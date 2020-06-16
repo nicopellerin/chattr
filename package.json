@@ -2,7 +2,7 @@
   "name": "with-typescript",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next",
+    "dev": "nodemon server.js",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc"
@@ -10,6 +10,8 @@
   "dependencies": {
     "@types/recoil": "^0.0.1",
     "@types/styled-components": "^5.1.0",
+    "better-react-spinkit": "^2.0.4",
+    "express": "^4.17.1",
     "framer-motion": "^2.0.0-beta.76",
     "next": "latest",
     "react": "^16.12.0",
@@ -17,6 +19,7 @@
     "react-icons": "^3.10.0",
     "recoil": "^0.0.8",
     "simple-peer": "^9.7.2",
+    "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "styled-components": "^5.1.1"
   },
@@ -27,6 +30,7 @@
     "@types/simple-peer": "^9.6.0",
     "@types/socket.io-client": "^1.4.33",
     "babel-plugin-styled-components": "^1.10.7",
+    "nodemon": "^2.0.4",
     "typescript": "3.7.3"
   },
   "license": "ISC"

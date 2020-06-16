@@ -24,3 +24,8 @@ export const callAcceptedState = atom<boolean>({
   key: "callAcceptedState",
   default: false,
 })
+
+export const showSelfWebcamState = atom<boolean>({
+  key: "showSelfWebcamState",
+  default: true,
+})

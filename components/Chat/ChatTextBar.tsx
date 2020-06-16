@@ -36,19 +36,19 @@ export default ChatTextBar
 
 // Styles
 const Wrapper = styled.form`
-  background: #111;
+  background: #1e1e1e;
   height: 100%;
   padding: 1rem;
-  border-radius: 3px;
+  border-radius: 5px;
   display: grid;
   grid-template-columns: 1fr auto;
-  border: 1px solid #222;
+  /* border: 1px solid #222; */
 `
 
 const TextInput = styled.input`
   width: 100%;
   height: 100%;
-  background: #0a0a0a;
+  background: #121212;
   border: none;
   color: #f8f8f8;
   font-size: 1.6rem;
@@ -59,7 +59,7 @@ const TextInput = styled.input`
 const SendButton = styled(motion.button)`
   padding: 1em 1.8em;
   border: none;
-  background: #bb66cc;
+  background: #f968b0;
   color: #f8f8f8;
   font-size: 1.6rem;
   font-weight: 600;

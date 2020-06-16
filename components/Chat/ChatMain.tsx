@@ -17,6 +17,7 @@ import ChatVideo from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
 import ChatCommands from "./ChatCommands"
 import ChatTextWindow from "./ChatTextWindow"
+import ChatUsername from "./ChatUsername"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -117,9 +118,17 @@ const ChatMain = () => {
     peer.signal(callerSignal)
   }
 
+  console.log(listUsers)
+
   return (
-    <>
-      <LogoStyled src="/logo.png" alt="logo" />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        alignItems: "center",
+      }}
+    >
       <Wrapper>
         <LeftColumn>
           <ChatVideo
@@ -130,11 +139,13 @@ const ChatMain = () => {
           <ChatTextBar />
         </LeftColumn>
         <RightColumn>
-          <ChatCommands />
+          <LogoStyled src="/logo.png" alt="logo" />
+          <ChatUsername />
+          <ChatCommands callFriend={callFriend} />
           <ChatTextWindow />
         </RightColumn>
       </Wrapper>
-    </>
+    </div>
   )
 }
 
@@ -150,7 +161,7 @@ export default Root
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
-  grid-gap: 3rem;
+  grid-gap: 2rem;
   width: 85%;
 `
 
@@ -162,12 +173,13 @@ const LeftColumn = styled.div`
 
 const RightColumn = styled.div`
   display: grid;
-  grid-template-rows: 1fr 3fr;
+  grid-template-rows: auto 50px 1fr 3fr;
   grid-gap: 2rem;
 `
 
 const LogoStyled = styled.img`
-  position: absolute;
-  top: 2rem;
+  /* position: absolute; */
   width: 190px;
+  justify-self: center;
+  margin-bottom: 2rem;
 `

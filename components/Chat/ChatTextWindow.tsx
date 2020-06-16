@@ -4,6 +4,7 @@ import { useRecoilValue } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 
 import { chatWindowState } from "../../store/chat"
+import { FaKiwiBird } from "react-icons/fa"
 
 const ChatTextWindow = () => {
   const msgs = useRecoilValue(chatWindowState)
@@ -26,6 +27,7 @@ const ChatTextWindow = () => {
         </AnimatePresence>
         {msgs.length === 0 && (
           <NoMessages>
+            <FaKiwiBird size={32} style={{ marginBottom: 15 }} color="#aaa" />
             <NoMessagesText>Pretty quiet over here</NoMessagesText>
           </NoMessages>
         )}
@@ -38,18 +40,18 @@ export default ChatTextWindow
 
 // Styles
 const Wrapper = styled.div`
-  background: #111;
+  background: #1e1e1e;
   height: 100%;
   padding: 2rem;
-  border-radius: 3px;
-  border: 1px solid #222;
+  border-radius: 5px;
+  /* border: 1px solid #222; */
 `
 
 const Container = styled.div`
   background: rgba(255, 255, 255, 0.01);
   width: 100%;
   height: 100%;
-  padding: 2rem;
+  padding: 2.2rem 2rem;
   color: #f8f8f8;
   font-size: 1.6rem;
   overflow: auto;
@@ -68,7 +70,7 @@ const MsgWrapper = styled(motion.div)`
 `
 
 const Username = styled.span`
-  color: orange;
+  color: #2cfcf0;
   font-weight: 600;
 `
 
@@ -76,6 +78,7 @@ const NoMessages = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   height: 100%;
 `
 
