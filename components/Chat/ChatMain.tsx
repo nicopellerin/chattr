@@ -123,7 +123,6 @@ const ChatMain = () => {
       <Wrapper>
         <LeftColumn>
           <ChatVideo
-            stream={stream}
             selfVideoRef={selfVideoRef}
             friendVideoRef={friendVideoRef}
             acceptCall={acceptCall}
@@ -152,7 +151,6 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
   grid-gap: 3rem;
-  height: 70%;
   width: 85%;
 `
 
@@ -170,5 +168,6 @@ const RightColumn = styled.div`
 
 const LogoStyled = styled.img`
   position: absolute;
-  top: 1rem;
+  top: 2rem;
+  width: 190px;
 `
