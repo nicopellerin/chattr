@@ -1,11 +1,15 @@
 import * as React from "react"
 import styled from "styled-components"
+import { useRecoilValue } from "recoil"
+
+import { usernameState } from "../../store/users"
 
 const ChatUsername = () => {
+  const username = useRecoilValue(usernameState)
   return (
     <Wrapper>
       <Text>Username</Text>
-      <Username>Nico</Username>
+      <Username>{username}</Username>
     </Wrapper>
   )
 }

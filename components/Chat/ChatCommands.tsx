@@ -12,18 +12,18 @@ import { motion } from "framer-motion"
 import { useRecoilState, useRecoilValue } from "recoil"
 
 import { showSelfWebcamState } from "../../store/video"
-import { selfIDState, listUsersState } from "../../store/users"
+import { selfIdState, listUsersState } from "../../store/users"
 
 const ChatCommands = ({ callFriend }) => {
   const [showSelfWebcam, setShowSelfWebcam] = useRecoilState(
     showSelfWebcamState
   )
-  const selfID = useRecoilValue(selfIDState)
+  const selfId = useRecoilValue(selfIdState)
   const listUsers = useRecoilValue(listUsersState)
 
-  const otherUser = Object.keys(listUsers).filter((user) => user !== selfID)[0]
+  const otherUser = Object.keys(listUsers).filter((user) => user !== selfId)[0]
 
-  console.log(otherUser, selfID)
+  console.log(otherUser, selfId)
   return (
     <Wrapper>
       <Container>

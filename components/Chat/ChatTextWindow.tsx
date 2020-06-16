@@ -3,11 +3,17 @@ import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 
-import { chatWindowState } from "../../store/chat"
+import { chatWindowState, chatWelcomeMessageState } from "../../store/chat"
 import { FaKiwiBird } from "react-icons/fa"
+import { usernameState } from "../../store/users"
 
 const ChatTextWindow = () => {
+  const welcomeMsg = useRecoilValue(chatWelcomeMessageState)
   const msgs = useRecoilValue(chatWindowState)
+
+  const username = useRecoilValue(usernameState)
+
+  console.log("WINDOW", msgs)
 
   return (
     <Wrapper>
@@ -16,11 +22,12 @@ const ChatTextWindow = () => {
           {msgs.length > 0 &&
             msgs.map(({ msg, user }) => (
               <MsgWrapper
+                key={msg}
                 initial={{ y: 5 }}
                 animate={{ y: 0 }}
                 transition={{ type: "spring", damping: 80 }}
               >
-                <Username>{user}</Username>
+                <Username me={username === user}>{user}</Username>
                 <span>{msg}</span>
               </MsgWrapper>
             ))}
@@ -28,7 +35,7 @@ const ChatTextWindow = () => {
         {msgs.length === 0 && (
           <NoMessages>
             <FaKiwiBird size={32} style={{ marginBottom: 15 }} color="#aaa" />
-            <NoMessagesText>Pretty quiet over here</NoMessagesText>
+            <NoMessagesText>{welcomeMsg}</NoMessagesText>
           </NoMessages>
         )}
       </Container>
@@ -70,7 +77,7 @@ const MsgWrapper = styled(motion.div)`
 `
 
 const Username = styled.span`
-  color: #2cfcf0;
+  color: ${(props: { me: boolean }) => (props.me ? "#2cfcf0" : "orange")};
   font-weight: 600;
 `
 

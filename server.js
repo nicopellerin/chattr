@@ -14,12 +14,26 @@ const PORT = 3000
 
 const users = {}
 
+const chatMessages = []
+
 io.on("connection", (socket) => {
   if (!users[socket.id]) {
     users[socket.id] = socket.id
   }
 
-  socket.emit("selfID", socket.id)
+  socket.emit("chatConnection", "Welcome to Chattr!")
+
+  socket.on("chatMessage", (msg) => {
+    chatMessages.push(msg)
+
+    io.emit("chatMessages", chatMessages)
+  })
+
+  socket.on("username", (username) => {
+    users[socket.id] = username
+  })
+
+  socket.emit("selfId", socket.id)
   io.sockets.emit("listUsers", users)
   socket.on("disconnect", () => {
     delete users[socket.id]

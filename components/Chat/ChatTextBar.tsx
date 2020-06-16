@@ -1,22 +1,27 @@
 import * as React from "react"
 import { useState } from "react"
 import styled from "styled-components"
-import { useSetRecoilState } from "recoil"
+import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil"
 
 import { chatWindowState } from "../../store/chat"
 import { motion } from "framer-motion"
+import { usernameState } from "../../store/users"
 
-const ChatTextBar = () => {
-  const setChatMsg = useSetRecoilState(chatWindowState)
+const ChatTextBar = ({ socket }) => {
+  const username = useRecoilValue(usernameState)
+  const [chatMsgs, setChatMsgs] = useRecoilState(chatWindowState)
+
   const [msg, setMsg] = useState("")
-
-  const user = "Nico"
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!msg) return
 
-    setChatMsg((prevState) => [...prevState, { user, msg }])
+    socket.current.emit("chatMessage", { user: username, msg })
+    socket.current.on("chatMessages", (msgs) => {
+      setChatMsgs(msgs)
+      console.log("MSGGG", msgs)
+    })
     setMsg("")
   }
 
