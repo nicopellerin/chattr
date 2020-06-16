@@ -1,15 +1,24 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
+import dynamic from "next/dynamic"
+import styled from "styled-components"
+
+const ChatMainClient = dynamic(() => import("../components/Chat/ChatMain"), {
+  ssr: false,
+})
 
 const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
-  </Layout>
+  <Wrapper>
+    <ChatMainClient />
+  </Wrapper>
 )
 
 export default IndexPage
+
+// Styles
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background: #020207;
+`

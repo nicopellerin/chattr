@@ -8,14 +8,24 @@
     "type-check": "tsc"
   },
   "dependencies": {
+    "@types/recoil": "^0.0.1",
+    "@types/styled-components": "^5.1.0",
+    "framer-motion": "^2.0.0-beta.76",
     "next": "latest",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "recoil": "^0.0.8",
+    "simple-peer": "^9.7.2",
+    "socket.io-client": "^2.3.0",
+    "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@types/node": "^12.12.21",
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
+    "@types/simple-peer": "^9.6.0",
+    "@types/socket.io-client": "^1.4.33",
+    "babel-plugin-styled-components": "^1.10.7",
     "typescript": "3.7.3"
   },
   "license": "ISC"
