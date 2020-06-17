@@ -50,10 +50,6 @@ export default class MyDocument extends Document {
           />
           <meta name="og:image" content="/og-image-5.png" />
           <link href="/manifest.json" rel="manifest" />
-          {/* <link
-            href="https://fonts.googleapis.com/css?family=Playfair+Display&display=swap"
-            rel="stylesheet"
-          /> */}
           <link
             rel="apple-touch-icon"
             sizes="180x180"

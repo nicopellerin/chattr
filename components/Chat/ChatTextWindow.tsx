@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
@@ -18,13 +19,13 @@ const ChatTextWindow = () => {
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
 
+  useEffect(() => {}, [msgs])
+
   return (
     <Wrapper>
       <ScrollArea
         style={{
           height: 400,
-          width: "100%",
-          // background: "rgba(255, 255, 255, 0.05)",
           boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
           borderRadius: "5px",
         }}
@@ -66,18 +67,18 @@ export default ChatTextWindow
 
 // Styles
 const Wrapper = styled.div`
-  background: #1e1e1e;
+  background: #1a0d2b;
   height: 100%;
-  padding: 2rem;
+  padding: 1.7rem;
   border-radius: 5px;
-  /* border: 1px solid #222; */
+  filter: drop-shadow(0 0 0.75rem rgba(204, 75, 194, 0.1));
 `
 
 const Container = styled.div`
   background: rgba(255, 255, 255, 0.01);
   width: 100%;
   height: 100%;
-  padding: 2.2rem 2rem;
+  padding: 2.2rem 1.7rem;
   color: var(--textColor);
   font-size: 1.7rem;
   overflow: auto;
@@ -112,5 +113,5 @@ const NoMessages = styled.div`
 const NoMessagesText = styled.span`
   font-size: 1.7rem;
   font-weight: 600;
-  color: #ffe9ff;
+  color: var(--textColor);
 `

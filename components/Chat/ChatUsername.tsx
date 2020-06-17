@@ -19,14 +19,15 @@ export default ChatUsername
 
 // Styles
 const Wrapper = styled.form`
-  background: #1e1e1e;
+  background: #1a0d2b;
   height: 100%;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 1.7rem;
   border-radius: 5px;
   display: grid;
   grid-template-columns: 1fr auto;
   display: flex;
   align-items: center;
+  filter: drop-shadow(0 0 0.75rem rgba(204, 75, 194, 0.1));
 `
 
 const Text = styled.span`

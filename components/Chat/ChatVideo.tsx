@@ -45,8 +45,8 @@ const ChatVideo: React.FC<Props> = ({
           <IncomingCallContainer>
             <IncomingCallTitle style={{ margin: 0 }}>
               <Circle
-                size={72}
-                style={{ marginBottom: 30 }}
+                size={90}
+                style={{ marginBottom: 40 }}
                 color="var(--textColor)"
               />
               Waiting for friend to connect
@@ -62,11 +62,14 @@ const ChatVideo: React.FC<Props> = ({
           transition={{ type: "spring", damping: 80 }}
         >
           <IncomingCallContainer>
-            <CatTitle>{"No video yet :("}</CatTitle>
+            <CatTitle>{"No video connection"}</CatTitle>
             <CatsTagline>
-              In the meantime, wanna see some cute cats?
+              Press <span style={{ color: "var(--primaryColor)" }}>Call</span>{" "}
+              to start video
             </CatsTagline>
-            <CatSlideshowButton>Show me cats :3</CatSlideshowButton>
+            <CatSlideshowButton whileTap={{ y: 1 }} whileHover={{ y: -1 }}>
+              Show me cats instead :3
+            </CatSlideshowButton>
           </IncomingCallContainer>
         </IncomingCallWrapper>
       )}
@@ -133,19 +136,17 @@ const Wrapper = styled(motion.div)`
   height: 100%;
   width: 100%;
   position: relative;
-  background: #0a0a0a;
+  background: #000;
   margin: 0;
   padding: 0;
   border-radius: 5px;
-  /* border: 1px solid #222; */
+  filter: drop-shadow(0 0 0.75rem rgba(204, 75, 194, 0.1));
 `
 
 const FriendVideo = styled.video`
   height: 100%;
   max-height: 670px;
   width: 100%;
-  /* object-fit: cover;
-  object-position: bottom; */
   margin: 0;
   padding: 0;
   -webkit-transform: scaleX(-1);
@@ -153,8 +154,8 @@ const FriendVideo = styled.video`
 `
 
 const SelfVideo = styled(motion.video)`
-  height: 155px;
-  width: 225px;
+  height: 130px;
+  width: 200px;
   object-fit: cover;
   position: absolute;
   bottom: 3rem;
@@ -184,11 +185,8 @@ const IncomingCallContainer = styled(motion.div)`
   justify-content: center;
   flex-direction: column;
   padding: 3rem;
-  /* background: rgba(255, 255, 255, 0.03); */
   border-radius: 5px;
-  /* border: 1px solid #222; */
-  z-index: 10;
-  backdrop-filter: blur(10px);
+  z-index: 2;
 `
 
 const IncomingCallTitle = styled.h4`
@@ -225,7 +223,7 @@ const IncomingCallRejectButton = styled(IncomingCallAcceptButton)`
 `
 
 const CatTitle = styled.h2`
-  font-size: 6rem;
+  font-size: 5rem;
   margin-bottom: 4rem;
   color: var(--tertiaryColor);
   display: flex;
@@ -234,13 +232,12 @@ const CatTitle = styled.h2`
 `
 
 const CatsTagline = styled.h4`
-  font-size: 2.4rem;
-  color: #ffe9ff;
+  font-size: 2rem;
+  color: var(--textColor);
   margin-bottom: 5rem;
-  /* font-weight: 500; */
 `
 
 const CatSlideshowButton = styled(IncomingCallAcceptButton)`
-  background: var(--tertiaryColor);
-  color: #333;
+  background: var(--primaryColor);
+  color: var(--textColor);
 `

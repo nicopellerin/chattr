@@ -20,5 +20,5 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 100%;
   width: 100%;
-  background: #111111;
+  background: #0c0613;
 `

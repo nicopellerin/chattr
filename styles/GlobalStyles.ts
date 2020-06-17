@@ -13,7 +13,7 @@ const GlobalStyles = createGlobalStyle`
 
   --textColor: #E3E8FF;
 
-  --systemFont: font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacSystemFont,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  --systemFont: "Inter", sans-serif;
 }
 
 
@@ -41,7 +41,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacSystemFont,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  font-family: var(--systemFont);
   /* font-family: 'Open Sans', sans-serif; */
   color: #555;
   -webkit-font-smoothing: antialiased;
@@ -56,7 +56,7 @@ h1, h2, h3, h4, h5 {
 
 h1, h2 {
   /* font-family: 'Playfair+Display', serif; */
-  /* font-weight: 500; */
+  /* font-weight: 900; */
 }
 
 input {
@@ -64,7 +64,7 @@ input {
 }
 
 p {
-  font-family: "Playfair+Display", serif;
+  /* font-family: "Playfair+Display", serif; */
   font-size: 1.8rem;
 }
 `

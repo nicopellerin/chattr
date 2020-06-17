@@ -1,5 +1,6 @@
 import React from "react"
 import { RecoilRoot } from "recoil"
+import "typeface-inter"
 
 import GlobalStyles from "../styles/GlobalStyles"
 

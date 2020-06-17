@@ -44,27 +44,27 @@ export default ChatTextBar
 
 // Styles
 const Wrapper = styled.form`
-  background: #1e1e1e;
+  background: #1a0d2b;
   height: 100%;
   padding: 1rem;
   border-radius: 5px;
   display: grid;
   grid-template-columns: 1fr auto;
-  /* border: 1px solid #222; */
+  filter: drop-shadow(0 0 0.75rem rgba(204, 75, 194, 0.1));
 `
 
 const TextInput = styled.input`
   width: 100%;
   height: 100%;
-  background: #121212;
+  background: #0c0613;
   border: none;
-  color: #ffe9ff;
+  color: var(--textColor);
   font-size: 1.7rem;
-  padding: 0 1.6rem;
+  padding: 0 1.5rem;
   outline: transparent;
 
   &::placeholder {
-    color: #ffe9ff;
+    color: var(--textColor);
   }
 `
 

@@ -116,10 +116,11 @@ export default ChatCommands
 
 // Styles
 const Wrapper = styled.div`
-  background: #1e1e1e;
+  background: #1a0d2b;
   height: 100%;
-  padding: 2rem;
+  padding: 1.7rem;
   border-radius: 5px;
+  filter: drop-shadow(0 0 0.75rem rgba(204, 75, 194, 0.1));
 `
 
 const Container = styled.div`
