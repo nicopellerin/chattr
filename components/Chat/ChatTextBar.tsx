@@ -62,6 +62,10 @@ const TextInput = styled.input`
   font-size: 1.6rem;
   padding: 0 1.6rem;
   outline: transparent;
+
+  &::placeholder {
+    color: #ffe9ff;
+  }
 `
 
 const SendButton = styled(motion.button)`

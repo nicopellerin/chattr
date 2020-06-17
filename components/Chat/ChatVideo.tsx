@@ -44,12 +44,29 @@ const ChatVideo: React.FC<Props> = ({
         >
           <IncomingCallContainer>
             <IncomingCallTitle style={{ margin: 0 }}>
-              <Circle size={72} style={{ marginBottom: 30 }} color="#D0D9EB" />
+              <Circle size={72} style={{ marginBottom: 30 }} color="#3EFCE8" />
               Waiting for friend to connect
             </IncomingCallTitle>
           </IncomingCallContainer>
         </IncomingCallWrapper>
       )}
+      {!receivingCall && (
+        <IncomingCallWrapper
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ type: "spring", damping: 80 }}
+        >
+          <IncomingCallContainer>
+            <CatTitle>{"No video yet :("}</CatTitle>
+            <CatsTagline>
+              In the meantime, wanna see some cute cats?
+            </CatsTagline>
+            <CatSlideshowButton>Show me cats :3</CatSlideshowButton>
+          </IncomingCallContainer>
+        </IncomingCallWrapper>
+      )}
+
       {receivingCall && !callAccepted && (
         <IncomingCallWrapper
           initial={{ opacity: 0, scale: 0.8 }}
@@ -112,7 +129,7 @@ const Wrapper = styled(motion.div)`
   height: 100%;
   width: 100%;
   position: relative;
-  background: #000;
+  background: #0a0a0a;
   margin: 0;
   padding: 0;
   border-radius: 5px;
@@ -173,7 +190,7 @@ const IncomingCallContainer = styled(motion.div)`
 const IncomingCallTitle = styled.h3`
   font-size: 3rem;
   margin-bottom: 3rem;
-  color: #d0d9eb;
+  color: #3efce8;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -184,10 +201,10 @@ const IncomingCallButtonWrapper = styled.div`
 `
 
 const IncomingCallAcceptButton = styled(motion.button)`
-  padding: 1em 1.8em;
+  padding: 1.05em 1.8em;
   border: none;
   background: #28d728;
-  color: #e2ebfe;
+  color: #ffe9ff;
   font-size: 1.6rem;
   font-weight: 600;
   border-radius: 5px;
@@ -201,4 +218,24 @@ const IncomingCallAcceptButton = styled(motion.button)`
 const IncomingCallRejectButton = styled(IncomingCallAcceptButton)`
   margin-left: 1em;
   background: crimson;
+`
+
+const CatTitle = styled.h3`
+  font-size: 5.2rem;
+  margin-bottom: 3.8rem;
+  color: #3efce8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const CatsTagline = styled.h4`
+  font-size: 2rem;
+  color: #ffe9ff;
+  margin-bottom: 5rem;
+`
+
+const CatSlideshowButton = styled(IncomingCallAcceptButton)`
+  background: #3efce8;
+  color: #333;
 `

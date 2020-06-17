@@ -24,8 +24,9 @@ const ChatTextWindow = () => {
         style={{
           height: 400,
           width: "100%",
-          background: "rgba(255, 255, 255, 0.05)",
+          // background: "rgba(255, 255, 255, 0.05)",
           boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
+          borderRadius: "5px",
         }}
         verticalScrollbarStyle={{ background: "#000" }}
         verticalContainerStyle={{ background: "#eee" }}
