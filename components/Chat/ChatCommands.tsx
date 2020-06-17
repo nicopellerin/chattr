@@ -35,13 +35,16 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
 
   const otherUser = Object.keys(listUsers).filter((user) => user !== selfId)[0]
 
-  // console.log(selfId)
+  const beepOn = new Audio("/sounds/card_drop.mp3")
 
   return (
     <Wrapper>
       <Container>
         <IconWrapper
-          onClick={() => setMuteMic(!muteMic)}
+          onClick={() => {
+            setMuteMic(!muteMic)
+            beepOn.play()
+          }}
           whileTap={{ scale: 0.98 }}
         >
           {muteMic ? (
@@ -60,7 +63,10 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
           )}
         </IconWrapper>
         <IconWrapper
-          onClick={() => setShowSelfWebcam(!showSelfWebcam)}
+          onClick={() => {
+            setShowSelfWebcam(!showSelfWebcam)
+            beepOn.play()
+          }}
           whileTap={{ scale: 0.98 }}
         >
           {showSelfWebcam ? (
@@ -80,7 +86,10 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
         </IconWrapper>
         <IconWrapper
           whileTap={{ scale: 0.98 }}
-          onClick={() => callFriend(otherUser)}
+          onClick={() => {
+            callFriend(otherUser)
+            beepOn.play()
+          }}
         >
           {callAccepted ? (
             <>
@@ -132,6 +141,7 @@ const Container = styled.div`
   height: 100%;
   background: rgba(255, 255, 255, 0.01);
   padding: 1rem;
+  boxshadow: "4px 0 15px rgba(0, 0, 0, 0.1)";
 `
 
 const IconWrapper = styled(motion.div)`

@@ -1,10 +1,12 @@
 import * as React from "react"
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { FaPhoneAlt, FaTimesCircle } from "react-icons/fa"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { Circle } from "better-react-spinkit"
+
+import Slider from "./Slider"
 
 import {
   showSelfWebcamState,
@@ -31,100 +33,126 @@ const ChatVideo: React.FC<Props> = ({
   const callAccepted = useRecoilValue(callAcceptedState)
   const listUsers = useRecoilValue(listUsersState)
 
+  const [showCatSlider, setShowCatSlider] = useState(false)
+
   const contraintsRef = useRef()
+
+  let beep = new Audio("/sounds/call.mp3")
+
+  useEffect(() => {
+    if (receivingCall) {
+      beep.loop = true
+      beep.play()
+    } else {
+      beep.pause()
+    }
+  }, [receivingCall])
 
   return (
     <Wrapper ref={contraintsRef}>
-      {Object.keys(listUsers).length < 2 && (
-        <IncomingCallWrapper
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ type: "spring", damping: 80 }}
-        >
-          <IncomingCallContainer>
-            <IncomingCallTitle style={{ margin: 0 }}>
-              <Circle
-                size={90}
-                style={{ marginBottom: 40 }}
-                color="var(--textColor)"
-              />
-              Waiting for friend to connect
-            </IncomingCallTitle>
-          </IncomingCallContainer>
-        </IncomingCallWrapper>
-      )}
-      {!receivingCall && Object.keys(listUsers).length === 2 && (
-        <IncomingCallWrapper
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ type: "spring", damping: 80 }}
-        >
-          <IncomingCallContainer>
-            <CatTitle>{"No video connection"}</CatTitle>
-            <CatsTagline>
-              Press <span style={{ color: "var(--primaryColor)" }}>Call</span>{" "}
-              to start video
-            </CatsTagline>
-            <CatSlideshowButton whileTap={{ y: 1 }} whileHover={{ y: -1 }}>
-              Show me cats instead :3
-            </CatSlideshowButton>
-          </IncomingCallContainer>
-        </IncomingCallWrapper>
-      )}
+      {!showCatSlider ? (
+        <>
+          {Object.keys(listUsers).length < 2 && (
+            <IncomingCallWrapper
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ type: "spring", damping: 80 }}
+            >
+              <IncomingCallContainer>
+                <IncomingCallTitle style={{ margin: 0 }}>
+                  <Circle
+                    size={90}
+                    style={{ marginBottom: 40 }}
+                    color="var(--textColor)"
+                  />
+                  Waiting for friend to connect
+                </IncomingCallTitle>
+              </IncomingCallContainer>
+            </IncomingCallWrapper>
+          )}
+          {!receivingCall &&
+            !callAccepted &&
+            Object.keys(listUsers).length === 2 && (
+              <IncomingCallWrapper
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ type: "spring", damping: 80 }}
+              >
+                <IncomingCallContainer>
+                  <CatTitle>{"No video connection"}</CatTitle>
+                  <CatsTagline>
+                    Press{" "}
+                    <span style={{ color: "var(--primaryColor)" }}>Call</span>{" "}
+                    to start video/audio call
+                  </CatsTagline>
+                  <CatSlideshowButton
+                    onClick={() => setShowCatSlider(true)}
+                    whileTap={{ y: 1 }}
+                    whileHover={{ y: -1 }}
+                  >
+                    Show me cats instead :3
+                  </CatSlideshowButton>
+                </IncomingCallContainer>
+              </IncomingCallWrapper>
+            )}
 
-      {receivingCall && !callAccepted && (
-        <IncomingCallWrapper
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ type: "spring", damping: 80 }}
-        >
-          <IncomingCallContainer>
-            <IncomingCallTitle>Incoming call...</IncomingCallTitle>
-            <IncomingCallButtonWrapper>
-              <IncomingCallAcceptButton
-                onClick={() => {
-                  setReceivingCall(false)
-                  acceptCall()
-                }}
-                whileTap={{ y: 1 }}
-                whileHover={{ y: -1 }}
-              >
-                <FaPhoneAlt size={14} style={{ marginRight: 7 }} />
-                Answer
-              </IncomingCallAcceptButton>
-              <IncomingCallRejectButton
-                onClick={() => {
-                  setReceivingCall(false)
-                  setCancelCall(true)
-                }}
-                whileTap={{ y: 1 }}
-                whileHover={{ y: -1 }}
-              >
-                <FaTimesCircle size={14} style={{ marginRight: 7 }} />
-                Reject
-              </IncomingCallRejectButton>
-            </IncomingCallButtonWrapper>
-          </IncomingCallContainer>
-        </IncomingCallWrapper>
+          {receivingCall && !callAccepted && (
+            <IncomingCallWrapper
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ type: "spring", damping: 80 }}
+            >
+              <IncomingCallContainer>
+                <IncomingCallTitle>Incoming call...</IncomingCallTitle>
+                <IncomingCallButtonWrapper>
+                  <IncomingCallAcceptButton
+                    onClick={() => {
+                      setReceivingCall(false)
+                      acceptCall()
+                    }}
+                    whileTap={{ y: 1 }}
+                    whileHover={{ y: -1 }}
+                  >
+                    <FaPhoneAlt size={14} style={{ marginRight: 7 }} />
+                    Answer
+                  </IncomingCallAcceptButton>
+                  <IncomingCallRejectButton
+                    onClick={() => {
+                      setReceivingCall(false)
+                      setCancelCall(true)
+                    }}
+                    whileTap={{ y: 1 }}
+                    whileHover={{ y: -1 }}
+                  >
+                    <FaTimesCircle size={14} style={{ marginRight: 7 }} />
+                    Reject
+                  </IncomingCallRejectButton>
+                </IncomingCallButtonWrapper>
+              </IncomingCallContainer>
+            </IncomingCallWrapper>
+          )}
+          <AnimatePresence>
+            <SelfVideo
+              muted
+              initial={{ scaleX: -1 }}
+              exit={{ scaleX: 0 }}
+              drag
+              dragMomentum={false}
+              dragConstraints={contraintsRef}
+              ref={selfVideoRef}
+              playsInline
+              autoPlay
+              style={{ opacity: showWebcam ? 1 : 0 }}
+            />
+          </AnimatePresence>
+          {true && <FriendVideo ref={friendVideoRef} playsInline autoPlay />}
+        </>
+      ) : (
+        <Slider />
       )}
-      <AnimatePresence>
-        <SelfVideo
-          muted
-          initial={{ scaleX: -1 }}
-          exit={{ scaleX: 0 }}
-          drag
-          dragMomentum={false}
-          dragConstraints={contraintsRef}
-          ref={selfVideoRef}
-          playsInline
-          autoPlay
-          style={{ opacity: showWebcam ? 1 : 0 }}
-        />
-      </AnimatePresence>
-      {true && <FriendVideo ref={friendVideoRef} playsInline autoPlay />}
     </Wrapper>
   )
 }

@@ -19,7 +19,11 @@ const ChatTextWindow = () => {
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
 
-  useEffect(() => {}, [msgs])
+  const pop = new Audio("/sounds/pop_drip.mp3")
+
+  useEffect(() => {
+    pop.play()
+  }, [msgs])
 
   return (
     <Wrapper>
