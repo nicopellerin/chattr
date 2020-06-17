@@ -11,29 +11,53 @@ import {
 import { motion } from "framer-motion"
 import { useRecoilState, useRecoilValue } from "recoil"
 
-import { showSelfWebcamState } from "../../store/video"
+import {
+  showSelfWebcamState,
+  callAcceptedState,
+  muteMicState,
+  receivingCallState,
+} from "../../store/video"
 import { selfIdState, listUsersState } from "../../store/users"
 
-const ChatCommands = ({ callFriend }) => {
+interface Props {
+  callFriend: (key: string) => void
+}
+
+const ChatCommands: React.FC<Props> = ({ callFriend }) => {
   const [showSelfWebcam, setShowSelfWebcam] = useRecoilState(
     showSelfWebcamState
   )
+  const [muteMic, setMuteMic] = useRecoilState(muteMicState)
   const selfId = useRecoilValue(selfIdState)
   const listUsers = useRecoilValue(listUsersState)
+  const callAccepted = useRecoilValue(callAcceptedState)
+  const receivingCall = useRecoilValue(receivingCallState)
 
-  const otherUser = Object.keys(listUsers).filter((user) => user !== selfId)[0]
+  const otherUser = listUsers.filter((user) => user !== selfId)[0]
 
-  console.log(otherUser, selfId)
+  console.log(selfId, otherUser)
+
   return (
     <Wrapper>
       <Container>
-        <IconWrapper whileTap={{ scale: 0.98 }}>
-          {/* <FaMicrophoneSlash size={30} style={{ marginBottom: 7 }} /> */}
-          <FaMicrophone
-            size={30}
-            style={{ marginBottom: 7, color: "#E2EBFE" }}
-          />
-          <span style={{ color: "#E2EBFE" }}>Mic</span>
+        <IconWrapper
+          onClick={() => setMuteMic(!muteMic)}
+          whileTap={{ scale: 0.98 }}
+        >
+          {muteMic ? (
+            <>
+              <FaMicrophoneSlash size={30} style={{ marginBottom: 7 }} />
+              <span>Mic</span>
+            </>
+          ) : (
+            <>
+              <FaMicrophone
+                size={30}
+                style={{ marginBottom: 7, color: "#E2EBFE" }}
+              />
+              <span style={{ color: "#E2EBFE" }}>Mic</span>
+            </>
+          )}
         </IconWrapper>
         <IconWrapper
           onClick={() => setShowSelfWebcam(!showSelfWebcam)}
@@ -58,13 +82,26 @@ const ChatCommands = ({ callFriend }) => {
           whileTap={{ scale: 0.98 }}
           onClick={() => callFriend(otherUser)}
         >
-          {/* <FaTimesCircle
-            size={30}
-            style={{ marginBottom: 7, color: "#E2EBFE" }}
-          />
-          <span style={{ color: "#E2EBFE" }}>End call</span> */}
-          <FaPhone size={26} style={{ marginBottom: 7, color: "#E2EBFE" }} />
-          <span style={{ color: "#E2EBFE" }}>Call</span>
+          {callAccepted ? (
+            <>
+              <FaTimesCircle
+                size={30}
+                style={{ marginBottom: 7, color: "#E2EBFE" }}
+              />
+              <span style={{ color: "#E2EBFE" }}>End call</span>
+            </>
+          ) : (
+            <>
+              <FaPhone
+                size={26}
+                style={{
+                  marginBottom: 7,
+                  color: receivingCall ? "#aaa" : "#E2EBFE",
+                }}
+              />
+              <span style={{ color: "#E2EBFE" }}>Call</span>
+            </>
+          )}
         </IconWrapper>
       </Container>
     </Wrapper>
@@ -78,7 +115,6 @@ const Wrapper = styled.div`
   background: #1e1e1e;
   height: 100%;
   padding: 2rem;
-  /* border: 1px solid #222; */
   border-radius: 5px;
 `
 

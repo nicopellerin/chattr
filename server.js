@@ -12,46 +12,59 @@ const nextHandler = nextApp.getRequestHandler()
 
 const PORT = 3000
 
-const users = {}
+// const users = {}
 
-const chatMessages = []
+let chatMessages = []
 
-io.on("connection", (socket) => {
-  if (!users[socket.id]) {
-    users[socket.id] = socket.id
+const nsp = io.of("/")
+
+nsp.on("connection", (socket) => {
+  const room = socket.handshake.query.room
+  console.log("ROOM", room)
+  socket.join(room)
+
+  const sockets = nsp.in(room)
+  Object.keys(sockets.sockets).forEach((user) => {
+    // users[socket.id] = sockets.sockets[user].id
+    nsp.to(room).emit("listUsers", sockets.sockets[user].id)
+  })
+
+  if (io.sockets.adapter.rooms[room].length === 3) {
+    socket.disconnect()
   }
 
-  socket.emit("chatConnection", "Welcome to Chattr!")
+  nsp.to(room).emit("chatConnection", "Welcome to Chattr!")
 
-  socket.on("chatMessage", (msg) => {
+  socket.to(room).on("chatMessage", (msg) => {
     chatMessages.push(msg)
 
-    io.emit("chatMessages", chatMessages)
+    nsp.to(room).emit("chatMessages", chatMessages)
   })
 
-  socket.on("username", (username) => {
-    users[socket.id] = username
-  })
+  socket.to(room).emit("selfId", socket.id)
 
-  socket.emit("selfId", socket.id)
-  io.sockets.emit("listUsers", users)
   socket.on("disconnect", () => {
-    delete users[socket.id]
+    // delete users[socket.id]
+    chatMessages = []
   })
 
-  socket.on("callUser", (data) => {
-    io.to(data.userToCall).emit("call", {
+  socket.to(room).on("callUser", (data) => {
+    nsp.to(data.userToCall).emit("call", {
       signal: data.signalData,
       from: data.from,
     })
   })
 
-  socket.on("acceptCall", (data) => {
-    io.to(data.to).emit("callAccepted", data.signal)
+  socket.to(room).on("acceptCall", (data) => {
+    nsp.to(data.to).emit("callAccepted", data.signal)
   })
 })
 
 nextApp.prepare().then(() => {
+  // app.get("/test", (req, res) => {
+  //   return nextHandler(req, res)
+  // })
+
   app.get("*", (req, res) => {
     return nextHandler(req, res)
   })

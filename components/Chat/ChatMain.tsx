@@ -3,6 +3,7 @@ import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import io from "socket.io-client"
 import Peer from "simple-peer"
+import { useRouter } from "next/router"
 import {
   useRecoilState,
   RecoilRoot,
@@ -43,10 +44,12 @@ const ChatMain = () => {
 
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
-  const socket = useRef() as any
+  const socket = useRef() as React.MutableRefObject<SocketIOClient.Socket>
+
+  const { query } = useRouter()
 
   useEffect(() => {
-    socket.current = io.connect("/")
+    socket.current = io.connect(`/?room=${query["index"]}`)
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
@@ -67,14 +70,14 @@ const ChatMain = () => {
     })
 
     socket.current.on("chatMessages", (msgs) => {
-      console.log(msgs)
       setChatMsgs(msgs)
     })
 
-    socket.current.on("listUsers", (users) => {
-      setListUsers(users)
+    socket.current.on("listUsers", (userId) => {
+      setListUsers((prevState) => [...prevState, userId])
     })
 
+    console.log("UAERs", listUsers)
     socket.current.on("call", (data) => {
       setReceivingCall(true)
       setCaller(data.from)

@@ -13,7 +13,17 @@ import {
 } from "../../store/video"
 import { listUsersState } from "../../store/users"
 
-const ChatVideo = ({ acceptCall, selfVideoRef, friendVideoRef }) => {
+interface Props {
+  acceptCall: () => void
+  selfVideoRef: React.MutableRefObject<HTMLVideoElement>
+  friendVideoRef: React.MutableRefObject<HTMLVideoElement>
+}
+
+const ChatVideo: React.FC<Props> = ({
+  acceptCall,
+  selfVideoRef,
+  friendVideoRef,
+}) => {
   const showWebcam = useRecoilValue(showSelfWebcamState)
   const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
 

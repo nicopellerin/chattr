@@ -6,6 +6,7 @@ import { usernameState } from "../../store/users"
 
 const ChatUsername = () => {
   const username = useRecoilValue(usernameState)
+
   return (
     <Wrapper>
       <Text>Username</Text>

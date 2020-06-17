@@ -29,3 +29,8 @@ export const showSelfWebcamState = atom<boolean>({
   key: "showSelfWebcamState",
   default: true,
 })
+
+export const muteMicState = atom<boolean>({
+  key: "muteMicState",
+  default: false,
+})

@@ -2,43 +2,57 @@ import * as React from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
+import ScrollArea from "react-scrollbar"
 
 import { chatWindowState, chatWelcomeMessageState } from "../../store/chat"
 import { FaKiwiBird } from "react-icons/fa"
 import { usernameState } from "../../store/users"
 
+interface Message {
+  msg: string
+  user: string
+}
+
 const ChatTextWindow = () => {
   const welcomeMsg = useRecoilValue(chatWelcomeMessageState)
   const msgs = useRecoilValue(chatWindowState)
-
   const username = useRecoilValue(usernameState)
-
-  console.log("WINDOW", msgs)
 
   return (
     <Wrapper>
-      <Container>
-        <AnimatePresence>
-          {msgs.length > 0 &&
-            msgs.map(({ msg, user }) => (
-              <MsgWrapper
-                key={msg}
-                initial={{ y: 5 }}
-                animate={{ y: 0 }}
-                transition={{ type: "spring", damping: 80 }}
-              >
-                <Username me={username === user}>{user}</Username>
-                <span>{msg}</span>
-              </MsgWrapper>
-            ))}
-        </AnimatePresence>
-        {msgs.length === 0 && (
-          <NoMessages>
-            <FaKiwiBird size={32} style={{ marginBottom: 15 }} color="#aaa" />
-            <NoMessagesText>{welcomeMsg}</NoMessagesText>
-          </NoMessages>
-        )}
-      </Container>
+      <ScrollArea
+        style={{
+          height: 400,
+          width: "100%",
+          background: "rgba(255, 255, 255, 0.05)",
+          boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
+        }}
+        verticalScrollbarStyle={{ background: "#000" }}
+        verticalContainerStyle={{ background: "#eee" }}
+      >
+        <Container>
+          <AnimatePresence>
+            {msgs.length > 0 &&
+              msgs.map(({ msg, user }: Message, i) => (
+                <MsgWrapper
+                  key={i}
+                  initial={{ y: 5 }}
+                  animate={{ y: 0 }}
+                  transition={{ type: "spring", damping: 80 }}
+                >
+                  <Username me={username === user}>{user}</Username>
+                  <span>{msg}</span>
+                </MsgWrapper>
+              ))}
+          </AnimatePresence>
+          {msgs.length === 0 && (
+            <NoMessages>
+              <FaKiwiBird size={32} style={{ marginBottom: 15 }} color="#aaa" />
+              <NoMessagesText>{welcomeMsg}</NoMessagesText>
+            </NoMessages>
+          )}
+        </Container>
+      </ScrollArea>
     </Wrapper>
   )
 }
