@@ -50,7 +50,7 @@ const ChatVideo: React.FC<Props> = ({
           </IncomingCallContainer>
         </IncomingCallWrapper>
       )}
-      {!receivingCall && (
+      {!receivingCall && Object.keys(listUsers).length === 2 && (
         <IncomingCallWrapper
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -221,8 +221,8 @@ const IncomingCallRejectButton = styled(IncomingCallAcceptButton)`
 `
 
 const CatTitle = styled.h3`
-  font-size: 5.2rem;
-  margin-bottom: 3.8rem;
+  font-size: 5.4rem;
+  margin-bottom: 3rem;
   color: #3efce8;
   display: flex;
   flex-direction: column;
@@ -232,7 +232,7 @@ const CatTitle = styled.h3`
 const CatsTagline = styled.h4`
   font-size: 2rem;
   color: #ffe9ff;
-  margin-bottom: 5rem;
+  margin-bottom: 4.5rem;
 `
 
 const CatSlideshowButton = styled(IncomingCallAcceptButton)`
