@@ -4,9 +4,13 @@ import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollArea from "react-scrollbar"
-
-import { chatWindowState, chatWelcomeMessageState } from "../../store/chat"
 import { FaKiwiBird } from "react-icons/fa"
+
+import {
+  chatWindowState,
+  chatWelcomeMessageState,
+  chatUserIsTypingState,
+} from "../../store/chat"
 import { usernameState } from "../../store/users"
 
 interface Message {
@@ -18,6 +22,7 @@ const ChatTextWindow = () => {
   const welcomeMsg = useRecoilValue(chatWelcomeMessageState)
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
+  const userIsTyping = useRecoilValue(chatUserIsTypingState)
 
   const pop = new Audio("/sounds/pop_drip.mp3")
 
@@ -51,6 +56,15 @@ const ChatTextWindow = () => {
                 </MsgWrapper>
               ))}
           </AnimatePresence>
+          {msgs.length > 0 &&
+            userIsTyping?.status &&
+            username !== userIsTyping?.username && (
+              <UserIsTypingWrapper>
+                <UserIsTypingText>
+                  {userIsTyping?.username} is typing...
+                </UserIsTypingText>
+              </UserIsTypingWrapper>
+            )}
           {msgs.length === 0 && (
             <NoMessages>
               <FaKiwiBird
@@ -118,4 +132,13 @@ const NoMessagesText = styled.span`
   font-size: 1.7rem;
   font-weight: 600;
   color: var(--textColor);
+`
+
+const UserIsTypingWrapper = styled.div`
+  padding: 3rem 1.7rem 1rem;
+  text-align: center;
+`
+
+const UserIsTypingText = styled.span`
+  font-size: 1.7rem;
 `

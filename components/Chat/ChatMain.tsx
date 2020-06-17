@@ -24,7 +24,11 @@ import ChatTextBar from "./ChatTextBar"
 import ChatCommands from "./ChatCommands"
 import ChatTextWindow from "./ChatTextWindow"
 import ChatUsername from "./ChatUsername"
-import { chatWelcomeMessageState, chatWindowState } from "../../store/chat"
+import {
+  chatWelcomeMessageState,
+  chatWindowState,
+  chatUserIsTypingState,
+} from "../../store/chat"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -36,6 +40,9 @@ const ChatMain = () => {
   const [callAccepted, setCallAccepted] = useRecoilState(callAcceptedState)
   const [chatWelcomeMessage, setChatWelcomeMessage] = useRecoilState(
     chatWelcomeMessageState
+  )
+  const [chatUserIsTyping, setChatUserIsTyping] = useRecoilState(
+    chatUserIsTypingState
   )
   const [chatMsgs, setChatMsgs] = useRecoilState(chatWindowState)
   const username = useRecoilValue(usernameState)
@@ -71,6 +78,10 @@ const ChatMain = () => {
 
     socket.current.on("chatMessages", (msg) => {
       setChatMsgs((prevState) => [...prevState, msg])
+    })
+
+    socket.current.on("chatMessageIsTyping", ({ username, status, msg }) => {
+      setChatUserIsTyping({ username, status })
     })
 
     socket.current.on("listUsers", (users) => {

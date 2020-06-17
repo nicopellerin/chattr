@@ -40,10 +40,12 @@ const ChatVideo: React.FC<Props> = ({
   let beep = new Audio("/sounds/call.mp3")
 
   useEffect(() => {
+    beep.pause()
     if (receivingCall) {
       beep.loop = true
       beep.play()
     } else {
+      beep.loop = false
       beep.pause()
     }
   }, [receivingCall])
@@ -218,7 +220,7 @@ const IncomingCallContainer = styled(motion.div)`
 `
 
 const IncomingCallTitle = styled.h4`
-  font-size: 3rem;
+  font-size: 4rem;
   margin-bottom: 3rem;
   color: var(--textColor);
   display: flex;
@@ -246,7 +248,7 @@ const IncomingCallAcceptButton = styled(motion.button)`
 `
 
 const IncomingCallRejectButton = styled(IncomingCallAcceptButton)`
-  margin-left: 1em;
+  margin-left: 3rem;
   background: crimson;
 `
 

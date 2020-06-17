@@ -1,10 +1,11 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 import { motion } from "framer-motion"
 
 import { usernameState, listUsersState } from "../../store/users"
+import { chatUserIsTypingState } from "../../store/chat"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -14,6 +15,8 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const listUsers = useRecoilValue(listUsersState)
 
+  console.log(username)
+
   const [msg, setMsg] = useState("")
 
   const handleSubmit = (e) => {
@@ -21,10 +24,31 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
 
     if (!msg || Object.keys(listUsers).length < 2) return
 
+    socket.current.emit("chatMessageIsTyping", {
+      username,
+      status: false,
+      msg: "",
+    })
     socket.current.emit("chatMessage", { user: username, msg })
 
     setMsg("")
   }
+
+  useEffect(() => {
+    if (msg.length > 0) {
+      socket?.current?.emit("chatMessageIsTyping", {
+        username,
+        status: true,
+        msg,
+      })
+    }
+  }, [msg])
+
+  useEffect(() => {
+    if (!msg.length) {
+      // socket.current.emit("chatMessageIsTyping", { username, status: false })
+    }
+  })
 
   return (
     <Wrapper onSubmit={handleSubmit}>

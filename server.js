@@ -38,6 +38,14 @@ io.on("connection", (socket) => {
     io.to(room).emit("chatMessages", msg)
   })
 
+  socket.on("chatMessageIsTyping", ({ username, status, msg }) => {
+    if (msg && msg.length > 1) {
+      io.to(room).emit("chatMessageIsTyping", { username, status })
+    } else {
+      io.to(room).emit("chatMessageIsTyping", { username, status: false })
+    }
+  })
+
   socket.on("disconnect", () => {
     delete users[socket.id]
     socket.leave(room)
