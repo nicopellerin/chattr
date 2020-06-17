@@ -53,9 +53,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
             <>
               <FaMicrophone
                 size={22}
-                style={{ marginBottom: 7, color: "#E2EBFE" }}
+                style={{ marginBottom: 7, color: "#FFE9FF" }}
               />
-              <span style={{ color: "#E2EBFE" }}>Mic</span>
+              <span style={{ color: "#FFE9FF" }}>Mic</span>
             </>
           )}
         </IconWrapper>
@@ -67,9 +67,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
             <>
               <FaVideo
                 size={22}
-                style={{ marginBottom: 7, color: "#E2EBFE" }}
+                style={{ marginBottom: 7, color: "#FFE9FF" }}
               />
-              <span style={{ color: "#E2EBFE" }}>Webcam</span>
+              <span style={{ color: "#FFE9FF" }}>Webcam</span>
             </>
           ) : (
             <>
@@ -90,9 +90,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
                   setCallAccepted(false)
                 }}
                 size={22}
-                style={{ marginBottom: 7, color: "#E2EBFE" }}
+                style={{ marginBottom: 7, color: "#FFE9FF" }}
               />
-              <span style={{ color: "#E2EBFE" }}>End call</span>
+              <span style={{ color: "#FFE9FF" }}>End call</span>
             </>
           ) : (
             <>
@@ -100,10 +100,10 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
                 size={22}
                 style={{
                   marginBottom: 7,
-                  color: receivingCall ? "#aaa" : "#E2EBFE",
+                  color: receivingCall ? "#aaa" : "#FFE9FF",
                 }}
               />
-              <span style={{ color: "#E2EBFE" }}>Call</span>
+              <span style={{ color: "#FFE9FF" }}>Call</span>
             </>
           )}
         </IconWrapper>

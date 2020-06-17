@@ -49,7 +49,7 @@ const ChatMain = () => {
   const { query } = useRouter()
 
   useEffect(() => {
-    socket.current = io.connect(`/?room=${query["index"]}`)
+    socket.current = io.connect(`/?room=${query["room"]}`)
     navigator.mediaDevices
       .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
       .then((stream) => {
@@ -150,7 +150,6 @@ const ChatMain = () => {
     peer2.signal(callerSignal)
 
     peer2.on("close", () => {
-      setCallAccepted(true)
       friendVideoRef.current.srcObject = null
     })
   }
@@ -164,44 +163,37 @@ const ChatMain = () => {
   }, [cancelCall])
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        alignItems: "center",
-      }}
-    >
+    <OutterWrapper>
       <Wrapper>
         <LeftColumn>
           <ChatVideo
             selfVideoRef={selfVideoRef}
             friendVideoRef={friendVideoRef}
             acceptCall={acceptCall}
-            setCancelCall={setCancelCall}
           />
           <ChatTextBar socket={socket} />
         </LeftColumn>
         <RightColumn>
-          <LogoStyled src="/logo.png" alt="logo" />
+          <LogoStyled src="/logo.svg" alt="logo" />
           <ChatUsername />
-          <ChatCommands setCancelCall={setCancelCall} callFriend={callFriend} />
+          <ChatCommands callFriend={callFriend} />
           <ChatTextWindow />
         </RightColumn>
       </Wrapper>
-    </div>
+    </OutterWrapper>
   )
 }
 
-const Root = () => (
-  <RecoilRoot>
-    <ChatMain />
-  </RecoilRoot>
-)
-
-export default Root
+export default ChatMain
 
 // Styles
+const OutterWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+`
+
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;

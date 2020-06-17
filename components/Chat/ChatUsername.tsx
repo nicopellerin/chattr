@@ -33,7 +33,7 @@ const Text = styled.span`
   font-size: 1.6rem;
   font-weight: 600;
   margin-right: 1rem;
-  color: #e2ebfe;
+  color: #ffe9ff;
 `
 
 const Username = styled.span`

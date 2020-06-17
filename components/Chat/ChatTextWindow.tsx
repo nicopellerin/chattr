@@ -47,7 +47,11 @@ const ChatTextWindow = () => {
           </AnimatePresence>
           {msgs.length === 0 && (
             <NoMessages>
-              <FaKiwiBird size={32} style={{ marginBottom: 15 }} color="#aaa" />
+              <FaKiwiBird
+                size={32}
+                style={{ marginBottom: 15 }}
+                color="#FFE9FF"
+              />
               <NoMessagesText>{welcomeMsg}</NoMessagesText>
             </NoMessages>
           )}
@@ -73,25 +77,25 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   padding: 2.2rem 2rem;
-  color: #f8f8f8;
+  color: #ffe9ff;
   font-size: 1.6rem;
   overflow: auto;
 `
 
 const MsgWrapper = styled(motion.div)`
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr;
   grid-gap: 1rem;
-  padding-bottom: 2rem;
+  padding-bottom: 1.5rem;
   border-bottom: 1px solid #222;
 
   &:not(:first-child) {
-    padding-top: 2rem;
+    padding-top: 1.5rem;
   }
 `
 
 const Username = styled.span`
-  color: ${(props: { me: boolean }) => (props.me ? "#2cfcf0" : "orange")};
+  color: ${(props: { me: boolean }) => (props.me ? "#2cfcf0" : "#FF2F79")};
   font-weight: 600;
 `
 
@@ -106,5 +110,5 @@ const NoMessages = styled.div`
 const NoMessagesText = styled.span`
   font-size: 1.6rem;
   font-weight: 600;
-  color: #aaa;
+  color: #ffe9ff;
 `
