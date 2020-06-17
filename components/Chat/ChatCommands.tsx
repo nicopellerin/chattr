@@ -46,13 +46,13 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
         >
           {muteMic ? (
             <>
-              <FaMicrophoneSlash size={30} style={{ marginBottom: 7 }} />
+              <FaMicrophoneSlash size={22} style={{ marginBottom: 7 }} />
               <span>Mic</span>
             </>
           ) : (
             <>
               <FaMicrophone
-                size={30}
+                size={22}
                 style={{ marginBottom: 7, color: "#E2EBFE" }}
               />
               <span style={{ color: "#E2EBFE" }}>Mic</span>
@@ -66,14 +66,14 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
           {showSelfWebcam ? (
             <>
               <FaVideo
-                size={30}
+                size={22}
                 style={{ marginBottom: 7, color: "#E2EBFE" }}
               />
               <span style={{ color: "#E2EBFE" }}>Webcam</span>
             </>
           ) : (
             <>
-              <FaVideoSlash size={30} style={{ marginBottom: 7 }} />
+              <FaVideoSlash size={22} style={{ marginBottom: 7 }} />
               <span>Webcam</span>
             </>
           )}
@@ -89,7 +89,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
                   setCancelCall(true)
                   setCallAccepted(false)
                 }}
-                size={30}
+                size={22}
                 style={{ marginBottom: 7, color: "#E2EBFE" }}
               />
               <span style={{ color: "#E2EBFE" }}>End call</span>
@@ -97,7 +97,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
           ) : (
             <>
               <FaPhone
-                size={26}
+                size={22}
                 style={{
                   marginBottom: 7,
                   color: receivingCall ? "#aaa" : "#E2EBFE",
@@ -130,6 +130,7 @@ const Container = styled.div`
   justify-items: center;
   height: 100%;
   background: rgba(255, 255, 255, 0.01);
+  padding: 1rem;
 `
 
 const IconWrapper = styled(motion.div)`

@@ -21,11 +21,10 @@ export default ChatUsername
 const Wrapper = styled.form`
   background: #1e1e1e;
   height: 100%;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   border-radius: 5px;
   display: grid;
   grid-template-columns: 1fr auto;
-  /* border: 1px solid #222; */
   display: flex;
   align-items: center;
 `

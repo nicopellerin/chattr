@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { motion } from "framer-motion"
 
-import { usernameState } from "../../store/users"
+import { usernameState, listUsersState } from "../../store/users"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -12,12 +12,14 @@ interface Props {
 
 const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
+  const listUsers = useRecoilValue(listUsersState)
 
   const [msg, setMsg] = useState("")
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!msg) return
+
+    if (!msg || Object.keys(listUsers).length < 2) return
 
     socket.current.emit("chatMessage", { user: username, msg })
 
@@ -29,7 +31,9 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       <TextInput
         placeholder="Type message..."
         value={msg}
-        onChange={(e) => setMsg(e.target.value)}
+        onChange={(e) =>
+          Object.keys(listUsers).length < 2 ? null : setMsg(e.target.value)
+        }
       />
       <SendButton whileTap={{ scale: 0.98 }}>Send</SendButton>
     </Wrapper>

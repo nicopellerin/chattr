@@ -205,7 +205,7 @@ export default Root
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
-  grid-gap: 2rem;
+  grid-gap: 3rem;
   width: 85%;
 `
 
@@ -217,12 +217,11 @@ const LeftColumn = styled.div`
 
 const RightColumn = styled.div`
   display: grid;
-  grid-template-rows: auto 50px 1fr 3fr;
+  /* grid-template-rows: auto 50px 1fr 3fr; */
   grid-gap: 2rem;
 `
 
 const LogoStyled = styled.img`
-  /* position: absolute; */
   width: 190px;
   justify-self: center;
   margin-bottom: 2rem;
