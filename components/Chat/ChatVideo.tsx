@@ -88,6 +88,7 @@ const ChatVideo: React.FC<Props> = ({
       )}
       <AnimatePresence>
         <SelfVideo
+          muted
           initial={{ scaleX: -1 }}
           exit={{ scaleX: 0 }}
           drag

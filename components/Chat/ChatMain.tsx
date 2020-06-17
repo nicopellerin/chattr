@@ -49,7 +49,7 @@ const ChatMain = () => {
   const { query } = useRouter()
 
   useEffect(() => {
-    socket.current = io.connect(`/`)
+    socket.current = io.connect(`/?room=${query["index"]}`)
     navigator.mediaDevices
       .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
       .then((stream) => {
@@ -69,8 +69,8 @@ const ChatMain = () => {
       setChatWelcomeMessage(msg)
     })
 
-    socket.current.on("chatMessages", (msgs) => {
-      setChatMsgs(msgs)
+    socket.current.on("chatMessages", (msg) => {
+      setChatMsgs((prevState) => [...prevState, msg])
     })
 
     socket.current.on("listUsers", (users) => {
@@ -84,7 +84,7 @@ const ChatMain = () => {
     })
   }, [])
 
-  const callFriend = (id) => {
+  const callFriend = (id: string) => {
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -119,38 +119,49 @@ const ChatMain = () => {
       }
     })
 
+    peer.on("close", () => {
+      setCallAccepted(true)
+      selfVideoRef.current.srcObject = null
+    })
+
     socket.current.on("callAccepted", (signal) => {
       setCallAccepted(true)
       peer.signal(signal)
     })
   }
 
+  const peer2 = new Peer({
+    initiator: false,
+    trickle: false,
+    stream: stream,
+  })
+
   const acceptCall = () => {
     setCallAccepted(true)
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream: stream,
-    })
 
-    peer.on("signal", (data) => {
+    peer2.on("signal", (data) => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
     })
 
-    peer.on("stream", (stream) => {
+    peer2.on("stream", (stream) => {
       friendVideoRef.current.srcObject = stream
     })
 
-    peer.signal(callerSignal)
+    peer2.signal(callerSignal)
 
-    if (cancelCall) {
-      peer.destroy()
-    }
-
-    peer.on("close", () => {
-      // setCallAccepted(true)
+    peer2.on("close", () => {
+      setCallAccepted(true)
+      friendVideoRef.current.srcObject = null
     })
   }
+
+  useEffect(() => {
+    if (cancelCall) {
+      peer2.removeStream(stream)
+      friendVideoRef.current.srcObject = null
+      alert("cancel")
+    }
+  }, [cancelCall])
 
   return (
     <div

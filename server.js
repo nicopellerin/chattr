@@ -14,41 +14,33 @@ const PORT = 3000
 
 const users = {}
 
-let chatMessages = []
-
 io.on("connection", (socket) => {
   const room = socket.handshake.query.room
-  console.log("ROOM", room)
-  // socket.join(room)
+  socket.join(room)
 
-  // const sockets = nsp.in(room)
-  // Object.keys(sockets.sockets).forEach((user) => {
-  //   users[socket.id] = sockets.sockets[user].id
-  //   nsp.to(room).emit("listUsers", users[socket.id])
-  // })
+  const sockets = io.in(room)
+  Object.keys(sockets.sockets).forEach((user) => {
+    users[socket.id] = sockets.sockets[user].id
+    console.log("user", sockets.sockets[user].id)
+  })
 
-  if (!users[socket.id]) {
-    users[socket.id] = socket.id
+  if (io.sockets.adapter.rooms[room].length === 3) {
+    socket.disconnect()
   }
 
-  // if (io.sockets.adapter.rooms[room].length === 3) {
-  //   socket.disconnect()
-  // }
   socket.emit("selfId", socket.id)
 
   io.emit("listUsers", users)
 
   io.to(room).emit("chatConnection", "Welcome to Chattr!")
 
-  socket.to(room).on("chatMessage", (msg) => {
-    chatMessages.push(msg)
-
-    io.to(room).emit("chatMessages", chatMessages)
+  socket.on("chatMessage", (msg) => {
+    io.to(room).emit("chatMessages", msg)
   })
 
   socket.on("disconnect", () => {
     delete users[socket.id]
-    socket.disconnect()
+    socket.leave(room)
   })
 
   socket.on("callUser", (data) => {
