@@ -51,7 +51,7 @@ const ChatTextWindow = () => {
               <FaKiwiBird
                 size={32}
                 style={{ marginBottom: 15 }}
-                color="#FFE9FF"
+                color="var(--textColor);"
               />
               <NoMessagesText>{welcomeMsg}</NoMessagesText>
             </NoMessages>
@@ -78,8 +78,8 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   padding: 2.2rem 2rem;
-  color: #ffe9ff;
-  font-size: 1.6rem;
+  color: var(--textColor);
+  font-size: 1.7rem;
   overflow: auto;
 `
 
@@ -96,7 +96,8 @@ const MsgWrapper = styled(motion.div)`
 `
 
 const Username = styled.span`
-  color: ${(props: { me: boolean }) => (props.me ? "#2cfcf0" : "#FF2F79")};
+  color: ${(props: { me: boolean }) =>
+    props.me ? "var(--secondaryColor)" : "var(--tertiaryColor)"};
   font-weight: 600;
 `
 
@@ -109,7 +110,7 @@ const NoMessages = styled.div`
 `
 
 const NoMessagesText = styled.span`
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 600;
   color: #ffe9ff;
 `

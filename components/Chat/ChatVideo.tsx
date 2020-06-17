@@ -44,7 +44,11 @@ const ChatVideo: React.FC<Props> = ({
         >
           <IncomingCallContainer>
             <IncomingCallTitle style={{ margin: 0 }}>
-              <Circle size={72} style={{ marginBottom: 30 }} color="#3EFCE8" />
+              <Circle
+                size={72}
+                style={{ marginBottom: 30 }}
+                color="var(--textColor)"
+              />
               Waiting for friend to connect
             </IncomingCallTitle>
           </IncomingCallContainer>
@@ -187,10 +191,10 @@ const IncomingCallContainer = styled(motion.div)`
   backdrop-filter: blur(10px);
 `
 
-const IncomingCallTitle = styled.h3`
+const IncomingCallTitle = styled.h4`
   font-size: 3rem;
   margin-bottom: 3rem;
-  color: #3efce8;
+  color: var(--textColor);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -201,11 +205,11 @@ const IncomingCallButtonWrapper = styled.div`
 `
 
 const IncomingCallAcceptButton = styled(motion.button)`
-  padding: 1.05em 1.8em;
+  padding: 1em 1.5em;
   border: none;
   background: #28d728;
   color: #ffe9ff;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 600;
   border-radius: 5px;
   display: flex;
@@ -220,22 +224,23 @@ const IncomingCallRejectButton = styled(IncomingCallAcceptButton)`
   background: crimson;
 `
 
-const CatTitle = styled.h3`
-  font-size: 5.4rem;
-  margin-bottom: 3rem;
-  color: #3efce8;
+const CatTitle = styled.h2`
+  font-size: 6rem;
+  margin-bottom: 4rem;
+  color: var(--tertiaryColor);
   display: flex;
   flex-direction: column;
   align-items: center;
 `
 
 const CatsTagline = styled.h4`
-  font-size: 2rem;
+  font-size: 2.4rem;
   color: #ffe9ff;
-  margin-bottom: 4.5rem;
+  margin-bottom: 5rem;
+  /* font-weight: 500; */
 `
 
 const CatSlideshowButton = styled(IncomingCallAcceptButton)`
-  background: #3efce8;
+  background: var(--tertiaryColor);
   color: #333;
 `

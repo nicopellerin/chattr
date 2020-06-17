@@ -137,7 +137,7 @@ const IconWrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 600;
   cursor: pointer;
 `

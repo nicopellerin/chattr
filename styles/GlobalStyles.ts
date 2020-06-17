@@ -3,7 +3,15 @@ import { createGlobalStyle } from "styled-components"
 const GlobalStyles = createGlobalStyle`
 
 :root {
-  --primaryColor: #9D00E0;
+  --primaryColor: #8352FD;
+  --primaryColorDark: #6900bc;
+  --primaryColorLight: #d75cff;
+
+  --secondaryColor: #f020d8;
+
+  --tertiaryColor: #00e5ff;
+
+  --textColor: #E3E8FF;
 
   --systemFont: font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacSystemFont,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
 }

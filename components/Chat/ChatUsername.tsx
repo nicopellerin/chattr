@@ -30,14 +30,14 @@ const Wrapper = styled.form`
 `
 
 const Text = styled.span`
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 600;
   margin-right: 1rem;
-  color: #ffe9ff;
+  color: var(--textColor);
 `
 
 const Username = styled.span`
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 600;
-  color: #2cfcf0;
+  color: var(--secondaryColor);
 `

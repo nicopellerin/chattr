@@ -59,7 +59,7 @@ const TextInput = styled.input`
   background: #121212;
   border: none;
   color: #ffe9ff;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   padding: 0 1.6rem;
   outline: transparent;
 
@@ -73,7 +73,7 @@ const SendButton = styled(motion.button)`
   border: none;
   background: #a020f0;
   color: #ffe9ff;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 600;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;

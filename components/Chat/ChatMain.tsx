@@ -214,7 +214,7 @@ const RightColumn = styled.div`
 `
 
 const LogoStyled = styled.img`
-  width: 190px;
+  width: 200px;
   justify-self: center;
   margin-bottom: 1rem;
 `
