@@ -5,9 +5,9 @@ export const selfIdState = atom({
   default: "",
 })
 
-export const listUsersState = atom<Array<string>>({
+export const listUsersState = atom<any>({
   key: "listUsersState",
-  default: [],
+  default: {},
 })
 
 export const usernameState = atom({

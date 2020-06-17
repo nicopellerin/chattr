@@ -2,7 +2,7 @@ import * as React from "react"
 import { useRef } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
-import { FaPhoneAlt } from "react-icons/fa"
+import { FaPhoneAlt, FaTimesCircle } from "react-icons/fa"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { Circle } from "better-react-spinkit"
 
@@ -21,6 +21,7 @@ interface Props {
 
 const ChatVideo: React.FC<Props> = ({
   acceptCall,
+  setCancelCall,
   selfVideoRef,
   friendVideoRef,
 }) => {
@@ -58,25 +59,37 @@ const ChatVideo: React.FC<Props> = ({
         >
           <IncomingCallContainer>
             <IncomingCallTitle>Incoming call...</IncomingCallTitle>
-            <IncomingCallButton
-              onClick={() => {
-                setReceivingCall(false)
-                acceptCall()
-              }}
-              whileTap={{ y: 1 }}
-              whileHover={{ y: -1 }}
-            >
-              <FaPhoneAlt size={14} style={{ marginRight: 7 }} />
-              Answer
-            </IncomingCallButton>
+            <IncomingCallButtonWrapper>
+              <IncomingCallAcceptButton
+                onClick={() => {
+                  setReceivingCall(false)
+                  acceptCall()
+                }}
+                whileTap={{ y: 1 }}
+                whileHover={{ y: -1 }}
+              >
+                <FaPhoneAlt size={14} style={{ marginRight: 7 }} />
+                Answer
+              </IncomingCallAcceptButton>
+              <IncomingCallRejectButton
+                onClick={() => {
+                  setReceivingCall(false)
+                  setCancelCall(true)
+                }}
+                whileTap={{ y: 1 }}
+                whileHover={{ y: -1 }}
+              >
+                <FaTimesCircle size={14} style={{ marginRight: 7 }} />
+                Reject
+              </IncomingCallRejectButton>
+            </IncomingCallButtonWrapper>
           </IncomingCallContainer>
         </IncomingCallWrapper>
       )}
       <AnimatePresence>
         <SelfVideo
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: 0 }}
+          initial={{ scaleX: -1 }}
+          exit={{ scaleX: 0 }}
           drag
           dragMomentum={false}
           dragConstraints={contraintsRef}
@@ -107,14 +120,20 @@ const Wrapper = styled(motion.div)`
 
 const FriendVideo = styled.video`
   height: 100%;
+  max-height: 670px;
   width: 100%;
-  object-fit: cover;
+  /* object-fit: cover;
+  object-position: bottom; */
   margin: 0;
   padding: 0;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 `
 
 const SelfVideo = styled(motion.video)`
-  height: 175px;
+  height: 155px;
+  width: 225px;
+  object-fit: cover;
   position: absolute;
   bottom: 3rem;
   right: 3rem;
@@ -151,7 +170,7 @@ const IncomingCallContainer = styled(motion.div)`
 `
 
 const IncomingCallTitle = styled.h3`
-  font-size: 2.4rem;
+  font-size: 3rem;
   margin-bottom: 3rem;
   color: #d0d9eb;
   display: flex;
@@ -159,17 +178,26 @@ const IncomingCallTitle = styled.h3`
   align-items: center;
 `
 
-const IncomingCallButton = styled(motion.button)`
+const IncomingCallButtonWrapper = styled.div`
+  display: flex;
+`
+
+const IncomingCallAcceptButton = styled(motion.button)`
   padding: 1em 1.8em;
   border: none;
   background: #28d728;
   color: #e2ebfe;
   font-size: 1.6rem;
   font-weight: 600;
-  border-radius: 10px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   outline: transparent;
+`
+
+const IncomingCallRejectButton = styled(IncomingCallAcceptButton)`
+  margin-left: 1em;
+  background: crimson;
 `

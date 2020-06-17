@@ -23,19 +23,19 @@ interface Props {
   callFriend: (key: string) => void
 }
 
-const ChatCommands: React.FC<Props> = ({ callFriend }) => {
+const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
   const [showSelfWebcam, setShowSelfWebcam] = useRecoilState(
     showSelfWebcamState
   )
   const [muteMic, setMuteMic] = useRecoilState(muteMicState)
   const selfId = useRecoilValue(selfIdState)
   const listUsers = useRecoilValue(listUsersState)
-  const callAccepted = useRecoilValue(callAcceptedState)
+  const [callAccepted, setCallAccepted] = useRecoilState(callAcceptedState)
   const receivingCall = useRecoilValue(receivingCallState)
 
-  const otherUser = listUsers.filter((user) => user !== selfId)[0]
+  const otherUser = Object.keys(listUsers).filter((user) => user !== selfId)[0]
 
-  console.log(selfId, otherUser)
+  // console.log(selfId)
 
   return (
     <Wrapper>
@@ -85,6 +85,10 @@ const ChatCommands: React.FC<Props> = ({ callFriend }) => {
           {callAccepted ? (
             <>
               <FaTimesCircle
+                onClick={() => {
+                  setCancelCall(true)
+                  setCallAccepted(false)
+                }}
                 size={30}
                 style={{ marginBottom: 7, color: "#E2EBFE" }}
               />

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 import io from "socket.io-client"
 import Peer from "simple-peer"
@@ -37,10 +37,10 @@ const ChatMain = () => {
   const [chatWelcomeMessage, setChatWelcomeMessage] = useRecoilState(
     chatWelcomeMessageState
   )
-
   const [chatMsgs, setChatMsgs] = useRecoilState(chatWindowState)
-
   const username = useRecoilValue(usernameState)
+
+  const [cancelCall, setCancelCall] = useState(false)
 
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
@@ -49,9 +49,9 @@ const ChatMain = () => {
   const { query } = useRouter()
 
   useEffect(() => {
-    socket.current = io.connect(`/?room=${query["index"]}`)
+    socket.current = io.connect(`/`)
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
       .then((stream) => {
         setStream(stream)
         if (selfVideoRef.current) {
@@ -73,11 +73,10 @@ const ChatMain = () => {
       setChatMsgs(msgs)
     })
 
-    socket.current.on("listUsers", (userId) => {
-      setListUsers((prevState) => [...prevState, userId])
+    socket.current.on("listUsers", (users) => {
+      setListUsers(users)
     })
 
-    console.log("UAERs", listUsers)
     socket.current.on("call", (data) => {
       setReceivingCall(true)
       setCaller(data.from)
@@ -143,6 +142,14 @@ const ChatMain = () => {
     })
 
     peer.signal(callerSignal)
+
+    if (cancelCall) {
+      peer.destroy()
+    }
+
+    peer.on("close", () => {
+      // setCallAccepted(true)
+    })
   }
 
   return (
@@ -160,14 +167,15 @@ const ChatMain = () => {
             selfVideoRef={selfVideoRef}
             friendVideoRef={friendVideoRef}
             acceptCall={acceptCall}
+            setCancelCall={setCancelCall}
           />
           <ChatTextBar socket={socket} />
         </LeftColumn>
         <RightColumn>
           <LogoStyled src="/logo.png" alt="logo" />
           <ChatUsername />
-          <ChatCommands callFriend={callFriend} />
-          <ChatTextWindow chatMsgs={chatMsgs} />
+          <ChatCommands setCancelCall={setCancelCall} callFriend={callFriend} />
+          <ChatTextWindow />
         </RightColumn>
       </Wrapper>
     </div>

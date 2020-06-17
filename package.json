@@ -28,6 +28,7 @@
     "@types/node": "^12.12.21",
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
+    "@types/react-scrollbar": "^0.5.1",
     "@types/simple-peer": "^9.6.0",
     "@types/socket.io-client": "^1.4.33",
     "babel-plugin-styled-components": "^1.10.7",
