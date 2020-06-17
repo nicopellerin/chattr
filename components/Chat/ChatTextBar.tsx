@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { motion } from "framer-motion"
@@ -14,10 +14,11 @@ interface Props {
 const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const listUsers = useRecoilValue(listUsersState)
-
-  console.log(username)
+  const userIsTyping = useRecoilValue(chatUserIsTypingState)
 
   const [msg, setMsg] = useState("")
+
+  let count = useRef(0)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -30,8 +31,8 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       msg: "",
     })
     socket.current.emit("chatMessage", { user: username, msg })
-
     setMsg("")
+    count.current = 0
   }
 
   useEffect(() => {
@@ -44,11 +45,14 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     }
   }, [msg])
 
+  const click = new Audio("/sounds/is-typing.mp3")
+
   useEffect(() => {
-    if (!msg.length) {
-      // socket.current.emit("chatMessageIsTyping", { username, status: false })
+    if (userIsTyping && userIsTyping?.username !== username && !count.current) {
+      click.play()
+      count.current++
     }
-  })
+  }, [userIsTyping])
 
   return (
     <Wrapper onSubmit={handleSubmit}>

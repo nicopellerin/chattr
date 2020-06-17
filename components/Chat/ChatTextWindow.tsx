@@ -40,6 +40,7 @@ const ChatTextWindow = () => {
         }}
         verticalScrollbarStyle={{ background: "#000" }}
         verticalContainerStyle={{ background: "#eee" }}
+        horizontal={false}
       >
         <Container>
           <AnimatePresence>
@@ -56,15 +57,6 @@ const ChatTextWindow = () => {
                 </MsgWrapper>
               ))}
           </AnimatePresence>
-          {msgs.length > 0 &&
-            userIsTyping?.status &&
-            username !== userIsTyping?.username && (
-              <UserIsTypingWrapper>
-                <UserIsTypingText>
-                  {userIsTyping?.username} is typing...
-                </UserIsTypingText>
-              </UserIsTypingWrapper>
-            )}
           {msgs.length === 0 && (
             <NoMessages>
               <FaKiwiBird
@@ -75,6 +67,20 @@ const ChatTextWindow = () => {
               <NoMessagesText>{welcomeMsg}</NoMessagesText>
             </NoMessages>
           )}
+          <AnimatePresence>
+            {userIsTyping?.status && username !== userIsTyping?.username && (
+              <UserIsTypingWrapper
+                initial={{ y: 5 }}
+                animate={{ y: 0 }}
+                exit={{ y: 5 }}
+                transition={{ type: "spring", damping: 80 }}
+              >
+                <UserIsTypingText>
+                  {userIsTyping?.username} is typing...
+                </UserIsTypingText>
+              </UserIsTypingWrapper>
+            )}
+          </AnimatePresence>
         </Container>
       </ScrollArea>
     </Wrapper>
@@ -134,7 +140,7 @@ const NoMessagesText = styled.span`
   color: var(--textColor);
 `
 
-const UserIsTypingWrapper = styled.div`
+const UserIsTypingWrapper = styled(motion.div)`
   padding: 3rem 1.7rem 1rem;
   text-align: center;
 `
