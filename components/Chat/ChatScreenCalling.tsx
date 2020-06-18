@@ -1,34 +1,34 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { DoubleBounce } from "better-react-spinkit"
+import { ThreeBounce } from "better-react-spinkit"
 
 const ChatScreenCalling = () => {
   return (
-    <IncomingCallWrapper
+    <Wrapper
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <IncomingCallContainer>
-        <IncomingCallTitle style={{ margin: 0 }}>
-          <DoubleBounce
+      <Container>
+        <Title style={{ margin: 0 }}>
+          <ThreeBounce
             size={40}
             style={{ marginBottom: 40 }}
             color="var(--textColor)"
           />
           Calling...
-        </IncomingCallTitle>
-      </IncomingCallContainer>
-    </IncomingCallWrapper>
+        </Title>
+      </Container>
+    </Wrapper>
   )
 }
 
 export default ChatScreenCalling
 
 // Styles
-const IncomingCallWrapper = styled(motion.div)`
+const Wrapper = styled(motion.div)`
   position: absolute;
   left: 0;
   top: 0;
@@ -40,7 +40,7 @@ const IncomingCallWrapper = styled(motion.div)`
   flex-direction: column;
 `
 
-const IncomingCallContainer = styled(motion.div)`
+const Container = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,7 +50,7 @@ const IncomingCallContainer = styled(motion.div)`
   z-index: 2;
 `
 
-const IncomingCallTitle = styled.h4`
+const Title = styled.h4`
   font-size: 3rem;
   color: var(--textColor);
   display: flex;

@@ -8,34 +8,34 @@ interface Props {
 
 const ChatScreenNoVideo: React.FC<Props> = ({ setShowCatSlider }) => {
   return (
-    <IncomingCallWrapper
+    <Wrapper
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <IncomingCallContainer>
-        <CatTitle>{"No video connection"}</CatTitle>
-        <CatsTagline>
+      <Container>
+        <Title>{"No video connection"}</Title>
+        <Tagline>
           Press <span style={{ color: "var(--primaryColor)" }}>Call</span> to
           start video/audio call
-        </CatsTagline>
-        <CatSlideshowButton
+        </Tagline>
+        <SlideshowButton
           onClick={() => setShowCatSlider(true)}
           whileTap={{ y: 1 }}
           whileHover={{ y: -1 }}
         >
           Show me cats instead :3
-        </CatSlideshowButton>
-      </IncomingCallContainer>
-    </IncomingCallWrapper>
+        </SlideshowButton>
+      </Container>
+    </Wrapper>
   )
 }
 
 export default ChatScreenNoVideo
 
 // Styles
-const IncomingCallWrapper = styled(motion.div)`
+const Wrapper = styled(motion.div)`
   position: absolute;
   left: 0;
   top: 0;
@@ -47,7 +47,7 @@ const IncomingCallWrapper = styled(motion.div)`
   flex-direction: column;
 `
 
-const IncomingCallContainer = styled(motion.div)`
+const Container = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,7 +57,7 @@ const IncomingCallContainer = styled(motion.div)`
   z-index: 2;
 `
 
-const CatTitle = styled.h2`
+const Title = styled.h2`
   font-size: 5rem;
   margin-bottom: 4rem;
   color: var(--tertiaryColor);
@@ -66,13 +66,13 @@ const CatTitle = styled.h2`
   align-items: center;
 `
 
-const CatsTagline = styled.h4`
+const Tagline = styled.h4`
   font-size: 2rem;
   color: var(--textColor);
   margin-bottom: 5rem;
 `
 
-export const IncomingCallAcceptButton = styled(motion.button)`
+export const Button = styled(motion.button)`
   padding: 1em 1.5em;
   border: none;
   background: #28d728;
@@ -87,7 +87,7 @@ export const IncomingCallAcceptButton = styled(motion.button)`
   outline: transparent;
 `
 
-const CatSlideshowButton = styled(IncomingCallAcceptButton)`
+const SlideshowButton = styled(Button)`
   background: var(--primaryColor);
   color: var(--textColor);
 `

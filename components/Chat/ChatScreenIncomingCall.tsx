@@ -15,16 +15,16 @@ const ChatScreenNoVideo: React.FC<Props> = ({
   setCancelCall,
 }) => {
   return (
-    <IncomingCallWrapper
+    <Wrapper
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <IncomingCallContainer>
-        <IncomingCallTitle>Incoming call...</IncomingCallTitle>
-        <IncomingCallButtonWrapper>
-          <IncomingCallAcceptButton
+      <Container>
+        <Title>Incoming call...</Title>
+        <ButtonWrapper>
+          <AcceptButton
             onClick={() => {
               setReceivingCall(false)
               acceptCall()
@@ -34,8 +34,8 @@ const ChatScreenNoVideo: React.FC<Props> = ({
           >
             <FaPhoneAlt size={14} style={{ marginRight: 7 }} />
             Answer
-          </IncomingCallAcceptButton>
-          <IncomingCallRejectButton
+          </AcceptButton>
+          <RejectButton
             onClick={() => {
               setReceivingCall(false)
               setCancelCall(true)
@@ -45,17 +45,17 @@ const ChatScreenNoVideo: React.FC<Props> = ({
           >
             <FaTimesCircle size={14} style={{ marginRight: 7 }} />
             Reject
-          </IncomingCallRejectButton>
-        </IncomingCallButtonWrapper>
-      </IncomingCallContainer>
-    </IncomingCallWrapper>
+          </RejectButton>
+        </ButtonWrapper>
+      </Container>
+    </Wrapper>
   )
 }
 
 export default ChatScreenNoVideo
 
 // Styles
-const IncomingCallWrapper = styled(motion.div)`
+const Wrapper = styled(motion.div)`
   position: absolute;
   left: 0;
   top: 0;
@@ -67,7 +67,7 @@ const IncomingCallWrapper = styled(motion.div)`
   flex-direction: column;
 `
 
-const IncomingCallContainer = styled(motion.div)`
+const Container = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,7 +77,7 @@ const IncomingCallContainer = styled(motion.div)`
   z-index: 2;
 `
 
-const IncomingCallTitle = styled.h4`
+const Title = styled.h4`
   font-size: 3rem;
   color: var(--textColor);
   display: flex;
@@ -85,7 +85,7 @@ const IncomingCallTitle = styled.h4`
   align-items: center;
 `
 
-export const IncomingCallAcceptButton = styled(motion.button)`
+export const AcceptButton = styled(motion.button)`
   padding: 1em 1.5em;
   border: none;
   background: #28d728;
@@ -100,7 +100,7 @@ export const IncomingCallAcceptButton = styled(motion.button)`
   outline: transparent;
 `
 
-const IncomingCallRejectButton = styled(IncomingCallAcceptButton)`
+const RejectButton = styled(AcceptButton)`
   margin-left: 3rem;
   background: crimson;
 `
