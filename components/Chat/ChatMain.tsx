@@ -17,6 +17,9 @@ import {
   callerState,
   callerSignalState,
   callAcceptedState,
+  cancelCallRequestState,
+  pressedCallState,
+  muteMicState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -38,24 +41,23 @@ import {
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
   const [selfId, setSelfId] = useRecoilState(selfIdState)
-  const [listUsers, setListUsers] = useRecoilState(listUsersState)
-  const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
   const [caller, setCaller] = useRecoilState(callerState)
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
-  const [callAccepted, setCallAccepted] = useRecoilState(callAcceptedState)
-  const [chatWelcomeMessage, setChatWelcomeMessage] = useRecoilState(
-    chatWelcomeMessageState
-  )
-  const [chatUserIsTyping, setChatUserIsTyping] = useRecoilState(
-    chatUserIsTypingState
-  )
-  const [chatMsgs, setChatMsgs] = useRecoilState(chatWindowState)
-  const username = useRecoilValue(usernameState)
-  const [userLeftChattr, setUserLeftChattr] = useRecoilState(
-    userLeftChattrState
+
+  const setListUsers = useSetRecoilState(listUsersState)
+  const setReceivingCall = useSetRecoilState(receivingCallState)
+  const setCallAccepted = useSetRecoilState(callAcceptedState)
+  const setChatWelcomeMessage = useSetRecoilState(chatWelcomeMessageState)
+  const setChatUserIsTyping = useSetRecoilState(chatUserIsTypingState)
+  const setChatMsgs = useSetRecoilState(chatWindowState)
+  const setUserLeftChattr = useSetRecoilState(userLeftChattrState)
+  const setPressedCall = useSetRecoilState(pressedCallState)
+  const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
+    cancelCallRequestState
   )
 
-  const [cancelCall, setCancelCall] = useState(false)
+  const username = useRecoilValue(usernameState)
+  const micMuted = useRecoilValue(muteMicState)
 
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
@@ -73,6 +75,8 @@ const ChatMain = () => {
           selfVideoRef.current.srcObject = stream
         }
       })
+
+    console.log("STREAM", stream)
 
     socket.current.emit("username", username)
 
@@ -108,6 +112,14 @@ const ChatMain = () => {
       setReceivingCall(true)
       setCaller(data.from)
       setCallerSignal(data.signal)
+    })
+
+    socket.current.on("callCancelled", () => {
+      setPressedCall(false)
+      setCallAccepted(false)
+      setReceivingCall(false)
+      setCancelCallRequest(true)
+      friendVideoRef.current.srcObject = null
     })
   }, [])
 
@@ -182,18 +194,29 @@ const ChatMain = () => {
   }
 
   useEffect(() => {
-    if (cancelCall) {
+    if (cancelCallRequest) {
+      // alert("Yo")
       peer2.removeStream(stream)
       friendVideoRef.current.srcObject = null
-      alert("cancel")
+      // selfVideoRef.current.srcObject = null
+      socket.current.emit("cancelCallRequest")
     }
-  }, [cancelCall])
+  }, [cancelCallRequest])
+
+  // useEffect(() => {
+  //   if (micMuted) {
+  //     stream.getAudioTracks()[0].enabled = false
+  //   } else {
+  //     stream.getAudioTracks()[0].enabled = true
+  //   }
+  // }, [micMuted])
 
   return (
     <OutterWrapper>
       <Wrapper>
         <LeftColumn>
           <ChatVideo
+            socket={socket}
             selfVideoRef={selfVideoRef}
             friendVideoRef={friendVideoRef}
             acceptCall={acceptCall}
@@ -203,7 +226,7 @@ const ChatMain = () => {
         <RightColumn>
           <LogoStyled src="/logo.svg" alt="logo" />
           <ChatUsername />
-          <ChatCommands callFriend={callFriend} />
+          <ChatCommands callFriend={callFriend} socket={socket} />
           <ChatTextWindow />
         </RightColumn>
       </Wrapper>

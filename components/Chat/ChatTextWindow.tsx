@@ -85,15 +85,15 @@ const ChatTextWindow = () => {
           )}
 
           {userLeftChattr && (
-            <UserIsTypingWrapper
+            <UserDisconnectedWrapper
               initial={{ y: 5 }}
               animate={{ y: 0 }}
               transition={{ type: "spring", damping: 80 }}
             >
-              <UserIsTypingText>
+              <UserDisconnectedText>
                 Your friend has disconnected from Chattr
-              </UserIsTypingText>
-            </UserIsTypingWrapper>
+              </UserDisconnectedText>
+            </UserDisconnectedWrapper>
           )}
         </Container>
       </ScrollArea>
@@ -161,4 +161,15 @@ const UserIsTypingWrapper = styled(motion.div)`
 
 const UserIsTypingText = styled.span`
   font-size: 1.7rem;
+`
+
+const UserDisconnectedWrapper = styled(motion.div)`
+  padding: 3rem 1.7rem 1rem;
+  text-align: center;
+`
+
+const UserDisconnectedText = styled.span`
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--textColor);
 `

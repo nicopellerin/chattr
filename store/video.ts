@@ -25,6 +25,11 @@ export const callAcceptedState = atom<boolean>({
   default: false,
 })
 
+export const cancelCallRequestState = atom<boolean>({
+  key: "cancelCallRequest",
+  default: false,
+})
+
 export const showSelfWebcamState = atom<boolean>({
   key: "showSelfWebcamState",
   default: true,

@@ -15,6 +15,7 @@ import {
   receivingCallState,
   callAcceptedState,
   pressedCallState,
+  cancelCallRequestState,
 } from "../../store/video"
 import { listUsersState } from "../../store/users"
 
@@ -22,20 +23,22 @@ interface Props {
   acceptCall: () => void
   selfVideoRef: React.MutableRefObject<HTMLVideoElement>
   friendVideoRef: React.MutableRefObject<HTMLVideoElement>
+  socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 const ChatVideo: React.FC<Props> = ({
   acceptCall,
-  setCancelCall,
   selfVideoRef,
   friendVideoRef,
+  socket,
 }) => {
   const showWebcam = useRecoilValue(showSelfWebcamState)
-  const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
-
   const callAccepted = useRecoilValue(callAcceptedState)
   const listUsers = useRecoilValue(listUsersState)
   const pressedCall = useRecoilValue(pressedCallState)
+  const cancelCallRequest = useRecoilValue(cancelCallRequestState)
+
+  const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
 
   const [showCatSlider, setShowCatSlider] = useState(false)
 
@@ -44,12 +47,10 @@ const ChatVideo: React.FC<Props> = ({
   let beep = new Audio("/sounds/call.mp3")
 
   useEffect(() => {
-    beep.pause()
     if (receivingCall) {
-      beep.loop = true
+      // beep.loop = true
       beep.play()
     } else {
-      beep.loop = false
       beep.pause()
     }
   }, [receivingCall])
@@ -74,11 +75,11 @@ const ChatVideo: React.FC<Props> = ({
                 <ChatScreenNoVideo setShowCatSlider={setShowCatSlider} />
               )}
 
-            {receivingCall && !callAccepted && (
+            {receivingCall && (
               <ChatScreenIncomingCall
                 setReceivingCall={setReceivingCall}
                 acceptCall={acceptCall}
-                setCancelCall={setCancelCall}
+                socket={socket}
               />
             )}
           </>

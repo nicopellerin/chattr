@@ -9,7 +9,7 @@ import {
   FaPhone,
 } from "react-icons/fa"
 import { motion } from "framer-motion"
-import { useRecoilState, useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 
 import {
   showSelfWebcamState,
@@ -17,6 +17,7 @@ import {
   muteMicState,
   receivingCallState,
   pressedCallState,
+  cancelCallRequestState,
 } from "../../store/video"
 import { selfIdState, listUsersState } from "../../store/users"
 
@@ -24,17 +25,19 @@ interface Props {
   callFriend: (key: string) => void
 }
 
-const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
+const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
   const [showSelfWebcam, setShowSelfWebcam] = useRecoilState(
     showSelfWebcamState
   )
   const selfId = useRecoilValue(selfIdState)
   const listUsers = useRecoilValue(listUsersState)
-  const receivingCall = useRecoilValue(receivingCallState)
 
+  const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
   const [callAccepted, setCallAccepted] = useRecoilState(callAcceptedState)
   const [muteMic, setMuteMic] = useRecoilState(muteMicState)
   const [pressedCall, setPressedCall] = useRecoilState(pressedCallState)
+
+  const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
 
   const otherUser = Object.keys(listUsers).filter((user) => user !== selfId)[0]
 
@@ -99,8 +102,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
             <>
               <FaTimesCircle
                 onClick={() => {
-                  setCancelCall(true)
-                  setCallAccepted(false)
+                  setReceivingCall(false)
+                  setCancelCallRequest(true)
+                  socket.current.emit("cancelCallRequest")
                 }}
                 size={22}
                 style={{ marginBottom: 7, color: "#FFE9FF" }}

@@ -38,7 +38,7 @@ const IndexPage = () => {
             <Input
               value={user}
               onChange={(e) => setUser(e.target.value)}
-              placeholder="Some random name"
+              placeholder="Eg. koolz69"
               maxLength={20}
             />
             <Button>
@@ -111,6 +111,7 @@ const Input = styled.input`
   border-radius: 5px;
   margin-bottom: 3rem;
   width: 100%;
+  outline: transparent;
 `
 
 export const Button = styled(motion.button)`
