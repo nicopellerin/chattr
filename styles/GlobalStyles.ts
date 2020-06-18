@@ -42,10 +42,11 @@ body {
   padding: 0;
   height: 100%;
   font-family: var(--systemFont);
-  /* font-family: 'Open Sans', sans-serif; */
   color: #555;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+
 }
 
 

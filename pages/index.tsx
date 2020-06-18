@@ -1,19 +1,46 @@
 import * as React from "react"
+import { useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import { useRouter } from "next/router"
+import shortid from "shortid"
+import { FaRocket } from "react-icons/fa"
+import { useRecoilState } from "recoil"
 
 import Layout from "../components/Home/Layout"
-import { FaRocket } from "react-icons/fa"
+
+import { usernameState } from "../store/users"
 
 const IndexPage = () => {
+  const [username, setUsername] = useRecoilState(usernameState)
+
+  const [user, setUser] = useState("")
+
+  const router = useRouter()
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setUsername(user)
+
+    typeof window !== "undefined" &&
+      window.localStorage.setItem("chattr-username", JSON.stringify(user))
+
+    const room = shortid.generate()
+    router.push(`/[room]`, `/${room}`)
+  }
+
   return (
     <Layout>
       <div>
         <LogoStyled src="/logo.svg" alt="logo" />
         <Container>
           <Tagline>Pick a username</Tagline>
-          <Form>
-            <Input placeholder="Some random name" />
+          <Form onSubmit={handleSubmit}>
+            <Input
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
+              placeholder="Some random name"
+              maxLength={20}
+            />
             <Button>
               Launch chat <FaRocket style={{ marginLeft: 7 }} />
             </Button>
@@ -23,6 +50,17 @@ const IndexPage = () => {
           <Footer>Made by Nico Pellerin</Footer>
         </Container>
       </div>
+      <svg
+        style={{ position: "absolute", bottom: -50 }}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1440 320"
+      >
+        <path
+          fill="#001"
+          fill-opacity="1"
+          d="M0,64L48,90.7C96,117,192,171,288,170.7C384,171,480,117,576,122.7C672,128,768,192,864,213.3C960,235,1056,213,1152,176C1248,139,1344,85,1392,58.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+        ></path>
+      </svg>
     </Layout>
   )
 }

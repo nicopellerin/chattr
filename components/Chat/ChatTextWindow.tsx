@@ -122,7 +122,7 @@ const MsgWrapper = styled(motion.div)`
 
 const Username = styled.span`
   color: ${(props: { me: boolean }) =>
-    props.me ? "var(--secondaryColor)" : "var(--tertiaryColor)"};
+    props.me ? "var(--tertiaryColor)" : "var(--secondaryColor)"};
   font-weight: 600;
 `
 

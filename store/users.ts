@@ -12,5 +12,8 @@ export const listUsersState = atom<any>({
 
 export const usernameState = atom({
   key: "usernameState",
-  default: `Nico${Math.floor(Math.random() * 100)}`,
+  default:
+    (typeof window !== "undefined" &&
+      JSON.parse(window.localStorage.getItem("chattr-username")!)) ||
+    "",
 })

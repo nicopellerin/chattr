@@ -40,5 +40,5 @@ const Text = styled.span`
 const Username = styled.span`
   font-size: 1.7rem;
   font-weight: 600;
-  color: var(--secondaryColor);
+  color: var(--tertiaryColor);
 `

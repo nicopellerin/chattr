@@ -85,6 +85,10 @@ const Title = styled.h4`
   align-items: center;
 `
 
+const ButtonWrapper = styled.div`
+  display: flex;
+`
+
 export const AcceptButton = styled(motion.button)`
   padding: 1em 1.5em;
   border: none;
