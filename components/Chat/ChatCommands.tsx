@@ -16,6 +16,7 @@ import {
   callAcceptedState,
   muteMicState,
   receivingCallState,
+  pressedCallState,
 } from "../../store/video"
 import { selfIdState, listUsersState } from "../../store/users"
 
@@ -27,15 +28,17 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
   const [showSelfWebcam, setShowSelfWebcam] = useRecoilState(
     showSelfWebcamState
   )
-  const [muteMic, setMuteMic] = useRecoilState(muteMicState)
   const selfId = useRecoilValue(selfIdState)
   const listUsers = useRecoilValue(listUsersState)
-  const [callAccepted, setCallAccepted] = useRecoilState(callAcceptedState)
   const receivingCall = useRecoilValue(receivingCallState)
+
+  const [callAccepted, setCallAccepted] = useRecoilState(callAcceptedState)
+  const [muteMic, setMuteMic] = useRecoilState(muteMicState)
+  const [pressedCall, setPressedCall] = useRecoilState(pressedCallState)
 
   const otherUser = Object.keys(listUsers).filter((user) => user !== selfId)[0]
 
-  const beepOn = new Audio("/sounds/card_drop.mp3")
+  const beepOn = new Audio("/sounds/click_snip.mp3")
 
   return (
     <Wrapper>
@@ -88,6 +91,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, setCancelCall }) => {
           whileTap={{ scale: 0.98 }}
           onClick={() => {
             callFriend(otherUser)
+            setPressedCall(true)
             beepOn.play()
           }}
         >

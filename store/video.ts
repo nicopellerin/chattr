@@ -34,3 +34,8 @@ export const muteMicState = atom<boolean>({
   key: "muteMicState",
   default: false,
 })
+
+export const pressedCallState = atom<boolean>({
+  key: "pressedCallState",
+  default: false,
+})

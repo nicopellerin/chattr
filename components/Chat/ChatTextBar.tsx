@@ -45,7 +45,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     }
   }, [msg])
 
-  const click = new Audio("/sounds/is-typing.mp3")
+  const click = new Audio("/sounds/click.mp3")
 
   useEffect(() => {
     if (userIsTyping && userIsTyping?.username !== username && !count.current) {
@@ -99,8 +99,8 @@ const TextInput = styled.input`
 const SendButton = styled(motion.button)`
   padding: 1em 1.8em;
   border: none;
-  background: #a020f0;
-  color: #ffe9ff;
+  background: var(--primaryColor);
+  color: var(--textColor);
   font-size: 1.7rem;
   font-weight: 600;
   border-top-right-radius: 3px;
