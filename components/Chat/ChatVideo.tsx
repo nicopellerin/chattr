@@ -17,7 +17,7 @@ import {
   pressedCallState,
   cancelCallRequestState,
 } from "../../store/video"
-import { listUsersState } from "../../store/users"
+import { listUsersState, userLeftChattrState } from "../../store/users"
 
 interface Props {
   acceptCall: () => void
@@ -36,6 +36,7 @@ const ChatVideo: React.FC<Props> = ({
   const callAccepted = useRecoilValue(callAcceptedState)
   const listUsers = useRecoilValue(listUsersState)
   const pressedCall = useRecoilValue(pressedCallState)
+  const userLeftChattr = useRecoilValue(userLeftChattrState)
   // const cancelCallRequest = useRecoilValue(cancelCallRequestState)
 
   const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
@@ -64,9 +65,7 @@ const ChatVideo: React.FC<Props> = ({
               <ChatScreenWaitingForConnect />
             )}
 
-            {pressedCall && !receivingCall && !callAccepted && (
-              <ChatScreenCalling />
-            )}
+            {pressedCall && !callAccepted && <ChatScreenCalling />}
 
             {!receivingCall &&
               !callAccepted &&
@@ -75,7 +74,7 @@ const ChatVideo: React.FC<Props> = ({
                 <ChatScreenNoVideo setShowCatSlider={setShowCatSlider} />
               )}
 
-            {receivingCall && (
+            {receivingCall && !callAccepted && (
               <ChatScreenIncomingCall
                 setReceivingCall={setReceivingCall}
                 acceptCall={acceptCall}

@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     delete users[socket.id]
     io.to(room).emit("userLeftChattr", "Your friend left Chattr")
+    io.emit("listUsers", users)
     socket.leave(room)
   })
 

@@ -91,14 +91,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
             </>
           )}
         </IconWrapper>
-        <IconWrapper
-          whileTap={{ scale: 0.98 }}
-          onClick={() => {
-            callFriend(otherUser)
-            setPressedCall(true)
-            beepOn.play()
-          }}
-        >
+        <IconWrapper whileTap={{ scale: 0.98 }}>
           {callAccepted ? (
             <>
               <FaTimesCircle
@@ -115,6 +108,11 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
           ) : (
             <>
               <FaPhone
+                onClick={() => {
+                  callFriend(otherUser)
+                  setPressedCall(true)
+                  beepOn.play()
+                }}
                 size={22}
                 style={{
                   marginBottom: 7,
