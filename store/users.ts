@@ -17,3 +17,8 @@ export const usernameState = atom({
       JSON.parse(window.localStorage.getItem("chattr-username")!)) ||
     "",
 })
+
+export const userLeftChattrState = atom({
+  key: "userLeftChattrState",
+  default: "",
+})

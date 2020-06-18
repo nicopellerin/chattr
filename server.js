@@ -16,17 +16,25 @@ const users = {}
 
 io.on("connection", (socket) => {
   const room = socket.handshake.query.room
-  socket.join(room)
+
+  if (
+    io.sockets.adapter.rooms[room] &&
+    io.sockets.adapter.rooms[room].length === 2
+  ) {
+    socket.disconnect()
+  } else {
+    socket.join(room)
+  }
 
   const sockets = io.in(room)
   Object.keys(sockets.sockets).forEach((user) => {
-    users[socket.id] = sockets.sockets[user].id
-    console.log("user", sockets.sockets[user].id)
+    if (!users[sockets.sockets[user].id]) {
+      users[socket.id] = sockets.sockets[user].id
+    }
   })
+  console.log("USERS", users)
 
-  if (io.sockets.adapter.rooms[room].length === 3) {
-    socket.disconnect()
-  }
+  io.to(room).emit("userJoinedChattr")
 
   socket.emit("selfId", socket.id)
 
@@ -48,6 +56,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     delete users[socket.id]
+    io.to(room).emit("userLeftChattr", "Your friend left Chattr")
     socket.leave(room)
   })
 

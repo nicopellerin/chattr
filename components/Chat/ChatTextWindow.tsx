@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
@@ -11,7 +11,7 @@ import {
   chatWelcomeMessageState,
   chatUserIsTypingState,
 } from "../../store/chat"
-import { usernameState } from "../../store/users"
+import { usernameState, userLeftChattrState } from "../../store/users"
 
 interface Message {
   msg: string
@@ -23,11 +23,15 @@ const ChatTextWindow = () => {
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
   const userIsTyping = useRecoilValue(chatUserIsTypingState)
+  const userLeftChattr = useRecoilValue(userLeftChattrState)
+
+  const chatWindowRef = useRef()
 
   const pop = new Audio("/sounds/pop_drip.mp3")
 
   useEffect(() => {
     pop.play()
+    // chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
   }, [msgs])
 
   return (
@@ -67,20 +71,30 @@ const ChatTextWindow = () => {
               <NoMessagesText>{welcomeMsg}</NoMessagesText>
             </NoMessages>
           )}
-          <AnimatePresence>
-            {userIsTyping?.status && username !== userIsTyping?.username && (
-              <UserIsTypingWrapper
-                initial={{ y: 5 }}
-                animate={{ y: 0 }}
-                exit={{ y: 5 }}
-                transition={{ type: "spring", damping: 80 }}
-              >
-                <UserIsTypingText>
-                  {userIsTyping?.username} is typing...
-                </UserIsTypingText>
-              </UserIsTypingWrapper>
-            )}
-          </AnimatePresence>
+
+          {userIsTyping?.status && username !== userIsTyping?.username && (
+            <UserIsTypingWrapper
+              initial={{ y: 5 }}
+              animate={{ y: 0 }}
+              transition={{ type: "spring", damping: 80 }}
+            >
+              <UserIsTypingText>
+                {userIsTyping?.username} is typing...
+              </UserIsTypingText>
+            </UserIsTypingWrapper>
+          )}
+
+          {userLeftChattr && (
+            <UserIsTypingWrapper
+              initial={{ y: 5 }}
+              animate={{ y: 0 }}
+              transition={{ type: "spring", damping: 80 }}
+            >
+              <UserIsTypingText>
+                Your friend has disconnected from Chattr
+              </UserIsTypingText>
+            </UserIsTypingWrapper>
+          )}
         </Container>
       </ScrollArea>
     </Wrapper>

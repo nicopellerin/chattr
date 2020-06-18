@@ -70,7 +70,7 @@ const ChatVideo: React.FC<Props> = ({
             {!receivingCall &&
               !callAccepted &&
               !pressedCall &&
-              Object.keys(listUsers).length === 2 && (
+              Object.keys(listUsers).length >= 2 && (
                 <ChatScreenNoVideo setShowCatSlider={setShowCatSlider} />
               )}
 

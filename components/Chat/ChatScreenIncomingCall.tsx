@@ -4,9 +4,9 @@ import { motion } from "framer-motion"
 import { FaPhoneAlt, FaTimesCircle } from "react-icons/fa"
 
 interface Props {
-  setReceivingCall: React.SetStateAction<React.Dispatch<boolean>>
+  setReceivingCall: React.Dispatch<React.SetStateAction<boolean>>
   acceptCall: () => void
-  setCancelCall: React.SetStateAction<React.Dispatch<boolean>>
+  setCancelCall: React.SetSDispatchtateAction<React.SetStateAction<boolean>>
 }
 
 const ChatScreenNoVideo: React.FC<Props> = ({

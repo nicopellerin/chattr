@@ -45,14 +45,14 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     }
   }, [msg])
 
-  const click = new Audio("/sounds/click.mp3")
+  // const click = new Audio("/sounds/click.mp3")
 
-  useEffect(() => {
-    if (userIsTyping && userIsTyping?.username !== username && !count.current) {
-      click.play()
-      count.current++
-    }
-  }, [userIsTyping])
+  // useEffect(() => {
+  //   if (userIsTyping && userIsTyping?.username !== username && !count.current) {
+  //     click.play()
+  //     count.current++
+  //   }
+  // }, [userIsTyping])
 
   return (
     <Wrapper onSubmit={handleSubmit}>

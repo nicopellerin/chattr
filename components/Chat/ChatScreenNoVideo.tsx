@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 
 interface Props {
-  setShowCatSlider: () => void
+  setShowCatSlider: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ChatScreenNoVideo: React.FC<Props> = ({ setShowCatSlider }) => {

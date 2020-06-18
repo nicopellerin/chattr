@@ -18,7 +18,12 @@ import {
   callerSignalState,
   callAcceptedState,
 } from "../../store/video"
-import { selfIdState, listUsersState, usernameState } from "../../store/users"
+import {
+  selfIdState,
+  listUsersState,
+  usernameState,
+  userLeftChattrState,
+} from "../../store/users"
 import ChatVideo from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
 import ChatCommands from "./ChatCommands"
@@ -46,6 +51,9 @@ const ChatMain = () => {
   )
   const [chatMsgs, setChatMsgs] = useRecoilState(chatWindowState)
   const username = useRecoilValue(usernameState)
+  const [userLeftChattr, setUserLeftChattr] = useRecoilState(
+    userLeftChattrState
+  )
 
   const [cancelCall, setCancelCall] = useState(false)
 
@@ -82,6 +90,14 @@ const ChatMain = () => {
 
     socket.current.on("chatMessageIsTyping", ({ username, status, msg }) => {
       setChatUserIsTyping({ username, status })
+    })
+
+    socket.current.on("userLeftChattr", (msg) => {
+      setUserLeftChattr(msg)
+    })
+
+    socket.current.on("userJoinedChattr", () => {
+      setUserLeftChattr("")
     })
 
     socket.current.on("listUsers", (users) => {
