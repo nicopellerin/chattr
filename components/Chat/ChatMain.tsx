@@ -203,13 +203,19 @@ const ChatMain = () => {
     }
   }, [cancelCallRequest])
 
-  // useEffect(() => {
-  //   if (micMuted) {
-  //     stream.getAudioTracks()[0].enabled = false
-  //   } else {
-  //     stream.getAudioTracks()[0].enabled = true
-  //   }
-  // }, [micMuted])
+  useEffect(() => {
+    if (!stream?.getAudioTracks()) return
+
+    if (micMuted) {
+      const audio = stream.getAudioTracks()
+      audio[0].enabled = false
+      console.log("AUDIO", stream?.getAudioTracks())
+    } else {
+      const audio = stream.getAudioTracks()
+      audio[0].enabled = true
+      console.log("AUDIO", stream?.getAudioTracks())
+    }
+  }, [micMuted, stream])
 
   return (
     <OutterWrapper>

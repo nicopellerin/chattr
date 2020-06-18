@@ -36,7 +36,7 @@ const ChatVideo: React.FC<Props> = ({
   const callAccepted = useRecoilValue(callAcceptedState)
   const listUsers = useRecoilValue(listUsersState)
   const pressedCall = useRecoilValue(pressedCallState)
-  const cancelCallRequest = useRecoilValue(cancelCallRequestState)
+  // const cancelCallRequest = useRecoilValue(cancelCallRequestState)
 
   const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
 
