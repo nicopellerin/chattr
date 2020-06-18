@@ -20,6 +20,7 @@ import {
   cancelCallRequestState,
   pressedCallState,
   muteMicState,
+  showSelfWebcamState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -58,6 +59,7 @@ const ChatMain = () => {
 
   const username = useRecoilValue(usernameState)
   const micMuted = useRecoilValue(muteMicState)
+  const showSelfWebcam = useRecoilValue(showSelfWebcamState)
 
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
@@ -191,6 +193,7 @@ const ChatMain = () => {
     })
   }
 
+  // End call
   useEffect(() => {
     if (cancelCallRequest) {
       peer2.removeStream(stream)
@@ -199,19 +202,31 @@ const ChatMain = () => {
     }
   }, [cancelCallRequest])
 
+  // Mute mic
   useEffect(() => {
     if (!stream?.getAudioTracks()) return
 
     if (micMuted) {
       const audio = stream.getAudioTracks()
       audio[0].enabled = false
-      console.log("AUDIO", stream?.getAudioTracks())
     } else {
       const audio = stream.getAudioTracks()
       audio[0].enabled = true
-      console.log("AUDIO", stream?.getAudioTracks())
     }
   }, [micMuted, stream])
+
+  // Disable video
+  useEffect(() => {
+    if (!stream?.getVideoTracks()) return
+
+    if (!showSelfWebcam) {
+      const video = stream.getVideoTracks()
+      video[0].enabled = false
+    } else {
+      const video = stream.getVideoTracks()
+      video[0].enabled = true
+    }
+  }, [showSelfWebcam, stream])
 
   return (
     <OutterWrapper>
