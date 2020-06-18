@@ -23,6 +23,7 @@ import { selfIdState, listUsersState } from "../../store/users"
 
 interface Props {
   callFriend: (key: string) => void
+  socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {

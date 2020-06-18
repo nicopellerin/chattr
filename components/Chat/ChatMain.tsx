@@ -76,8 +76,6 @@ const ChatMain = () => {
         }
       })
 
-    console.log("STREAM", stream)
-
     socket.current.emit("username", username)
 
     socket.current.on("selfId", (id) => {
@@ -195,10 +193,8 @@ const ChatMain = () => {
 
   useEffect(() => {
     if (cancelCallRequest) {
-      // alert("Yo")
       peer2.removeStream(stream)
       friendVideoRef.current.srcObject = null
-      // selfVideoRef.current.srcObject = null
       socket.current.emit("cancelCallRequest")
     }
   }, [cancelCallRequest])
