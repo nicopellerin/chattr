@@ -49,6 +49,7 @@ const ChatMain = () => {
   const setChatMsgs = useSetRecoilState(chatWindowState)
   const setUserLeftChattr = useSetRecoilState(userLeftChattrState)
   const setPressedCall = useSetRecoilState(pressedCallState)
+  // @ts-ignore
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
     cancelCallRequestState
   )

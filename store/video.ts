@@ -51,7 +51,7 @@ export const disableCallIconState = selector({
   key: "disableCallIconState",
   get: ({ get }) => {
     const receivingCall = get(receivingCallState)
-    const cancelCall = get(cancelCallRequestState)
+    // const cancelCall = get(cancelCallRequestState)
     const listUsers = get(listUsersState)
 
     console.log("RECEIVING", receivingCall)

@@ -1,21 +1,29 @@
-const express = require("express")
-const http = require("http")
+import express, { Request, Response } from "express"
+import http from "http"
+import socket from "socket.io"
+import next from "next"
+
 const app = express()
 const server = http.createServer(app)
-const socket = require("socket.io")
+
 const io = socket(server)
-const next = require("next")
 
 const dev = process.env.NODE_ENV !== "production"
 const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
-const rooms = {}
+interface Rooms {
+  [room: string]: {
+    users: string[]
+  }
+}
+
+const rooms: Rooms = {}
 
 io.on("connection", (socket) => {
-  const room = socket.handshake.query.room
+  const room: string = socket.handshake.query.room
 
   // io.in(room).clients((error, clients) => {
   //   if (error) {
@@ -31,7 +39,7 @@ io.on("connection", (socket) => {
 
   socket.join(room)
 
-  const oldUsers = (rooms[room] && rooms[room].users) || []
+  const oldUsers: string[] = (rooms[room] && rooms[room].users) || []
 
   rooms[room] = { users: [...oldUsers, socket.id] }
 
@@ -56,20 +64,22 @@ io.on("connection", (socket) => {
   })
 
   socket.on("disconnect", () => {
-    rooms[room].users = rooms[room].users.filter((user) => user !== socket.id)
+    rooms[room].users = rooms[room].users.filter(
+      (user: string) => user !== socket.id
+    )
     io.to(room).emit("userLeftChattr", "Your friend left Chattr")
     io.emit("listUsers", [])
     socket.leave(room)
   })
 
-  socket.on("callUser", (data) => {
+  socket.on("callUser", (data: any) => {
     io.to(data.userToCall).emit("call", {
       signal: data.signalData,
       from: data.from,
     })
   })
 
-  socket.on("acceptCall", (data) => {
+  socket.on("acceptCall", (data: any) => {
     io.to(data.to).emit("callAccepted", data.signal)
   })
 
@@ -79,11 +89,11 @@ io.on("connection", (socket) => {
 })
 
 nextApp.prepare().then(() => {
-  app.get("*", (req, res) => {
+  app.get("*", (req: Request, res: Response) => {
     return nextHandler(req, res)
   })
 
-  server.listen(PORT, (err) => {
+  server.listen(PORT, (err?: any) => {
     if (err) throw err
     console.log(`Listening on port ${PORT}`)
   })

@@ -1,8 +1,8 @@
 import * as React from "react"
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useRecoilValue } from "recoil"
 
 import Slider from "./Slider"
 import ChatScreenWaitingForConnect from "./ChatScreenWaitingForConnect"
@@ -15,7 +15,6 @@ import {
   receivingCallState,
   callAcceptedState,
   pressedCallState,
-  // cancelCallRequestState,
 } from "../../store/video"
 import { listUsersState } from "../../store/users"
 
@@ -36,9 +35,7 @@ const ChatVideo: React.FC<Props> = ({
   const callAccepted = useRecoilValue(callAcceptedState)
   const listUsers = useRecoilValue(listUsersState)
   const pressedCall = useRecoilValue(pressedCallState)
-  // const cancelCallRequest = useRecoilValue(cancelCallRequestState)
-
-  const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
+  const receivingCall = useRecoilValue(receivingCallState)
 
   const [showCatSlider, setShowCatSlider] = useState(false)
 
@@ -61,11 +58,7 @@ const ChatVideo: React.FC<Props> = ({
               )}
 
             {receivingCall && !callAccepted && (
-              <ChatScreenIncomingCall
-                setReceivingCall={setReceivingCall}
-                acceptCall={acceptCall}
-                socket={socket}
-              />
+              <ChatScreenIncomingCall acceptCall={acceptCall} socket={socket} />
             )}
           </>
         ) : (

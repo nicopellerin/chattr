@@ -1,5 +1,4 @@
 import * as React from "react"
-import { useEffect } from "react"
 import styled, { css } from "styled-components"
 import {
   FaMicrophoneSlash,
@@ -37,10 +36,10 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
   const [showSelfWebcam, setShowSelfWebcam] = useRecoilState(
     showSelfWebcamState
   )
-  const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
   const [muteMic, setMuteMic] = useRecoilState(muteMicState)
   const [pressedCall, setPressedCall] = useRecoilState(pressedCallState)
 
+  const setReceivingCall = useSetRecoilState(receivingCallState)
   const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
 
   const callAccepted = useRecoilValue(callAcceptedState)

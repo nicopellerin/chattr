@@ -4,19 +4,7 @@ import { FaPlusCircle } from "react-icons/fa"
 import { motion } from "framer-motion"
 
 const Invite = () => {
-  const inviteFriend = async () => {
-    if (typeof window !== "undefined" && navigator && navigator.share) {
-      try {
-        await navigator.share({
-          title: "Chattr",
-          text: "Share this session with a friend",
-          url: window.location.href,
-        })
-      } catch (err) {
-        console.error(err)
-      }
-    }
-  }
+  const inviteFriend = async () => {}
 
   return (
     <Wrapper

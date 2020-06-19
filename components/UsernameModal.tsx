@@ -115,8 +115,3 @@ const Button = styled(motion.button)`
   cursor: pointer;
   outline: transparent;
 `
-
-const LogoStyled = styled.img`
-  width: 25rem;
-  margin-bottom: 3rem;
-`
