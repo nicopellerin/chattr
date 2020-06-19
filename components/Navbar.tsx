@@ -7,7 +7,9 @@ const Navbar = () => {
     <Wrapper>
       <LogoStyled src="/logo.svg" alt="logo" />
       <Text>Free P2P audio/video + chat</Text>
-      <ShareButton>About</ShareButton>
+      <ButtonAbout whileTap={{ scale: 0.98 }} whileHover={{ scale: 1.02 }}>
+        About
+      </ButtonAbout>
     </Wrapper>
   )
 }
@@ -30,7 +32,7 @@ const LogoStyled = styled.img`
   width: 20rem;
 `
 
-const ShareButton = styled(motion.button)`
+const ButtonAbout = styled(motion.button)`
   /* padding: 0.7em 1.5em; */
   border: none;
   background: transparent;

@@ -11,12 +11,12 @@ import { usernameState } from "../store/users"
 
 interface Props {
   buttonText?: string
-  showLogo?: boolean
+  noUsernameModal?: boolean
 }
 
 const UsernameModal: React.FC<Props> = ({
-  buttonText = "LaunchChat",
-  showLogo = false,
+  buttonText = "Launch Chat",
+  noUsernameModal = false,
 }) => {
   const setUsername = useSetRecoilState(usernameState)
   const [user, setUser] = useState("")
@@ -25,6 +25,8 @@ const UsernameModal: React.FC<Props> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (!user) return
+
     setUsername(user)
 
     typeof window !== "undefined" &&
@@ -35,17 +37,17 @@ const UsernameModal: React.FC<Props> = ({
   }
 
   return (
-    <Container>
-      {showLogo && <LogoStyled src="/logo.svg" alt="logo" />}
+    <Container noUsernameModal={noUsernameModal}>
       <Tagline>Pick a username</Tagline>
       <Form onSubmit={handleSubmit}>
         <Input
+          required
           value={user}
           onChange={(e) => setUser(e.target.value)}
           placeholder="Eg. koolz69"
           maxLength={20}
         />
-        <Button>
+        <Button whileTap={{ y: 1 }} whileHover={{ y: -1 }}>
           {buttonText} <FaRocket style={{ marginLeft: 7 }} />
         </Button>
       </Form>
@@ -64,10 +66,11 @@ const Container = styled.div`
   background: #1a0d2b;
   padding: 5rem;
   border-radius: 10%;
-  /* width: 40rem;
-  height: 30rem; */
   border-bottom: 7px solid var(--primaryColorDark);
-  filter: drop-shadow(0 0 20rem rgba(131, 82, 253, 0.2));
+  filter: ${(props: { noUsernameModal: boolean }) =>
+    props.noUsernameModal
+      ? "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.9))"
+      : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.5))"};
 `
 
 const Tagline = styled.span`
@@ -112,6 +115,6 @@ const Button = styled(motion.button)`
 `
 
 const LogoStyled = styled.img`
-  width: 20rem;
+  width: 25rem;
   margin-bottom: 3rem;
 `

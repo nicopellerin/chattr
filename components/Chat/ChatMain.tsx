@@ -33,7 +33,7 @@ import {
   chatWindowState,
   chatUserIsTypingState,
 } from "../../store/chat"
-import NoUsername from "./NoUsername"
+import NoUsername from "./NoUsernameModal"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -74,32 +74,6 @@ const ChatMain = () => {
 
   useEffect(() => {
     socket.current = io.connect(`/?room=${room}`)
-
-    // navigator.getUserMedia =
-    //   navigator.getUserMedia ||
-    //   navigator.webkitGetUserMedia ||
-    //   navigator.mozGetUserMedia ||
-    //   navigator.msGetUserMedia
-
-    // if (navigator.mediaDevices) {
-    //   navigator.mediaDevices
-    //     .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
-    //     .then((stream) => {
-    //       setStream(stream)
-    //       if (selfVideoRef.current) {
-    //         selfVideoRef.current.srcObject = stream
-    //       }
-    //     })
-    // } else {
-    //   navigator
-    //     .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
-    //     .then((stream) => {
-    //       setStream(stream)
-    //       if (selfVideoRef.current) {
-    //         selfVideoRef.current.srcObject = stream
-    //       }
-    //     })
-    // }
 
     navigator.mediaDevices
       .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
