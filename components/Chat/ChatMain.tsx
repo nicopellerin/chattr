@@ -106,7 +106,12 @@ const ChatMain = () => {
 
     socket.current.on("userLeftChattr", (msg: string) => {
       setUserLeftChattr(msg)
+      setPressedCall(false)
+      setCallAccepted(false)
+      setReceivingCall(false)
+      setCancelCallRequest(true)
       setTimeout(() => setUserLeftChattr(""), 3000)
+      setChatMsgs([])
       friendVideoRef.current.srcObject = null
       peer2.destroy()
     })
@@ -116,14 +121,13 @@ const ChatMain = () => {
     })
 
     socket.current.on("listUsers", (users: string[]) => {
-      console.log("USERS", room, users)
       setListUsers(users)
     })
 
     socket.current.on("call", (data: any) => {
-      setReceivingCall(true)
       setCaller(data.from)
       setCallerSignal(data.signal)
+      setReceivingCall(true)
     })
 
     socket.current.on("callCancelled", () => {
@@ -171,11 +175,10 @@ const ChatMain = () => {
       }
     })
 
-    // peer.on("close", () => {
-    //   setCallAccepted(true)
-    //   peer.destroy()
-    //   selfVideoRef.current.srcObject = null
-    // })
+    peer.on("close", () => {
+      peer.destroy()
+      selfVideoRef.current.srcObject = null
+    })
 
     socket.current.on("userLeftChattr", (msg: string) => {
       setUserLeftChattr(msg)
@@ -184,6 +187,7 @@ const ChatMain = () => {
     })
 
     socket.current.on("callAccepted", (signal: any) => {
+      setReceivingCall(false)
       setCallAccepted(true)
       peer.signal(signal)
     })
@@ -192,6 +196,7 @@ const ChatMain = () => {
   // Accept incoming call
   const acceptCall = () => {
     setCallAccepted(true)
+    setReceivingCall(false)
 
     peer2.on("signal", (data) => {
       socket.current.emit("acceptCall", { signal: data, to: caller })

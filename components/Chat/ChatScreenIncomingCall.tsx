@@ -4,20 +4,16 @@ import { motion } from "framer-motion"
 import { FaPhoneAlt, FaTimesCircle } from "react-icons/fa"
 import { useSetRecoilState } from "recoil"
 
-import { cancelCallRequestState } from "../../store/video"
+import { cancelCallRequestState, receivingCallState } from "../../store/video"
 
 interface Props {
-  setReceivingCall: React.Dispatch<React.SetStateAction<boolean>>
   acceptCall: () => void
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
-const ChatScreenNoVideo: React.FC<Props> = ({
-  setReceivingCall,
-  acceptCall,
-  socket,
-}) => {
+const ChatScreenNoVideo: React.FC<Props> = ({ acceptCall, socket }) => {
   const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
+  // const setReceivingCall = useSetRecoilState(receivingCallState)
 
   return (
     <Wrapper
@@ -31,7 +27,6 @@ const ChatScreenNoVideo: React.FC<Props> = ({
         <ButtonWrapper>
           <AcceptButton
             onClick={() => {
-              setReceivingCall(false)
               acceptCall()
             }}
             whileTap={{ y: 1 }}
@@ -42,7 +37,6 @@ const ChatScreenNoVideo: React.FC<Props> = ({
           </AcceptButton>
           <RejectButton
             onClick={() => {
-              setReceivingCall(false)
               setCancelCallRequest(true)
               socket.current.emit("cancelCallRequest")
             }}

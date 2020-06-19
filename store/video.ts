@@ -1,4 +1,6 @@
-import { atom } from "recoil"
+import { atom, selector } from "recoil"
+
+import { listUsersState } from "./users"
 
 export const streamState = atom<MediaStream | any>({
   key: "streamState",
@@ -43,4 +45,21 @@ export const muteMicState = atom<boolean>({
 export const pressedCallState = atom<boolean>({
   key: "pressedCallState",
   default: false,
+})
+
+export const disableCallIconState = selector({
+  key: "disableCallIconState",
+  get: ({ get }) => {
+    const receivingCall = get(receivingCallState)
+    const cancelCall = get(cancelCallRequestState)
+    const listUsers = get(listUsersState)
+
+    console.log("RECEIVING", receivingCall)
+
+    if (listUsers?.length < 2) {
+      return true
+    } else {
+      return false
+    }
+  },
 })

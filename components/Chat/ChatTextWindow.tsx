@@ -60,7 +60,7 @@ const ChatTextWindow = () => {
                   key={i}
                   initial={{ y: 5 }}
                   animate={{ y: 0 }}
-                  exit={{ opacity: 0 }}
+                  exit={{ opacity: 0, transition: { duration: 0 } }}
                   transition={{ type: "spring", damping: 80 }}
                 >
                   <Username me={username === user}>{user}</Username>
