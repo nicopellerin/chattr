@@ -24,7 +24,12 @@ const IndexPage = () => {
           experience
         </Note>
       </motion.div>
-      <Footer>Made by Nico Pellerin</Footer>
+      <Footer>
+        Made by{" "}
+        <a href="https://nicopellerin.io" target="_blank">
+          Nico Pellerin
+        </a>
+      </Footer>
     </Wrapper>
   )
 }
@@ -59,4 +64,9 @@ const Footer = styled.footer`
   transform: translateX(-50%);
   font-size: 1.7rem;
   font-weight: 700;
+
+  a {
+    color: var(--tertiaryColor);
+    text-decoration: none;
+  }
 `

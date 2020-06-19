@@ -25,7 +25,7 @@ const Invite = () => {
       exit={{ opacity: 0 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <Container onClick={inviteFriend}>
+      <Container onClick={inviteFriend} whileTap={{ scale: 0.98 }}>
         <Icon />
         <Text>Invite friend</Text>
       </Container>
@@ -40,7 +40,7 @@ const Wrapper = styled(motion.div)`
   height: 28rem;
 `
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   height: 100%;
   display: flex;
   flex-direction: column;

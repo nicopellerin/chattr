@@ -144,7 +144,7 @@ const Wrapper = styled.div`
   height: 100%;
   padding: 1.7rem;
   border-radius: 5px;
-  filter: drop-shadow(0 0 0.75rem rgba(204, 75, 194, 0.1));
+  filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05));
 `
 
 const Container = styled.div`

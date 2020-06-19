@@ -32,6 +32,8 @@ const UsernameModal: React.FC<Props> = ({
     typeof window !== "undefined" &&
       window.localStorage.setItem("chattr-username", JSON.stringify(user))
 
+    if (noUsernameModal) return
+
     const room = shortid.generate()
     router.push(`/[room]`, `/${room}`)
   }
@@ -66,11 +68,11 @@ const Container = styled.div`
   background: #1a0d2b;
   padding: 5rem;
   border-radius: 10%;
-  border-bottom: 7px solid var(--primaryColorDark);
+  border-bottom: 7px solid var(--primaryColor);
   filter: ${(props: { noUsernameModal: boolean }) =>
     props.noUsernameModal
       ? "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.9))"
-      : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.5))"};
+      : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.45))"};
 `
 
 const Tagline = styled.span`

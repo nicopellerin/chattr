@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
@@ -7,6 +8,12 @@ interface Props {
 }
 
 const ChatScreenNoVideo: React.FC<Props> = ({ setShowCatSlider }) => {
+  let conn = new Audio("/sounds/connection.mp3")
+
+  useEffect(() => {
+    conn.play()
+  }, [])
+
   return (
     <Wrapper
       initial={{ opacity: 0, scale: 0.8 }}

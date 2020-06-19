@@ -44,17 +44,6 @@ const ChatVideo: React.FC<Props> = ({
 
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
 
-  let beep = new Audio("/sounds/call.mp3")
-
-  useEffect(() => {
-    if (receivingCall) {
-      // beep.loop = true
-      beep.play()
-    } else {
-      beep.pause()
-    }
-  }, [receivingCall])
-
   return (
     <Wrapper ref={contraintsRef}>
       <>
@@ -116,7 +105,7 @@ const Wrapper = styled(motion.div)`
   margin: 0;
   padding: 0;
   border-radius: 5px;
-  filter: drop-shadow(0 0 0.75rem rgba(204, 75, 194, 0.1));
+  filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05));
 `
 
 const FriendVideo = styled.video`

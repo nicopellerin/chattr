@@ -1,8 +1,9 @@
 import * as React from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { FaPhoneAlt, FaTimesCircle } from "react-icons/fa"
-import { useSetRecoilState } from "recoil"
+import { useSetRecoilState, useRecoilValue } from "recoil"
 
 import { cancelCallRequestState, receivingCallState } from "../../store/video"
 
@@ -13,7 +14,20 @@ interface Props {
 
 const ChatScreenNoVideo: React.FC<Props> = ({ acceptCall, socket }) => {
   const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
-  // const setReceivingCall = useSetRecoilState(receivingCallState)
+
+  const receivingCall = useRecoilValue(receivingCallState)
+
+  let beep = new Audio("/sounds/call.mp3")
+
+  useEffect(() => {
+    if (receivingCall) {
+      // beep.loop = true
+      beep.play()
+    } else {
+      // beep.loop = false
+      beep.pause()
+    }
+  }, [receivingCall])
 
   return (
     <Wrapper

@@ -74,7 +74,6 @@ const ChatMain = () => {
 
   useEffect(() => {
     socket.current = io.connect(`/?room=${room}`)
-
     navigator.mediaDevices
       .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
       .then((stream) => {
@@ -114,7 +113,7 @@ const ChatMain = () => {
       setTimeout(() => setUserLeftChattr(""), 3000)
       setChatMsgs([])
       friendVideoRef.current.srcObject = null
-      peer2.destroy()
+      // peer2.destroy()
     })
 
     socket.current.on("userJoinedChattr", () => {
@@ -217,13 +216,13 @@ const ChatMain = () => {
   }
 
   // End call
-  useEffect(() => {
-    if (cancelCallRequest) {
-      peer2.removeStream(stream)
-      friendVideoRef.current.srcObject = null
-      socket.current.emit("cancelCallRequest")
-    }
-  }, [cancelCallRequest])
+  // useEffect(() => {
+  //   if (cancelCallRequest) {
+  //     peer2.removeStream(stream)
+  //     friendVideoRef.current.srcObject = null
+  //     socket.current.emit("cancelCallRequest")
+  //   }
+  // }, [cancelCallRequest])
 
   // Mute mic
   useEffect(() => {
