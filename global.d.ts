@@ -1,11 +1,11 @@
 declare module "better-react-spinkit"
 
-type ShareData = {
-  title?: string
-  text?: string
-  url?: string
-}
+// type ShareData = {
+//   title?: string
+//   text?: string
+//   url?: string
+// }
 
-interface Navigator {
-  share?: (data?: ShareData) => Promise<void>
-}
+// interface Navigator {
+//   share?: (data?: ShareData) => Promise<void>
+// }

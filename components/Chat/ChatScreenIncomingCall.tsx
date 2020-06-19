@@ -78,11 +78,12 @@ const Container = styled(motion.div)`
 `
 
 const Title = styled.h4`
-  font-size: 3rem;
+  font-size: 4rem;
   color: var(--textColor);
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 5rem;
 `
 
 const ButtonWrapper = styled.div`

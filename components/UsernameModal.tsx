@@ -67,6 +67,7 @@ const Container = styled.div`
   /* width: 40rem;
   height: 30rem; */
   border-bottom: 7px solid var(--primaryColorDark);
+  filter: drop-shadow(0 0 20rem rgba(131, 82, 253, 0.2));
 `
 
 const Tagline = styled.span`

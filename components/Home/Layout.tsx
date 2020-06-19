@@ -15,7 +15,9 @@ export default Layout
 const Wrapper = styled.div`
   height: 100%;
   width: 100%;
-  background: #0c0613;
+  background: linear-gradient(rgba(12, 6, 19, 0.9), rgba(12, 6, 19, 0.99)),
+    url("/bg.jpg");
+  background-size: cover;
   display: grid;
   place-items: center;
 `

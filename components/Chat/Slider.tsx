@@ -24,6 +24,7 @@ const images = [
   "/cats/cat16.jpg",
   "/cats/cat17.jpg",
   "/cats/cat18.jpg",
+  "/cats/cat19.jpg",
 ]
 
 interface Props {
@@ -32,7 +33,7 @@ interface Props {
 
 const Slider: React.FC<Props> = ({ setShowCatSlider }) => {
   const [[page, direction], setPage] = useState([
-    0 + Math.floor(Math.random() * 19),
+    0 + Math.floor(Math.random() * images?.length),
     0,
   ])
 
