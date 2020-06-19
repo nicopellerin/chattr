@@ -2,9 +2,9 @@ import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { FaPhoneAlt, FaTimesCircle } from "react-icons/fa"
-import { useSetRecoilState, useRecoilValue } from "recoil"
+import { useSetRecoilState } from "recoil"
 
-import { cancelCallRequestState, callAcceptedState } from "../../store/video"
+import { cancelCallRequestState } from "../../store/video"
 
 interface Props {
   setReceivingCall: React.Dispatch<React.SetStateAction<boolean>>

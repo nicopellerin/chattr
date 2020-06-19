@@ -17,7 +17,7 @@ import {
   pressedCallState,
   cancelCallRequestState,
 } from "../../store/video"
-import { listUsersState, userLeftChattrState } from "../../store/users"
+import { listUsersState } from "../../store/users"
 
 interface Props {
   acceptCall: () => void
@@ -36,7 +36,6 @@ const ChatVideo: React.FC<Props> = ({
   const callAccepted = useRecoilValue(callAcceptedState)
   const listUsers = useRecoilValue(listUsersState)
   const pressedCall = useRecoilValue(pressedCallState)
-  const userLeftChattr = useRecoilValue(userLeftChattrState)
   // const cancelCallRequest = useRecoilValue(cancelCallRequestState)
 
   const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
@@ -61,16 +60,14 @@ const ChatVideo: React.FC<Props> = ({
       <>
         {!showCatSlider || receivingCall ? (
           <>
-            {Object.keys(listUsers).length < 2 && (
-              <ChatScreenWaitingForConnect />
-            )}
+            {listUsers?.length < 2 && <ChatScreenWaitingForConnect />}
 
             {pressedCall && !callAccepted && <ChatScreenCalling />}
 
             {!receivingCall &&
               !callAccepted &&
               !pressedCall &&
-              Object.keys(listUsers).length >= 2 && (
+              listUsers?.length >= 2 && (
                 <ChatScreenNoVideo setShowCatSlider={setShowCatSlider} />
               )}
 
@@ -95,6 +92,7 @@ const ChatVideo: React.FC<Props> = ({
           exit={{ scaleX: 0 }}
           drag
           dragMomentum={false}
+          // @ts-ignore
           dragConstraints={contraintsRef}
           ref={selfVideoRef}
           playsInline

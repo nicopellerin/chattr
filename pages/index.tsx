@@ -1,55 +1,18 @@
 import * as React from "react"
-import { useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRouter } from "next/router"
-import shortid from "shortid"
-import { FaRocket } from "react-icons/fa"
-import { useRecoilState } from "recoil"
 
 import Layout from "../components/Home/Layout"
-
-import { usernameState } from "../store/users"
+import UsernameModal from "../components/UsernameModal"
 
 const IndexPage = () => {
-  const [username, setUsername] = useRecoilState(usernameState)
-
-  const [user, setUser] = useState("")
-
-  const router = useRouter()
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setUsername(user)
-
-    typeof window !== "undefined" &&
-      window.localStorage.setItem("chattr-username", JSON.stringify(user))
-
-    const room = shortid.generate()
-    router.push(`/[room]`, `/${room}`)
-  }
-
   return (
     <Layout>
-      <div>
-        <LogoStyled src="/logo.svg" alt="logo" />
-        <Container>
-          <Tagline>Pick a username</Tagline>
-          <Form onSubmit={handleSubmit}>
-            <Input
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              placeholder="Eg. koolz69"
-              maxLength={20}
-            />
-            <Button>
-              Launch chat <FaRocket style={{ marginLeft: 7 }} />
-            </Button>
-          </Form>
-          <ShareButton>About</ShareButton>
-          <Text>Free P2P audio/video + chat</Text>
-          <Footer>Made by Nico Pellerin</Footer>
-        </Container>
-      </div>
+      <LogoStyled src="/logo.svg" alt="logo" />
+      <UsernameModal />
+      <ShareButton>About</ShareButton>
+      <Text>Free P2P audio/video + chat</Text>
+      <Footer>Made by Nico Pellerin</Footer>
       <svg
         style={{ position: "absolute", bottom: -50 }}
         xmlns="http://www.w3.org/2000/svg"
@@ -73,60 +36,6 @@ const LogoStyled = styled.img`
   position: absolute;
   top: 3rem;
   left: 8rem;
-`
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #1a0d2b;
-  padding: 5rem;
-  border-radius: 10%;
-  width: 40rem;
-  height: 30rem;
-  border-bottom: 7px solid var(--primaryColorDark);
-`
-
-const Tagline = styled.span`
-  font-size: 3rem;
-  color: var(--textColor);
-  margin-bottom: 2rem;
-  font-weight: 600;
-`
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 30rem;
-`
-
-const Input = styled.input`
-  border: none;
-  background: #0c0613;
-  color: var(--textColor);
-  padding: 0.8em 1em;
-  font-size: 2rem;
-  border-radius: 5px;
-  margin-bottom: 3rem;
-  width: 100%;
-  outline: transparent;
-`
-
-export const Button = styled(motion.button)`
-  padding: 1em 1.5em;
-  border: none;
-  background: var(--tertiaryColor);
-  color: #0c0613;
-  font-size: 2rem;
-  font-weight: 600;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  outline: transparent;
 `
 
 const ShareButton = styled(motion.button)`

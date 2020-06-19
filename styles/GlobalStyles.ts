@@ -45,8 +45,7 @@ body {
   color: #555;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
-
+  /* overflow: hidden; */
 }
 
 

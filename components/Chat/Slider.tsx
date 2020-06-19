@@ -26,28 +26,11 @@ const images = [
   "/cats/cat18.jpg",
 ]
 
-const variants = {
-  enter: (direction: number) => {
-    return {
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0,
-    }
-  },
-  center: {
-    zIndex: 1,
-    x: 0,
-    opacity: 1,
-  },
-  exit: (direction: number) => {
-    return {
-      zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0,
-    }
-  },
+interface Props {
+  setShowCatSlider: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Slider = ({ setShowCatSlider }) => {
+const Slider: React.FC<Props> = ({ setShowCatSlider }) => {
   const [[page, direction], setPage] = useState([
     0 + Math.floor(Math.random() * 19),
     0,
@@ -66,6 +49,27 @@ const Slider = ({ setShowCatSlider }) => {
 
     return () => clearInterval(intervalId)
   })
+
+  const variants = {
+    enter: (direction: number) => {
+      return {
+        x: direction > 0 ? 1000 : -1000,
+        opacity: 0,
+      }
+    },
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => {
+      return {
+        zIndex: 0,
+        x: direction < 0 ? 1000 : -1000,
+        opacity: 0,
+      }
+    },
+  }
 
   return (
     <motion.div
@@ -101,7 +105,7 @@ const Slider = ({ setShowCatSlider }) => {
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={1}
-            onDragEnd={(e, { offset, velocity }) => {
+            onDragEnd={(_, { offset, velocity }) => {
               const swipe = swipePower(offset.x, velocity.x)
 
               if (swipe < -swipeConfidenceThreshold) {
@@ -157,41 +161,6 @@ const ImageStyled = styled(motion.img)`
   width: 100%;
   height: 72rem;
   object-fit: cover;
-`
-
-const NextIcon = styled.div`
-  top: calc(50% - 60px);
-  position: absolute;
-  border-radius: 30px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 18px;
-  z-index: 2;
-  right: 3rem;
-`
-
-const PrevIcon = styled.div`
-  top: calc(50% - 50px);
-  position: absolute;
-  border-radius: 30px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 18px;
-  z-index: 2;
-  left: 3rem;
-  transform: rotate(-180deg);
 `
 
 const CloseIcon = styled(FaTimesCircle)`

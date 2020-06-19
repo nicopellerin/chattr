@@ -22,7 +22,7 @@ import {
 import { selfIdState, listUsersState } from "../../store/users"
 
 interface Props {
-  callFriend: (key: string) => void
+  callFriend: (id: string) => void
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
@@ -30,17 +30,19 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
   const [showSelfWebcam, setShowSelfWebcam] = useRecoilState(
     showSelfWebcamState
   )
+  const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
+  const [muteMic, setMuteMic] = useRecoilState(muteMicState)
+
+  const callAccepted = useRecoilValue(callAcceptedState)
+  const setPressedCall = useSetRecoilState(pressedCallState)
+  const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
+
   const selfId = useRecoilValue(selfIdState)
   const listUsers = useRecoilValue(listUsersState)
 
-  const [receivingCall, setReceivingCall] = useRecoilState(receivingCallState)
-  const [callAccepted, setCallAccepted] = useRecoilState(callAcceptedState)
-  const [muteMic, setMuteMic] = useRecoilState(muteMicState)
-  const [pressedCall, setPressedCall] = useRecoilState(pressedCallState)
+  const otherUser = listUsers?.filter((user) => user !== selfId)
 
-  const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
-
-  const otherUser = Object.keys(listUsers).filter((user) => user !== selfId)[0]
+  console.log(listUsers, selfId)
 
   const beepOn = new Audio("/sounds/click_snip.mp3")
 
@@ -148,7 +150,7 @@ const Container = styled.div`
   height: 100%;
   background: rgba(255, 255, 255, 0.01);
   padding: 1rem;
-  boxshadow: "4px 0 15px rgba(0, 0, 0, 0.1)";
+  box-shadow: "4px 0 15px rgba(0, 0, 0, 0.1)";
 `
 
 const IconWrapper = styled(motion.div)`

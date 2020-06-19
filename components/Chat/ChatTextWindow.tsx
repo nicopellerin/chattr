@@ -25,7 +25,7 @@ const ChatTextWindow = () => {
   const userIsTyping = useRecoilValue(chatUserIsTypingState)
   const userLeftChattr = useRecoilValue(userLeftChattrState)
 
-  const chatWindowRef = useRef()
+  // const chatWindowRef = useRef()
 
   const pop = new Audio("/sounds/pop_drip.mp3")
 
@@ -66,7 +66,7 @@ const ChatTextWindow = () => {
               <FaKiwiBird
                 size={32}
                 style={{ marginBottom: 15 }}
-                color="var(--textColor);"
+                color="var(--textColor)"
               />
               <NoMessagesText>{welcomeMsg}</NoMessagesText>
             </NoMessages>
@@ -90,9 +90,7 @@ const ChatTextWindow = () => {
               animate={{ y: 0 }}
               transition={{ type: "spring", damping: 80 }}
             >
-              <UserDisconnectedText>
-                Your friend has disconnected from Chattr
-              </UserDisconnectedText>
+              <UserDisconnectedText>{userLeftChattr}</UserDisconnectedText>
             </UserDisconnectedWrapper>
           )}
         </Container>
@@ -171,5 +169,5 @@ const UserDisconnectedWrapper = styled(motion.div)`
 const UserDisconnectedText = styled.span`
   font-size: 1.7rem;
   font-weight: 700;
-  color: var(--textColor);
+  color: var(--secondaryColor);
 `

@@ -5,11 +5,13 @@ const ChatMainClient = dynamic(() => import("../components/Chat/ChatMain"), {
   ssr: false,
 })
 
-const IndexPage = () => (
-  <Wrapper>
-    <ChatMainClient />
-  </Wrapper>
-)
+const IndexPage = () => {
+  return (
+    <Wrapper>
+      <ChatMainClient />
+    </Wrapper>
+  )
+}
 
 export default IndexPage
 

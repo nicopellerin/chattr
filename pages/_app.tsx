@@ -9,6 +9,7 @@ const MyApp = ({ Component, pageProps, router }) => {
     <RecoilRoot>
       <Component {...pageProps} key={router.query.id} />
       <GlobalStyles />
+      <div id="portal" />
     </RecoilRoot>
   )
 }

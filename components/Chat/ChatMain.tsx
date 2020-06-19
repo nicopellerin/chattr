@@ -1,15 +1,10 @@
 import * as React from "react"
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import io from "socket.io-client"
 import Peer from "simple-peer"
 import { useRouter } from "next/router"
-import {
-  useRecoilState,
-  RecoilRoot,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 
 import {
   streamState,
@@ -38,6 +33,7 @@ import {
   chatWindowState,
   chatUserIsTypingState,
 } from "../../store/chat"
+import NoUsername from "./NoUsername"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -67,8 +63,10 @@ const ChatMain = () => {
 
   const { query } = useRouter()
 
+  const room = query["room"]
+
   useEffect(() => {
-    socket.current = io.connect(`/?room=${query["room"]}`)
+    socket.current = io.connect(`/?room=${room}`)
     navigator.mediaDevices
       .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
       .then((stream) => {
@@ -80,11 +78,11 @@ const ChatMain = () => {
 
     socket.current.emit("username", username)
 
-    socket.current.on("selfId", (id) => {
+    socket.current.on("selfId", (id: string) => {
       setSelfId(id)
     })
 
-    socket.current.on("chatConnection", (msg) => {
+    socket.current.on("chatConnection", (msg: string) => {
       setChatWelcomeMessage(msg)
     })
 
@@ -92,11 +90,11 @@ const ChatMain = () => {
       setChatMsgs((prevState) => [...prevState, msg])
     })
 
-    socket.current.on("chatMessageIsTyping", ({ username, status, msg }) => {
+    socket.current.on("chatMessageIsTyping", ({ username, status }) => {
       setChatUserIsTyping({ username, status })
     })
 
-    socket.current.on("userLeftChattr", (msg) => {
+    socket.current.on("userLeftChattr", (msg: string) => {
       setUserLeftChattr(msg)
     })
 
@@ -105,6 +103,7 @@ const ChatMain = () => {
     })
 
     socket.current.on("listUsers", (users) => {
+      console.log("USERS", room, users)
       setListUsers(users)
     })
 
@@ -123,6 +122,7 @@ const ChatMain = () => {
     })
   }, [])
 
+  // Call second peer connection
   const callFriend = (id: string) => {
     const peer = new Peer({
       initiator: true,
@@ -169,12 +169,14 @@ const ChatMain = () => {
     })
   }
 
+  // Second peer connection
   const peer2 = new Peer({
     initiator: false,
     trickle: false,
     stream: stream,
   })
 
+  // Accept incoming call
   const acceptCall = () => {
     setCallAccepted(true)
 
@@ -229,25 +231,28 @@ const ChatMain = () => {
   }, [showSelfWebcam, stream])
 
   return (
-    <OutterWrapper>
-      <Wrapper>
-        <LeftColumn>
-          <ChatVideo
-            socket={socket}
-            selfVideoRef={selfVideoRef}
-            friendVideoRef={friendVideoRef}
-            acceptCall={acceptCall}
-          />
-          <ChatTextBar socket={socket} />
-        </LeftColumn>
-        <RightColumn>
-          <LogoStyled src="/logo.svg" alt="logo" />
-          <ChatUsername />
-          <ChatCommands callFriend={callFriend} socket={socket} />
-          <ChatTextWindow />
-        </RightColumn>
-      </Wrapper>
-    </OutterWrapper>
+    <>
+      {!username && <NoUsername />}
+      <OutterWrapper>
+        <Wrapper>
+          <LeftColumn>
+            <ChatVideo
+              socket={socket}
+              selfVideoRef={selfVideoRef}
+              friendVideoRef={friendVideoRef}
+              acceptCall={acceptCall}
+            />
+            <ChatTextBar socket={socket} />
+          </LeftColumn>
+          <RightColumn>
+            <LogoStyled src="/logo.svg" alt="logo" />
+            <ChatUsername />
+            <ChatCommands callFriend={callFriend} socket={socket} />
+            <ChatTextWindow />
+          </RightColumn>
+        </Wrapper>
+      </OutterWrapper>
+    </>
   )
 }
 
@@ -276,7 +281,6 @@ const LeftColumn = styled.div`
 
 const RightColumn = styled.div`
   display: grid;
-  /* grid-template-rows: auto 50px 1fr 3fr; */
   grid-gap: 2rem;
 `
 

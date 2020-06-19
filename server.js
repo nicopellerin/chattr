@@ -12,33 +12,34 @@ const nextHandler = nextApp.getRequestHandler()
 
 const PORT = 3000
 
-const users = {}
+const rooms = {}
 
 io.on("connection", (socket) => {
   const room = socket.handshake.query.room
 
-  if (
-    io.sockets.adapter.rooms[room] &&
-    io.sockets.adapter.rooms[room].length === 2
-  ) {
-    socket.disconnect()
-  } else {
-    socket.join(room)
-  }
+  // io.in(room).clients((error, clients) => {
+  //   if (error) {
+  //     throw error
+  //   }
 
-  const sockets = io.in(room)
-  Object.keys(sockets.sockets).forEach((user) => {
-    if (!users[sockets.sockets[user].id]) {
-      users[socket.id] = sockets.sockets[user].id
-    }
-  })
-  console.log("USERS", users)
+  //   // if (clients.length > 2) {
+  //   //   console.log("MAX CONNECTIONS0")
+  //   //   return
+  //   // }
+
+  // })
+
+  socket.join(room)
+
+  const oldUsers = (rooms[room] && rooms[room].users) || []
+
+  rooms[room] = { users: [...oldUsers, socket.id] }
+
+  io.to(room).emit("listUsers", rooms[room].users)
 
   io.to(room).emit("userJoinedChattr")
 
   socket.emit("selfId", socket.id)
-
-  io.emit("listUsers", users)
 
   io.to(room).emit("chatConnection", "Welcome to Chattr!")
 
@@ -55,9 +56,9 @@ io.on("connection", (socket) => {
   })
 
   socket.on("disconnect", () => {
-    delete users[socket.id]
+    rooms[room].users = rooms[room].users.filter((user) => user !== socket.id)
     io.to(room).emit("userLeftChattr", "Your friend left Chattr")
-    io.emit("listUsers", users)
+    io.emit("listUsers", [])
     socket.leave(room)
   })
 

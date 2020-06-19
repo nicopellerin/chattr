@@ -1,11 +1,11 @@
 import * as React from "react"
 import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useRecoilValue } from "recoil"
 import { motion } from "framer-motion"
 
 import { usernameState, listUsersState } from "../../store/users"
-import { chatUserIsTypingState } from "../../store/chat"
+// import { chatUserIsTypingState } from "../../store/chat"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -14,16 +14,16 @@ interface Props {
 const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const listUsers = useRecoilValue(listUsersState)
-  const userIsTyping = useRecoilValue(chatUserIsTypingState)
+  // const userIsTyping = useRecoilValue(chatUserIsTypingState)
 
   const [msg, setMsg] = useState("")
 
   let count = useRef(0)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!msg || Object.keys(listUsers).length < 2) return
+    if (!msg || listUsers?.length < 2) return
 
     socket.current.emit("chatMessageIsTyping", {
       username,
@@ -60,7 +60,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         placeholder="Type message..."
         value={msg}
         onChange={(e) =>
-          Object.keys(listUsers).length < 2 ? null : setMsg(e.target.value)
+          listUsers?.length < 2 ? null : setMsg(e.target.value)
         }
       />
       <SendButton whileTap={{ scale: 0.98 }}>Send</SendButton>
