@@ -65,6 +65,13 @@ const ChatMain = () => {
 
   const room = query["room"]
 
+  // Second peer connection
+  const peer2 = new Peer({
+    initiator: false,
+    trickle: false,
+    stream: stream,
+  })
+
   useEffect(() => {
     socket.current = io.connect(`/?room=${room}`)
     navigator.mediaDevices
@@ -86,28 +93,34 @@ const ChatMain = () => {
       setChatWelcomeMessage(msg)
     })
 
-    socket.current.on("chatMessages", (msg) => {
+    socket.current.on("chatMessages", (msg: string) => {
       setChatMsgs((prevState) => [...prevState, msg])
     })
 
-    socket.current.on("chatMessageIsTyping", ({ username, status }) => {
-      setChatUserIsTyping({ username, status })
-    })
+    socket.current.on(
+      "chatMessageIsTyping",
+      ({ username, status }: { username: string; status: boolean }) => {
+        setChatUserIsTyping({ username, status })
+      }
+    )
 
     socket.current.on("userLeftChattr", (msg: string) => {
       setUserLeftChattr(msg)
+      setTimeout(() => setUserLeftChattr(""), 3000)
+      friendVideoRef.current.srcObject = null
+      peer2.destroy()
     })
 
     socket.current.on("userJoinedChattr", () => {
       setUserLeftChattr("")
     })
 
-    socket.current.on("listUsers", (users) => {
+    socket.current.on("listUsers", (users: string[]) => {
       console.log("USERS", room, users)
       setListUsers(users)
     })
 
-    socket.current.on("call", (data) => {
+    socket.current.on("call", (data: any) => {
       setReceivingCall(true)
       setCaller(data.from)
       setCallerSignal(data.signal)
@@ -158,23 +171,23 @@ const ChatMain = () => {
       }
     })
 
-    peer.on("close", () => {
-      setCallAccepted(true)
-      selfVideoRef.current.srcObject = null
+    // peer.on("close", () => {
+    //   setCallAccepted(true)
+    //   peer.destroy()
+    //   selfVideoRef.current.srcObject = null
+    // })
+
+    socket.current.on("userLeftChattr", (msg: string) => {
+      setUserLeftChattr(msg)
+      friendVideoRef.current.srcObject = null
+      peer.destroy()
     })
 
-    socket.current.on("callAccepted", (signal) => {
+    socket.current.on("callAccepted", (signal: any) => {
       setCallAccepted(true)
       peer.signal(signal)
     })
   }
-
-  // Second peer connection
-  const peer2 = new Peer({
-    initiator: false,
-    trickle: false,
-    stream: stream,
-  })
 
   // Accept incoming call
   const acceptCall = () => {
@@ -192,6 +205,8 @@ const ChatMain = () => {
 
     peer2.on("close", () => {
       friendVideoRef.current.srcObject = null
+      peer2.removeStream(stream)
+      peer2.destroy()
     })
   }
 

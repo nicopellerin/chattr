@@ -36,7 +36,7 @@ const UsernameModal: React.FC<Props> = ({
 
   return (
     <Container>
-      <LogoStyled src="/logo.svg" alt="logo" />
+      {showLogo && <LogoStyled src="/logo.svg" alt="logo" />}
       <Tagline>Pick a username</Tagline>
       <Form onSubmit={handleSubmit}>
         <Input

@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import {
   FaMicrophoneSlash,
@@ -40,11 +41,11 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
   const selfId = useRecoilValue(selfIdState)
   const listUsers = useRecoilValue(listUsersState)
 
-  const otherUser = listUsers?.filter((user) => user !== selfId)
-
-  console.log(listUsers, selfId)
+  const otherUser = listUsers?.filter((user) => user !== selfId).join("")
 
   const beepOn = new Audio("/sounds/click_snip.mp3")
+
+  useEffect(() => {}, [])
 
   return (
     <Wrapper>
@@ -65,9 +66,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
             <>
               <FaMicrophone
                 size={22}
-                style={{ marginBottom: 7, color: "#FFE9FF" }}
+                style={{ marginBottom: 7, color: "var(--textColor)" }}
               />
-              <span style={{ color: "#FFE9FF" }}>Mic</span>
+              <span style={{ color: "var(--textColor)" }}>Mic</span>
             </>
           )}
         </IconWrapper>
@@ -82,9 +83,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
             <>
               <FaVideo
                 size={22}
-                style={{ marginBottom: 7, color: "#FFE9FF" }}
+                style={{ marginBottom: 7, color: "var(--textColor)" }}
               />
-              <span style={{ color: "#FFE9FF" }}>Webcam</span>
+              <span style={{ color: "var(--textColor)" }}>Webcam</span>
             </>
           ) : (
             <>
@@ -93,7 +94,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
             </>
           )}
         </IconWrapper>
-        <IconWrapper whileTap={{ scale: 0.98 }}>
+        <IconWrapper disabled={receivingCall} whileTap={{ scale: 0.98 }}>
           {callAccepted ? (
             <>
               <FaTimesCircle
@@ -103,9 +104,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
                   socket.current.emit("cancelCallRequest")
                 }}
                 size={22}
-                style={{ marginBottom: 7, color: "#FFE9FF" }}
+                style={{ marginBottom: 7, color: "var(--textColor)" }}
               />
-              <span style={{ color: "#FFE9FF" }}>End call</span>
+              <span style={{ color: "var(--textColor)" }}>End call</span>
             </>
           ) : (
             <>
@@ -118,10 +119,14 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
                 size={22}
                 style={{
                   marginBottom: 7,
-                  color: receivingCall ? "#aaa" : "#FFE9FF",
+                  color: receivingCall ? "#aaa" : "var(--textColor)",
                 }}
               />
-              <span style={{ color: "#FFE9FF" }}>Call</span>
+              <span
+                style={{ color: receivingCall ? "#aaa" : "var(--textColor)" }}
+              >
+                Call
+              </span>
             </>
           )}
         </IconWrapper>
@@ -160,4 +165,10 @@ const IconWrapper = styled(motion.div)`
   font-size: 1.5rem;
   font-weight: 600;
   cursor: pointer;
+
+  &:disabled {
+    color: #aaa !important;
+    pointer-events: none;
+    cursor: initial;
+  }
 `

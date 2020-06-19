@@ -8,7 +8,7 @@ const portalRoot =
 export default class Portal extends Component {
   el: any
 
-  constructor(props) {
+  constructor(props: any) {
     super(props)
     // Use a ternary operator to make sure that the document object is defined
     this.el =
@@ -16,11 +16,11 @@ export default class Portal extends Component {
   }
 
   componentDidMount = () => {
-    portalRoot.appendChild(this.el)
+    portalRoot ? portalRoot.appendChild(this.el) : null
   }
 
   componentWillUnmount = () => {
-    portalRoot.removeChild(this.el)
+    portalRoot ? portalRoot.removeChild(this.el) : null
   }
 
   render() {

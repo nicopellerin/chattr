@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
@@ -11,7 +11,12 @@ import {
   chatWelcomeMessageState,
   chatUserIsTypingState,
 } from "../../store/chat"
-import { usernameState, userLeftChattrState } from "../../store/users"
+import {
+  usernameState,
+  userLeftChattrState,
+  listUsersState,
+} from "../../store/users"
+import Invite from "./Invite"
 
 interface Message {
   msg: string
@@ -24,6 +29,7 @@ const ChatTextWindow = () => {
   const username = useRecoilValue(usernameState)
   const userIsTyping = useRecoilValue(chatUserIsTypingState)
   const userLeftChattr = useRecoilValue(userLeftChattrState)
+  const listUsers = useRecoilValue(listUsersState)
 
   // const chatWindowRef = useRef()
 
@@ -54,6 +60,7 @@ const ChatTextWindow = () => {
                   key={i}
                   initial={{ y: 5 }}
                   animate={{ y: 0 }}
+                  exit={{ opacity: 0 }}
                   transition={{ type: "spring", damping: 80 }}
                 >
                   <Username me={username === user}>{user}</Username>
@@ -88,12 +95,15 @@ const ChatTextWindow = () => {
             <UserDisconnectedWrapper
               initial={{ y: 5 }}
               animate={{ y: 0 }}
+              exit={{ opacity: 0 }}
               transition={{ type: "spring", damping: 80 }}
             >
               <UserDisconnectedText>{userLeftChattr}</UserDisconnectedText>
             </UserDisconnectedWrapper>
           )}
         </Container>
+
+        {listUsers?.length < 2 && !userLeftChattr?.length && <Invite />}
       </ScrollArea>
     </Wrapper>
   )
