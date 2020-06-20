@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { FaArrowLeft } from "react-icons/fa"
 
-import Navbar from "../components/Navbar"
+import Layout from "../components/Layout"
 
 const AboutPage = () => {
   return (
@@ -13,8 +13,7 @@ const AboutPage = () => {
       <Head>
         <title>Chattr | About</title>
       </Head>
-      <Wrapper>
-        <Navbar />
+      <Layout>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -46,13 +45,7 @@ const AboutPage = () => {
             </Link>
           </Container>
         </motion.div>
-        <Footer>
-          Made by{" "}
-          <a href="https://nicopellerin.io" target="_blank" rel="noreferrer">
-            Nico Pellerin
-          </a>
-        </Footer>
-      </Wrapper>
+      </Layout>
     </>
   )
 }
@@ -60,16 +53,6 @@ const AboutPage = () => {
 export default AboutPage
 
 // Styles
-const Wrapper = styled.div`
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(rgba(12, 6, 19, 0.9), rgba(12, 6, 19, 0.99)),
-    url("/bg.jpg");
-  background-size: cover;
-  display: grid;
-  place-items: center;
-`
-
 const Container = styled.div`
   max-width: 80ch;
   margin: 0 auto;
@@ -104,19 +87,4 @@ const BackButton = styled(motion.button)`
   margin-top: 4rem;
   outline: transparent;
   cursor: pointer;
-`
-
-const Footer = styled.footer`
-  left: 50%;
-  bottom: 5.2rem;
-  position: absolute;
-  color: #2fb5fc;
-  transform: translateX(-50%);
-  font-size: 1.7rem;
-  font-weight: 700;
-
-  a {
-    color: var(--tertiaryColor);
-    text-decoration: none;
-  }
 `

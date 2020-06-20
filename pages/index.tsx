@@ -1,10 +1,10 @@
 import * as React from "react"
 import Head from "next/head"
 import styled from "styled-components"
+import { motion } from "framer-motion"
 
 import UsernameModal from "../components/UsernameModal"
-import Navbar from "../components/Navbar"
-import { motion } from "framer-motion"
+import Layout from "../components/Layout"
 
 const IndexPage = () => {
   return (
@@ -12,8 +12,7 @@ const IndexPage = () => {
       <Head>
         <title>Chattr | Free P2P audio/video + chat platform</title>
       </Head>
-      <Wrapper>
-        <Navbar />
+      <Layout>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -29,13 +28,7 @@ const IndexPage = () => {
             best experience
           </Note>
         </motion.div>
-        <Footer>
-          Made by{" "}
-          <a href="https://nicopellerin.io" target="_blank" rel="noreferrer">
-            Nico Pellerin
-          </a>
-        </Footer>
-      </Wrapper>
+      </Layout>
     </>
   )
 }
@@ -43,16 +36,6 @@ const IndexPage = () => {
 export default IndexPage
 
 // Styles
-const Wrapper = styled.div`
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(rgba(12, 6, 19, 0.9), rgba(12, 6, 19, 0.99)),
-    url("/bg.jpg");
-  background-size: cover;
-  display: grid;
-  place-items: center;
-`
-
 const Note = styled(motion.span)`
   display: block;
   font-size: 1.7rem;
@@ -60,19 +43,4 @@ const Note = styled(motion.span)`
   text-align: center;
   margin-top: 4rem;
   line-height: 1.4;
-`
-
-const Footer = styled.footer`
-  left: 50%;
-  bottom: 5.2rem;
-  position: absolute;
-  color: #2fb5fc;
-  transform: translateX(-50%);
-  font-size: 1.7rem;
-  font-weight: 700;
-
-  a {
-    color: var(--tertiaryColor);
-    text-decoration: none;
-  }
 `
