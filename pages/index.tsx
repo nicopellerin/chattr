@@ -13,7 +13,7 @@ const IndexPage = () => {
         <title>Chattr | Free P2P audio/video + chat platform</title>
       </Head>
       <Layout>
-        <motion.div
+        <Container
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", damping: 80 }}
@@ -27,7 +27,7 @@ const IndexPage = () => {
             At the moment, please use a desktop Chromium-based browser for the
             best experience
           </Note>
-        </motion.div>
+        </Container>
       </Layout>
     </>
   )
@@ -36,6 +36,12 @@ const IndexPage = () => {
 export default IndexPage
 
 // Styles
+const Container = styled(motion.div)`
+  @media (max-width; 500px) {
+    height: 40rem;
+  }
+`
+
 const Note = styled(motion.span)`
   display: block;
   font-size: 1.7rem;
