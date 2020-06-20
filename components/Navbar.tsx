@@ -32,7 +32,6 @@ export default Navbar
 
 // Styles
 const Wrapper = styled.nav`
-  /* position: absolute; */
   padding-top: 2rem;
   width: 100%;
   display: grid;
@@ -42,7 +41,7 @@ const Wrapper = styled.nav`
   justify-items: center;
   height: 87px;
 
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
     display: flex;
     justify-content: space-around;
     padding-top: 1rem;
@@ -79,8 +78,9 @@ const Text = styled.span`
   font-weight: 700;
   color: var(--textColor);
   margin-top: 1.5rem;
+  text-align: center;
 
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
     display: none;
   }
 `

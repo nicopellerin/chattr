@@ -31,6 +31,10 @@ const Wrapper = styled.div`
   background: linear-gradient(rgba(12, 6, 19, 0.9), rgba(12, 6, 19, 0.99)),
     url("/bg.jpg");
   background-size: cover;
+
+  @media (max-width: 500px) {
+    min-height: 100vh;
+  }
 `
 
 const Container = styled.main`
