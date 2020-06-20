@@ -47,7 +47,7 @@ const UsernameModal: React.FC<Props> = ({
           value={user}
           onChange={(e) => setUser(e.target.value)}
           placeholder="Eg. koolz69"
-          maxLength={20}
+          maxLength={12}
         />
         <Button whileTap={{ y: 1 }} whileHover={{ y: -1 }}>
           {buttonText} <FaRocket style={{ marginLeft: 7 }} />

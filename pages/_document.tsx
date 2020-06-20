@@ -37,7 +37,7 @@ export default class MyDocument extends Document {
           <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
           <meta
             name="description"
-            content="Chat with a friend in a secure way"
+            content="Chat 1-on-1 with a friend in a fun and secure way"
           />
           <meta name="theme-color" content="#8352FD" />
           <meta
@@ -47,7 +47,7 @@ export default class MyDocument extends Document {
           <meta name="og:url" content="https://chattr.lol" />
           <meta
             name="og:description"
-            content="Chat with a friend in a secure way"
+            content="Chat 1-on-1 with a friend in a fun and secure way"
           />
           <meta name="og:image" content="/og-image.png" />
           <link rel="icon" type="image/png" href="/favicon.png" />

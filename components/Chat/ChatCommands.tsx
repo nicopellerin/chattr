@@ -20,7 +20,11 @@ import {
   cancelCallRequestState,
   disableCallIconState,
 } from "../../store/video"
-import { selfIdState, listUsersState } from "../../store/users"
+import {
+  selfIdState,
+  listUsersState,
+  userSoundOnState,
+} from "../../store/users"
 
 interface Props {
   callFriend: (id: string) => void
@@ -46,6 +50,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
   const selfId = useRecoilValue(selfIdState)
   const listUsers = useRecoilValue(listUsersState)
   const disableCallIcon = useRecoilValue(disableCallIconState)
+  const soundOn = useRecoilValue(userSoundOnState)
 
   const otherUser = listUsers?.filter((user) => user !== selfId).join("")
 
@@ -57,7 +62,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
         <IconWrapper
           onClick={() => {
             setMuteMic(!muteMic)
-            beepOn.play()
+            if (soundOn) {
+              beepOn.play()
+            }
           }}
           off={muteMic}
           whileTap={{ scale: 0.98 }}
@@ -77,7 +84,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
         <IconWrapper
           onClick={() => {
             setShowSelfWebcam(!showSelfWebcam)
-            beepOn.play()
+            if (soundOn) {
+              beepOn.play()
+            }
           }}
           whileTap={{ scale: 0.98 }}
           off={!showSelfWebcam}
@@ -119,7 +128,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
                 onClick={() => {
                   callFriend(otherUser)
                   setPressedCall(true)
-                  beepOn.play()
+                  if (soundOn) {
+                    beepOn.play()
+                  }
                 }}
                 size={22}
                 style={{
@@ -166,6 +177,7 @@ const IconWrapper = styled(motion.div)`
   font-weight: 600;
   color: var(--textColor);
   cursor: pointer;
+  user-select: none;
 
   ${(props: StyledProps) =>
     props.off &&

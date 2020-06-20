@@ -15,6 +15,7 @@ import {
   usernameState,
   userLeftChattrState,
   listUsersState,
+  userSoundOnState,
 } from "../../store/users"
 import Invite from "./Invite"
 
@@ -30,13 +31,14 @@ const ChatTextWindow = () => {
   const userIsTyping = useRecoilValue(chatUserIsTypingState)
   const userLeftChattr = useRecoilValue(userLeftChattrState)
   const listUsers = useRecoilValue(listUsersState)
+  const soundOn = useRecoilValue(userSoundOnState)
 
   // const chatWindowRef = useRef()
 
   const pop = new Audio("/sounds/pop_drip.mp3")
 
   useEffect(() => {
-    if (msgs.length > 0) {
+    if (msgs.length > 0 && soundOn) {
       pop.play()
     }
     // chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight

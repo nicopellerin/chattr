@@ -6,6 +6,7 @@ import { FaPhoneAlt, FaTimesCircle } from "react-icons/fa"
 import { useSetRecoilState, useRecoilValue } from "recoil"
 
 import { cancelCallRequestState, receivingCallState } from "../../store/video"
+import { userSoundOnState } from "../../store/users"
 
 interface Props {
   acceptCall: () => void
@@ -16,11 +17,12 @@ const ChatScreenNoVideo: React.FC<Props> = ({ acceptCall, socket }) => {
   const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
 
   const receivingCall = useRecoilValue(receivingCallState)
+  const soundOn = useRecoilValue(userSoundOnState)
 
   let beep = new Audio("/sounds/call.mp3")
 
   useEffect(() => {
-    if (receivingCall) {
+    if (receivingCall && soundOn) {
       // beep.loop = true
       beep.play()
     } else {
