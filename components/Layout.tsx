@@ -3,7 +3,11 @@ import styled from "styled-components"
 
 import Navbar from "./Navbar"
 
-const Layout = ({ children }) => {
+interface Props {
+  children: React.ReactNode
+}
+
+const Layout: React.FC<Props> = ({ children }) => {
   return (
     <Wrapper>
       <Navbar />
