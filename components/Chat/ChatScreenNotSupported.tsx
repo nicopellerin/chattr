@@ -17,6 +17,9 @@ const ChatScreenNotSupported: React.FC = () => {
           transition={{ type: "spring", damping: 80 }}
         >
           <Title>{"Streaming is not supported :("}</Title>
+          <Tagline>
+            Make sure you allow video/audio or try using a different browser
+          </Tagline>
           <SlideshowButton
             onClick={() => setShowCatSlider(true)}
             whileTap={{ y: 1 }}
@@ -65,6 +68,12 @@ const Title = styled.h4`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 3rem;
+`
+
+const Tagline = styled.span`
+  display: block;
+  font-size: 2rem;
   margin-bottom: 5rem;
 `
 

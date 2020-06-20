@@ -22,16 +22,17 @@ const AboutPage = () => {
           <Container>
             <Title>About Chattr</Title>
             <Text>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ullam
-              delectus beatae quas rem, fuga, a cum, iusto dolore repellendus
-              quam nostrum commodi eius id architecto dignissimos. Ratione
-              nostrum esse deserunt.
+              Chattr is a free 1-to-1 P2P audio/video and chat platform built by
+              Nico Pellerin. It provides a secure way of communicating on the
+              web. The project is still in its infancy and more features will
+              likely be added.
             </Text>
             <Text>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ullam
-              delectus beatae quas rem, fuga, a cum, iusto dolore repellendus
-              quam nostrum commodi eius id architecto dignissimos. Ratione
-              nostrum esse deserunt.
+              Please note, if you get the{" "}
+              <strong>Streaming is not supported</strong> screen, make sure you
+              accepted the request to allow video/audio. If this still doesn't
+              work, try using a recent Chromium-based browser or Firefox. IE is
+              not supported.
             </Text>
             <Link href="/">
               <BackButton
@@ -74,6 +75,7 @@ const Text = styled.p`
   color: var(--textColor);
   font-size: 1.7rem;
   line-height: 1.47059;
+  margin-bottom: 1rem;
 `
 
 const BackButton = styled(motion.button)`
@@ -84,7 +86,7 @@ const BackButton = styled(motion.button)`
   color: var(--primaryColor);
   display: flex;
   align-items: center;
-  margin-top: 4rem;
+  margin-top: 5rem;
   outline: transparent;
   cursor: pointer;
 `
