@@ -3,8 +3,6 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 
 const Invite = () => {
-  const inviteFriend = async () => {}
-
   return (
     <Wrapper
       initial={{ opacity: 0, y: 5 }}
