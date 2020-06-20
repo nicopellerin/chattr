@@ -5,6 +5,7 @@ import io from "socket.io-client"
 import Peer from "simple-peer"
 import { useRouter } from "next/router"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import getUserMedia from "get-user-media-promise"
 
 import {
   streamState,
@@ -75,16 +76,17 @@ const ChatMain = () => {
 
   useEffect(() => {
     socket.current = io.connect(`/?room=${room}`)
-    if (navigator?.mediaDevices?.getUserMedia) {
-      navigator?.mediaDevices
-        ?.getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
-        .then((stream) => {
-          setStream(stream)
-          if (selfVideoRef.current) {
-            selfVideoRef.current.srcObject = stream
-          }
-        })
-    }
+
+    getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
+      .then((stream: MediaStream) => {
+        setStream(stream)
+        if (selfVideoRef.current) {
+          selfVideoRef.current.srcObject = stream
+        }
+      })
+      .catch((err: any) => {
+        console.log("ERROR", err)
+      })
 
     socket.current.emit("username", username)
 
@@ -310,5 +312,5 @@ const RightColumn = styled.div`
 const LogoStyled = styled.img`
   width: 200px;
   justify-self: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 `

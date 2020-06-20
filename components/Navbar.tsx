@@ -45,6 +45,7 @@ const Wrapper = styled.nav`
 const LogoStyled = styled.img`
   width: 20rem;
   cursor: pointer;
+  padding: 1rem 0;
 `
 
 const ButtonAbout = styled(motion.button)`
@@ -59,10 +60,12 @@ const ButtonAbout = styled(motion.button)`
   justify-content: center;
   cursor: pointer;
   outline: transparent;
+  margin-top: 1.5rem;
 `
 
 const Text = styled.span`
   font-size: 2rem;
   font-weight: 700;
   color: var(--textColor);
+  margin-top: 1.5rem;
 `

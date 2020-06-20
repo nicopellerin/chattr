@@ -79,7 +79,7 @@ const Wrapper = styled.form`
   border-radius: 5px;
   display: grid;
   grid-template-columns: 1fr auto;
-  filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05));
+  /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
 `
 
 const TextInput = styled.input`

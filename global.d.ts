@@ -1,4 +1,5 @@
 declare module "better-react-spinkit"
+declare module "get-user-media-promise"
 
 // type ShareData = {
 //   title?: string

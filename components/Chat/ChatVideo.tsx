@@ -98,7 +98,7 @@ const Wrapper = styled(motion.div)`
   margin: 0;
   padding: 0;
   border-radius: 5px;
-  filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05));
+  /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
 `
 
 const FriendVideo = styled.video`

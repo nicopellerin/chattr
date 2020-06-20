@@ -2,17 +2,24 @@ import * as React from "react"
 import { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import { useRecoilValue } from "recoil"
+
+import { listUsersState } from "../../store/users"
 
 interface Props {
   setShowCatSlider: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ChatScreenNoVideo: React.FC<Props> = ({ setShowCatSlider }) => {
-  let conn = new Audio("/sounds/connection.mp3")
+  const listUsers = useRecoilValue(listUsersState)
 
-  useEffect(() => {
-    conn.play()
-  }, [])
+  // let conn = new Audio("/sounds/connection.mp3")
+
+  // useEffect(() => {
+  //   if (listUsers?.length > 1) {
+  //     conn.play()
+  //   }
+  // }, [])
 
   return (
     <Wrapper
