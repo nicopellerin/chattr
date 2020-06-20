@@ -69,6 +69,10 @@ const Title = styled.h2`
   font-size: 4rem;
   color: var(--tertiaryColor);
   text-align: center;
+
+  @media (max-width: 500px) {
+    margin-bottom: 1.7rem;
+  }
 `
 
 const Text = styled.p`
@@ -89,4 +93,8 @@ const BackButton = styled(motion.button)`
   margin-top: 5rem;
   outline: transparent;
   cursor: pointer;
+
+  @media (max-width: 500px) {
+    margin-top: 3rem;
+  }
 `

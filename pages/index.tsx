@@ -36,11 +36,7 @@ const IndexPage = () => {
 export default IndexPage
 
 // Styles
-const Container = styled(motion.div)`
-  @media (max-width; 500px) {
-    height: 40rem;
-  }
-`
+const Container = styled(motion.div)``
 
 const Note = styled(motion.span)`
   display: block;

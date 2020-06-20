@@ -32,18 +32,20 @@ export default Navbar
 
 // Styles
 const Wrapper = styled.nav`
-  position: absolute;
-  top: 2rem;
+  /* position: absolute; */
+  padding-top: 2rem;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   justify-content: center;
   justify-items: center;
+  height: 87px;
 
   @media (max-width: 500px) {
     display: flex;
     justify-content: space-around;
+    padding-top: 1rem;
   }
 `
 

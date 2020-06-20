@@ -78,6 +78,7 @@ const Container = styled.div`
     width: 90vw;
     margin: 0 auto;
     filter: none;
+    padding: 4rem 5rem;
   }
 `
 

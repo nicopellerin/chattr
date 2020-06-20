@@ -11,7 +11,7 @@ const Layout: React.FC<Props> = ({ children }) => {
   return (
     <Wrapper>
       <Navbar />
-      {children}
+      <Container>{children}</Container>
       <Footer>
         Made by{" "}
         <a href="https://nicopellerin.io" target="_blank" rel="noreferrer">
@@ -31,21 +31,27 @@ const Wrapper = styled.div`
   background: linear-gradient(rgba(12, 6, 19, 0.9), rgba(12, 6, 19, 0.99)),
     url("/bg.jpg");
   background-size: cover;
+`
+
+const Container = styled.main`
   display: grid;
   place-items: center;
+  height: calc(100% - 150px);
 `
 
 const Footer = styled.footer`
-  left: 50%;
-  bottom: 5.2rem;
-  position: absolute;
   color: #2fb5fc;
-  transform: translateX(-50%);
   font-size: 1.7rem;
   font-weight: 700;
+  padding-bottom: 4rem;
+  text-align: center;
 
   a {
     color: var(--tertiaryColor);
     text-decoration: none;
+  }
+
+  @media (max-width: 500px) {
+    padding-bottom: 3rem;
   }
 `
