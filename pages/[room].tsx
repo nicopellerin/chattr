@@ -1,3 +1,4 @@
+import Head from "next/head"
 import dynamic from "next/dynamic"
 import styled from "styled-components"
 
@@ -7,9 +8,14 @@ const ChatMainClient = dynamic(() => import("../components/Chat/ChatMain"), {
 
 const IndexPage = () => {
   return (
-    <Wrapper>
-      <ChatMainClient />
-    </Wrapper>
+    <>
+      <Head>
+        <title>Chattr</title>
+      </Head>
+      <Wrapper>
+        <ChatMainClient />
+      </Wrapper>
+    </>
   )
 }
 

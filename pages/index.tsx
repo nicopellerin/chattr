@@ -1,4 +1,5 @@
 import * as React from "react"
+import Head from "next/head"
 import styled from "styled-components"
 
 import UsernameModal from "../components/UsernameModal"
@@ -7,30 +8,35 @@ import { motion } from "framer-motion"
 
 const IndexPage = () => {
   return (
-    <Wrapper>
-      <Navbar />
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", damping: 80 }}
-      >
-        <UsernameModal />
-        <Note
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ type: "spring", damping: 80, delay: 0.5 }}
+    <>
+      <Head>
+        <title>Chattr | Free P2P audio/video + chat</title>
+      </Head>
+      <Wrapper>
+        <Navbar />
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", damping: 80 }}
         >
-          At the moment, please use a Chromium-based browser for the best
-          experience
-        </Note>
-      </motion.div>
-      <Footer>
-        Made by{" "}
-        <a href="https://nicopellerin.io" target="_blank">
-          Nico Pellerin
-        </a>
-      </Footer>
-    </Wrapper>
+          <UsernameModal />
+          <Note
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ type: "spring", damping: 80, delay: 0.5 }}
+          >
+            At the moment, please use a Chromium-based browser for the best
+            experience
+          </Note>
+        </motion.div>
+        <Footer>
+          Made by{" "}
+          <a href="https://nicopellerin.io" target="_blank">
+            Nico Pellerin
+          </a>
+        </Footer>
+      </Wrapper>
+    </>
   )
 }
 

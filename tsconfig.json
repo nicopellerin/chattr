@@ -4,7 +4,7 @@
     "alwaysStrict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    // "isolatedModules": true,
+    "isolatedModules": true,
     "jsx": "preserve",
     "lib": [
       "dom",
@@ -20,15 +20,13 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
-    "outDir": "dist",
-    "isolatedModules": true
+    "outDir": "dist"
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
     "**/*.ts",
-    "**/*.tsx",
-    "server"
+    "**/*.tsx"
   ]
 }

@@ -2,9 +2,12 @@
   "name": "with-typescript",
   "version": "1.0.0",
   "scripts": {
-    "dev": "ts-node server.ts",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "dev": "ts-node --project tsconfig.server.json index.ts",
+    "build:server": "tsc --project tsconfig.server.json",
+    "build:next": "next build",
+    "build": "npm run build:next && npm run build:server",
+    "start": "NODE_ENV=production node dist/index.js",
+    "export": "next export",
     "type-check": "tsc"
   },
   "dependencies": {
@@ -40,7 +43,7 @@
     "babel-plugin-styled-components": "^1.10.7",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
-    "typescript": "3.7.3"
+    "typescript": "^3.9.5"
   },
   "license": "ISC"
 }

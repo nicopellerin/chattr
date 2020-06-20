@@ -1,6 +1,5 @@
 import * as React from "react"
 import styled from "styled-components"
-import { FaPlusCircle } from "react-icons/fa"
 import { motion } from "framer-motion"
 
 const Invite = () => {
@@ -13,9 +12,20 @@ const Invite = () => {
       exit={{ opacity: 0 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <Container onClick={inviteFriend} whileTap={{ scale: 0.98 }}>
-        <Icon />
-        <Text>Invite friend</Text>
+      <Container>
+        <Text>Invite friend via</Text>
+        <a
+          href={`http://www.facebook.com/dialog/send?app_id=296141104755109&link=${window.location.href}&redirect_uri=${window.location.href}`}
+          target="_blank"
+          rel="noopener"
+        >
+          <FbookMessengerIcon
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            src="/messenger.svg"
+            alt="Messenger"
+          />
+        </a>
       </Container>
     </Wrapper>
   )
@@ -37,14 +47,13 @@ const Container = styled(motion.div)`
   cursor: pointer;
 `
 
-const Icon = styled(FaPlusCircle)`
-  font-size: 3rem;
-  margin-bottom: 1.4rem;
-  color: var(--tertiaryColor);
-`
-
 const Text = styled.span`
   font-size: 2rem;
   color: var(--textColor);
   font-weight: 600;
+  margin-bottom: 2.4rem;
+`
+
+const FbookMessengerIcon = styled(motion.img)`
+  width: 6rem;
 `

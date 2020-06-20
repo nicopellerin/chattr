@@ -35,19 +35,11 @@ export default class MyDocument extends Document {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-          <meta
-            name="description"
-            content="Créer ton propre journal de bord en ligne. Facile d'utilisation et
-            100% gratuit."
-          />
-          <meta name="theme-color" content="#9D00E0" />
-          <meta name="og:title" content="monjournaldebord" />
-          <meta name="og:url" content="https://monjournaldebord.ca" />
-          <meta
-            name="og:description"
-            content="Créer ton propre journal de bord en ligne. Facile d'utilisation et
-            100% gratuit."
-          />
+          <meta name="description" content="Free P2P audio/video + chat" />
+          <meta name="theme-color" content="#8352FD" />
+          <meta name="og:title" content="Chattr" />
+          <meta name="og:url" content="https://chattr.lol" />
+          <meta name="og:description" content="Free P2P audio/video + chat" />
           <meta name="og:image" content="/og-image-5.png" />
           <link href="/manifest.json" rel="manifest" />
           <link
@@ -70,10 +62,10 @@ export default class MyDocument extends Document {
           <link
             rel="mask-icon"
             href="/icons/safari-pinned-tab.svg"
-            color="#5bbad5"
+            color="#8352FD"
           />
           <link rel="shortcut icon" href="/icons/favicon.ico" />
-          <meta name="msapplication-TileColor" content="#da532c" />
+          <meta name="msapplication-TileColor" content="#8352FD" />
           <meta
             name="msapplication-config"
             content="/icons/browserconfig.xml"
