@@ -7,7 +7,6 @@
     "build:next": "next build",
     "build": "npm run build:next && npm run build:server",
     "start": "NODE_ENV=production node dist/index.js",
-    "export": "next export",
     "type-check": "tsc"
   },
   "dependencies": {

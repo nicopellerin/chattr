@@ -30,7 +30,7 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang="fr">
+      <Html lang="en">
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta charSet="utf-8" />
@@ -53,6 +53,11 @@ export default class MyDocument extends Document {
           <link rel="icon" type="image/png" href="/favicon.png" />
           <meta name="msapplication-TileColor" content="#8352FD" />
           <meta name="theme-color" content="#ffffff" />
+          {/* <script
+            dangerouslySetInnerHTML={{
+              __html: `[google analytics tracking code here]`
+            }}
+          /> */}
         </Head>
         <body>
           <Main />
