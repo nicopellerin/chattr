@@ -75,14 +75,16 @@ const ChatMain = () => {
 
   useEffect(() => {
     socket.current = io.connect(`/?room=${room}`)
-    navigator.mediaDevices
-      .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
-      .then((stream) => {
-        setStream(stream)
-        if (selfVideoRef.current) {
-          selfVideoRef.current.srcObject = stream
-        }
-      })
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
+        .then((stream) => {
+          setStream(stream)
+          if (selfVideoRef.current) {
+            selfVideoRef.current.srcObject = stream
+          }
+        })
+    }
 
     socket.current.emit("username", username)
 
