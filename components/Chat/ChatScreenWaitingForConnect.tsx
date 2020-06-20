@@ -38,6 +38,10 @@ const Wrapper = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
+  @media (max-width: 500px) {
+    max-height: 300px;
+  }
 `
 
 const Container = styled(motion.div)`
@@ -56,4 +60,5 @@ const Title = styled.h4`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 `

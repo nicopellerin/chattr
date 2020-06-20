@@ -120,6 +120,10 @@ const FriendVideo = styled.video`
   padding: 0;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
+
+  @media (max-width: 500px) {
+    height: 300px;
+  }
 `
 
 const SelfVideo = styled(motion.video)`
@@ -134,4 +138,8 @@ const SelfVideo = styled(motion.video)`
   padding: 0;
   border-radius: 3px;
   cursor: move;
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `

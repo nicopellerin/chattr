@@ -310,12 +310,21 @@ const Wrapper = styled.div`
   grid-template-columns: 3fr 1fr;
   grid-gap: 3rem;
   width: 85%;
+
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
+    width: 90vw;
+  }
 `
 
 const LeftColumn = styled.div`
   display: grid;
   grid-template-rows: 9fr 1fr;
   grid-gap: 2rem;
+
+  @media (max-width: 500px) {
+    grid-template-rows: 1fr;
+  }
 `
 
 const RightColumn = styled.div`
@@ -327,4 +336,8 @@ const LogoStyled = styled.img`
   width: 200px;
   justify-self: center;
   margin-bottom: 2rem;
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `

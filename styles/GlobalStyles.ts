@@ -25,7 +25,7 @@ html {
   font-size: 62.5%;
   box-sizing: border-box;
   height: 100%;
-
+  min-height: 100%;
   @media (max-width: 1500px) {
     font-size: 57.5%;
   }
@@ -33,14 +33,15 @@ html {
 
 #__next {
   height: 100%;
+  min-height: 100%;
   width: 100%;
-
 }
 
 body {
   margin: 0;
   padding: 0;
   height: 100%;
+  min-height: 100%;
   font-family: var(--systemFont);
   color: #555;
   -webkit-font-smoothing: antialiased;

@@ -73,6 +73,11 @@ const Container = styled.div`
     props.noUsernameModal
       ? "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.9))"
       : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.45))"};
+
+  @media (max-width: 500px) {
+    width: 90vw;
+    margin: 0 auto;
+  }
 `
 
 const Tagline = styled.span`

@@ -90,6 +90,10 @@ const Wrapper = styled.form`
   justify-content: space-between;
   overflow: hidden;
   /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `
 
 const Text = styled.span`

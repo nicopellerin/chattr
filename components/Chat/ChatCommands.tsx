@@ -155,6 +155,10 @@ const Wrapper = styled.div`
   padding: 1.7rem;
   border-radius: 5px;
   /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `
 
 const Container = styled.div`

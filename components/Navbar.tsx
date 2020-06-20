@@ -40,6 +40,11 @@ const Wrapper = styled.nav`
   align-items: center;
   justify-content: center;
   justify-items: center;
+
+  @media (max-width: 500px) {
+    display: flex;
+    justify-content: space-around;
+  }
 `
 
 const LogoStyled = styled.img`
@@ -61,6 +66,10 @@ const ButtonAbout = styled(motion.button)`
   cursor: pointer;
   outline: transparent;
   margin-top: 1.5rem;
+
+  @media (max-width: 500px) {
+    margin-top: 2.5rem;
+  }
 `
 
 const Text = styled.span`
@@ -68,4 +77,8 @@ const Text = styled.span`
   font-weight: 700;
   color: var(--textColor);
   margin-top: 1.5rem;
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `

@@ -43,4 +43,9 @@ const Note = styled(motion.span)`
   text-align: center;
   margin-top: 4rem;
   line-height: 1.4;
+
+  @media (max-width: 500px) {
+    width: 80vw;
+    margin: 4rem auto 0;
+  }
 `
