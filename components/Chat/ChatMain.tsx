@@ -36,6 +36,7 @@ import {
   chatUserIsTypingState,
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
+import Router from "next/router"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -82,7 +83,10 @@ const ChatMain = () => {
   useEffect(() => {
     socket.current = io.connect(`/?room=${room}`)
 
-    getUserMedia({ video: { width: 1280, height: 720 }, audio: true })
+    getUserMedia({
+      video: { width: { ideal: 4096 }, height: { ideal: 2160 } },
+      audio: true,
+    })
       .then((stream: MediaStream) => {
         setStream(stream)
         if (selfVideoRef.current) {
@@ -92,6 +96,10 @@ const ChatMain = () => {
       .catch(() => {
         setGetUserMediaNotSupported(true)
       })
+
+    socket.current.on("notAllowed", () => {
+      Router.push("/")
+    })
 
     socket.current.emit("username", username)
 

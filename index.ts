@@ -25,23 +25,19 @@ const rooms: Rooms = {}
 io.on("connection", (socket) => {
   const room: string = socket.handshake.query.room
 
-  // io.in(room).clients((error, clients) => {
-  //   if (error) {
-  //     throw error
-  //   }
-
-  //   // if (clients.length > 2) {
-  //   //   console.log("MAX CONNECTIONS0")
-  //   //   return
-  //   // }
-
-  // })
+  if (rooms[room] && rooms[room].users.length === 2) {
+    socket.emit("notAllowed")
+    socket.disconnect()
+    return
+  }
 
   socket.join(room)
 
   const oldUsers: string[] = (rooms[room] && rooms[room].users) || []
 
   rooms[room] = { users: [...oldUsers, socket.id] }
+
+  console.log(rooms[room].users)
 
   io.to(room).emit("listUsers", rooms[room].users)
 

@@ -18,7 +18,7 @@ const ChatScreenNotSupported: React.FC = () => {
         >
           <Title>{"Streaming is not supported :("}</Title>
           <Tagline>
-            Make sure you allow video/audio or try using a different browser
+            Make sure you allowed video/audio or try using a different browser
           </Tagline>
           <SlideshowButton
             onClick={() => setShowCatSlider(true)}
