@@ -1,16 +1,18 @@
 import Head from "next/head"
 import dynamic from "next/dynamic"
 import styled from "styled-components"
+import { useRouter } from "next/router"
 
 const ChatMainClient = dynamic(() => import("../components/Chat/ChatMain"), {
   ssr: false,
 })
 
 const IndexPage = () => {
+  const { query } = useRouter()
   return (
     <>
       <Head>
-        <title>Chattr</title>
+        <title>{`Chattr | Room: ${query?.room}`}</title>
       </Head>
       <Wrapper>
         <ChatMainClient />

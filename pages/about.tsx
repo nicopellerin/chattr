@@ -90,7 +90,7 @@ const Title = styled.h2`
 const Text = styled.p`
   color: var(--textColor);
   font-size: 1.7rem;
-  line-height: 1.6;
+  line-height: 1.47059;
 `
 
 const BackButton = styled(motion.button)`

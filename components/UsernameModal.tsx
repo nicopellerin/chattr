@@ -15,7 +15,7 @@ interface Props {
 }
 
 const UsernameModal: React.FC<Props> = ({
-  buttonText = "Launch Chat",
+  buttonText = "Launch chat",
   noUsernameModal = false,
 }) => {
   const setUsername = useSetRecoilState(usernameState)
