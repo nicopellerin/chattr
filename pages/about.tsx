@@ -48,7 +48,7 @@ const AboutPage = () => {
         </motion.div>
         <Footer>
           Made by{" "}
-          <a href="https://nicopellerin.io" target="_blank">
+          <a href="https://nicopellerin.io" target="_blank" rel="noreferrer">
             Nico Pellerin
           </a>
         </Footer>
