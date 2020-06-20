@@ -40,7 +40,7 @@ export default class MyDocument extends Document {
           <meta name="og:title" content="Chattr" />
           <meta name="og:url" content="https://chattr.lol" />
           <meta name="og:description" content="Free P2P audio/video + chat" />
-          <meta name="og:image" content="/og-image-5.png" />
+          <meta name="og:image" content="/og-image.png" />
           <link rel="icon" type="image/png" href="/favicon.png" />
           <meta name="msapplication-TileColor" content="#8352FD" />
           <meta name="theme-color" content="#ffffff" />
