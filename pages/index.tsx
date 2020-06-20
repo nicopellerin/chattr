@@ -10,7 +10,7 @@ const IndexPage = () => {
   return (
     <>
       <Head>
-        <title>Chattr | Free P2P audio/video + chat</title>
+        <title>Chattr | Free P2P audio/video + chat platform</title>
       </Head>
       <Wrapper>
         <Navbar />

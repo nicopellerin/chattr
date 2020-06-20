@@ -12,7 +12,7 @@ const Navbar = () => {
       <Link href="/">
         <LogoStyled src="/logo.svg" alt="logo" />
       </Link>
-      <Text>Free P2P audio/video + chat</Text>
+      <Text>Free P2P audio/video + chat platform</Text>
       <Link href="/about">
         <ButtonAbout
           style={{
