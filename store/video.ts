@@ -63,3 +63,8 @@ export const disableCallIconState = selector({
     }
   },
 })
+
+export const getUserMediaNotSupportedState = atom<boolean>({
+  key: "getUserMediaNotSupportedState",
+  default: false,
+})

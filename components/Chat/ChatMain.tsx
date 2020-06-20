@@ -17,6 +17,7 @@ import {
   pressedCallState,
   muteMicState,
   showSelfWebcamState,
+  getUserMediaNotSupportedState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -50,6 +51,10 @@ const ChatMain = () => {
   const setChatMsgs = useSetRecoilState(chatWindowState)
   const setUserLeftChattr = useSetRecoilState(userLeftChattrState)
   const setPressedCall = useSetRecoilState(pressedCallState)
+  const setGetUserMediaNotSupported = useSetRecoilState(
+    getUserMediaNotSupportedState
+  )
+
   // @ts-ignore
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
     cancelCallRequestState
@@ -84,8 +89,8 @@ const ChatMain = () => {
           selfVideoRef.current.srcObject = stream
         }
       })
-      .catch((err: any) => {
-        console.log("ERROR", err)
+      .catch(() => {
+        setGetUserMediaNotSupported(true)
       })
 
     socket.current.emit("username", username)

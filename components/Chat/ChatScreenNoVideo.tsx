@@ -86,7 +86,7 @@ const Tagline = styled.h4`
   margin-bottom: 5rem;
 `
 
-export const Button = styled(motion.button)`
+const Button = styled(motion.button)`
   padding: 1em 1.5em;
   border: none;
   background: #28d728;

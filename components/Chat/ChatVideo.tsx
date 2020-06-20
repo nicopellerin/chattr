@@ -15,8 +15,10 @@ import {
   receivingCallState,
   callAcceptedState,
   pressedCallState,
+  getUserMediaNotSupportedState,
 } from "../../store/video"
 import { listUsersState } from "../../store/users"
+import ChatScreenNotSupported from "./ChatScreenNotSupported"
 
 interface Props {
   acceptCall: () => void
@@ -36,10 +38,19 @@ const ChatVideo: React.FC<Props> = ({
   const listUsers = useRecoilValue(listUsersState)
   const pressedCall = useRecoilValue(pressedCallState)
   const receivingCall = useRecoilValue(receivingCallState)
+  const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
 
   const [showCatSlider, setShowCatSlider] = useState(false)
 
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
+
+  if (getUserMediaNotSupported) {
+    return (
+      <Wrapper ref={contraintsRef}>
+        <ChatScreenNotSupported />
+      </Wrapper>
+    )
+  }
 
   return (
     <Wrapper ref={contraintsRef}>
