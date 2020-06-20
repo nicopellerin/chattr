@@ -57,6 +57,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   return (
     <Wrapper onSubmit={handleSubmit}>
       <TextInput
+        disabled={listUsers?.length < 2}
         placeholder="Type message..."
         value={msg}
         onChange={(e) =>
@@ -93,6 +94,12 @@ const TextInput = styled.input`
 
   &::placeholder {
     color: var(--textColor);
+  }
+
+  &:disabled {
+    &::placeholder {
+      color: #aaa;
+    }
   }
 `
 
