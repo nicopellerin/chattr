@@ -40,7 +40,10 @@ export default class MyDocument extends Document {
             content="Free P2P audio/video + chat platform"
           />
           <meta name="theme-color" content="#8352FD" />
-          <meta name="og:title" content="Chattr" />
+          <meta
+            name="og:title"
+            content="Chattr | Free P2P audio/video + chat platform"
+          />
           <meta name="og:url" content="https://chattr.lol" />
           <meta
             name="og:description"
