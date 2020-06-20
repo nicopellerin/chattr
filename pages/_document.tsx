@@ -41,35 +41,8 @@ export default class MyDocument extends Document {
           <meta name="og:url" content="https://chattr.lol" />
           <meta name="og:description" content="Free P2P audio/video + chat" />
           <meta name="og:image" content="/og-image-5.png" />
-          <link href="/manifest.json" rel="manifest" />
-          <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="/icons/apple-touch-icon.png"
-          />
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="/icons/favicon-32x32.png"
-          />
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="/icons/favicon-16x16.png"
-          />
-          <link
-            rel="mask-icon"
-            href="/icons/safari-pinned-tab.svg"
-            color="#8352FD"
-          />
-          <link rel="shortcut icon" href="/icons/favicon.ico" />
+          <link rel="icon" type="image/png" href="/favicon.png" />
           <meta name="msapplication-TileColor" content="#8352FD" />
-          <meta
-            name="msapplication-config"
-            content="/icons/browserconfig.xml"
-          />
           <meta name="theme-color" content="#ffffff" />
         </Head>
         <body>

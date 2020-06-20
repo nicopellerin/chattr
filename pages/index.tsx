@@ -25,8 +25,8 @@ const IndexPage = () => {
             animate={{ opacity: 1 }}
             transition={{ type: "spring", damping: 80, delay: 0.5 }}
           >
-            At the moment, please use a Chromium-based browser for the best
-            experience
+            At the moment, please use a desktop Chromium-based browser for the
+            best experience
           </Note>
         </motion.div>
         <Footer>

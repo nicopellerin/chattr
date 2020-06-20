@@ -1,15 +1,29 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import Link from "next/link"
+import { useRouter } from "next/router"
 
 const Navbar = () => {
+  const { pathname } = useRouter()
+
   return (
     <Wrapper>
-      <LogoStyled src="/logo.svg" alt="logo" />
+      <Link href="/">
+        <LogoStyled src="/logo.svg" alt="logo" />
+      </Link>
       <Text>Free P2P audio/video + chat</Text>
-      <ButtonAbout whileTap={{ scale: 0.98 }} whileHover={{ scale: 1.02 }}>
-        About
-      </ButtonAbout>
+      <Link href="/about">
+        <ButtonAbout
+          style={{
+            textDecoration: pathname === "/about" ? "underline" : "none",
+          }}
+          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: 1.02 }}
+        >
+          About
+        </ButtonAbout>
+      </Link>
     </Wrapper>
   )
 }
@@ -30,10 +44,10 @@ const Wrapper = styled.nav`
 
 const LogoStyled = styled.img`
   width: 20rem;
+  cursor: pointer;
 `
 
 const ButtonAbout = styled(motion.button)`
-  /* padding: 0.7em 1.5em; */
   border: none;
   background: transparent;
   color: var(--primaryColor);
