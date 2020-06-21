@@ -17,7 +17,6 @@ import {
   userLeftChattrState,
   listUsersState,
   userSoundOnState,
-  selfIdState,
 } from "../../store/users"
 import Invite from "./Invite"
 
@@ -26,7 +25,7 @@ interface Message {
   user: string
 }
 
-const ChatTextWindow: React.FC<Props> = () => {
+const ChatTextWindow: React.FC = () => {
   const welcomeMsg = useRecoilValue(chatWelcomeMessageState)
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
@@ -34,7 +33,6 @@ const ChatTextWindow: React.FC<Props> = () => {
   const userLeftChattr = useRecoilValue(userLeftChattrState)
   const listUsers = useRecoilValue(listUsersState)
   const soundOn = useRecoilValue(userSoundOnState)
-  const selfId = useRecoilValue(selfIdState)
 
   const [fileTransferProgress, setFileTransferProgress] = useRecoilState(
     fileTransferProgressState
@@ -126,29 +124,6 @@ const ChatTextWindow: React.FC<Props> = () => {
 
         {listUsers?.length < 2 && !userLeftChattr?.length && <Invite />}
       </ScrollArea>
-      {/* {listUsers?.length > 1 && (
-        <SendFileWrapper>
-          <ButtonSend
-            whileHover={{ scale: 1.0 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => fileInputRef.current && fileInputRef.current.click()}
-          >
-            Send file
-            <FaRocket style={{ marginLeft: 5 }} />
-          </ButtonSend>
-          <input
-            hidden
-            name="file"
-            id="file"
-            type="file"
-            ref={fileInputRef}
-            onChange={(e) => handleSendFile(e)}
-          />
-          {fileTransferProgress !== "0" && (
-            <h3 style={{ color: "red" }}>{fileTransferProgress + "%"}</h3>
-          )}
-        </SendFileWrapper>
-      )} */}
     </Wrapper>
   )
 }
@@ -224,27 +199,4 @@ const UserDisconnectedText = styled.span`
   font-size: 1.7rem;
   font-weight: 700;
   color: var(--secondaryColor);
-`
-
-const ButtonSend = styled(motion.button)`
-  background: linear-gradient(
-    140deg,
-    var(--primaryColor),
-    var(--primaryColorDark)
-  );
-  border: none;
-  color: var(--textColor);
-  font-size: 1.4rem;
-  font-weight: 600;
-  padding: 0.8rem 1rem;
-  border-radius: 5px;
-  outline: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-`
-
-const SendFileWrapper = styled.div`
-  display: flex;
-  justify-content: center;
 `

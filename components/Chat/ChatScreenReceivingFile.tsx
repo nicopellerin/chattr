@@ -1,8 +1,9 @@
 import * as React from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
-import { useRecoilValue, useSetRecoilState } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 
 import { fileNameState, receivingFileState } from "../../store/chat"
 
@@ -12,7 +13,16 @@ interface Props {
 
 const ChatScreenReceivingFile: React.FC<Props> = ({ acceptFile }) => {
   const fileName = useRecoilValue(fileNameState)
-  const setReceivingFile = useSetRecoilState(receivingFileState)
+
+  const [receivingFile, setReceivingFile] = useRecoilState(receivingFileState)
+
+  let sound = new Audio("/sounds/connection.mp3")
+
+  useEffect(() => {
+    if (receivingFile) {
+      sound.play()
+    }
+  }, [receivingFile])
 
   return (
     <Wrapper

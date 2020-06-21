@@ -312,6 +312,10 @@ const ChatMain = () => {
 
         peer.send("Done!")
       })
+
+      // peer.on("close", () => {
+      //   peer.removeAllListeners()
+      // })
     })
 
     socket.current.on("receivingFile", (signal: any) => {
@@ -359,6 +363,10 @@ const ChatMain = () => {
       } else {
         fileChunks.push(data)
       }
+    })
+
+    peer.on("close", () => {
+      peer.removeAllListeners()
     })
   }
 

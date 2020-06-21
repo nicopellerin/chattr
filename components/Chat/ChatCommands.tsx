@@ -90,7 +90,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               beepOn.play()
             }
           }}
-          // off={fileTransferProgress}
+          off={listUsers?.length < 2}
           whileTap={{ scale: 0.98 }}
         >
           <input
