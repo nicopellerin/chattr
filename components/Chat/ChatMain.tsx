@@ -83,19 +83,22 @@ const ChatMain = () => {
   useEffect(() => {
     socket.current = io.connect(`/?room=${room}`)
 
-    getUserMedia({
-      video: { width: { ideal: 4096 }, height: { ideal: 2160 } },
-      audio: true,
-    })
-      .then((stream: MediaStream) => {
-        setStream(stream)
-        if (selfVideoRef.current) {
-          selfVideoRef.current.srcObject = stream
-        }
-      })
-      .catch(() => {
-        setGetUserMediaNotSupported(true)
-      })
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({
+          video: { width: { ideal: 4096 }, height: { ideal: 2160 } },
+          audio: true,
+        })
+        .then((stream: MediaStream) => {
+          setStream(stream)
+          if (selfVideoRef.current) {
+            selfVideoRef.current.srcObject = stream
+          }
+        })
+        .catch(() => {
+          setGetUserMediaNotSupported(true)
+        })
+    }
 
     socket.current.on("notAllowed", () => {
       Router.push("/")
@@ -310,6 +313,10 @@ const Wrapper = styled.div`
   grid-template-columns: 3fr 1fr;
   grid-gap: 3rem;
   width: 85%;
+
+  @media (max-width: 1024px) {
+    width: 95vw;
+  }
 
   @media (max-width: 500px) {
     grid-template-columns: 1fr;
