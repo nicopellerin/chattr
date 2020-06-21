@@ -114,10 +114,11 @@ const IconCog = styled(FaCog)`
   font-size: 2rem;
   color: #aaa;
   cursor: pointer;
-  transition: color 150ms ease-in-out;
+  transition: all 150ms ease-in-out;
 
   &:hover {
     color: #eef;
+    transform: rotate(180deg);
   }
 `
 
@@ -161,7 +162,6 @@ const ToggleSwitchInner = styled(motion.span)`
   display: block;
   width: 100%;
   margin-left: ${(props: { isOn: boolean }) => (props.isOn ? 0 : "-100%")};
-  /* transition: margin 0.1s ease-in 0s; */
 
   &:before,
   :after {
@@ -181,14 +181,12 @@ const ToggleSwitchInner = styled(motion.span)`
   &:before {
     content: "On";
     padding-left: 15px;
-    background-color: #0c0613;
     color: transparent;
   }
 
   &:after {
     content: "Off";
     padding-right: 13px;
-    background-color: #0c0613;
     color: transparent;
     text-align: right;
   }
@@ -202,13 +200,12 @@ const ToggleSwitchSwitch = styled(motion.span)`
   height: 28px;
   margin: 0px;
   background: ${(props: { isOn: boolean }) =>
-    props.isOn ? "#fd52cd" : "#f4f4f4"};
+    props.isOn ? "#d852fd" : "#f4f4f4"};
   position: absolute;
   top: -1px;
   bottom: 0;
   right: ${(props: { isOn: boolean }) => (props.isOn ? "0px" : "21px")};
   border-radius: 50%;
-  /* transition: all 0.15s ease-in 0s; */
   color: #fff;
   filter: drop-shadow(0 0 0.75rem rgba(89, 86, 213, 0.25));
 `

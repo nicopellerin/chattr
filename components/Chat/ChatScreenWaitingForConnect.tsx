@@ -13,12 +13,12 @@ const ChatScreenWaitingForConnect = () => {
     >
       <Container>
         <Title style={{ margin: 0 }}>
-          <ThreeBounce
-            size={30}
-            style={{ marginBottom: 40 }}
-            color="var(--textColor)"
-          />
-          {"Waiting for friend to connect :)"}
+          <ThreeBounce size={30} style={{ marginBottom: 40 }} color="#f9e4fe" />
+          <div>
+            {/* <span>🧘‍♂️</span> */}
+            <span style={{ margin: 20 }}>Waiting for friend to connect</span>
+            {/* <span>🧘‍♂️</span> */}
+          </div>
         </Title>
       </Container>
     </Wrapper>
@@ -56,7 +56,7 @@ const Container = styled(motion.div)`
 
 const Title = styled.h4`
   font-size: 3rem;
-  color: var(--textColor);
+  color: #f9e4fe;
   display: flex;
   flex-direction: column;
   align-items: center;

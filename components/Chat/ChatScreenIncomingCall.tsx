@@ -98,7 +98,7 @@ const Title = styled.h4`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 5rem;
+  margin-bottom: 4rem;
 `
 
 const ButtonWrapper = styled.div`
