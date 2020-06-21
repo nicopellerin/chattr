@@ -9,7 +9,7 @@ const Invite = () => {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    let idx
+    let idx: ReturnType<typeof setTimeout>
 
     if (copied) {
       idx = setTimeout(() => {
