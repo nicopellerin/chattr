@@ -87,13 +87,7 @@ const Text = styled.span`
 const CopyButton = styled(motion.button)`
   margin-top: 5rem;
   background: ${(props: { disabled: boolean }) =>
-    props.disabled
-      ? "green"
-      : `linear-gradient(
-    180deg,
-    var(--primaryColor),
-    var(--primaryColorDark)
-  )`};
+    props.disabled ? "green" : "var(--primaryColorDark)"};
   color: var(--textColor);
   border: none;
   border-radius: 5px;
