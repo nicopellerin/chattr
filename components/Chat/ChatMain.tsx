@@ -133,7 +133,9 @@ const ChatMain = () => {
       setTimeout(() => setUserLeftChattr(""), 3000)
       setChatMsgs([])
       friendVideoRef.current.srcObject = null
-      peer2.destroy()
+      // if (peer2) {
+      //   peer2.destroy()
+      // }
     })
 
     socket.current.on("userJoinedChattr", () => {
@@ -196,14 +198,16 @@ const ChatMain = () => {
     })
 
     peer.on("close", () => {
-      peer.destroy()
+      // peer.destroy()
       selfVideoRef.current.srcObject = null
     })
 
     socket.current.on("userLeftChattr", (msg: string) => {
       setUserLeftChattr(msg)
       friendVideoRef.current.srcObject = null
-      peer.destroy()
+      if (peer) {
+        peer.destroy()
+      }
     })
 
     socket.current.on("callAccepted", (signal: any) => {
@@ -230,17 +234,15 @@ const ChatMain = () => {
 
     peer2.on("close", () => {
       friendVideoRef.current.srcObject = null
-      peer2.removeStream(stream)
-      peer2.destroy()
+      // peer2.removeStream(stream)
     })
   }
 
   // End call
   useEffect(() => {
     if (cancelCallRequest) {
-      peer2.removeStream(stream)
-      peer2.destroy()
-      // friendVideoRef.current.srcObject = null
+      // peer2.removeStream(stream)
+      // peer2.destroy()
       socket.current.emit("cancelCallRequest")
     }
   }, [cancelCallRequest])
