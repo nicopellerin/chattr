@@ -19,16 +19,20 @@ import {
 } from "../../store/video"
 import { listUsersState } from "../../store/users"
 import ChatScreenNotSupported from "./ChatScreenNotSupported"
+import ChatScreenReceivingFile from "./ChatScreenReceivingFile"
+import { receivingFileState } from "../../store/chat"
 
 interface Props {
   acceptCall: () => void
   selfVideoRef: React.MutableRefObject<HTMLVideoElement>
   friendVideoRef: React.MutableRefObject<HTMLVideoElement>
+  acceptFile: () => void
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 const ChatVideo: React.FC<Props> = ({
   acceptCall,
+  acceptFile,
   selfVideoRef,
   friendVideoRef,
   socket,
@@ -39,6 +43,7 @@ const ChatVideo: React.FC<Props> = ({
   const pressedCall = useRecoilValue(pressedCallState)
   const receivingCall = useRecoilValue(receivingCallState)
   const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
+  const receivingFile = useRecoilValue(receivingFileState)
 
   const [showCatSlider, setShowCatSlider] = useState(false)
 
@@ -48,6 +53,14 @@ const ChatVideo: React.FC<Props> = ({
     return (
       <Wrapper ref={contraintsRef}>
         <ChatScreenNotSupported />
+      </Wrapper>
+    )
+  }
+
+  if (receivingFile) {
+    return (
+      <Wrapper ref={contraintsRef}>
+        <ChatScreenReceivingFile acceptFile={acceptFile} />
       </Wrapper>
     )
   }

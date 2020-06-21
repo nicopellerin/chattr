@@ -1,21 +1,23 @@
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import styled from "styled-components"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollArea from "react-scrollbar"
-import { FaKiwiBird } from "react-icons/fa"
+import { FaKiwiBird, FaRocket } from "react-icons/fa"
 
 import {
   chatWindowState,
   chatWelcomeMessageState,
   chatUserIsTypingState,
+  fileTransferProgressState,
 } from "../../store/chat"
 import {
   usernameState,
   userLeftChattrState,
   listUsersState,
   userSoundOnState,
+  selfIdState,
 } from "../../store/users"
 import Invite from "./Invite"
 
@@ -24,7 +26,11 @@ interface Message {
   user: string
 }
 
-const ChatTextWindow = () => {
+interface Props {
+  sendFile: (id: string, file: any) => void
+}
+
+const ChatTextWindow: React.FC<Props> = ({ sendFile }) => {
   const welcomeMsg = useRecoilValue(chatWelcomeMessageState)
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
@@ -32,8 +38,28 @@ const ChatTextWindow = () => {
   const userLeftChattr = useRecoilValue(userLeftChattrState)
   const listUsers = useRecoilValue(listUsersState)
   const soundOn = useRecoilValue(userSoundOnState)
+  const selfId = useRecoilValue(selfIdState)
+
+  const [fileTransferProgress, setFileTransferProgress] = useRecoilState(
+    fileTransferProgressState
+  )
 
   // const chatWindowRef = useRef()
+  const fileInputRef = useRef() as React.RefObject<HTMLInputElement>
+
+  const otherUser = listUsers?.filter((user) => user !== selfId).join("")
+
+  const handleSendFile = (e: any) => {
+    const file = e.target.files[0]
+
+    if (file.size > 5 * 1000000) {
+      alert("File too big. Max size is 5 mb")
+      e.target.value = ""
+      return
+    }
+
+    sendFile(otherUser, file)
+  }
 
   const pop = new Audio("/sounds/pop_drip.mp3")
 
@@ -44,8 +70,37 @@ const ChatTextWindow = () => {
     // chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
   }, [msgs])
 
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+
+    if (fileTransferProgress === "100") {
+      idx = setTimeout(() => setFileTransferProgress("0"), 3000)
+    }
+
+    return () => clearTimeout(idx)
+  }, [fileTransferProgress])
+
   return (
     <Wrapper>
+      <ButtonSend
+        whileHover={{ scale: 1.0 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => fileInputRef.current && fileInputRef.current.click()}
+      >
+        Send file
+        <FaRocket style={{ marginLeft: 5 }} />
+      </ButtonSend>
+      <input
+        hidden
+        name="file"
+        id="file"
+        type="file"
+        ref={fileInputRef}
+        onChange={(e) => handleSendFile(e)}
+      />
+      {fileTransferProgress !== "0" && (
+        <h3 style={{ color: "red" }}>{fileTransferProgress + "%"}</h3>
+      )}
       <ScrollArea
         style={{
           height: 400,
@@ -184,4 +239,22 @@ const UserDisconnectedText = styled.span`
   font-size: 1.7rem;
   font-weight: 700;
   color: var(--secondaryColor);
+`
+
+const ButtonSend = styled(motion.button)`
+  background: linear-gradient(
+    140deg,
+    var(--primaryColor),
+    var(--primaryColorDark)
+  );
+  border: none;
+  color: var(--textColor);
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 0.8rem 1rem;
+  border-radius: 5px;
+  outline: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 `

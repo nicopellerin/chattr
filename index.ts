@@ -12,7 +12,7 @@ const dev = process.env.NODE_ENV !== "production"
 const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
 
-const PORT = process.env.PORT || 3000
+const PORT = 3000
 
 interface Rooms {
   [room: string]: {
@@ -77,6 +77,18 @@ io.on("connection", (socket) => {
 
   socket.on("cancelCallRequest", () => {
     io.to(room).emit("callCancelled")
+  })
+
+  socket.on("sendFile", (data: any) => {
+    io.to(data.userToCall).emit("sendingFile", {
+      signal: data.signalData,
+      from: data.from,
+      fileName: data.fileName,
+    })
+  })
+
+  socket.on("acceptFile", (data: any) => {
+    io.to(data.to).emit("receivingFile", data.signal)
   })
 })
 

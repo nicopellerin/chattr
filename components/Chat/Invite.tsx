@@ -49,7 +49,7 @@ const Invite = () => {
             setCopied((prevState) => !prevState)
             copySounds.play()
           }}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           disabled={copied}
         >

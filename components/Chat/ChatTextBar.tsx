@@ -15,7 +15,6 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const listUsers = useRecoilValue(listUsersState)
   // const userIsTyping = useRecoilValue(chatUserIsTypingState)
-
   const [msg, setMsg] = useState("")
 
   let count = useRef(0)

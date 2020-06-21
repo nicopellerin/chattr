@@ -5,6 +5,7 @@ import io from "socket.io-client"
 import Peer from "simple-peer"
 import { useRouter } from "next/router"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { saveAs } from "file-saver"
 
 import {
   streamState,
@@ -33,6 +34,9 @@ import {
   chatWelcomeMessageState,
   chatWindowState,
   chatUserIsTypingState,
+  fileNameState,
+  fileTransferProgressState,
+  receivingFileState,
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
 import Router from "next/router"
@@ -42,7 +46,9 @@ const ChatMain = () => {
   const [selfId, setSelfId] = useRecoilState(selfIdState)
   const [caller, setCaller] = useRecoilState(callerState)
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
+  const [filename, setFileName] = useRecoilState(fileNameState)
 
+  const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
   const setListUsers = useSetRecoilState(listUsersState)
   const setReceivingCall = useSetRecoilState(receivingCallState)
   const setCallAccepted = useSetRecoilState(callAcceptedState)
@@ -54,6 +60,7 @@ const ChatMain = () => {
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
+  const setReceivingFile = useSetRecoilState(receivingFileState)
 
   // @ts-ignore
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
@@ -71,13 +78,6 @@ const ChatMain = () => {
   const { query } = useRouter()
 
   const room = query["room"]
-
-  // Second peer connection
-  const peer2 = new Peer({
-    initiator: false,
-    trickle: false,
-    stream: stream,
-  })
 
   useEffect(() => {
     socket.current = io.connect(`/?room=${room}`)
@@ -132,7 +132,7 @@ const ChatMain = () => {
       setCancelCallRequest(true)
       setTimeout(() => setUserLeftChattr(""), 3000)
       setChatMsgs([])
-      friendVideoRef.current.srcObject = null
+      // friendVideoRef.current.srcObject = null
     })
 
     socket.current.on("userJoinedChattr", () => {
@@ -155,6 +155,17 @@ const ChatMain = () => {
       setReceivingCall(false)
       setCancelCallRequest(true)
       friendVideoRef.current.srcObject = null
+    })
+
+    socket.current.on("sendingFile", (data: any) => {
+      setCaller(data.from)
+      setCallerSignal(data.signal)
+      setFileName(data.fileName)
+      setReceivingFile(true)
+    })
+
+    socket.current.on("receivingFile", (data: any) => {
+      console.log(data)
     })
   }, [])
 
@@ -225,6 +236,12 @@ const ChatMain = () => {
     setCallAccepted(true)
     setReceivingCall(false)
 
+    const peer2 = new Peer({
+      initiator: false,
+      trickle: false,
+      stream: stream,
+    })
+
     peer2.on("signal", (data) => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
     })
@@ -241,10 +258,111 @@ const ChatMain = () => {
     })
   }
 
+  // Send file
+  const sendFile = (id: string, file: any) => {
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      config: {
+        iceServers: [
+          {
+            urls: "stun:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683",
+          },
+          {
+            urls: "turn:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683",
+          },
+        ],
+      },
+    })
+
+    peer.on("signal", (data) => {
+      socket.current.emit("sendFile", {
+        userToCall: id,
+        signalData: data,
+        from: selfId,
+        fileName: file.name,
+      })
+    })
+
+    console.log(file.size)
+
+    peer.on("connect", () => {
+      file.arrayBuffer().then((buffer: any) => {
+        const chunkSize = 16 * 1024
+
+        let at = 0
+
+        while (buffer.byteLength) {
+          const chunk = buffer.slice(0, chunkSize)
+          buffer = buffer.slice(chunkSize, buffer.byteLength)
+
+          at += buffer.byteLength
+
+          setFileTransferProgress((at / file.size).toFixed(0))
+
+          peer.send(chunk)
+        }
+
+        setFileTransferProgress("100")
+
+        peer.send("Done!")
+      })
+    })
+
+    socket.current.on("receivingFile", (signal: any) => {
+      // setReceivingCall(false)
+      // setCallAccepted(true)
+      peer.signal(signal)
+    })
+  }
+
+  // Receive file
+  const fileChunks: any[] = []
+
+  const acceptFile = () => {
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      config: {
+        iceServers: [
+          {
+            urls: "stun:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683",
+          },
+          {
+            urls: "turn:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683",
+          },
+        ],
+      },
+    })
+
+    peer.on("signal", (data) => {
+      socket.current.emit("acceptFile", { signal: data, to: caller })
+    })
+
+    peer.signal(callerSignal)
+
+    peer.on("data", (data) => {
+      if (data.toString() === "Done!") {
+        const file = new Blob(fileChunks)
+
+        saveAs(file, filename)
+      } else {
+        fileChunks.push(data)
+      }
+    })
+  }
+
   // End call
   useEffect(() => {
     if (cancelCallRequest) {
-      peer2.removeAllListeners()
       socket.current.emit("cancelCallRequest")
     }
   }, [cancelCallRequest])
@@ -286,6 +404,7 @@ const ChatMain = () => {
               selfVideoRef={selfVideoRef}
               friendVideoRef={friendVideoRef}
               acceptCall={acceptCall}
+              acceptFile={acceptFile}
             />
             <ChatTextBar socket={socket} />
           </LeftColumn>
@@ -293,7 +412,7 @@ const ChatMain = () => {
             <LogoStyled src="/logo.svg" alt="logo" />
             <ChatUsername />
             <ChatCommands callFriend={callFriend} socket={socket} />
-            <ChatTextWindow />
+            <ChatTextWindow sendFile={sendFile} />
           </RightColumn>
         </Wrapper>
       </OutterWrapper>

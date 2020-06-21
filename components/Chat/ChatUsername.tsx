@@ -81,7 +81,7 @@ export default ChatUsername
 const Wrapper = styled.form`
   background: #1a0d2b;
   height: 100%;
-  min-height: 53px;
+  min-height: 54px;
   padding: 1.5rem 1.7rem;
   border-radius: 5px;
   display: grid;

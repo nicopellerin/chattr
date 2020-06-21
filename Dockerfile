@@ -1,14 +1,14 @@
-FROM mhart/alpine-node
+FROM node
 
 WORKDIR /app
 COPY package*.json ./
 
-RUN yarn install
+RUN npm install
 
 COPY . .
 
-RUN yarn build
+RUN npm run build
 
-# EXPOSE 3000:3000
+EXPOSE 3000
 
 CMD ["yarn", "start"]
