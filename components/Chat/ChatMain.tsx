@@ -133,9 +133,6 @@ const ChatMain = () => {
       setTimeout(() => setUserLeftChattr(""), 3000)
       setChatMsgs([])
       friendVideoRef.current.srcObject = null
-      // if (peer2) {
-      //   peer2.destroy()
-      // }
     })
 
     socket.current.on("userJoinedChattr", () => {
@@ -161,7 +158,7 @@ const ChatMain = () => {
     })
   }, [])
 
-  // Call second peer connection
+  // Call other connection
   const callFriend = (id: string) => {
     const peer = new Peer({
       initiator: true,
@@ -198,13 +195,19 @@ const ChatMain = () => {
     })
 
     peer.on("close", () => {
-      // peer.destroy()
+      console.log("Closing WEBRTC")
+      peer.removeAllListeners()
       selfVideoRef.current.srcObject = null
+    })
+
+    peer.on("error", (err) => {
+      console.log("WEBRTC ERROR", err)
     })
 
     socket.current.on("userLeftChattr", (msg: string) => {
       setUserLeftChattr(msg)
       friendVideoRef.current.srcObject = null
+      peer.removeAllListeners()
       if (peer) {
         peer.destroy()
       }
@@ -234,15 +237,14 @@ const ChatMain = () => {
 
     peer2.on("close", () => {
       friendVideoRef.current.srcObject = null
-      // peer2.removeStream(stream)
+      peer2.removeAllListeners()
     })
   }
 
   // End call
   useEffect(() => {
     if (cancelCallRequest) {
-      // peer2.removeStream(stream)
-      // peer2.destroy()
+      peer2.removeAllListeners()
       socket.current.emit("cancelCallRequest")
     }
   }, [cancelCallRequest])

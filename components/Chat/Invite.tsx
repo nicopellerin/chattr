@@ -1,8 +1,25 @@
 import * as React from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import { FaLink } from "react-icons/fa"
+import { copyToClipboard } from "../../utils/copyToClipboard"
 
 const Invite = () => {
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    let idx
+
+    if (copied) {
+      idx = setTimeout(() => {
+        setCopied(false)
+      }, 2000)
+    }
+
+    return () => clearTimeout(idx)
+  }, [copied])
+
   return (
     <Wrapper
       initial={{ opacity: 0, y: 5 }}
@@ -18,12 +35,24 @@ const Invite = () => {
           rel="noopener"
         >
           <FbookMessengerIcon
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             src="/messenger.svg"
             alt="Messenger"
           />
         </a>
+        <CopyButton
+          onClick={() => {
+            copyToClipboard(window.location.href)
+            setCopied((prevState) => !prevState)
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.98 }}
+          disabled={copied}
+        >
+          <FaLink style={{ marginRight: 7 }} />{" "}
+          {copied ? `Copied to clipboard` : `Copy room link`}
+        </CopyButton>
       </Container>
     </Wrapper>
   )
@@ -49,7 +78,23 @@ const Text = styled.span`
   font-size: 2rem;
   color: var(--textColor);
   font-weight: 600;
-  margin-bottom: 2.4rem;
+  margin-bottom: 2rem;
+`
+
+const CopyButton = styled(motion.button)`
+  margin-top: 5rem;
+  background: ${(props: { disabled: boolean }) =>
+    props.disabled ? "green" : "var(--primaryColorDark)"};
+  color: var(--textColor);
+  border: none;
+  border-radius: 5px;
+  padding: 1rem 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: transparent;
+  display: flex;
+  align-items: center;
 `
 
 const FbookMessengerIcon = styled(motion.img)`

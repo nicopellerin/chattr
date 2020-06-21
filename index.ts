@@ -30,22 +30,18 @@ io.on("connection", (socket) => {
     socket.disconnect()
     return
   }
-
   socket.join(room)
 
   const oldUsers: string[] = (rooms[room] && rooms[room].users) || []
-
   rooms[room] = { users: [...oldUsers, socket.id] }
 
   console.log(rooms[room].users)
 
   io.to(room).emit("listUsers", rooms[room].users)
-
   io.to(room).emit("userJoinedChattr")
+  io.to(room).emit("chatConnection", "Welcome to Chattr!")
 
   socket.emit("selfId", socket.id)
-
-  io.to(room).emit("chatConnection", "Welcome to Chattr!")
 
   socket.on("chatMessage", (msg) => {
     io.to(room).emit("chatMessages", msg)
@@ -64,7 +60,7 @@ io.on("connection", (socket) => {
       (user: string) => user !== socket.id
     )
     io.to(room).emit("userLeftChattr", "Your friend left Chattr")
-    io.emit("listUsers", [])
+    io.emit("listUsers", rooms[room].users)
     socket.leave(room)
   })
 

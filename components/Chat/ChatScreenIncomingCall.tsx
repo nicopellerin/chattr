@@ -26,7 +26,6 @@ const ChatScreenNoVideo: React.FC<Props> = ({ acceptCall, socket }) => {
       // beep.loop = true
       beep.play()
     } else {
-      // beep.loop = false
       beep.pause()
     }
   }, [receivingCall])
