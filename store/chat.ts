@@ -25,6 +25,11 @@ export const fileTransferProgressState = atom<string>({
   default: "0",
 })
 
+export const sendingFileState = atom<boolean>({
+  key: "sendingFileState",
+  default: false,
+})
+
 export const receivingFileState = atom<boolean>({
   key: "receivingFileState",
   default: false,

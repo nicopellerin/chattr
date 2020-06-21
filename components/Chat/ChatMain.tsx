@@ -37,6 +37,7 @@ import {
   fileNameState,
   fileTransferProgressState,
   receivingFileState,
+  sendingFileState,
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
 import Router from "next/router"
@@ -61,6 +62,7 @@ const ChatMain = () => {
     getUserMediaNotSupportedState
   )
   const setReceivingFile = useSetRecoilState(receivingFileState)
+  const setSendingFile = useSetRecoilState(sendingFileState)
 
   // @ts-ignore
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
@@ -284,11 +286,9 @@ const ChatMain = () => {
         userToCall: id,
         signalData: data,
         from: selfId,
-        fileName: file.name,
+        fileName: file?.name,
       })
     })
-
-    console.log(file.size)
 
     peer.on("connect", () => {
       file.arrayBuffer().then((buffer: any) => {
@@ -308,6 +308,7 @@ const ChatMain = () => {
         }
 
         setFileTransferProgress("100")
+        setSendingFile(false)
 
         peer.send("Done!")
       })
@@ -351,6 +352,7 @@ const ChatMain = () => {
 
     peer.on("data", (data) => {
       if (data.toString() === "Done!") {
+        setSendingFile(false)
         const file = new Blob(fileChunks)
 
         saveAs(file, filename)

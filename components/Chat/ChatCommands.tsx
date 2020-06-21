@@ -27,7 +27,7 @@ import {
   listUsersState,
   userSoundOnState,
 } from "../../store/users"
-import { fileTransferProgressState } from "../../store/chat"
+import { fileTransferProgressState, sendingFileState } from "../../store/chat"
 
 interface Props {
   callFriend: (id: string) => void
@@ -49,6 +49,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
 
   const setReceivingCall = useSetRecoilState(receivingCallState)
   const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
+  const [sendingFile, setSendingFile] = useRecoilState(sendingFileState)
 
   const callAccepted = useRecoilValue(callAcceptedState)
   const selfId = useRecoilValue(selfIdState)
@@ -64,6 +65,8 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
   const beepOn = new Audio("/sounds/click_snip.mp3")
 
   const handleSendFile = (e: any) => {
+    setSendingFile(true)
+
     const file = e.target.files[0]
 
     if (file && file.size > 5 * 1000000) {
@@ -74,6 +77,8 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
 
     sendFile(otherUser, file)
   }
+
+  console.log(sendingFile)
 
   return (
     <Wrapper>
@@ -96,7 +101,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             ref={fileInputRef}
             onChange={(e) => handleSendFile(e)}
           />
-          {fileTransferProgress === "0" ? (
+          {!sendingFile ? (
             <>
               <FaRocket size={22} style={{ marginBottom: 7 }} />
               <span>
@@ -108,7 +113,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
           ) : (
             <>
               <FaRocket size={22} style={{ marginBottom: 7 }} />
-              <span>Send file</span>
+              <span>{`${fileTransferProgress}%`}</span>
             </>
           )}
         </IconWrapper>

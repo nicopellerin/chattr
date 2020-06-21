@@ -1,10 +1,10 @@
 import * as React from "react"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollArea from "react-scrollbar"
-import { FaKiwiBird, FaRocket } from "react-icons/fa"
+import { FaKiwiBird } from "react-icons/fa"
 
 import {
   chatWindowState,
@@ -26,11 +26,7 @@ interface Message {
   user: string
 }
 
-interface Props {
-  sendFile: (id: string, file: any) => void
-}
-
-const ChatTextWindow: React.FC<Props> = ({ sendFile }) => {
+const ChatTextWindow: React.FC<Props> = () => {
   const welcomeMsg = useRecoilValue(chatWelcomeMessageState)
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
