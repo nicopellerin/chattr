@@ -114,11 +114,11 @@ const IconCog = styled(FaCog)`
   font-size: 2rem;
   color: #aaa;
   cursor: pointer;
-  transition: all 150ms ease-in-out;
+  transition: all 300ms ease-in-out;
 
   &:hover {
     color: #eef;
-    transform: rotate(180deg);
+    transform: rotate(90deg);
   }
 `
 
@@ -200,7 +200,7 @@ const ToggleSwitchSwitch = styled(motion.span)`
   height: 28px;
   margin: 0px;
   background: ${(props: { isOn: boolean }) =>
-    props.isOn ? "#d852fd" : "#f4f4f4"};
+    props.isOn ? "linear-gradient(45deg, #d852fd, #9c74fe)" : "#f4f4f4"};
   position: absolute;
   top: -1px;
   bottom: 0;

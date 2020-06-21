@@ -97,7 +97,11 @@ const TextInput = styled.input`
 const SendButton = styled(motion.button)`
   padding: 1em 1.8em;
   border: none;
-  background: var(--primaryColor);
+  background: linear-gradient(
+    -160deg,
+    var(--primaryColor),
+    var(--primaryColorDark)
+  );
   color: var(--textColor);
   font-size: 1.7rem;
   font-weight: 600;
