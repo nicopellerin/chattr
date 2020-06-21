@@ -5,7 +5,6 @@ import io from "socket.io-client"
 import Peer from "simple-peer"
 import { useRouter } from "next/router"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
-import getUserMedia from "get-user-media-promise"
 
 import {
   streamState,

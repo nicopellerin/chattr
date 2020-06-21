@@ -74,6 +74,8 @@ const Title = styled.h4`
 const Tagline = styled.span`
   display: block;
   font-size: 2rem;
+  max-width: 80ch;
+  margin: 0 auto;
   margin-bottom: 5rem;
 `
 
