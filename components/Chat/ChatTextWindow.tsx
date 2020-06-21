@@ -45,21 +45,6 @@ const ChatTextWindow: React.FC<Props> = ({ sendFile }) => {
   )
 
   // const chatWindowRef = useRef()
-  const fileInputRef = useRef() as React.RefObject<HTMLInputElement>
-
-  const otherUser = listUsers?.filter((user) => user !== selfId).join("")
-
-  const handleSendFile = (e: any) => {
-    const file = e.target.files[0]
-
-    if (file.size > 5 * 1000000) {
-      alert("File too big. Max size is 5 mb")
-      e.target.value = ""
-      return
-    }
-
-    sendFile(otherUser, file)
-  }
 
   const pop = new Audio("/sounds/pop_drip.mp3")
 

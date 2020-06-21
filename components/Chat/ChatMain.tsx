@@ -411,8 +411,12 @@ const ChatMain = () => {
           <RightColumn>
             <LogoStyled src="/logo.svg" alt="logo" />
             <ChatUsername />
-            <ChatCommands callFriend={callFriend} socket={socket} />
-            <ChatTextWindow sendFile={sendFile} />
+            <ChatCommands
+              callFriend={callFriend}
+              sendFile={sendFile}
+              socket={socket}
+            />
+            <ChatTextWindow />
           </RightColumn>
         </Wrapper>
       </OutterWrapper>

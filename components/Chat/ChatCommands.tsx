@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useRef } from "react"
 import styled, { css } from "styled-components"
 import {
   FaMicrophoneSlash,
@@ -7,6 +8,7 @@ import {
   FaTimesCircle,
   FaVideo,
   FaPhone,
+  FaRocket,
 } from "react-icons/fa"
 import { motion } from "framer-motion"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
@@ -25,9 +27,11 @@ import {
   listUsersState,
   userSoundOnState,
 } from "../../store/users"
+import { fileTransferProgressState } from "../../store/chat"
 
 interface Props {
   callFriend: (id: string) => void
+  sendFile: (id: string, file: any) => void
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
@@ -36,7 +40,7 @@ interface StyledProps {
   disabled?: boolean
 }
 
-const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
+const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
   const [showSelfWebcam, setShowSelfWebcam] = useRecoilState(
     showSelfWebcamState
   )
@@ -51,14 +55,63 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket }) => {
   const listUsers = useRecoilValue(listUsersState)
   const disableCallIcon = useRecoilValue(disableCallIconState)
   const soundOn = useRecoilValue(userSoundOnState)
+  const fileTransferProgress = useRecoilValue(fileTransferProgressState)
+
+  const fileInputRef = useRef() as React.RefObject<HTMLInputElement>
 
   const otherUser = listUsers?.filter((user) => user !== selfId).join("")
 
   const beepOn = new Audio("/sounds/click_snip.mp3")
 
+  const handleSendFile = (e: any) => {
+    const file = e.target.files[0]
+
+    if (file && file.size > 5 * 1000000) {
+      alert("File too big. Max size is 5 mb")
+      e.target.value = ""
+      return
+    }
+
+    sendFile(otherUser, file)
+  }
+
   return (
     <Wrapper>
       <Container>
+        <IconWrapper
+          onClick={() => {
+            fileInputRef.current && fileInputRef.current.click()
+            if (soundOn) {
+              beepOn.play()
+            }
+          }}
+          // off={fileTransferProgress}
+          whileTap={{ scale: 0.98 }}
+        >
+          <input
+            hidden
+            name="file"
+            id="file"
+            type="file"
+            ref={fileInputRef}
+            onChange={(e) => handleSendFile(e)}
+          />
+          {fileTransferProgress === "0" ? (
+            <>
+              <FaRocket size={22} style={{ marginBottom: 7 }} />
+              <span>
+                {fileTransferProgress === "0"
+                  ? `Send file`
+                  : `${fileTransferProgress}%`}
+              </span>
+            </>
+          ) : (
+            <>
+              <FaRocket size={22} style={{ marginBottom: 7 }} />
+              <span>Send file</span>
+            </>
+          )}
+        </IconWrapper>
         <IconWrapper
           onClick={() => {
             setMuteMic(!muteMic)
@@ -163,7 +216,7 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   align-items: center;
   justify-content: center;
   justify-items: center;
