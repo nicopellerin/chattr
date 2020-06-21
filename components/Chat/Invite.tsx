@@ -90,7 +90,7 @@ const CopyButton = styled(motion.button)`
     props.disabled
       ? "green"
       : `linear-gradient(
-    180deg,
+    140deg,
     var(--primaryColor),
     var(--primaryColorDark)
   )`};
