@@ -55,7 +55,9 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
           listUsers?.length < 2 ? null : setMsg(e.target.value)
         }
       />
-      <SendButton whileTap={{ scale: 0.98 }}>Send</SendButton>
+      <SendButton disabled={listUsers?.length < 2} whileTap={{ scale: 0.98 }}>
+        Send
+      </SendButton>
     </Wrapper>
   )
 }
@@ -97,12 +99,16 @@ const TextInput = styled.input`
 const SendButton = styled(motion.button)`
   padding: 1em 1.8em;
   border: none;
-  background: linear-gradient(
+  background: ${(props: { disabled: boolean }) =>
+    props.disabled
+      ? "#112"
+      : `linear-gradient(
     -160deg,
     var(--primaryColor),
     var(--primaryColorDark)
-  );
-  color: var(--textColor);
+  )`};
+  color: ${(props: { disabled: boolean }) =>
+    props.disabled ? "#aaa" : "var(--textColor)"};
   font-size: 1.7rem;
   font-weight: 600;
   border-top-right-radius: 3px;
@@ -110,6 +116,7 @@ const SendButton = styled(motion.button)`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: ${(props: { disabled: boolean }) =>
+    props.disabled ? "initial" : "pointer"};
   outline: transparent;
 `

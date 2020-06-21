@@ -103,6 +103,10 @@ const Button = styled(motion.button)`
 `
 
 const SlideshowButton = styled(Button)`
-  background: var(--primaryColor);
+  background: linear-gradient(
+    -180deg,
+    var(--primaryColor),
+    var(--primaryColorDark)
+  );
   color: var(--textColor);
 `
