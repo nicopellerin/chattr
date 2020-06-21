@@ -8,6 +8,8 @@ import { copyToClipboard } from "../../utils/copyToClipboard"
 const Invite = () => {
   const [copied, setCopied] = useState(false)
 
+  let copySounds = new Audio("/sounds/etc_camera_shutter.mp3")
+
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
 
@@ -45,6 +47,7 @@ const Invite = () => {
           onClick={() => {
             copyToClipboard(window.location.href)
             setCopied((prevState) => !prevState)
+            copySounds.play()
           }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}

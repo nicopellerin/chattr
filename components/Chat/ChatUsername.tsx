@@ -14,7 +14,7 @@ const ChatUsername = () => {
 
   const [toggleDrawer, setToggleDrawer] = useState(false)
 
-  const beepOn = new Audio("/sounds/click_snip.mp3")
+  const beepOn = new Audio("/sounds/slide_drop.mp3")
   const swoosh = new Audio("/sounds/paper_slide.mp3")
 
   return (
@@ -25,7 +25,7 @@ const ChatUsername = () => {
             initial={{ y: -30 }}
             animate={{ y: 0 }}
             exit={{ y: 30 }}
-            transition={{ type: "spring", damping: 17 }}
+            transition={{ type: "spring", damping: 15 }}
           >
             <Text style={{ marginRight: 20 }}>Sound effects</Text>
             <ToggleSwitch
@@ -43,9 +43,10 @@ const ChatUsername = () => {
             >
               <ToggleSwitchCheckbox type="checkbox" name="status" id="status" />
               <ToggleSwitchLabel>
-                <ToggleSwitchInner isPrivate={soundOn ? true : false} />
+                <ToggleSwitchInner animate isOn={soundOn ? true : false} />
                 <ToggleSwitchSwitch
-                  isPrivate={soundOn ? true : false}
+                  animate
+                  isOn={soundOn ? true : false}
                 ></ToggleSwitchSwitch>
               </ToggleSwitchLabel>
             </ToggleSwitch>
@@ -153,15 +154,14 @@ const ToggleSwitchLabel = styled.label`
   border-radius: 20px;
   margin: 0;
   box-shadow: inset rgba(0, 0, 0, 0.1) 0px 7px 15px;
-  background-color: var(--primaryColorDark);
+  background-color: #0c0613;
 `
 
-const ToggleSwitchInner = styled.span`
+const ToggleSwitchInner = styled(motion.span)`
   display: block;
   width: 100%;
-  margin-left: ${(props: { isPrivate: boolean }) =>
-    props.isPrivate ? 0 : "-100%"};
-  transition: margin 0.1s ease-in 0s;
+  margin-left: ${(props: { isOn: boolean }) => (props.isOn ? 0 : "-100%")};
+  /* transition: margin 0.1s ease-in 0s; */
 
   &:before,
   :after {
@@ -181,35 +181,34 @@ const ToggleSwitchInner = styled.span`
   &:before {
     content: "On";
     padding-left: 15px;
-    background-color: var(--primaryColorDark);
+    background-color: #0c0613;
     color: transparent;
   }
 
   &:after {
     content: "Off";
     padding-right: 13px;
-    background-color: var(--primaryColorDark);
+    background-color: #0c0613;
     color: transparent;
     text-align: right;
   }
 `
 
-const ToggleSwitchSwitch = styled.span`
+const ToggleSwitchSwitch = styled(motion.span)`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 28px;
   height: 28px;
   margin: 0px;
-  background: ${(props: { isPrivate: boolean }) =>
-    props.isPrivate ? "var(--tertiaryColor)" : "#f4f4f4"};
+  background: ${(props: { isOn: boolean }) =>
+    props.isOn ? "#fd52cd" : "#f4f4f4"};
   position: absolute;
   top: -1px;
   bottom: 0;
-  right: ${(props: { isPrivate: boolean }) =>
-    props.isPrivate ? "0px" : "21px"};
+  right: ${(props: { isOn: boolean }) => (props.isOn ? "0px" : "21px")};
   border-radius: 50%;
-  transition: all 0.15s ease-in 0s;
+  /* transition: all 0.15s ease-in 0s; */
   color: #fff;
   filter: drop-shadow(0 0 0.75rem rgba(89, 86, 213, 0.25));
 `

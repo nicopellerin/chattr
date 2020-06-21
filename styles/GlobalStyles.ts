@@ -4,8 +4,8 @@ const GlobalStyles = createGlobalStyle`
 
 :root {
   --primaryColor: #8352FD;
-  --primaryColorDark: #3913B8;
-  --primaryColorLight: #d75cff;
+  --primaryColorDark: #4823c9;
+  --primaryColorLight: #b981ff;
 
   --secondaryColor: #f020d8;
 
