@@ -82,25 +82,6 @@ const ChatTextWindow: React.FC<Props> = ({ sendFile }) => {
 
   return (
     <Wrapper>
-      <ButtonSend
-        whileHover={{ scale: 1.0 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={() => fileInputRef.current && fileInputRef.current.click()}
-      >
-        Send file
-        <FaRocket style={{ marginLeft: 5 }} />
-      </ButtonSend>
-      <input
-        hidden
-        name="file"
-        id="file"
-        type="file"
-        ref={fileInputRef}
-        onChange={(e) => handleSendFile(e)}
-      />
-      {fileTransferProgress !== "0" && (
-        <h3 style={{ color: "red" }}>{fileTransferProgress + "%"}</h3>
-      )}
       <ScrollArea
         style={{
           height: 400,
@@ -164,6 +145,29 @@ const ChatTextWindow: React.FC<Props> = ({ sendFile }) => {
 
         {listUsers?.length < 2 && !userLeftChattr?.length && <Invite />}
       </ScrollArea>
+      {/* {listUsers?.length > 1 && (
+        <SendFileWrapper>
+          <ButtonSend
+            whileHover={{ scale: 1.0 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => fileInputRef.current && fileInputRef.current.click()}
+          >
+            Send file
+            <FaRocket style={{ marginLeft: 5 }} />
+          </ButtonSend>
+          <input
+            hidden
+            name="file"
+            id="file"
+            type="file"
+            ref={fileInputRef}
+            onChange={(e) => handleSendFile(e)}
+          />
+          {fileTransferProgress !== "0" && (
+            <h3 style={{ color: "red" }}>{fileTransferProgress + "%"}</h3>
+          )}
+        </SendFileWrapper>
+      )} */}
     </Wrapper>
   )
 }
@@ -257,4 +261,9 @@ const ButtonSend = styled(motion.button)`
   cursor: pointer;
   display: flex;
   align-items: center;
+`
+
+const SendFileWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `
