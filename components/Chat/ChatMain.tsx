@@ -140,7 +140,6 @@ const ChatMain = () => {
       setCancelCallRequest(true)
       setTimeout(() => setUserLeftChattr(""), 3000)
       setChatMsgs([])
-      // friendVideoRef.current.srcObject = null
     })
 
     socket.current.on("userJoinedChattr", () => {
@@ -170,15 +169,15 @@ const ChatMain = () => {
       setCallerFileSignal(data.signal)
       setFileName(data.fileName)
       setReceivingFile(true)
-      socket.current.emit("chatMessage", {
-        user: username,
-        msg: "YO",
-      })
+      // socket.current.emit("chatMessage", {
+      //   user: username,
+      //   msg: "YO",
+      // })
     })
 
-    socket.current.on("receivingFile", (data: any) => {
-      console.log(data)
-    })
+    // socket.current.on("receivingFile", (data: any) => {
+    //   console.log(data)
+    // })
   }, [])
 
   // Call other connection
@@ -220,7 +219,9 @@ const ChatMain = () => {
     peer.on("close", () => {
       console.log("Closing WEBRTC")
       peer.removeAllListeners()
-      selfVideoRef.current.srcObject = null
+      if (peer) {
+        peer.destroy()
+      }
     })
 
     peer.on("error", (err) => {
@@ -229,7 +230,6 @@ const ChatMain = () => {
 
     socket.current.on("userLeftChattr", (msg: string) => {
       setUserLeftChattr(msg)
-      friendVideoRef.current.srcObject = null
       peer.removeAllListeners()
       if (peer) {
         peer.destroy()
@@ -265,8 +265,11 @@ const ChatMain = () => {
     peer2.signal(callerSignal)
 
     peer2.on("close", () => {
-      friendVideoRef.current.srcObject = null
+      // friendVideoRef.current.srcObject = null
       peer2.removeAllListeners()
+      if (peer2) {
+        peer2.destroy()
+      }
     })
   }
 
@@ -323,14 +326,13 @@ const ChatMain = () => {
         peer.send("Done!")
       })
 
-      // peer.on("close", () => {
-      //   peer.removeAllListeners()
-      // })
+      peer.on("close", () => {
+        peer.removeAllListeners()
+        peer.destroy()
+      })
     })
 
     socket.current.on("receivingFile", (signal: any) => {
-      // setReceivingCall(false)
-      // setCallAccepted(true)
       peer.signal(signal)
     })
   }
@@ -385,6 +387,7 @@ const ChatMain = () => {
 
     peer.on("close", () => {
       peer.removeAllListeners()
+      peer.destroy()
     })
   }
 
