@@ -6,7 +6,8 @@
     "build:server": "tsc --project tsconfig.server.json",
     "build:next": "next build",
     "build": "npm run build:next && npm run build:server",
-    "start": "NODE_ENV=production node dist/server.js",
+    "start": "NODE_ENV=production pm2 start dist/server.js --exp-backoff-restart-delay=100",
+    "stop": "pm2 stop dist/server.js",
     "type-check": "tsc"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "framer-motion": "^2.0.0-beta.76",
     "get-user-media-promise": "^1.1.4",
     "next": "latest",
+    "pm2": "^4.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
