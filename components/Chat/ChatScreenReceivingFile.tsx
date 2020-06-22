@@ -17,6 +17,7 @@ const ChatScreenReceivingFile: React.FC<Props> = ({ acceptFile }) => {
   const [receivingFile, setReceivingFile] = useRecoilState(receivingFileState)
 
   let sound = new Audio("/sounds/connection.mp3")
+  sound.volume = 0.3
 
   useEffect(() => {
     if (receivingFile) {

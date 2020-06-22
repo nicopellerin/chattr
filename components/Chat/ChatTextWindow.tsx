@@ -41,6 +41,7 @@ const ChatTextWindow: React.FC = () => {
   // const chatWindowRef = useRef()
 
   const pop = new Audio("/sounds/pop_drip.mp3")
+  pop.volume = 0.4
 
   useEffect(() => {
     if (msgs.length > 0 && soundOn) {

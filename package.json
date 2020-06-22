@@ -2,11 +2,11 @@
   "name": "with-typescript",
   "version": "1.0.0",
   "scripts": {
-    "dev": "ts-node --project tsconfig.server.json index.ts",
+    "dev": "ts-node --project tsconfig.server.json server.ts",
     "build:server": "tsc --project tsconfig.server.json",
     "build:next": "next build",
     "build": "npm run build:next && npm run build:server",
-    "start": "NODE_ENV=production node dist/index.js",
+    "start": "NODE_ENV=production node dist/server.js",
     "type-check": "tsc"
   },
   "dependencies": {

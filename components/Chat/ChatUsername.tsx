@@ -16,6 +16,8 @@ const ChatUsername = () => {
 
   const beepOn = new Audio("/sounds/slide_drop.mp3")
   const swoosh = new Audio("/sounds/paper_slide.mp3")
+  beepOn.volume = 0.3
+  swoosh.volume = 0.3
 
   return (
     <Wrapper>

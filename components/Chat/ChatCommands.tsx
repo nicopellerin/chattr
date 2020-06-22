@@ -63,6 +63,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
   const otherUser = listUsers?.filter((user) => user !== selfId).join("")
 
   const beepOn = new Audio("/sounds/click_snip.mp3")
+  beepOn.volume = 0.3
 
   const handleSendFile = (e: any) => {
     setSendingFile(true)
@@ -78,8 +79,6 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
     sendFile(otherUser, file)
   }
 
-  console.log(sendingFile)
-
   return (
     <Wrapper>
       <Container>
@@ -90,7 +89,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               beepOn.play()
             }
           }}
-          off={listUsers?.length < 2}
+          disabled={listUsers?.length < 2}
           whileTap={{ scale: 0.98 }}
         >
           <input
