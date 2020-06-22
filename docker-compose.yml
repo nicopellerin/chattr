@@ -1,0 +1,15 @@
+web:
+  build: .
+  working_dir: /app
+  environment:
+    - PORT=3000
+    - NODE_ENV=production
+  ports:
+    - "3000:3000"
+  links:
+    - db
+db:
+  image: redis
+  command: redis-server
+  ports:
+    - "6379:6379"

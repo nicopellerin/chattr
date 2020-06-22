@@ -2,6 +2,7 @@ import express, { Request, Response } from "express"
 import http from "http"
 import socket from "socket.io"
 import next from "next"
+// import redisAdapter from "socket.io-redis"
 
 const app = express()
 const server = http.createServer(app)
@@ -21,6 +22,8 @@ interface Rooms {
 }
 
 const rooms: Rooms = {}
+
+// io.adapter(redisAdapter({ host: "db", port: 6379 }))
 
 io.on("connection", (socket) => {
   const room: string = socket.handshake.query.room
