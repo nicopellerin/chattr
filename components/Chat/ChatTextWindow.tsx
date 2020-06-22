@@ -53,7 +53,7 @@ const ChatTextWindow: React.FC = () => {
     let idx: ReturnType<typeof setTimeout>
 
     if (fileTransferProgress === "100") {
-      idx = setTimeout(() => setFileTransferProgress("0"), 3000)
+      idx = setTimeout(() => setFileTransferProgress("0"), 1500)
     }
 
     return () => clearTimeout(idx)
