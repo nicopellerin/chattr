@@ -109,7 +109,6 @@ const ChatVideo: React.FC<Props> = ({
           ref={selfVideoRef}
           playsInline
           autoPlay
-          // style={{ opacity: showWebcam ? 1 : 0 }}
           theatreMode={displayTheatreMode}
           showWebcam={showWebcam}
         />
@@ -126,6 +125,7 @@ const ChatVideo: React.FC<Props> = ({
           onClick={() => {
             if (!displayTheatreMode && soundOn) {
               sound.play()
+              sound.volume = 0.3
             }
             setDisplayTheatreMode((prevState) => !prevState)
           }}
