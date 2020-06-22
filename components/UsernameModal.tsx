@@ -40,11 +40,8 @@ const UsernameModal: React.FC<Props> = ({
 
   return (
     <Container noUsernameModal={noUsernameModal}>
-      <Tagline>Pick a username</Tagline>
       <Form onSubmit={handleSubmit}>
-        <Label hidden htmlFor="username">
-          Username
-        </Label>
+        <Tagline htmlFor="username">Pick a username</Tagline>
         <Input
           id="username"
           required
@@ -86,7 +83,7 @@ const Container = styled.div`
   }
 `
 
-const Tagline = styled.span`
+const Tagline = styled.label`
   font-size: 3rem;
   color: var(--textColor);
   margin-bottom: 2rem;
