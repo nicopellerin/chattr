@@ -359,6 +359,13 @@ const ChatMain = () => {
         setSendingFile(false)
         const file = new Blob(fileChunks)
 
+        if (filename.match(/\.(jpg|gif|png)$/) !== null) {
+          socket.current.emit("chatMessage", {
+            user: username,
+            msg: URL.createObjectURL(file),
+          })
+        }
+
         saveAs(file, filename)
       } else {
         fileChunks.push(data)

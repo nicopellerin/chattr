@@ -60,7 +60,7 @@ io.on("connection", (socket) => {
       (user: string) => user !== socket.id
     )
     io.to(room).emit("userLeftChattr", "Your friend left Chattr")
-    io.emit("listUsers", rooms[room].users)
+    io.to(room).emit("listUsers", rooms[room].users)
     socket.leave(room)
   })
 
