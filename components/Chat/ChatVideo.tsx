@@ -20,7 +20,7 @@ import {
   getUserMediaNotSupportedState,
   displayTheatreModeState,
 } from "../../store/video"
-import { listUsersState } from "../../store/users"
+import { listUsersState, userSoundOnState } from "../../store/users"
 import { receivingFileState } from "../../store/chat"
 import { FaExpand } from "react-icons/fa"
 
@@ -46,6 +46,7 @@ const ChatVideo: React.FC<Props> = ({
   const receivingCall = useRecoilValue(receivingCallState)
   const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
   const receivingFile = useRecoilValue(receivingFileState)
+  const soundOn = useRecoilValue(userSoundOnState)
 
   const [displayTheatreMode, setDisplayTheatreMode] = useRecoilState(
     displayTheatreModeState
@@ -54,6 +55,8 @@ const ChatVideo: React.FC<Props> = ({
   const [showCatSlider, setShowCatSlider] = useState(false)
 
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
+
+  let sound = new Audio("/sounds/expand.mp3")
 
   if (getUserMediaNotSupported) {
     return (
@@ -120,7 +123,12 @@ const ChatVideo: React.FC<Props> = ({
           title="Theatre mode"
           initial={{ opacity: 0.5 }}
           whileHover={{ opacity: 1, scale: 1.02 }}
-          onClick={() => setDisplayTheatreMode((prevState) => !prevState)}
+          onClick={() => {
+            if (!displayTheatreMode && soundOn) {
+              sound.play()
+            }
+            setDisplayTheatreMode((prevState) => !prevState)
+          }}
         >
           <FaExpand />
         </ExpandButton>
@@ -163,8 +171,8 @@ const SelfVideo = styled(motion.video)`
   width: 200px;
   object-fit: cover;
   position: absolute;
-  bottom: 3rem;
-  right: 3rem;
+  bottom: 3vh;
+  left: 3vh;
   z-index: 2;
   margin: 0;
   padding: 0;
@@ -187,6 +195,6 @@ const ExpandButton = styled(motion.button)`
   font-size: 2.4rem;
   cursor: pointer;
   position: absolute;
-  top: 1.5rem;
-  right: 2rem;
+  bottom: 0.5rem;
+  right: 1rem;
 `
