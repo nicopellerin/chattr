@@ -2,13 +2,15 @@ import * as React from "react"
 import { useRef, useState } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 
 import Slider from "./Slider"
 import ChatScreenWaitingForConnect from "./ChatScreenWaitingForConnect"
 import ChatScreenCalling from "./ChatScreenCalling"
 import ChatScreenNoVideo from "./ChatScreenNoVideo"
 import ChatScreenIncomingCall from "./ChatScreenIncomingCall"
+import ChatScreenNotSupported from "./ChatScreenNotSupported"
+import ChatScreenReceivingFile from "./ChatScreenReceivingFile"
 
 import {
   showSelfWebcamState,
@@ -16,11 +18,11 @@ import {
   callAcceptedState,
   pressedCallState,
   getUserMediaNotSupportedState,
+  displayTheatreModeState,
 } from "../../store/video"
 import { listUsersState } from "../../store/users"
-import ChatScreenNotSupported from "./ChatScreenNotSupported"
-import ChatScreenReceivingFile from "./ChatScreenReceivingFile"
 import { receivingFileState } from "../../store/chat"
+import { FaExpand } from "react-icons/fa"
 
 interface Props {
   acceptCall: () => void
@@ -44,6 +46,10 @@ const ChatVideo: React.FC<Props> = ({
   const receivingCall = useRecoilValue(receivingCallState)
   const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
   const receivingFile = useRecoilValue(receivingFileState)
+
+  const [displayTheatreMode, setDisplayTheatreMode] = useRecoilState(
+    displayTheatreModeState
+  )
 
   const [showCatSlider, setShowCatSlider] = useState(false)
 
@@ -100,9 +106,24 @@ const ChatVideo: React.FC<Props> = ({
           ref={selfVideoRef}
           playsInline
           autoPlay
-          style={{ opacity: showWebcam ? 1 : 0 }}
+          // style={{ opacity: showWebcam ? 1 : 0 }}
+          theatreMode={displayTheatreMode}
+          showWebcam={showWebcam}
         />
-        {true && <FriendVideo ref={friendVideoRef} playsInline autoPlay />}
+        <FriendVideo
+          theatreMode={displayTheatreMode}
+          ref={friendVideoRef}
+          playsInline
+          autoPlay
+        />
+        <ExpandButton
+          title="Theatre mode"
+          initial={{ opacity: 0.5 }}
+          whileHover={{ opacity: 1, scale: 1.02 }}
+          onClick={() => setDisplayTheatreMode((prevState) => !prevState)}
+        >
+          <FaExpand />
+        </ExpandButton>
       </>
     </Wrapper>
   )
@@ -124,7 +145,8 @@ const Wrapper = styled(motion.div)`
 
 const FriendVideo = styled.video`
   height: 100%;
-  max-height: 670px;
+  max-height: ${(props: { theatreMode: boolean }) =>
+    props.theatreMode ? "85vh" : "670px"};
   width: 100%;
   margin: 0;
   padding: 0;
@@ -148,8 +170,23 @@ const SelfVideo = styled(motion.video)`
   padding: 0;
   border-radius: 3px;
   cursor: move;
+  opacity: ${(props: { showWebcam: boolean }) => (props.showWebcam ? 1 : 0)};
+  display: ${(props: { theatreMode: boolean; showWebcam: boolean }) =>
+    props.theatreMode ? "none" : "block"};
 
   @media (max-width: 500px) {
     display: none;
   }
+`
+
+const ExpandButton = styled(motion.button)`
+  background: transparent;
+  outline: transparent;
+  border: none;
+  color: #ffe9ff;
+  font-size: 2.4rem;
+  cursor: pointer;
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
 `

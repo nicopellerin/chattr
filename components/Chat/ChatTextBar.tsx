@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil"
 import { motion } from "framer-motion"
 
 import { usernameState, listUsersState } from "../../store/users"
+import { displayTheatreModeState } from "../../store/video"
 // import { chatUserIsTypingState } from "../../store/chat"
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const listUsers = useRecoilValue(listUsersState)
+  const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   // const userIsTyping = useRecoilValue(chatUserIsTypingState)
   const [msg, setMsg] = useState("")
 
@@ -45,7 +47,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   }, [msg])
 
   return (
-    <Wrapper onSubmit={handleSubmit}>
+    <Wrapper theatreMode={displayTheatreMode} onSubmit={handleSubmit}>
       <TextInput
         disabled={listUsers?.length < 2}
         placeholder="Type message..."
@@ -69,7 +71,8 @@ const Wrapper = styled.form`
   height: 100%;
   padding: 1rem;
   border-radius: 5px;
-  display: grid;
+  display: ${(props: { theatreMode: boolean }) =>
+    props.theatreMode ? "none" : "grid"};
   grid-template-columns: 1fr auto;
   /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
 `

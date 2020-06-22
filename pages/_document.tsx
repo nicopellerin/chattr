@@ -37,17 +37,17 @@ export default class MyDocument extends Document {
           <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
           <meta
             name="description"
-            content="Chat 1-on-1 with a friend in a fun and secure way"
+            content="One-on-one hangout in a fun and secure way"
           />
           <meta name="theme-color" content="#8352FD" />
           <meta
             name="og:title"
-            content="Chattr | Free P2P audio/video + chat platform"
+            content="Chattr · Free P2P audio/video + chat platform"
           />
           <meta name="og:url" content="https://chattr.lol" />
           <meta
             name="og:description"
-            content="Chat 1-on-1 with a friend in a fun and secure way"
+            content="One-on-one hangout in a fun and secure way"
           />
           <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"

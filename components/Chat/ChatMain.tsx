@@ -18,6 +18,7 @@ import {
   muteMicState,
   showSelfWebcamState,
   getUserMediaNotSupportedState,
+  displayTheatreModeState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -44,6 +45,7 @@ import {
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
 import Router from "next/router"
+import { motion } from "framer-motion"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -77,6 +79,7 @@ const ChatMain = () => {
     cancelCallRequestState
   )
 
+  const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
   const micMuted = useRecoilValue(muteMicState)
   const showSelfWebcam = useRecoilValue(showSelfWebcamState)
@@ -433,8 +436,8 @@ const ChatMain = () => {
     <>
       {!username && <NoUsername />}
       <OutterWrapper>
-        <Wrapper>
-          <LeftColumn>
+        <Wrapper animate theatreMode={displayTheatreMode}>
+          <LeftColumn theatreMode={displayTheatreMode}>
             <ChatVideo
               socket={socket}
               selfVideoRef={selfVideoRef}
@@ -444,7 +447,7 @@ const ChatMain = () => {
             />
             <ChatTextBar socket={socket} />
           </LeftColumn>
-          <RightColumn>
+          <RightColumn theatreMode={displayTheatreMode}>
             <LogoStyled src="/logo.svg" alt="logo" />
             <ChatUsername />
             <ChatCommands
@@ -470,11 +473,13 @@ const OutterWrapper = styled.div`
   align-items: center;
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: ${(props: { theatreMode: boolean }) =>
+    props.theatreMode ? "1fr" : "3fr 1fr"};
   grid-gap: 3rem;
-  width: 85%;
+  width: ${(props: { theatreMode: boolean }) =>
+    props.theatreMode ? "100%" : "85%"};
 
   @media (max-width: 1024px) {
     width: 95vw;
@@ -488,7 +493,8 @@ const Wrapper = styled.div`
 
 const LeftColumn = styled.div`
   display: grid;
-  grid-template-rows: 9fr 1fr;
+  grid-template-rows: ${(props: { theatreMode: boolean }) =>
+    props.theatreMode ? "1fr" : "9fr 1fr"};
   grid-gap: 2rem;
 
   @media (max-width: 500px) {
@@ -499,6 +505,8 @@ const LeftColumn = styled.div`
 const RightColumn = styled.div`
   display: grid;
   grid-gap: 2rem;
+  display: ${(props: { theatreMode: boolean }) =>
+    props.theatreMode ? "none" : "grid"};
 `
 
 const LogoStyled = styled.img`
