@@ -49,6 +49,10 @@ export default class MyDocument extends Document {
             name="og:description"
             content="Chat 1-on-1 with a friend in a fun and secure way"
           />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+            rel="stylesheet"
+          />
           <meta name="og:image" content="/og-image.png" />
           <link rel="icon" type="image/png" href="/favicon.png" />
           <meta name="msapplication-TileColor" content="#8352FD" />
