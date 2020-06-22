@@ -155,6 +155,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  border-radius: 5px;
 `
 
 const ImageStyled = styled(motion.img)`
