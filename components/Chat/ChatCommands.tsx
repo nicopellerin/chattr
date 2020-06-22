@@ -177,7 +177,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
                 size={22}
                 style={{ marginBottom: 7 }}
               />
-              <span>End call</span>
+              <span>End</span>
             </>
           ) : (
             <>

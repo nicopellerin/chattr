@@ -20,7 +20,7 @@ const ChatScreenNoVideo: React.FC<Props> = ({ acceptCall, socket }) => {
   const soundOn = useRecoilValue(userSoundOnState)
 
   let beep = new Audio("/sounds/call.mp3")
-  beep.volume = 0.5
+  beep.volume = 0.3
 
   useEffect(() => {
     if (receivingCall && soundOn) {

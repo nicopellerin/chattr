@@ -9,7 +9,7 @@ const Invite = () => {
   const [copied, setCopied] = useState(false)
 
   let copySounds = new Audio("/sounds/etc_camera_shutter.mp3")
-  copySounds.volume = 0.3
+  copySounds.volume = 0.2
 
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
