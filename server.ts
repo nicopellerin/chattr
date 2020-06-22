@@ -84,6 +84,7 @@ io.on("connection", (socket) => {
       signal: data.signalData,
       from: data.from,
       fileName: data.fileName,
+      username: data.username,
     })
   })
 

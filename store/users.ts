@@ -30,3 +30,8 @@ export const userSoundOnState = atom<boolean>({
       JSON.parse(window.localStorage.getItem("chattr-sounds-on")!)) ||
     true,
 })
+
+export const otherUsernameState = atom<string>({
+  key: "otherUsernameState",
+  default: "",
+})

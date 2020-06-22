@@ -24,6 +24,7 @@ import {
   listUsersState,
   usernameState,
   userLeftChattrState,
+  otherUsernameState,
 } from "../../store/users"
 import ChatVideo from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
@@ -55,6 +56,7 @@ const ChatMain = () => {
   )
   const [filename, setFileName] = useRecoilState(fileNameState)
 
+  const setOtherUsername = useSetRecoilState(otherUsernameState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
   const setListUsers = useSetRecoilState(listUsersState)
   const setReceivingCall = useSetRecoilState(receivingCallState)
@@ -168,6 +170,7 @@ const ChatMain = () => {
       setCallerFile(data.from)
       setCallerFileSignal(data.signal)
       setFileName(data.fileName)
+      setOtherUsername(data.username)
       setReceivingFile(true)
       // socket.current.emit("chatMessage", {
       //   user: username,
@@ -300,6 +303,7 @@ const ChatMain = () => {
         signalData: data,
         from: selfId,
         fileName: file?.name,
+        username,
       })
     })
 

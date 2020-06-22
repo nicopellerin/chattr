@@ -6,6 +6,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 import { useRecoilValue, useRecoilState } from "recoil"
 
 import { fileNameState, receivingFileState } from "../../store/chat"
+import { otherUsernameState } from "../../store/users"
 
 interface Props {
   acceptFile: () => void
@@ -13,6 +14,7 @@ interface Props {
 
 const ChatScreenReceivingFile: React.FC<Props> = ({ acceptFile }) => {
   const fileName = useRecoilValue(fileNameState)
+  const otherUsername = useRecoilValue(otherUsernameState)
 
   const [receivingFile, setReceivingFile] = useRecoilState(receivingFileState)
 
@@ -33,7 +35,7 @@ const ChatScreenReceivingFile: React.FC<Props> = ({ acceptFile }) => {
       transition={{ type: "spring", damping: 80 }}
     >
       <Container>
-        <Title>Your friend wants to send a file</Title>
+        <Title>{otherUsername} wants to send a file</Title>
         <Filename>{fileName}</Filename>
         <ButtonWrapper>
           <AcceptButton
