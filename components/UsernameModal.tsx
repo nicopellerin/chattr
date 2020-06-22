@@ -109,11 +109,6 @@ const Input = styled.input`
   outline: transparent;
 `
 
-const Label = styled.label`
-  /* position: absolute;
-  left: -9999px; */
-`
-
 const Button = styled(motion.button)`
   padding: 1em 1.5em;
   border: none;
