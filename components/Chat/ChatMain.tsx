@@ -370,12 +370,13 @@ const ChatMain = () => {
       if (data.toString() === "Done!") {
         const file = new Blob(fileChunks)
 
-        if (filename.match(/\.(jpg|gif|png)$/) !== null) {
-          socket.current.emit("chatMessage", {
-            user: username,
-            msg: URL.createObjectURL(file),
-          })
-        }
+        // TODO
+        // if (filename.match(/\.(jpg|gif|png)$/) !== null) {
+        //   socket.current.emit("chatMessage", {
+        //     user: username,
+        //     msg: URL.createObjectURL(file),
+        //   })
+        // }
 
         saveAs(file, filename)
 
