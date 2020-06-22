@@ -68,6 +68,26 @@ p {
   /* font-family: "Playfair+Display", serif; */
   font-size: 1.8rem;
 }
+
+
+aside.emoji-picker-react {
+    background: #112 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+.emoji-categories {
+  display: none!important;
+}
+
+.emoji-picker-react .emoji-group:before {
+  background: #112 !important;
+}
+
+.emoji-picker-react .emoji-group:before {
+  content: "";
+} 
+
 `
 
 export default GlobalStyles

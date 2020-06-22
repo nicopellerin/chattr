@@ -15,6 +15,7 @@
     "@types/socket.io": "^2.1.8",
     "@types/styled-components": "^5.1.0",
     "better-react-spinkit": "^2.0.4",
+    "emoji-picker-react": "^3.2.1",
     "express": "^4.17.1",
     "file-saver": "^2.0.2",
     "framer-motion": "^2.0.0-beta.76",

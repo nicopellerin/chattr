@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 
 import { usernameState, listUsersState } from "../../store/users"
 import { displayTheatreModeState } from "../../store/video"
+import EmojiPicker from "./EmojiPicker"
 // import { chatUserIsTypingState } from "../../store/chat"
 
 interface Props {
@@ -18,6 +19,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   // const userIsTyping = useRecoilValue(chatUserIsTypingState)
   const [msg, setMsg] = useState("")
+  const [togglePicker, setTogglePicker] = useState(false)
 
   let count = useRef(0)
 
@@ -47,19 +49,33 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   }, [msg])
 
   return (
-    <Wrapper theatreMode={displayTheatreMode} onSubmit={handleSubmit}>
-      <TextInput
-        disabled={listUsers?.length < 2}
-        placeholder="Type message..."
-        value={msg}
-        onChange={(e) =>
-          listUsers?.length < 2 ? null : setMsg(e.target.value)
-        }
-      />
-      <SendButton disabled={listUsers?.length < 2} whileTap={{ scale: 0.98 }}>
-        Send
-      </SendButton>
-    </Wrapper>
+    <>
+      <Wrapper theatreMode={displayTheatreMode} onSubmit={handleSubmit}>
+        <TextInput
+          disabled={listUsers?.length < 2}
+          placeholder="Type message..."
+          value={msg}
+          onChange={(e) =>
+            listUsers?.length < 2 ? null : setMsg(e.target.value)
+          }
+        />
+        {listUsers?.length > 1 && (
+          <SmileyFace
+            src="/smiley.png"
+            alt="smiley"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setTogglePicker((prevState) => !prevState)}
+          />
+        )}
+        <SendButton disabled={listUsers?.length < 2} whileTap={{ scale: 0.98 }}>
+          Send
+        </SendButton>
+        {togglePicker && (
+          <EmojiPicker setMsg={setMsg} setTogglePicker={setTogglePicker} />
+        )}
+      </Wrapper>
+    </>
   )
 }
 
@@ -75,6 +91,7 @@ const Wrapper = styled.form`
     props.theatreMode ? "none" : "grid"};
   grid-template-columns: 1fr auto;
   /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
+  position: relative;
 `
 
 const TextInput = styled.input`
@@ -121,4 +138,12 @@ const SendButton = styled(motion.button)`
   cursor: ${(props: { disabled: boolean }) =>
     props.disabled ? "initial" : "pointer"};
   outline: transparent;
+`
+
+const SmileyFace = styled(motion.img)`
+  position: absolute;
+  right: 14rem;
+  top: 2rem;
+  width: 32px;
+  cursor: pointer;
 `

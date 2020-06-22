@@ -37,7 +37,7 @@ export default class MyDocument extends Document {
           <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
           <meta
             name="description"
-            content="One-on-one hangout in a fun and secure way"
+            content="One-on-one hangouts in a fun and secure way"
           />
           <meta name="theme-color" content="#8352FD" />
           <meta
@@ -47,7 +47,7 @@ export default class MyDocument extends Document {
           <meta name="og:url" content="https://chattr.lol" />
           <meta
             name="og:description"
-            content="One-on-one hangout in a fun and secure way"
+            content="One-on-one hangouts in a fun and secure way"
           />
           <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
