@@ -57,24 +57,21 @@ const ChatVideo: React.FC<Props> = ({
     )
   }
 
-  if (receivingFile) {
-    return (
-      <Wrapper ref={contraintsRef}>
-        <ChatScreenReceivingFile acceptFile={acceptFile} />
-      </Wrapper>
-    )
-  }
-
   return (
     <Wrapper ref={contraintsRef}>
       <>
-        {!showCatSlider || receivingCall ? (
+        {!showCatSlider ? (
           <>
             {listUsers?.length < 2 && <ChatScreenWaitingForConnect />}
 
             {pressedCall && !callAccepted && <ChatScreenCalling />}
 
+            {receivingFile && (
+              <ChatScreenReceivingFile acceptFile={acceptFile} />
+            )}
+
             {!receivingCall &&
+              !receivingFile &&
               !callAccepted &&
               !pressedCall &&
               listUsers?.length >= 2 && (

@@ -2,6 +2,10 @@ import express, { Request, Response } from "express"
 import http from "http"
 import socket from "socket.io"
 import next from "next"
+import cluster from "cluster"
+import os from "os"
+
+const numCPUs = os.cpus().length
 
 const app = express()
 const server = http.createServer(app)
@@ -92,13 +96,32 @@ io.on("connection", (socket) => {
   })
 })
 
-nextApp.prepare().then(() => {
-  app.get("*", (req: Request, res: Response) => {
-    return nextHandler(req, res)
-  })
+if (!dev && cluster.isMaster) {
+  console.log(`Node cluster master ${process.pid} is running`)
 
-  server.listen(PORT, (err?: any) => {
-    if (err) throw err
-    console.log(`Listening on port ${PORT}`)
+  // Fork workers.
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork()
+  }
+
+  cluster.on("exit", (worker, code, signal) => {
+    console.error(
+      `Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`
+    )
   })
-})
+} else {
+  nextApp.prepare().then(() => {
+    // app.get("/temp", (res: Response) => {
+    //   res.end("YO")
+    // })
+
+    app.get("*", (req: Request, res: Response) => {
+      return nextHandler(req, res)
+    })
+
+    server.listen(PORT, (err?: any) => {
+      if (err) throw err
+      console.log(`Listening on port ${PORT}`)
+    })
+  })
+}

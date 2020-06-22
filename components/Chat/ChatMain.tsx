@@ -38,6 +38,8 @@ import {
   fileTransferProgressState,
   receivingFileState,
   sendingFileState,
+  callerFileState,
+  callerFileSignalState,
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
 import Router from "next/router"
@@ -47,6 +49,10 @@ const ChatMain = () => {
   const [selfId, setSelfId] = useRecoilState(selfIdState)
   const [caller, setCaller] = useRecoilState(callerState)
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
+  const [callerFile, setCallerFile] = useRecoilState(callerFileState)
+  const [callerFileSignal, setCallerFileSignal] = useRecoilState(
+    callerFileSignalState
+  )
   const [filename, setFileName] = useRecoilState(fileNameState)
 
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
@@ -160,10 +166,14 @@ const ChatMain = () => {
     })
 
     socket.current.on("sendingFile", (data: any) => {
-      setCaller(data.from)
-      setCallerSignal(data.signal)
+      setCallerFile(data.from)
+      setCallerFileSignal(data.signal)
       setFileName(data.fileName)
       setReceivingFile(true)
+      socket.current.emit("chatMessage", {
+        user: username,
+        msg: "YO",
+      })
     })
 
     socket.current.on("receivingFile", (data: any) => {
@@ -349,14 +359,13 @@ const ChatMain = () => {
     })
 
     peer.on("signal", (data) => {
-      socket.current.emit("acceptFile", { signal: data, to: caller })
+      socket.current.emit("acceptFile", { signal: data, to: callerFile })
     })
 
-    peer.signal(callerSignal)
+    peer.signal(callerFileSignal)
 
     peer.on("data", (data) => {
       if (data.toString() === "Done!") {
-        setSendingFile(false)
         const file = new Blob(fileChunks)
 
         if (filename.match(/\.(jpg|gif|png)$/) !== null) {
@@ -367,6 +376,8 @@ const ChatMain = () => {
         }
 
         saveAs(file, filename)
+
+        setSendingFile(false)
       } else {
         fileChunks.push(data)
       }

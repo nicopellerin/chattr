@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 
 import { fileNameState, receivingFileState } from "../../store/chat"
 
@@ -87,6 +87,8 @@ const Container = styled(motion.div)`
   padding: 3rem;
   border-radius: 5px;
   z-index: 2;
+  background: rgba(12, 6, 19, 0.2);
+  backdrop-filter: blur(5px);
 `
 
 const Title = styled.h4`
