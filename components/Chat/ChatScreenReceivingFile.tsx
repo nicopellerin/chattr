@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
-import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 
 import { fileNameState, receivingFileState } from "../../store/chat"
 
