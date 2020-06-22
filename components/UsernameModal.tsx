@@ -42,7 +42,11 @@ const UsernameModal: React.FC<Props> = ({
     <Container noUsernameModal={noUsernameModal}>
       <Tagline>Pick a username</Tagline>
       <Form onSubmit={handleSubmit}>
+        <Label hidden htmlFor="username">
+          Username
+        </Label>
         <Input
+          id="username"
           required
           value={user}
           onChange={(e) => setUser(e.target.value)}
@@ -106,6 +110,11 @@ const Input = styled.input`
   margin-bottom: 3rem;
   width: 100%;
   outline: transparent;
+`
+
+const Label = styled.label`
+  /* position: absolute;
+  left: -9999px; */
 `
 
 const Button = styled(motion.button)`
