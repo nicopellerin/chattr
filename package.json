@@ -11,9 +11,6 @@
     "type-check": "tsc"
   },
   "dependencies": {
-    "@types/recoil": "^0.0.1",
-    "@types/socket.io": "^2.1.8",
-    "@types/styled-components": "^5.1.0",
     "better-react-spinkit": "^2.0.4",
     "emoji-picker-react": "^3.2.1",
     "express": "^4.17.1",
@@ -45,10 +42,13 @@
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
     "@types/react-scrollbar": "^0.5.1",
+    "@types/recoil": "^0.0.1",
     "@types/shortid": "^0.0.29",
     "@types/simple-peer": "^9.6.0",
+    "@types/socket.io": "^2.1.8",
     "@types/socket.io-client": "^1.4.33",
     "@types/socket.io-redis": "^1.0.26",
+    "@types/styled-components": "^5.1.0",
     "babel-plugin-styled-components": "^1.10.7",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",

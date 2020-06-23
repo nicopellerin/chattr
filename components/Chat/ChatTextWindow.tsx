@@ -93,11 +93,10 @@ const ChatTextWindow: React.FC = () => {
         }}
         options={{ wheelSpeed: 0.5 }}
         style={{
-          height: expandChatWindow ? 585 : 400,
           borderRadius: "5px",
         }}
       >
-        <Container>
+        <Container style={{ height: expandChatWindow ? 585 : 400 }}>
           <AnimatePresence>
             {msgs.length > 0 &&
               msgs.map(({ msg, user }: Message, i) => (
@@ -129,7 +128,11 @@ const ChatTextWindow: React.FC = () => {
               </NoMessagesText>
             </NoMessages>
           )}
-          {noConnection && !userLeftChattr?.length && <Invite />}
+          {noConnection && !userLeftChattr?.length && (
+            <motion.div animate style={{ height: 400 }}>
+              <Invite />
+            </motion.div>
+          )}
 
           {hasConnection &&
             userIsTyping?.status &&
@@ -144,17 +147,18 @@ const ChatTextWindow: React.FC = () => {
                 </UserIsTypingText>
               </UserIsTypingWrapper>
             )}
-
-          {userLeftChattr && (
-            <UserDisconnectedWrapper
-              initial={{ y: 5 }}
-              animate={{ y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ type: "spring", damping: 80 }}
-            >
-              <UserDisconnectedText>{userLeftChattr}</UserDisconnectedText>
-            </UserDisconnectedWrapper>
-          )}
+          <AnimatePresence>
+            {userLeftChattr && (
+              <UserDisconnectedWrapper
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ type: "spring", damping: 80 }}
+              >
+                <UserDisconnectedText>{userLeftChattr}</UserDisconnectedText>
+              </UserDisconnectedWrapper>
+            )}
+          </AnimatePresence>
         </Container>
       </PerfectScrollbar>
     </Wrapper>
