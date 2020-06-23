@@ -9,6 +9,32 @@ import { displayTheatreModeState } from "../../store/video"
 import EmojiPicker from "./EmojiPicker"
 import { FaVolumeUp } from "react-icons/fa"
 
+const lolSounds = [
+  "/sounds/lol/laugh.mp3",
+  "/sounds/lol/cannedlaugh.mp3",
+  "/sounds/lol/chipmunk.mp3",
+  "/sounds/lol/tvlaugh.mp3",
+  "/sounds/lol/mexlaugh4.mp3",
+  "/sounds/lol/family-guy-stewies-annoying-laugh-5.mp3",
+  "/sounds/lol/joker-laugh.mp3",
+  "/sounds/lol/wiz-khalifa-reacts-to-fan-laugh-impressions-1-mp3cut.mp3",
+  "/sounds/lol/laugh-3_9wVKqU7.mp3",
+  "/sounds/lol/beavis-and-buttheads-laugh.mp3",
+  "/sounds/lol/family-guy-lois-mom-mum-mommy-mp3cut.mp3",
+  "/sounds/lol/sitcom-laughing.mp3",
+  "/sounds/lol/222122.mp3",
+  "/sounds/lol/a-minute-of-laughs-jimmy-carr-online-audio-converter.mp3",
+  "/sounds/lol/troll-laugh-sound-effect.mp3",
+  "/sounds/lol/homer-simpson-evil-laugh-from-youtube.mp3",
+  "/sounds/lol/unnamed.mp3",
+  "/sounds/lol/will-smith-laugh.mp3",
+  "/sounds/lol/yodalaughing.mp3",
+  "/sounds/lol/samuelcreep.mp3",
+  "/sounds/lol/family-guy-stewie-s-laugh.mp3",
+  "/sounds/lol/cardi-b-hahaha.mp3",
+  "/sounds/lol/samuelcreep_uAqES0U.mp3",
+]
+
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
@@ -23,6 +49,14 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
 
   let count = useRef(0)
   const inputTextRef = useRef() as React.MutableRefObject<HTMLInputElement>
+
+  const playLolSound = () => {
+    const randomIdx = Math.floor(Math.random() * lolSounds.length)
+    const sound = new Audio(lolSounds[randomIdx])
+    sound.play()
+    sound.volume = 0.8
+    socket.current.emit("chatMessage", { user: username, msg: "LOL! 😆🤣" })
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -62,7 +96,6 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
           value={msg}
           onChange={(e) => (noConnection ? null : setMsg(e.target.value))}
         />
-
         <SmileyFace
           src="/smiley.png"
           alt="smiley"
@@ -78,7 +111,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         <LolButton
           type="button"
           onClick={() => {
-            alert("Coming soonz!")
+            playLolSound()
           }}
           style={
             noConnection
