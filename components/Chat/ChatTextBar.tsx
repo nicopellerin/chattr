@@ -60,15 +60,20 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
             listUsers?.length < 2 ? null : setMsg(e.target.value)
           }
         />
-        {listUsers?.length > 1 && (
-          <SmileyFace
-            src="/smiley.png"
-            alt="smiley"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setTogglePicker((prevState) => !prevState)}
-          />
-        )}
+
+        <SmileyFace
+          src="/smiley.png"
+          alt="smiley"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          style={
+            listUsers?.length < 2
+              ? { opacity: 0.2, pointerEvents: "none" }
+              : { opacity: 1, pointerEvents: "all" }
+          }
+          onClick={() => setTogglePicker((prevState) => !prevState)}
+        />
+
         <SendButton disabled={listUsers?.length < 2} whileTap={{ scale: 0.98 }}>
           Send
         </SendButton>
