@@ -26,6 +26,7 @@ html {
   box-sizing: border-box;
   height: 100%;
   min-height: 100%;
+  /* scroll-behavior: smooth; */
 
   @media (max-width: 1500px) {
     font-size: 57.5%;
@@ -57,8 +58,7 @@ h1, h2, h3, h4, h5 {
 }
 
 h1, h2 {
-  /* font-family: 'Playfair+Display', serif; */
-  /* font-weight: 900; */
+
 }
 
 input {
@@ -66,7 +66,6 @@ input {
 }
 
 p {
-  /* font-family: "Playfair+Display", serif; */
   font-size: 1.8rem;
 }
 
@@ -92,9 +91,6 @@ aside.emoji-picker-react {
 .ps__rail-y {
   display: none!important;
 }
-
-
-
 `
 
 export default GlobalStyles

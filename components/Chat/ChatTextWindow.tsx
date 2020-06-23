@@ -55,7 +55,7 @@ const ChatTextWindow: React.FC = () => {
       pop.play()
     }
 
-    scrollRef.current.scrollTop = scrollRef.current.scrollTop
+    scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
   }, [msgs])
 
   useEffect(() => {
