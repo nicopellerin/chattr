@@ -23,6 +23,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const [togglePicker, setTogglePicker] = useState(false)
 
   let count = useRef(0)
+  const inputTextRef = useRef() as React.MutableRefObject<HTMLInputElement>
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -50,16 +51,17 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     }
   }, [msg])
 
+  const noConnection = listUsers?.length < 2
+
   return (
     <>
       <Wrapper theatreMode={displayTheatreMode} onSubmit={handleSubmit}>
         <TextInput
-          disabled={listUsers?.length < 2}
+          ref={inputTextRef}
+          disabled={noConnection}
           placeholder="Type message..."
           value={msg}
-          onChange={(e) =>
-            listUsers?.length < 2 ? null : setMsg(e.target.value)
-          }
+          onChange={(e) => (noConnection ? null : setMsg(e.target.value))}
         />
 
         <SmileyFace
@@ -68,7 +70,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           style={
-            listUsers?.length < 2
+            noConnection
               ? { opacity: 0.2, pointerEvents: "none" }
               : { opacity: 1, pointerEvents: "all" }
           }
@@ -80,7 +82,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
             alert("Coming soonz!")
           }}
           style={
-            listUsers?.length < 2
+            noConnection
               ? { opacity: 0.2, pointerEvents: "none" }
               : { opacity: 1, pointerEvents: "all" }
           }
@@ -88,11 +90,15 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         >
           Lol <FaVolumeUp style={{ marginLeft: 5 }} />
         </LolButton>
-        <SendButton disabled={listUsers?.length < 2} whileTap={{ scale: 0.98 }}>
+        <SendButton disabled={noConnection} whileTap={{ scale: 0.98 }}>
           Send
         </SendButton>
         {togglePicker && (
-          <EmojiPicker setMsg={setMsg} setTogglePicker={setTogglePicker} />
+          <EmojiPicker
+            setMsg={setMsg}
+            setTogglePicker={setTogglePicker}
+            inputTextRef={inputTextRef}
+          />
         )}
       </Wrapper>
     </>

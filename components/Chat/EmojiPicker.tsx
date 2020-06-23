@@ -10,13 +10,19 @@ import { FaTimes } from "react-icons/fa"
 interface Props {
   setMsg: React.Dispatch<React.SetStateAction<string>>
   setTogglePicker: React.Dispatch<React.SetStateAction<boolean>>
+  inputTextRef: React.MutableRefObject<HTMLInputElement>
 }
 
-const EmojiPicker: React.FC<Props> = ({ setMsg, setTogglePicker }) => {
+const EmojiPicker: React.FC<Props> = ({
+  setMsg,
+  setTogglePicker,
+  inputTextRef,
+}) => {
   const [chosenEmoji, setChosenEmoji] = useState<any>(null)
 
   const onEmojiClick = (_: any, emojiObject: any) => {
     setChosenEmoji(emojiObject)
+    inputTextRef.current.focus()
   }
 
   useEffect(() => {

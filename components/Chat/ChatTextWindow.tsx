@@ -68,6 +68,9 @@ const ChatTextWindow: React.FC = () => {
     return () => clearTimeout(idx)
   }, [fileTransferProgress])
 
+  const hasConnection = listUsers?.length > 1
+  const noConnection = listUsers?.length < 2
+
   return (
     <Wrapper>
       <ExpandButton
@@ -110,37 +113,37 @@ const ChatTextWindow: React.FC = () => {
                 </MsgWrapper>
               ))}
           </AnimatePresence>
-          {msgs.length === 0 && (
-            <NoMessages hasConnection={listUsers?.length > 1}>
-              <NoMessagesText hasConnection={listUsers?.length > 1}>
+          {msgs.length === 0 && hasConnection && (
+            <NoMessages hasConnection={hasConnection}>
+              <NoMessagesText hasConnection={hasConnection}>
                 <FaKiwiBird
                   size={32}
                   style={{ marginBottom: 13 }}
                   color="var(--primaryColor)"
                 />
                 <span
-                  style={
-                    listUsers?.length > 1 ? { fontSize: 18 } : { fontSize: 15 }
-                  }
+                  style={hasConnection ? { fontSize: 18 } : { fontSize: 15 }}
                 >
                   {welcomeMsg}
                 </span>
               </NoMessagesText>
             </NoMessages>
           )}
-          {listUsers?.length < 2 && !userLeftChattr?.length && <Invite />}
+          {noConnection && !userLeftChattr?.length && <Invite />}
 
-          {userIsTyping?.status && username !== userIsTyping?.username && (
-            <UserIsTypingWrapper
-              initial={{ y: 5 }}
-              animate={{ y: 0 }}
-              transition={{ type: "spring", damping: 80 }}
-            >
-              <UserIsTypingText>
-                <ThreeBounce color="var(--textColor)" size={7} />
-              </UserIsTypingText>
-            </UserIsTypingWrapper>
-          )}
+          {hasConnection &&
+            userIsTyping?.status &&
+            username !== userIsTyping?.username && (
+              <UserIsTypingWrapper
+                initial={{ y: 5 }}
+                animate={{ y: 0 }}
+                transition={{ type: "spring", damping: 80 }}
+              >
+                <UserIsTypingText>
+                  <ThreeBounce color="var(--textColor)" size={7} />
+                </UserIsTypingText>
+              </UserIsTypingWrapper>
+            )}
 
           {userLeftChattr && (
             <UserDisconnectedWrapper
@@ -225,7 +228,7 @@ const NoMessagesText = styled.span`
       border-radius: 75px;
       padding: 5rem;
       background: #1a0d2b;
-      filter: drop-shadow(0 0.9rem 0.2rem rgba(131, 82, 253, 0.05));
+      filter: drop-shadow(0 0.7rem 0.2rem rgba(131, 82, 253, 0.05));
     `}
 `
 
@@ -270,7 +273,7 @@ const ExpandButton = styled(motion.div)`
   height: 2.4rem;
   border-radius: 50%;
   position: absolute;
-  right: -3rem;
+  right: -2.7rem;
   top: 1.5rem;
   z-index: 0;
   cursor: pointer;
