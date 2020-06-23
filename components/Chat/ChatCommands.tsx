@@ -206,7 +206,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
 export default ChatCommands
 
 // Styles
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   background: #1a0d2b;
   height: 100%;
   padding: 1.7rem;

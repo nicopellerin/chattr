@@ -44,3 +44,8 @@ export const callerFileSignalState = atom<any>({
   key: "callerFileSignalState",
   default: null,
 })
+
+export const expandChatWindowState = atom<boolean>({
+  key: "expandChatWindowState",
+  default: false,
+})

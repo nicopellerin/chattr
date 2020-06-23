@@ -1,16 +1,17 @@
 import * as React from "react"
 import { useEffect } from "react"
 import styled from "styled-components"
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollArea from "react-scrollbar"
-import { FaKiwiBird } from "react-icons/fa"
+import { FaKiwiBird, FaChevronCircleUp } from "react-icons/fa"
 
 import {
   chatWindowState,
   chatWelcomeMessageState,
   chatUserIsTypingState,
   fileTransferProgressState,
+  expandChatWindowState,
 } from "../../store/chat"
 import {
   usernameState,
@@ -37,11 +38,16 @@ const ChatTextWindow: React.FC = () => {
   const [fileTransferProgress, setFileTransferProgress] = useRecoilState(
     fileTransferProgressState
   )
+  const [expandChatWindow, setExpandChatWindow] = useRecoilState(
+    expandChatWindowState
+  )
 
   // const chatWindowRef = useRef()
 
   const pop = new Audio("/sounds/pop_drip.mp3")
   pop.volume = 0.3
+  const expand = new Audio("/sounds/expand.mp3")
+  expand.volume = 0.3
 
   useEffect(() => {
     if (msgs.length > 0 && soundOn) {
@@ -62,9 +68,23 @@ const ChatTextWindow: React.FC = () => {
 
   return (
     <Wrapper>
+      <ExpandButton
+        whileHover={{ opacity: 1, scale: 1 }}
+        whileTap={{ scale: 0.95 }}
+        animate={expandChatWindow ? { rotate: 180 } : { rotate: 0 }}
+        transition={{ type: "spring", damping: 15 }}
+        onClick={() => {
+          setExpandChatWindow((prevState) => !prevState)
+          if (soundOn) {
+            expand.play()
+          }
+        }}
+      >
+        <FaChevronCircleUp />
+      </ExpandButton>
       <ScrollArea
         style={{
-          height: 400,
+          height: expandChatWindow ? 595 : 400,
           boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
           borderRadius: "5px",
         }}
@@ -137,6 +157,8 @@ const Wrapper = styled.div`
   height: 100%;
   padding: 1.7rem;
   border-radius: 5px;
+  position: relative;
+
   /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
 `
 
@@ -147,6 +169,7 @@ const Container = styled.div`
   padding: 2.2rem 1.7rem;
   color: var(--textColor);
   font-size: 1.7rem;
+  line-height: 1.4;
   overflow: auto;
 `
 
@@ -154,11 +177,11 @@ const MsgWrapper = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.2rem;
   border-bottom: 1px solid #222;
 
   &:not(:first-child) {
-    padding-top: 1.5rem;
+    padding-top: 1.2rem;
   }
 `
 
@@ -197,7 +220,27 @@ const UserDisconnectedWrapper = styled(motion.div)`
 `
 
 const UserDisconnectedText = styled.span`
-  font-size: 1.7rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: var(--secondaryColor);
+`
+
+const ExpandButton = styled(motion.div)`
+  background: transparent;
+  border: none;
+  color: var(--primaryColorDark);
+  background: linear-gradient(45deg, #d852fd, #9c74fe);
+  font-size: 2.4rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 20;
+  cursor: pointer;
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `

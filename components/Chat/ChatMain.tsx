@@ -42,10 +42,11 @@ import {
   sendingFileState,
   callerFileState,
   callerFileSignalState,
+  expandChatWindowState,
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
 import Router from "next/router"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -83,6 +84,7 @@ const ChatMain = () => {
   const username = useRecoilValue(usernameState)
   const micMuted = useRecoilValue(muteMicState)
   const showSelfWebcam = useRecoilValue(showSelfWebcamState)
+  const expandChatWindow = useRecoilValue(expandChatWindowState)
 
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
@@ -445,17 +447,31 @@ const ChatMain = () => {
               acceptCall={acceptCall}
               acceptFile={acceptFile}
             />
-            <ChatTextBar socket={socket} />
+            <motion.div animate>
+              <ChatTextBar socket={socket} />
+            </motion.div>
           </LeftColumn>
           <RightColumn theatreMode={displayTheatreMode}>
-            <LogoStyled src="/logo.svg" alt="logo" />
-            <ChatUsername />
-            <ChatCommands
-              callFriend={callFriend}
-              sendFile={sendFile}
-              socket={socket}
-            />
-            <ChatTextWindow />
+            <>
+              <LogoStyled src="/logo.svg" alt="logo" />
+              {!expandChatWindow && (
+                <>
+                  <motion.div animate>
+                    <ChatUsername />
+                  </motion.div>
+                  <motion.div animate>
+                    <ChatCommands
+                      callFriend={callFriend}
+                      sendFile={sendFile}
+                      socket={socket}
+                    />
+                  </motion.div>
+                </>
+              )}
+              <motion.div animate>
+                <ChatTextWindow />
+              </motion.div>
+            </>
           </RightColumn>
         </Wrapper>
       </OutterWrapper>
@@ -502,8 +518,7 @@ const LeftColumn = styled.div`
   }
 `
 
-const RightColumn = styled.div`
-  display: grid;
+const RightColumn = styled(motion.div)`
   grid-gap: 2rem;
   display: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? "none" : "grid"};

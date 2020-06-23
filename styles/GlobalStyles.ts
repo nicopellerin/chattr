@@ -26,6 +26,7 @@ html {
   box-sizing: border-box;
   height: 100%;
   min-height: 100%;
+
   @media (max-width: 1500px) {
     font-size: 57.5%;
   }
