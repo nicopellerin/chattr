@@ -116,15 +116,11 @@ const ChatTextWindow: React.FC = () => {
             <NoMessages hasConnection={hasConnection}>
               <NoMessagesText hasConnection={hasConnection}>
                 <FaKiwiBird
-                  size={32}
-                  style={{ marginBottom: 13 }}
+                  size={50}
+                  style={{ marginBottom: 20 }}
                   color="var(--primaryColor)"
                 />
-                <span
-                  style={hasConnection ? { fontSize: 18 } : { fontSize: 15 }}
-                >
-                  {welcomeMsg}
-                </span>
+                <span style={{ fontSize: "2rem" }}>{welcomeMsg}</span>
               </NoMessagesText>
             </NoMessages>
           )}
@@ -216,24 +212,12 @@ const NoMessages = styled(motion.div)`
 `
 
 const NoMessagesText = styled.span`
-  font-size: 1.6rem;
   font-weight: 600;
   color: var(--primaryColorLight);
-  opacity: 0.85;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  ${(props: { hasConnection: boolean }) =>
-    props.hasConnection &&
-    css`
-      box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.15);
-      border-bottom: 7px solid #0c0613;
-      border-radius: 75px;
-      padding: 5rem;
-      background: #1a0d2b;
-      filter: drop-shadow(0 0.7rem 0.2rem rgba(131, 82, 253, 0.05));
-    `}
 `
 
 const UserIsTypingWrapper = styled(motion.div)`
