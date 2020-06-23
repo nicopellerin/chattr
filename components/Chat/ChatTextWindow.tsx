@@ -89,7 +89,7 @@ const ChatTextWindow: React.FC = () => {
         options={{ wheelSpeed: 0.5 }}
         style={{
           height: expandChatWindow ? 595 : 400,
-          boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
+          // boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
           borderRadius: "5px",
         }}
       >
@@ -113,8 +113,8 @@ const ChatTextWindow: React.FC = () => {
             <NoMessages hasConnection={listUsers?.length > 1}>
               <FaKiwiBird
                 size={32}
-                style={{ marginBottom: 15 }}
-                color="var(--primaryColorLight)"
+                style={{ marginBottom: 13 }}
+                color="var(--primaryColor)"
               />
               <NoMessagesText>{welcomeMsg}</NoMessagesText>
             </NoMessages>

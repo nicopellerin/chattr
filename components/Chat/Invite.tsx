@@ -67,6 +67,9 @@ export default Invite
 // Styles
 const Wrapper = styled(motion.div)`
   height: calc(100% - 11.5rem);
+  box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.15);
+  border-bottom: 7px solid #0c0613;
+  border-radius: 75px;
 `
 
 const Container = styled(motion.div)`
