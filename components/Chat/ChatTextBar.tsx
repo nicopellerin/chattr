@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { motion } from "framer-motion"
 
-import { usernameState, listUsersState } from "../../store/users"
+import { usernameState, listUsersState, selfIdState } from "../../store/users"
 import { displayTheatreModeState } from "../../store/video"
 import EmojiPicker from "./EmojiPicker"
 import { FaVolumeUp } from "react-icons/fa"
@@ -43,20 +43,34 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const listUsers = useRecoilValue(listUsersState)
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
+  const selfId = useRecoilValue(selfIdState)
 
   const [msg, setMsg] = useState("")
   const [togglePicker, setTogglePicker] = useState(false)
+
+  const otherUser = listUsers?.filter((user) => user !== selfId).join("")
 
   let count = useRef(0)
   const inputTextRef = useRef() as React.MutableRefObject<HTMLInputElement>
 
   const playLolSound = () => {
     const randomIdx = Math.floor(Math.random() * lolSounds.length)
-    const sound = new Audio(lolSounds[randomIdx])
-    sound.play()
-    sound.volume = 0.8
     socket.current.emit("chatMessage", { user: username, msg: "LOL! 😆🤣" })
+    socket.current.emit("playLolSound", {
+      to: otherUser,
+      sound: lolSounds[randomIdx],
+    })
   }
+
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on("playingLolSound", (lolSound: string) => {
+        const sound = new Audio(lolSound)
+        sound.play()
+        sound.volume = 0.5
+      })
+    }
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

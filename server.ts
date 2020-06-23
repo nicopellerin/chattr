@@ -94,6 +94,10 @@ io.on("connection", (socket) => {
   socket.on("acceptFile", (data: any) => {
     io.to(data.to).emit("receivingFile", data.signal)
   })
+
+  socket.on("playLolSound", (data: any) => {
+    io.to(data.to).emit("playingLolSound", data.sound)
+  })
 })
 
 nextApp.prepare().then(() => {
