@@ -7,6 +7,7 @@ import { motion } from "framer-motion"
 import { usernameState, listUsersState } from "../../store/users"
 import { displayTheatreModeState } from "../../store/video"
 import EmojiPicker from "./EmojiPicker"
+import { FaVolumeUp } from "react-icons/fa"
 // import { chatUserIsTypingState } from "../../store/chat"
 
 interface Props {
@@ -73,7 +74,20 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
           }
           onClick={() => setTogglePicker((prevState) => !prevState)}
         />
-
+        <LolButton
+          type="button"
+          onClick={() => {
+            alert("Coming soonz!")
+          }}
+          style={
+            listUsers?.length < 2
+              ? { opacity: 0.2, pointerEvents: "none" }
+              : { opacity: 1, pointerEvents: "all" }
+          }
+          whileTap={{ scale: 0.98 }}
+        >
+          Lol <FaVolumeUp style={{ marginLeft: 5 }} />
+        </LolButton>
         <SendButton disabled={listUsers?.length < 2} whileTap={{ scale: 0.98 }}>
           Send
         </SendButton>
@@ -106,7 +120,7 @@ const TextInput = styled.input`
   border: none;
   color: var(--textColor);
   font-size: 1.7rem;
-  padding: 0 8.8rem 0 1.5rem;
+  padding: 0 15.8rem 0 1.5rem;
   outline: transparent;
 
   &::placeholder {
@@ -151,4 +165,19 @@ const SmileyFace = styled(motion.img)`
   top: 2rem;
   width: 32px;
   cursor: pointer;
+`
+
+const LolButton = styled(motion.button)`
+  position: absolute;
+  right: 20rem;
+  top: 2.45rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background: linear-gradient(45deg, #d852fd, #9c74fe);
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  outline: transparent;
 `
