@@ -86,7 +86,7 @@ const ChatTextWindow: React.FC = () => {
       <PerfectScrollbar
         options={{ wheelSpeed: 0.5 }}
         style={{
-          height: expandChatWindow ? 595 : 400,
+          height: expandChatWindow ? 585 : 400,
           // boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
           borderRadius: "5px",
         }}
