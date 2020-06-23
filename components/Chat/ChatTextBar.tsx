@@ -14,8 +14,6 @@ const lolSounds = [
   "/sounds/lol/cannedlaugh.mp3",
   "/sounds/lol/chipmunk.mp3",
   "/sounds/lol/tvlaugh.mp3",
-  "/sounds/lol/mexlaugh4.mp3",
-  "/sounds/lol/family-guy-stewies-annoying-laugh-5.mp3",
   "/sounds/lol/joker-laugh.mp3",
   "/sounds/lol/wiz-khalifa-reacts-to-fan-laugh-impressions-1-mp3cut.mp3",
   "/sounds/lol/laugh-3_9wVKqU7.mp3",
@@ -30,7 +28,6 @@ const lolSounds = [
   "/sounds/lol/will-smith-laugh.mp3",
   "/sounds/lol/yodalaughing.mp3",
   "/sounds/lol/samuelcreep.mp3",
-  "/sounds/lol/family-guy-stewie-s-laugh.mp3",
   "/sounds/lol/cardi-b-hahaha.mp3",
   "/sounds/lol/samuelcreep_uAqES0U.mp3",
 ]
