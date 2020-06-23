@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useEffect, useRef } from "react"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 import { FaKiwiBird, FaChevronCircleUp } from "react-icons/fa"
@@ -114,7 +114,7 @@ const ChatTextWindow: React.FC = () => {
           </AnimatePresence>
           {msgs.length === 0 && hasConnection && (
             <NoMessages hasConnection={hasConnection}>
-              <NoMessagesText hasConnection={hasConnection}>
+              <NoMessagesText>
                 <FaKiwiBird
                   size={50}
                   style={{ marginBottom: 20 }}
