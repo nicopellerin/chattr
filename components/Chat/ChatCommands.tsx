@@ -228,6 +228,7 @@ const Container = styled.div`
   background: rgba(255, 255, 255, 0.01);
   padding: 1rem;
   box-shadow: "4px 0 15px rgba(0, 0, 0, 0.1)";
+  grid-gap: 0.5rem;
 `
 
 const IconWrapper = styled(motion.div)`

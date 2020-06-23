@@ -5,6 +5,7 @@ import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 import ScrollArea from "react-scrollbar"
 import { FaKiwiBird, FaChevronCircleUp } from "react-icons/fa"
+import PerfectScrollbar from "react-perfect-scrollbar"
 
 import {
   chatWindowState,
@@ -82,15 +83,13 @@ const ChatTextWindow: React.FC = () => {
       >
         <FaChevronCircleUp />
       </ExpandButton>
-      <ScrollArea
+      <PerfectScrollbar
+        options={{ wheelSpeed: 0.5 }}
         style={{
           height: expandChatWindow ? 595 : 400,
           boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
           borderRadius: "5px",
         }}
-        verticalScrollbarStyle={{ background: "#000" }}
-        verticalContainerStyle={{ background: "#eee" }}
-        horizontal={false}
       >
         <Container>
           <AnimatePresence>
@@ -109,7 +108,7 @@ const ChatTextWindow: React.FC = () => {
               ))}
           </AnimatePresence>
           {msgs.length === 0 && (
-            <NoMessages>
+            <NoMessages hasConnection={listUsers?.length > 1}>
               <FaKiwiBird
                 size={32}
                 style={{ marginBottom: 15 }}
@@ -118,6 +117,7 @@ const ChatTextWindow: React.FC = () => {
               <NoMessagesText>{welcomeMsg}</NoMessagesText>
             </NoMessages>
           )}
+          {listUsers?.length < 2 && !userLeftChattr?.length && <Invite />}
 
           {userIsTyping?.status && username !== userIsTyping?.username && (
             <UserIsTypingWrapper
@@ -142,9 +142,7 @@ const ChatTextWindow: React.FC = () => {
             </UserDisconnectedWrapper>
           )}
         </Container>
-
-        {listUsers?.length < 2 && !userLeftChattr?.length && <Invite />}
-      </ScrollArea>
+      </PerfectScrollbar>
     </Wrapper>
   )
 }
@@ -158,30 +156,33 @@ const Wrapper = styled.div`
   padding: 1.7rem;
   border-radius: 5px;
   position: relative;
+  /* overflow: hidden; */
 
   /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
 `
 
 const Container = styled.div`
-  background: rgba(255, 255, 255, 0.01);
   width: 100%;
   height: 100%;
-  padding: 2.2rem 1.7rem;
   color: var(--textColor);
   font-size: 1.7rem;
   line-height: 1.4;
-  overflow: auto;
 `
 
 const MsgWrapper = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
-  padding-bottom: 1.2rem;
+  padding: 1.5rem;
   border-bottom: 1px solid #222;
+  background: linear-gradient(45deg, #0c0613, #0f0818);
+  border-radius: 5px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin-bottom: 15px;
+  word-break: break-all;
 
   &:not(:first-child) {
-    padding-top: 1.2rem;
+    /* padding-top: 1.2rem; */
   }
 `
 
@@ -191,12 +192,14 @@ const Username = styled.span`
   font-weight: 600;
 `
 
-const NoMessages = styled.div`
+const NoMessages = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 100%;
+  margin-top: 0.8rem;
+  ${(props: { hasConnection: boolean }) =>
+    props.hasConnection && `height: 100%;`}
 `
 
 const NoMessagesText = styled.span`
@@ -220,7 +223,7 @@ const UserDisconnectedWrapper = styled(motion.div)`
 `
 
 const UserDisconnectedText = styled.span`
-  font-size: 1.4rem;
+  font-size: 1.7rem;
   font-weight: 700;
   color: var(--secondaryColor);
 `

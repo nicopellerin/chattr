@@ -1,6 +1,8 @@
 import React from "react"
 import { RecoilRoot } from "recoil"
 
+import "react-perfect-scrollbar/dist/css/styles.css"
+
 import GlobalStyles from "../styles/GlobalStyles"
 
 interface Props {

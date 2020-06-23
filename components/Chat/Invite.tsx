@@ -66,7 +66,7 @@ export default Invite
 
 // Styles
 const Wrapper = styled(motion.div)`
-  height: 28rem;
+  height: calc(100% - 11.5rem);
 `
 
 const Container = styled(motion.div)`

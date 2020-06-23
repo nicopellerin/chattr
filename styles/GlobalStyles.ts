@@ -89,6 +89,10 @@ aside.emoji-picker-react {
   content: "";
 } 
 
+.ps__rail-y {
+  display: none!important;
+}
+
 `
 
 export default GlobalStyles
