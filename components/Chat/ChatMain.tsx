@@ -439,7 +439,11 @@ const ChatMain = () => {
       {!username && <NoUsername />}
       <OutterWrapper>
         <Wrapper animate theatreMode={displayTheatreMode}>
-          <LeftColumn theatreMode={displayTheatreMode}>
+          <LeftColumn
+            // animate
+            // transition={{ type: "spring", damping: 20 }}
+            theatreMode={displayTheatreMode}
+          >
             <ChatVideo
               socket={socket}
               selfVideoRef={selfVideoRef}
@@ -447,19 +451,32 @@ const ChatMain = () => {
               acceptCall={acceptCall}
               acceptFile={acceptFile}
             />
-            <motion.div animate>
+            <motion.div
+              animate
+              // transition={{ type: "spring", damping: 50 }}
+            >
               <ChatTextBar socket={socket} />
             </motion.div>
           </LeftColumn>
-          <RightColumn theatreMode={displayTheatreMode}>
+          <RightColumn
+            animate
+            // transition={{ type: "spring", damping: 50 }}
+            theatreMode={displayTheatreMode}
+          >
             <>
               <LogoStyled src="/logo.svg" alt="logo" />
               {!expandChatWindow && (
                 <>
-                  <motion.div animate>
+                  <motion.div
+                    animate
+                    // transition={{ type: "spring", damping: 30 }}
+                  >
                     <ChatUsername />
                   </motion.div>
-                  <motion.div animate>
+                  <motion.div
+                    animate
+                    // transition={{ type: "spring", damping: 30 }}
+                  >
                     <ChatCommands
                       callFriend={callFriend}
                       sendFile={sendFile}
@@ -468,7 +485,10 @@ const ChatMain = () => {
                   </motion.div>
                 </>
               )}
-              <motion.div animate>
+              <motion.div
+                animate
+                // transition={{ type: "spring", damping: 20 }}
+              >
                 <ChatTextWindow />
               </motion.div>
             </>
@@ -507,7 +527,7 @@ const Wrapper = styled(motion.div)`
   }
 `
 
-const LeftColumn = styled.div`
+const LeftColumn = styled(motion.div)`
   display: grid;
   grid-template-rows: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? "1fr" : "9fr 1fr"};

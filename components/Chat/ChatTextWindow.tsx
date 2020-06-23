@@ -55,7 +55,7 @@ const ChatTextWindow: React.FC = () => {
       pop.play()
     }
 
-    scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
+    scrollRef.current.scrollTop = scrollRef.current.scrollTop
   }, [msgs])
 
   useEffect(() => {
@@ -225,7 +225,7 @@ const NoMessagesText = styled.span`
       border-radius: 75px;
       padding: 5rem;
       background: #1a0d2b;
-      filter: drop-shadow(0 0.9rem 0.2rem rgba(131, 82, 253, 0.08));
+      filter: drop-shadow(0 0.9rem 0.2rem rgba(131, 82, 253, 0.05));
     `}
 `
 
@@ -270,12 +270,23 @@ const ExpandButton = styled(motion.div)`
   height: 2.4rem;
   border-radius: 50%;
   position: absolute;
-  right: 1rem;
-  top: 1rem;
-  z-index: 20;
+  right: -3rem;
+  top: 1.5rem;
+  z-index: 0;
   cursor: pointer;
-  opacity: 0.1;
+  opacity: 0.5;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &::after {
+    content: "";
+    display: block;
+    background: #1a0d2b;
+    width: 3.4rem;
+    height: 4rem;
+    position: absolute;
+    z-index: -1;
+    border-radius: 5px;
+  }
 `
