@@ -47,7 +47,7 @@ body {
   color: #555;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* overflow: hidden; */
+  -webkit-transform: translateZ(0);
 }
 
 

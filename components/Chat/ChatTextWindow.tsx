@@ -1,11 +1,11 @@
 import * as React from "react"
 import { useEffect } from "react"
 import styled from "styled-components"
-import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
-import ScrollArea from "react-scrollbar"
 import { FaKiwiBird, FaChevronCircleUp } from "react-icons/fa"
 import PerfectScrollbar from "react-perfect-scrollbar"
+import { ThreeBounce } from "better-react-spinkit"
 
 import {
   chatWindowState,
@@ -67,6 +67,8 @@ const ChatTextWindow: React.FC = () => {
     return () => clearTimeout(idx)
   }, [fileTransferProgress])
 
+  console.log(userIsTyping?.status, username, userIsTyping?.username)
+
   return (
     <Wrapper>
       <ExpandButton
@@ -126,7 +128,8 @@ const ChatTextWindow: React.FC = () => {
               transition={{ type: "spring", damping: 80 }}
             >
               <UserIsTypingText>
-                {userIsTyping?.username} is typing...
+                <ThreeBounce color="var(--textColor)" size={7} />
+                {/* {userIsTyping?.username} is typing... */}
               </UserIsTypingText>
             </UserIsTypingWrapper>
           )}
@@ -167,6 +170,7 @@ const Container = styled.div`
   color: var(--textColor);
   font-size: 1.7rem;
   line-height: 1.4;
+  position: relative;
 `
 
 const MsgWrapper = styled(motion.div)`
@@ -211,10 +215,21 @@ const NoMessagesText = styled.span`
 const UserIsTypingWrapper = styled(motion.div)`
   padding: 3rem 1.7rem 1rem;
   text-align: center;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
 `
 
 const UserIsTypingText = styled.span`
-  font-size: 1.7rem;
+  font-size: 1.2rem;
+  background: linear-gradient(
+    140deg,
+    var(--primaryColor),
+    var(--primaryColorDark)
+  );
+  padding: 0.4rem 0.5rem;
+  border-radius: 5px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 `
 
 const UserDisconnectedWrapper = styled(motion.div)`
