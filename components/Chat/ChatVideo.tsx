@@ -123,7 +123,7 @@ const ChatVideo: React.FC<Props> = ({
           initial={{ opacity: 0.5 }}
           whileHover={{ opacity: 1, scale: 1.02 }}
           onClick={() => {
-            if (!displayTheatreMode && soundOn) {
+            if (soundOn) {
               sound.play()
               sound.volume = 0.3
             }

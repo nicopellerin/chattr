@@ -73,6 +73,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
     if (file && file.size > 5 * 1000000) {
       alert("File too big. Max size is 5 mb")
       e.target.value = ""
+      setSendingFile(false)
       return
     }
 

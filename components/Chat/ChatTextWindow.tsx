@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useEffect } from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 import { FaKiwiBird, FaChevronCircleUp } from "react-icons/fa"
@@ -67,8 +67,6 @@ const ChatTextWindow: React.FC = () => {
     return () => clearTimeout(idx)
   }, [fileTransferProgress])
 
-  console.log(userIsTyping?.status, username, userIsTyping?.username)
-
   return (
     <Wrapper>
       <ExpandButton
@@ -111,12 +109,20 @@ const ChatTextWindow: React.FC = () => {
           </AnimatePresence>
           {msgs.length === 0 && (
             <NoMessages hasConnection={listUsers?.length > 1}>
-              <FaKiwiBird
-                size={32}
-                style={{ marginBottom: 13 }}
-                color="var(--primaryColor)"
-              />
-              <NoMessagesText>{welcomeMsg}</NoMessagesText>
+              <NoMessagesText hasConnection={listUsers?.length > 1}>
+                <FaKiwiBird
+                  size={32}
+                  style={{ marginBottom: 13 }}
+                  color="var(--primaryColor)"
+                />
+                <span
+                  style={
+                    listUsers?.length > 1 ? { fontSize: 18 } : { fontSize: 15 }
+                  }
+                >
+                  {welcomeMsg}
+                </span>
+              </NoMessagesText>
             </NoMessages>
           )}
           {listUsers?.length < 2 && !userLeftChattr?.length && <Invite />}
@@ -203,7 +209,7 @@ const NoMessages = styled(motion.div)`
   flex-direction: column;
   margin-top: 0.2rem;
   ${(props: { hasConnection: boolean }) =>
-    props.hasConnection && `height: 100%;`}/* opacity: 0.85; */
+    props.hasConnection && `height: 100%;`};
 `
 
 const NoMessagesText = styled.span`
@@ -211,6 +217,18 @@ const NoMessagesText = styled.span`
   font-weight: 600;
   color: var(--primaryColorLight);
   opacity: 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  ${(props: { hasConnection: boolean }) =>
+    props.hasConnection &&
+    css`
+      box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.15);
+      border-bottom: 7px solid #0c0613;
+      border-radius: 75px;
+      padding: 5rem;
+    `}
 `
 
 const UserIsTypingWrapper = styled(motion.div)`
