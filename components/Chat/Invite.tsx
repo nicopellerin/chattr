@@ -86,7 +86,7 @@ const Text = styled.span`
 `
 
 const CopyButton = styled(motion.button)`
-  margin-top: 5rem;
+  margin-top: 4rem;
   background: ${(props: { disabled: boolean }) =>
     props.disabled
       ? "green"

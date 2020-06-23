@@ -8,7 +8,7 @@ const NoUsername = () => {
   return (
     <>
       <Wrapper>
-        <UsernameModal buttonText="Join chat" noUsernameModal={true} />
+        <UsernameModal buttonText="Join room" noUsernameModal={true} />
       </Wrapper>
       <Portal />
     </>

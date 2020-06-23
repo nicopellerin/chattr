@@ -207,7 +207,7 @@ const NoMessages = styled(motion.div)`
 `
 
 const NoMessagesText = styled.span`
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: var(--primaryColorLight);
   opacity: 0.85;
