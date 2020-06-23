@@ -46,7 +46,7 @@ import {
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
 import Router from "next/router"
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion"
+import { motion } from "framer-motion"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
