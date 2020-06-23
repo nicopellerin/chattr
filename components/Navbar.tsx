@@ -10,7 +10,7 @@ const Navbar = () => {
   return (
     <Wrapper>
       <Link href="/">
-        <LogoStyled src="/logo.svg" alt="logo" />
+        <LogoStyled src="/logo-3d.svg" alt="logo" />
       </Link>
       <Text>Free P2P audio/video + chat platform</Text>
       <Link href="/about">

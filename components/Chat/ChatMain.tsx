@@ -464,7 +464,7 @@ const ChatMain = () => {
             theatreMode={displayTheatreMode}
           >
             <>
-              <LogoStyled src="/logo.svg" alt="logo" />
+              <LogoStyled src="/logo-3d.svg" alt="logo" />
               {!expandChatWindow && (
                 <>
                   <motion.div

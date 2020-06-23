@@ -53,7 +53,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
           />
-          <meta name="og:image" content="/og-image2.png" />
+          <meta name="og:image" content="/og-image3.png" />
           <link rel="icon" type="image/png" href="/favicon.png" />
           <meta name="msapplication-TileColor" content="#8352FD" />
           <meta name="theme-color" content="#ffffff" />
