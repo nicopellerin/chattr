@@ -230,9 +230,9 @@ const ExpandButton = styled(motion.div)`
   border: none;
   color: var(--primaryColorDark);
   background: linear-gradient(45deg, #d852fd, #9c74fe);
-  font-size: 2.4rem;
-  width: 3rem;
-  height: 3rem;
+  font-size: 2rem;
+  width: 2.4rem;
+  height: 2.4rem;
   border-radius: 50%;
   position: absolute;
   right: 1rem;
