@@ -96,21 +96,7 @@ const Wrapper = styled.form`
   display: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? "none" : "grid"};
   grid-template-columns: 1fr auto;
-  /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
   position: relative;
-
-  &::before {
-    content: "";
-    display: block;
-    width: 2rem;
-    height: calc(100% - 2rem);
-    top: 50%;
-    transform: translateY(-50%);
-    position: absolute;
-    right: 19.2rem;
-    background: linear-gradient(90deg, rgba(26, 13, 43, 0), #1a0d2b);
-    z-index: 100;
-  }
 `
 
 const TextInput = styled.input`
@@ -120,7 +106,7 @@ const TextInput = styled.input`
   border: none;
   color: var(--textColor);
   font-size: 1.7rem;
-  padding: 0 11rem 0 1.5rem;
+  padding: 0 8.8rem 0 1.5rem;
   outline: transparent;
 
   &::placeholder {
@@ -161,7 +147,7 @@ const SendButton = styled(motion.button)`
 
 const SmileyFace = styled(motion.img)`
   position: absolute;
-  right: 13.6rem;
+  right: 14rem;
   top: 2rem;
   width: 32px;
   cursor: pointer;

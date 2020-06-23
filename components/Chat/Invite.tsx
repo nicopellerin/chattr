@@ -70,6 +70,8 @@ const Wrapper = styled(motion.div)`
   box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.15);
   border-bottom: 7px solid #0c0613;
   border-radius: 75px;
+  background: #1a0d2b;
+  filter: drop-shadow(0 0.9rem 0.2rem rgba(131, 82, 253, 0.08));
 `
 
 const Container = styled(motion.div)`

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import styled, { css } from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
@@ -43,7 +43,7 @@ const ChatTextWindow: React.FC = () => {
     expandChatWindowState
   )
 
-  // const chatWindowRef = useRef()
+  const scrollRef = useRef() as React.MutableRefObject<HTMLElement>
 
   const pop = new Audio("/sounds/pop_drip.mp3")
   pop.volume = 0.3
@@ -54,7 +54,8 @@ const ChatTextWindow: React.FC = () => {
     if (msgs.length > 0 && soundOn) {
       pop.play()
     }
-    // chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight
+
+    scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
   }, [msgs])
 
   useEffect(() => {
@@ -84,10 +85,12 @@ const ChatTextWindow: React.FC = () => {
         <FaChevronCircleUp />
       </ExpandButton>
       <PerfectScrollbar
+        containerRef={(ref) => {
+          scrollRef.current = ref
+        }}
         options={{ wheelSpeed: 0.5 }}
         style={{
           height: expandChatWindow ? 585 : 400,
-          // boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
           borderRadius: "5px",
         }}
       >
@@ -135,7 +138,6 @@ const ChatTextWindow: React.FC = () => {
             >
               <UserIsTypingText>
                 <ThreeBounce color="var(--textColor)" size={7} />
-                {/* {userIsTyping?.username} is typing... */}
               </UserIsTypingText>
             </UserIsTypingWrapper>
           )}
@@ -165,9 +167,6 @@ const Wrapper = styled.div`
   padding: 1.7rem;
   border-radius: 5px;
   position: relative;
-  /* overflow: hidden; */
-
-  /* filter: drop-shadow(0 0 10rem rgba(131, 82, 253, 0.05)); */
 `
 
 const Container = styled.div`
@@ -190,10 +189,6 @@ const MsgWrapper = styled(motion.div)`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   margin-bottom: 15px;
   word-break: break-all;
-
-  &:not(:first-child) {
-    /* padding-top: 1.2rem; */
-  }
 `
 
 const Username = styled.span`
@@ -208,6 +203,7 @@ const NoMessages = styled(motion.div)`
   justify-content: center;
   flex-direction: column;
   margin-top: 0.2rem;
+
   ${(props: { hasConnection: boolean }) =>
     props.hasConnection && `height: 100%;`};
 `
@@ -228,6 +224,8 @@ const NoMessagesText = styled.span`
       border-bottom: 7px solid #0c0613;
       border-radius: 75px;
       padding: 5rem;
+      background: #1a0d2b;
+      filter: drop-shadow(0 0.9rem 0.2rem rgba(131, 82, 253, 0.08));
     `}
 `
 
