@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import styled, { css } from "styled-components"
 import {
   FaMicrophoneSlash,
@@ -10,7 +10,7 @@ import {
   FaPhone,
   FaRocket,
 } from "react-icons/fa"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 
 import {
@@ -28,6 +28,7 @@ import {
   userSoundOnState,
 } from "../../store/users"
 import { fileTransferProgressState, sendingFileState } from "../../store/chat"
+import MessageBar from "../MessageBar"
 
 interface Props {
   callFriend: (id: string) => void
@@ -58,12 +59,16 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
   const soundOn = useRecoilValue(userSoundOnState)
   const fileTransferProgress = useRecoilValue(fileTransferProgressState)
 
+  const [errorMsg, setErrorMsg] = useState("")
+
   const fileInputRef = useRef() as React.RefObject<HTMLInputElement>
 
   const otherUser = listUsers?.filter((user) => user !== selfId).join("")
 
   const beepOn = new Audio("/sounds/click_snip.mp3")
   beepOn.volume = 0.3
+  const errorSound = new Audio("/sounds/digi_error_short.mp3")
+  errorSound.volume = 0.5
 
   const handleSendFile = (e: any) => {
     setSendingFile(true)
@@ -71,7 +76,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
     const file = e.target.files[0]
 
     if (file && file.size > 5 * 1000000) {
-      alert("File too big. Max size is 5 mb")
+      setErrorMsg("File too big. Max size is 5 mb")
       e.target.value = ""
       setSendingFile(false)
       return
@@ -80,127 +85,143 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
     sendFile(otherUser, file)
   }
 
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+
+    if (errorMsg) {
+      errorSound.play()
+      idx = setTimeout(() => setErrorMsg(""), 3000)
+    }
+
+    return () => clearTimeout(idx)
+  }, [errorMsg])
+
   return (
-    <Wrapper>
-      <Container>
-        <IconWrapper
-          onClick={() => {
-            fileInputRef.current && fileInputRef.current.click()
-            if (soundOn) {
-              beepOn.play()
-            }
-          }}
-          disabled={listUsers?.length < 2}
-          whileTap={{ scale: 0.98 }}
-        >
-          <input
-            hidden
-            name="file"
-            id="file"
-            type="file"
-            ref={fileInputRef}
-            onChange={(e) => handleSendFile(e)}
-          />
-          {!sendingFile ? (
-            <>
-              <FaRocket size={22} style={{ marginBottom: 7 }} />
-              <span>
-                {fileTransferProgress === "0"
-                  ? `Send file`
-                  : `${fileTransferProgress}%`}
-              </span>
-            </>
-          ) : (
-            <>
-              <FaRocket size={22} style={{ marginBottom: 7 }} />
-              <span>{`${fileTransferProgress}%`}</span>
-            </>
-          )}
-        </IconWrapper>
-        <IconWrapper
-          onClick={() => {
-            setMuteMic(!muteMic)
-            if (soundOn) {
-              beepOn.play()
-            }
-          }}
-          off={muteMic}
-          whileTap={{ scale: 0.98 }}
-        >
-          {muteMic ? (
-            <>
-              <FaMicrophoneSlash size={22} style={{ marginBottom: 7 }} />
-              <span>Mic</span>
-            </>
-          ) : (
-            <>
-              <FaMicrophone size={22} style={{ marginBottom: 7 }} />
-              <span>Mic</span>
-            </>
-          )}
-        </IconWrapper>
-        <IconWrapper
-          onClick={() => {
-            setShowSelfWebcam(!showSelfWebcam)
-            if (soundOn) {
-              beepOn.play()
-            }
-          }}
-          whileTap={{ scale: 0.98 }}
-          off={!showSelfWebcam}
-        >
-          {showSelfWebcam ? (
-            <>
-              <FaVideo
-                size={22}
-                style={{
-                  marginBottom: 7,
-                }}
-              />
-              <span>Webcam</span>
-            </>
-          ) : (
-            <>
-              <FaVideoSlash size={22} style={{ marginBottom: 7 }} />
-              <span>Webcam</span>
-            </>
-          )}
-        </IconWrapper>
-        <IconWrapper disabled={disableCallIcon} whileTap={{ scale: 0.98 }}>
-          {callAccepted || pressedCall ? (
-            <>
-              <FaTimesCircle
-                onClick={() => {
-                  setReceivingCall(false)
-                  setCancelCallRequest(true)
-                  socket.current.emit("cancelCallRequest")
-                }}
-                size={22}
-                style={{ marginBottom: 7 }}
-              />
-              <span>End</span>
-            </>
-          ) : (
-            <>
-              <FaPhone
-                onClick={() => {
-                  callFriend(otherUser)
-                  setPressedCall(true)
-                  if (soundOn) {
-                    beepOn.play()
-                  }
-                }}
-                size={22}
-                style={{
-                  marginBottom: 7,
-                }}
-              />
-              <span>Call</span>
-            </>
-          )}
-        </IconWrapper>
-      </Container>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Container>
+          <IconWrapper
+            onClick={() => {
+              fileInputRef.current && fileInputRef.current.click()
+              if (soundOn) {
+                beepOn.play()
+              }
+            }}
+            disabled={listUsers?.length < 2}
+            whileTap={{ scale: 0.98 }}
+          >
+            <input
+              hidden
+              name="file"
+              id="file"
+              type="file"
+              ref={fileInputRef}
+              onChange={(e) => handleSendFile(e)}
+            />
+            {!sendingFile ? (
+              <>
+                <FaRocket size={22} style={{ marginBottom: 7 }} />
+                <span>
+                  {fileTransferProgress === "0"
+                    ? `Send file`
+                    : `${fileTransferProgress}%`}
+                </span>
+              </>
+            ) : (
+              <>
+                <FaRocket size={22} style={{ marginBottom: 7 }} />
+                <span>{`${fileTransferProgress}%`}</span>
+              </>
+            )}
+          </IconWrapper>
+          <IconWrapper
+            onClick={() => {
+              setMuteMic(!muteMic)
+              if (soundOn) {
+                beepOn.play()
+              }
+            }}
+            off={muteMic}
+            whileTap={{ scale: 0.98 }}
+          >
+            {muteMic ? (
+              <>
+                <FaMicrophoneSlash size={22} style={{ marginBottom: 7 }} />
+                <span>Mic</span>
+              </>
+            ) : (
+              <>
+                <FaMicrophone size={22} style={{ marginBottom: 7 }} />
+                <span>Mic</span>
+              </>
+            )}
+          </IconWrapper>
+          <IconWrapper
+            onClick={() => {
+              setShowSelfWebcam(!showSelfWebcam)
+              if (soundOn) {
+                beepOn.play()
+              }
+            }}
+            whileTap={{ scale: 0.98 }}
+            off={!showSelfWebcam}
+          >
+            {showSelfWebcam ? (
+              <>
+                <FaVideo
+                  size={22}
+                  style={{
+                    marginBottom: 7,
+                  }}
+                />
+                <span>Webcam</span>
+              </>
+            ) : (
+              <>
+                <FaVideoSlash size={22} style={{ marginBottom: 7 }} />
+                <span>Webcam</span>
+              </>
+            )}
+          </IconWrapper>
+          <IconWrapper disabled={disableCallIcon} whileTap={{ scale: 0.98 }}>
+            {callAccepted || pressedCall ? (
+              <>
+                <FaTimesCircle
+                  onClick={() => {
+                    setReceivingCall(false)
+                    setCancelCallRequest(true)
+                    socket.current.emit("cancelCallRequest")
+                  }}
+                  size={22}
+                  style={{ marginBottom: 7 }}
+                />
+                <span>End</span>
+              </>
+            ) : (
+              <>
+                <FaPhone
+                  onClick={() => {
+                    callFriend(otherUser)
+                    setPressedCall(true)
+                    if (soundOn) {
+                      beepOn.play()
+                    }
+                  }}
+                  size={22}
+                  style={{
+                    marginBottom: 7,
+                  }}
+                />
+                <span>Call</span>
+              </>
+            )}
+          </IconWrapper>
+        </Container>
+      </Wrapper>
+      <AnimatePresence>
+        {errorMsg && <MessageBar msg={errorMsg} />}
+      </AnimatePresence>
+    </>
   )
 }
 
