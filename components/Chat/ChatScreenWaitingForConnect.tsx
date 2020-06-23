@@ -15,9 +15,7 @@ const ChatScreenWaitingForConnect = () => {
         <Title style={{ margin: 0 }}>
           <ThreeBounce size={30} style={{ marginBottom: 40 }} color="#f9e4fe" />
           <div>
-            {/* <span>🧘‍♂️</span> */}
             <span style={{ margin: 20 }}>Waiting for friend to connect</span>
-            {/* <span>🧘‍♂️</span> */}
           </div>
         </Title>
       </Container>

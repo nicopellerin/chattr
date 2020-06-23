@@ -253,12 +253,14 @@ const UserIsTypingText = styled.span`
 `
 
 const UserDisconnectedWrapper = styled(motion.div)`
-  padding: 3rem 1.7rem 1rem;
-  text-align: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 const UserDisconnectedText = styled.span`
-  font-size: 1.7rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--secondaryColor);
 `

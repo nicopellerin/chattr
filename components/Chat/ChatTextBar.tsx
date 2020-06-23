@@ -8,7 +8,6 @@ import { usernameState, listUsersState } from "../../store/users"
 import { displayTheatreModeState } from "../../store/video"
 import EmojiPicker from "./EmojiPicker"
 import { FaVolumeUp } from "react-icons/fa"
-// import { chatUserIsTypingState } from "../../store/chat"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -18,7 +17,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const listUsers = useRecoilValue(listUsersState)
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
-  // const userIsTyping = useRecoilValue(chatUserIsTypingState)
+
   const [msg, setMsg] = useState("")
   const [togglePicker, setTogglePicker] = useState(false)
 
