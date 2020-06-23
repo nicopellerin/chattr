@@ -114,7 +114,7 @@ const ChatTextWindow: React.FC = () => {
               <FaKiwiBird
                 size={32}
                 style={{ marginBottom: 15 }}
-                color="var(--textColor)"
+                color="var(--primaryColorLight)"
               />
               <NoMessagesText>{welcomeMsg}</NoMessagesText>
             </NoMessages>
@@ -203,13 +203,14 @@ const NoMessages = styled(motion.div)`
   flex-direction: column;
   margin-top: 0.2rem;
   ${(props: { hasConnection: boolean }) =>
-    props.hasConnection && `height: 100%;`}
+    props.hasConnection && `height: 100%;`}/* opacity: 0.85; */
 `
 
 const NoMessagesText = styled.span`
   font-size: 1.7rem;
   font-weight: 600;
-  color: var(--textColor);
+  color: var(--primaryColorLight);
+  opacity: 0.85;
 `
 
 const UserIsTypingWrapper = styled(motion.div)`
