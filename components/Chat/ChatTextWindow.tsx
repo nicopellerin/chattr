@@ -201,7 +201,7 @@ const NoMessages = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-top: 0.8rem;
+  margin-top: 0.2rem;
   ${(props: { hasConnection: boolean }) =>
     props.hasConnection && `height: 100%;`}
 `
@@ -257,7 +257,7 @@ const ExpandButton = styled(motion.div)`
   top: 1rem;
   z-index: 20;
   cursor: pointer;
-  opacity: 0;
+  opacity: 0.1;
   display: flex;
   justify-content: center;
   align-items: center;
