@@ -52,6 +52,7 @@ const ChatTextWindow: React.FC = () => {
   )
 
   const [togglePhotoExpander, setTogglePhotoExpander] = useState(false)
+  const [selectedPhoto, setSelectedPhoto] = useState("")
 
   const scrollRef = useRef() as React.MutableRefObject<HTMLElement>
 
@@ -120,18 +121,18 @@ const ChatTextWindow: React.FC = () => {
                   <Username me={username === user}>{user}</Username>
                   {msg.startsWith("data:application/octet-stream;base64") ? (
                     <>
-                      <DownloadIcon onClick={() => saveAs(msg, filename)} />
-                      <ExpandIcon
-                        onClick={() =>
-                          setTogglePhotoExpander((prevState) => !prevState)
-                        }
+                      <DownloadIcon
+                        title="Download"
+                        onClick={() => saveAs(msg, filename)}
                       />
-                      {togglePhotoExpander && (
-                        <PhotoExpander
-                          imageSrc={msg}
-                          setToggle={setTogglePhotoExpander}
-                        />
-                      )}
+                      <ExpandIcon
+                        title="Expand"
+                        onClick={() => {
+                          setTogglePhotoExpander((prevState) => !prevState)
+                          setSelectedPhoto(msg)
+                        }}
+                      />
+
                       <MessageImage src={msg} alt="Sent photo" />
                     </>
                   ) : (
@@ -185,6 +186,12 @@ const ChatTextWindow: React.FC = () => {
           </AnimatePresence>
         </Container>
       </PerfectScrollbar>
+      {togglePhotoExpander && (
+        <PhotoExpander
+          imageSrc={selectedPhoto}
+          setToggle={setTogglePhotoExpander}
+        />
+      )}
     </Wrapper>
   )
 }
@@ -323,6 +330,10 @@ const DownloadIcon = styled(FaFileDownload)`
   right: 4.5rem;
   cursor: pointer;
   color: var(--textColor);
+
+  &:hover {
+    color: #9c74fe;
+  }
 `
 
 const ExpandIcon = styled(FaExpand)`
@@ -331,4 +342,8 @@ const ExpandIcon = styled(FaExpand)`
   right: 1.5rem;
   cursor: pointer;
   color: var(--textColor);
+
+  &:hover {
+    color: #d852fd;
+  }
 `

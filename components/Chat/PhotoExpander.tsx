@@ -14,8 +14,8 @@ const PhotoExpander = ({ imageSrc, setToggle }) => {
           src={imageSrc}
           alt="User sent"
         />
-        <Button onClick={() => setToggle(false)}>
-          <CloseIcon color="var(--textColor)" />
+        <Button whileHover={{ rotate: 5 }} onClick={() => setToggle(false)}>
+          <CloseIcon title="Close" color="var(--textColor)" />
         </Button>
       </Container>
       <Portal />
@@ -56,9 +56,22 @@ const Button = styled(motion.button)`
   color: var(-textColor);
   cursor: pointer;
   outline: transparent;
+  background: linear-gradient(
+    140deg,
+    var(--primaryColor),
+    var(--primaryColorDark)
+  );
+  border-radius: 50%;
+  height: 3.5rem;
+  width: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const CloseIcon = styled(FaTimesCircle)`
-  font-size: 3rem;
+  font-size: 3.2rem;
   color: var(-textColor);
+  height: 3.5rem;
+  width: 3.5rem;
 `
