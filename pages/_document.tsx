@@ -58,16 +58,17 @@ export default class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#8352FD" />
           <meta name="theme-color" content="#ffffff" />
           <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=UA-170612872-1"
+          ></script>
+          <script
             dangerouslySetInnerHTML={{
               __html: `
-              <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170612872-1"></script>
-              <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
               
                 gtag('config', 'UA-170612872-1');
-              </script>
               `,
             }}
           />
