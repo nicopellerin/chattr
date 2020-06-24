@@ -61,11 +61,7 @@ const Button = styled(motion.button)`
   color: var(-textColor);
   cursor: pointer;
   outline: transparent;
-  background: linear-gradient(
-    140deg,
-    var(--primaryColor),
-    var(--primaryColorDark)
-  );
+  background: var(--primaryColorDark);
   border-radius: 50%;
   height: 3.5rem;
   width: 3.5rem;

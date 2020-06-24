@@ -142,6 +142,8 @@ const ChatMain = () => {
       setCancelCallRequest(true)
       setTimeout(() => setUserLeftChattr(""), 3000)
       setChatMsgs([])
+      setSendingFile(false)
+      setFileTransferProgress("")
     })
 
     socket.current.on("userJoinedChattr", () => {
@@ -163,6 +165,7 @@ const ChatMain = () => {
       setCallAccepted(false)
       setReceivingCall(false)
       setCancelCallRequest(true)
+      friendVideoRef.current.srcObject = null
     })
 
     socket.current.on("sendingFile", (data: any) => {
@@ -183,11 +186,6 @@ const ChatMain = () => {
         iceServers: [
           {
             urls: "stun:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
-          },
-          {
-            urls: "turn:numb.viagenie.ca",
             username: "sultan1640@gmail.com",
             credential: "98376683",
           },
@@ -269,11 +267,6 @@ const ChatMain = () => {
             username: "sultan1640@gmail.com",
             credential: "98376683",
           },
-          {
-            urls: "turn:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
-          },
         ],
       },
     })
@@ -299,28 +292,35 @@ const ChatMain = () => {
     })
 
     peer.on("connect", () => {
-      file.arrayBuffer().then((buffer: any) => {
-        const chunkSize = 16 * 1024
+      file
+        .arrayBuffer()
+        .then((buffer: any) => {
+          const chunkSize = 16 * 1024
 
-        let at = 0
+          let at = 0
 
-        while (buffer.byteLength) {
-          const chunk = buffer.slice(0, chunkSize)
-          buffer = buffer.slice(chunkSize, buffer.byteLength)
+          while (buffer.byteLength) {
+            const chunk = buffer.slice(0, chunkSize)
+            buffer = buffer.slice(chunkSize, buffer.byteLength)
 
-          at += buffer.byteLength
+            at += buffer.byteLength
 
-          setFileTransferProgress((at / file.size).toFixed(0))
+            setFileTransferProgress((at / file.size).toFixed(0))
 
-          peer.send(chunk)
-        }
+            peer.send(chunk)
+          }
 
-        setFileTransferProgress("100")
-        setSendingFile(false)
+          setFileTransferProgress("100")
+          setSendingFile(false)
 
-        peer.send("Done!")
-        peer.removeAllListeners()
-      })
+          peer.send("Done!")
+          peer.removeAllListeners()
+        })
+        .catch((err) => {
+          setSendingFile(false)
+          setFileTransferProgress("")
+          console.log("ERROR SENDING FILE", err)
+        })
     })
 
     peer.on("end", () => {
@@ -333,6 +333,8 @@ const ChatMain = () => {
     })
 
     peer.on("close", () => {
+      setSendingFile(false)
+      setFileTransferProgress("")
       console.log("PEER1 CLOSEDDDDDD")
       peer.removeAllListeners()
     })
@@ -342,7 +344,10 @@ const ChatMain = () => {
   const fileChunks: any[] = []
 
   const acceptFile = () => {
-    const peer2 = new Peer()
+    const peer2 = new Peer({
+      initiator: false,
+      trickle: false,
+    })
 
     console.log("PEER2", peer2)
 
