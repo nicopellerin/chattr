@@ -13,6 +13,8 @@ const GlobalStyles = createGlobalStyle`
 
   --textColor: #E3E8FF;
 
+  --successColor: #69f0ae;
+
   --systemFont: "Inter", sans-serif;
 }
 

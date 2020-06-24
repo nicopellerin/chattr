@@ -118,20 +118,32 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               ref={fileInputRef}
               onChange={(e) => handleSendFile(e)}
             />
-            {!sendingFile ? (
+            {!sendingFile && fileTransferProgress === "0" ? (
               <>
+                <FaRocket size={22} style={{ marginBottom: 7 }} />
+                <span>Send file</span>
+              </>
+            ) : (
+              <motion.div
+                style={{
+                  color:
+                    fileTransferProgress === "100"
+                      ? "var(--successColor)"
+                      : "var(--textColor)",
+                  scale: fileTransferProgress === "100" ? 1.1 : 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  transition: "all 300ms ease-in-out",
+                }}
+              >
                 <FaRocket size={22} style={{ marginBottom: 7 }} />
                 <span>
                   {fileTransferProgress === "0"
-                    ? `Send file`
+                    ? "Waiting..."
                     : `${fileTransferProgress}%`}
                 </span>
-              </>
-            ) : (
-              <>
-                <FaRocket size={22} style={{ marginBottom: 7 }} />
-                <span>{`${fileTransferProgress}%`}</span>
-              </>
+              </motion.div>
             )}
           </IconWrapper>
           <IconWrapper

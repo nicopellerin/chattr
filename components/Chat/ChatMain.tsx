@@ -58,8 +58,8 @@ const ChatMain = () => {
   )
   const [otherUsername, setOtherUsername] = useRecoilState(otherUsernameState)
 
-  const setReceivingCall = useSetRecoilState(receivingCallState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
+  const setReceivingCall = useSetRecoilState(receivingCallState)
   const setListUsers = useSetRecoilState(listUsersState)
   const setCallAccepted = useSetRecoilState(callAcceptedState)
   const setChatWelcomeMessage = useSetRecoilState(chatWelcomeMessageState)
@@ -173,6 +173,10 @@ const ChatMain = () => {
       setReceivingFile(true)
     })
 
+    socket.current.on("fileTransferProgressGlobal", (progress: string) => {
+      setFileTransferProgress(progress)
+    })
+
     socket.current.on("sendFileRequestCancelled", () => {
       setSendingFile(false)
       setFileTransferProgress("0")
@@ -283,7 +287,7 @@ const ChatMain = () => {
       },
     })
 
-    peer._debug = console.log
+    // peer._debug = console.log
 
     peer.on("signal", (data) => {
       if (!sendingFile) {
@@ -317,12 +321,15 @@ const ChatMain = () => {
 
             at += buffer.byteLength
 
-            setFileTransferProgress((at / file.size).toFixed(0))
+            socket.current.emit(
+              "fileTransferProgress",
+              (at / file.size).toFixed(0)
+            )
 
             peer.send(chunk)
           }
 
-          setFileTransferProgress("100")
+          socket.current.emit("fileTransferProgress", "100")
           setSendingFile(false)
 
           peer.send("Done!")
@@ -363,7 +370,7 @@ const ChatMain = () => {
 
     console.log("PEER2", peer2)
 
-    peer2._debug = console.log
+    // peer2._debug = console.log
 
     peer2.on("signal", (data) => {
       socket.current.emit("acceptFile", { signal: data, to: caller })
@@ -385,7 +392,7 @@ const ChatMain = () => {
 
         const b64 = await blobToBase64(file)
 
-        if (filename.match(/\.(jpg|gif|png)$/) !== null) {
+        if (filename.match(/\.(jpg|gif|png|JPG|PNG)$/) !== null) {
           socket.current.emit("chatMessage", {
             user: otherUsername,
             msg: b64,

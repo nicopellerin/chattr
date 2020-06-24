@@ -95,6 +95,10 @@ io.on("connection", (socket) => {
     io.to(data.to).emit("receivingFile", data.signal)
   })
 
+  socket.on("fileTransferProgress", (progress: string) => {
+    io.to(room).emit("fileTransferProgressGlobal", progress)
+  })
+
   socket.on("cancelSendFileRequest", () => {
     io.to(room).emit("sendFileRequestCancelled")
   })
