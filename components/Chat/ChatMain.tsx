@@ -316,7 +316,7 @@ const ChatMain = () => {
           peer.send("Done!")
           peer.removeAllListeners()
         })
-        .catch((err) => {
+        .catch((err: any) => {
           setSendingFile(false)
           setFileTransferProgress("")
           console.log("ERROR SENDING FILE", err)
