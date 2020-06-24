@@ -51,12 +51,10 @@ export const disableCallIconState = selector({
   key: "disableCallIconState",
   get: ({ get }) => {
     const receivingCall = get(receivingCallState)
-    // const cancelCall = get(cancelCallRequestState)
+    const callAccepted = get(callAcceptedState)
     const listUsers = get(listUsersState)
 
-    console.log("RECEIVING", receivingCall)
-
-    if (listUsers?.length < 2) {
+    if (listUsers?.length < 2 || (receivingCall && !callAccepted)) {
       return true
     } else {
       return false
