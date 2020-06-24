@@ -95,6 +95,10 @@ io.on("connection", (socket) => {
     io.to(data.to).emit("receivingFile", data.signal)
   })
 
+  socket.on("cancelSendFileRequest", () => {
+    io.to(room).emit("sendFileRequestCancelled")
+  })
+
   socket.on("playLolSound", (data: any) => {
     io.to(data.to).emit("playingLolSound", data.sound)
   })

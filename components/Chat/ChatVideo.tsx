@@ -76,7 +76,10 @@ const ChatVideo: React.FC<Props> = ({
             {pressedCall && !callAccepted && <ChatScreenCalling />}
 
             {receivingFile && (
-              <ChatScreenReceivingFile acceptFile={acceptFile} />
+              <ChatScreenReceivingFile
+                acceptFile={acceptFile}
+                socket={socket}
+              />
             )}
 
             {!receivingCall &&

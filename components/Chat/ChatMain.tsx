@@ -56,9 +56,9 @@ const ChatMain = () => {
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
     cancelCallRequestState
   )
+  const [otherUsername, setOtherUsername] = useRecoilState(otherUsernameState)
 
   const setReceivingCall = useSetRecoilState(receivingCallState)
-  const setOtherUsername = useSetRecoilState(otherUsernameState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
   const setListUsers = useSetRecoilState(listUsersState)
   const setCallAccepted = useSetRecoilState(callAcceptedState)
@@ -171,6 +171,11 @@ const ChatMain = () => {
       setFileName(data.fileName)
       setOtherUsername(data.username)
       setReceivingFile(true)
+    })
+
+    socket.current.on("sendFileRequestCancelled", () => {
+      setSendingFile(false)
+      setFileTransferProgress("0")
     })
   }, [])
 
@@ -382,7 +387,7 @@ const ChatMain = () => {
 
         if (filename.match(/\.(jpg|gif|png)$/) !== null) {
           socket.current.emit("chatMessage", {
-            user: username,
+            user: otherUsername,
             msg: b64,
             filename,
           })

@@ -10,9 +10,10 @@ import { otherUsernameState } from "../../store/users"
 
 interface Props {
   acceptFile: () => void
+  socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
-const ChatScreenReceivingFile: React.FC<Props> = ({ acceptFile }) => {
+const ChatScreenReceivingFile: React.FC<Props> = ({ acceptFile, socket }) => {
   const fileName = useRecoilValue(fileNameState)
   const otherUsername = useRecoilValue(otherUsernameState)
 
@@ -51,8 +52,8 @@ const ChatScreenReceivingFile: React.FC<Props> = ({ acceptFile }) => {
           </AcceptButton>
           <RejectButton
             onClick={() => {
-              // setCancelCallRequest(true)
-              // socket.current.emit("cancelCallRequest")
+              setReceivingFile(false)
+              socket.current.emit("cancelSendFileRequest")
             }}
             whileTap={{ y: 1 }}
             whileHover={{ y: -1 }}

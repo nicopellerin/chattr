@@ -35,15 +35,15 @@ export const receivingFileState = atom<boolean>({
   default: false,
 })
 
-export const callerFileState = atom<any>({
-  key: "callerFileState",
-  default: null,
-})
+// export const callerFileState = atom<any>({
+//   key: "callerFileState",
+//   default: null,
+// })
 
-export const callerFileSignalState = atom<any>({
-  key: "callerFileSignalState",
-  default: null,
-})
+// export const callerFileSignalState = atom<any>({
+//   key: "callerFileSignalState",
+//   default: null,
+// })
 
 export const expandChatWindowState = atom<boolean>({
   key: "expandChatWindowState",

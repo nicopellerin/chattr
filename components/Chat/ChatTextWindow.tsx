@@ -175,11 +175,16 @@ const ChatTextWindow: React.FC = () => {
           <AnimatePresence>
             {userLeftChattr && (
               <UserDisconnectedWrapper
-                initial={{ y: 20 }}
-                animate={{ y: 0 }}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: -20, opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ type: "spring", damping: 80 }}
               >
+                <FaKiwiBird
+                  size={50}
+                  style={{ marginBottom: 20 }}
+                  color="var(--primaryColor)"
+                />
                 <UserDisconnectedText>{userLeftChattr}</UserDisconnectedText>
               </UserDisconnectedWrapper>
             )}
@@ -279,6 +284,7 @@ const UserIsTypingText = styled.span`
 const UserDisconnectedWrapper = styled(motion.div)`
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 `
