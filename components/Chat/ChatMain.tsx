@@ -72,8 +72,9 @@ const ChatMain = () => {
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
+  const [sendingFile, setSendingFile] = useRecoilState(sendingFileState)
+
   const setReceivingFile = useSetRecoilState(receivingFileState)
-  const setSendingFile = useSetRecoilState(sendingFileState)
 
   // @ts-ignore
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
@@ -168,20 +169,15 @@ const ChatMain = () => {
       setCallAccepted(false)
       setReceivingCall(false)
       setCancelCallRequest(true)
-      friendVideoRef.current.srcObject = null
     })
 
     socket.current.on("sendingFile", (data: any) => {
-      setCallerFile(data.from)
-      setCallerFileSignal(data.signal)
+      setCaller(data.from)
+      setCallerSignal(data.signal)
       setFileName(data.fileName)
       setOtherUsername(data.username)
       setReceivingFile(true)
     })
-
-    // socket.current.on("receivingFile", (data: any) => {
-    //   console.log(data)
-    // })
   }, [])
 
   // Call other connection
@@ -200,11 +196,6 @@ const ChatMain = () => {
             urls: "turn:numb.viagenie.ca",
             username: "sultan1640@gmail.com",
             credential: "98376683",
-          },
-          {
-            urls: "turn:numb.viagenie.ca",
-            credential: "muazkh",
-            username: "webrtc@live.com",
           },
         ],
       },
@@ -237,9 +228,6 @@ const ChatMain = () => {
     socket.current.on("userLeftChattr", (msg: string) => {
       setUserLeftChattr(msg)
       peer.removeAllListeners()
-      if (peer) {
-        peer.destroy()
-      }
     })
 
     socket.current.on("callAccepted", (signal: any) => {
@@ -292,23 +280,28 @@ const ChatMain = () => {
             username: "sultan1640@gmail.com",
             credential: "98376683",
           },
-          {
-            urls: "turn:numb.viagenie.ca",
-            credential: "muazkh",
-            username: "webrtc@live.com",
-          },
         ],
       },
     })
 
+    peer._debug = console.log
+
     peer.on("signal", (data) => {
-      socket.current.emit("sendFile", {
-        userToCall: id,
-        signalData: data,
-        from: selfId,
-        fileName: file?.name,
-        username,
-      })
+      if (!sendingFile) {
+        socket.current.emit("sendFile", {
+          userToCall: id,
+          signalData: data,
+          from: selfId,
+          fileName: file?.name,
+          username,
+        })
+
+        console.log("SIGNAL SEND", data)
+      }
+    })
+
+    peer.on("error", (err) => {
+      console.log("SENDFILE ERROR", err)
     })
 
     peer.on("connect", () => {
@@ -332,15 +325,22 @@ const ChatMain = () => {
         setSendingFile(false)
 
         peer.send("Done!")
-      })
-
-      peer.on("close", () => {
         peer.removeAllListeners()
       })
     })
 
+    peer.on("end", () => {
+      setSendingFile(false)
+      setFileTransferProgress("")
+    })
+
     socket.current.on("receivingFile", (signal: any) => {
       peer.signal(signal)
+    })
+
+    peer.on("close", () => {
+      console.log("PEER1 CLOSEDDDDDD")
+      peer.removeAllListeners()
     })
   }
 
@@ -348,16 +348,15 @@ const ChatMain = () => {
   const fileChunks: any[] = []
 
   const acceptFile = () => {
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-    })
+    const peer2 = new Peer()
 
-    peer.on("signal", (data) => {
-      socket.current.emit("acceptFile", { signal: data, to: callerFile })
-    })
+    console.log("PEER2", peer2)
 
-    peer.signal(callerFileSignal)
+    peer2._debug = console.log
+
+    peer2.on("signal", (data) => {
+      socket.current.emit("acceptFile", { signal: data, to: caller })
+    })
 
     const blobToBase64 = (blob: Blob) => {
       const reader = new FileReader()
@@ -369,7 +368,7 @@ const ChatMain = () => {
       })
     }
 
-    peer.on("data", async (data) => {
+    peer2.on("data", async (data) => {
       if (data.toString() === "Done!") {
         const file = new Blob(fileChunks)
 
@@ -392,8 +391,11 @@ const ChatMain = () => {
       }
     })
 
-    peer.on("close", () => {
-      peer.removeAllListeners()
+    peer2.signal(callerSignal)
+
+    peer2.on("close", () => {
+      peer2.removeAllListeners()
+      console.log("PEER2 CLOSEDDDDDD")
     })
   }
 
