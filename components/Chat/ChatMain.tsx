@@ -186,6 +186,11 @@ const ChatMain = () => {
             username: "sultan1640@gmail.com",
             credential: "98376683",
           },
+          {
+            urls: "stun:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683",
+          },
         ],
       },
       stream: stream,
@@ -259,6 +264,11 @@ const ChatMain = () => {
       trickle: false,
       config: {
         iceServers: [
+          {
+            urls: "stun:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683",
+          },
           {
             urls: "stun:numb.viagenie.ca",
             username: "sultan1640@gmail.com",
