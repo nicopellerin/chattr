@@ -52,11 +52,15 @@ const ChatMain = () => {
   const [caller, setCaller] = useRecoilState(callerState)
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
   const [filename, setFileName] = useRecoilState(fileNameState)
+  const [sendingFile, setSendingFile] = useRecoilState(sendingFileState)
+  const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
+    cancelCallRequestState
+  )
 
+  const setReceivingCall = useSetRecoilState(receivingCallState)
   const setOtherUsername = useSetRecoilState(otherUsernameState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
   const setListUsers = useSetRecoilState(listUsersState)
-  const setReceivingCall = useSetRecoilState(receivingCallState)
   const setCallAccepted = useSetRecoilState(callAcceptedState)
   const setChatWelcomeMessage = useSetRecoilState(chatWelcomeMessageState)
   const setChatUserIsTyping = useSetRecoilState(chatUserIsTypingState)
@@ -66,14 +70,7 @@ const ChatMain = () => {
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
-  const [sendingFile, setSendingFile] = useRecoilState(sendingFileState)
-
   const setReceivingFile = useSetRecoilState(receivingFileState)
-
-  // @ts-ignore
-  const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
-    cancelCallRequestState
-  )
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -143,7 +140,7 @@ const ChatMain = () => {
       setTimeout(() => setUserLeftChattr(""), 3000)
       setChatMsgs([])
       setSendingFile(false)
-      setFileTransferProgress("")
+      setFileTransferProgress("0")
     })
 
     socket.current.on("userJoinedChattr", () => {
@@ -318,14 +315,14 @@ const ChatMain = () => {
         })
         .catch((err: any) => {
           setSendingFile(false)
-          setFileTransferProgress("")
+          setFileTransferProgress("0")
           console.log("ERROR SENDING FILE", err)
         })
     })
 
     peer.on("end", () => {
       setSendingFile(false)
-      setFileTransferProgress("")
+      setFileTransferProgress("0")
     })
 
     socket.current.on("receivingFile", (signal: any) => {
@@ -334,7 +331,7 @@ const ChatMain = () => {
 
     peer.on("close", () => {
       setSendingFile(false)
-      setFileTransferProgress("")
+      setFileTransferProgress("0")
       console.log("PEER1 CLOSEDDDDDD")
       peer.removeAllListeners()
     })
@@ -402,6 +399,12 @@ const ChatMain = () => {
   useEffect(() => {
     if (cancelCallRequest) {
       socket.current.emit("cancelCallRequest")
+
+      // stream.getTracks().forEach((track: any) => {
+      //   if (track.readyState == "live") {
+      //     track.stop()
+      //   }
+      // })
     }
   }, [cancelCallRequest])
 
