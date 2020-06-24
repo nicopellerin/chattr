@@ -28,8 +28,7 @@ export default Layout
 const Wrapper = styled.div`
   height: 100%;
   width: 100%;
-  background: linear-gradient(rgba(12, 6, 19, 0.9), rgba(12, 6, 19, 0.99)),
-    url("/bg.jpg");
+  background: url("/bg-2.jpg");
   background-size: cover;
 
   @media (max-width: 500px) {
