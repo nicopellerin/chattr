@@ -4,7 +4,12 @@ import { motion } from "framer-motion"
 import Portal from "./Portal"
 import { FaTimesCircle } from "react-icons/fa"
 
-const PhotoExpander = ({ imageSrc, setToggle }) => {
+interface Props {
+  imageSrc: string
+  setToggle: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const PhotoExpander: React.FC<Props> = ({ imageSrc, setToggle }) => {
   return (
     <Wrapper>
       <Container>
