@@ -40,8 +40,6 @@ import {
   fileTransferProgressState,
   receivingFileState,
   sendingFileState,
-  callerFileState,
-  callerFileSignalState,
   expandChatWindowState,
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
@@ -53,10 +51,6 @@ const ChatMain = () => {
   const [selfId, setSelfId] = useRecoilState(selfIdState)
   const [caller, setCaller] = useRecoilState(callerState)
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
-  const [callerFile, setCallerFile] = useRecoilState(callerFileState)
-  const [callerFileSignal, setCallerFileSignal] = useRecoilState(
-    callerFileSignalState
-  )
   const [filename, setFileName] = useRecoilState(fileNameState)
 
   const setOtherUsername = useSetRecoilState(otherUsernameState)
