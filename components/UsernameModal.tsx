@@ -35,7 +35,7 @@ const UsernameModal: React.FC<Props> = ({
     if (noUsernameModal) return
 
     const room = shortid.generate()
-    router.push(`/[room]`, `/${room}`)
+    router.push(`/room/[room]`, `/room/${room}`)
   }
 
   return (

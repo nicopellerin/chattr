@@ -1,11 +1,17 @@
 import * as React from "react"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
-import { FaKiwiBird, FaChevronCircleUp } from "react-icons/fa"
+import {
+  FaKiwiBird,
+  FaChevronCircleUp,
+  FaFileDownload,
+  FaExpand,
+} from "react-icons/fa"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
+import { saveAs } from "file-saver"
 
 import {
   chatWindowState,
@@ -21,10 +27,12 @@ import {
   userSoundOnState,
 } from "../../store/users"
 import Invite from "./Invite"
+import PhotoExpander from "./PhotoExpander"
 
 interface Message {
   msg: string
   user: string
+  filename: string
 }
 
 const ChatTextWindow: React.FC = () => {
@@ -42,6 +50,8 @@ const ChatTextWindow: React.FC = () => {
   const [expandChatWindow, setExpandChatWindow] = useRecoilState(
     expandChatWindowState
   )
+
+  const [togglePhotoExpander, setTogglePhotoExpander] = useState(false)
 
   const scrollRef = useRef() as React.MutableRefObject<HTMLElement>
 
@@ -99,7 +109,7 @@ const ChatTextWindow: React.FC = () => {
         <Container style={{ height: expandChatWindow ? 585 : 400 }}>
           <AnimatePresence>
             {msgs.length > 0 &&
-              msgs.map(({ msg, user }: Message, i) => (
+              msgs.map(({ msg, user, filename }: Message, i) => (
                 <MsgWrapper
                   key={i}
                   initial={{ y: 5 }}
@@ -108,7 +118,25 @@ const ChatTextWindow: React.FC = () => {
                   transition={{ type: "spring", damping: 80 }}
                 >
                   <Username me={username === user}>{user}</Username>
-                  <span>{msg}</span>
+                  {msg.startsWith("data:application/octet-stream;base64") ? (
+                    <>
+                      <DownloadIcon onClick={() => saveAs(msg, filename)} />
+                      <ExpandIcon
+                        onClick={() =>
+                          setTogglePhotoExpander((prevState) => !prevState)
+                        }
+                      />
+                      {togglePhotoExpander && (
+                        <PhotoExpander
+                          imageSrc={msg}
+                          setToggle={setTogglePhotoExpander}
+                        />
+                      )}
+                      <MessageImage src={msg} alt="Sent photo" />
+                    </>
+                  ) : (
+                    <span>{msg}</span>
+                  )}
                 </MsgWrapper>
               ))}
           </AnimatePresence>
@@ -192,6 +220,7 @@ const MsgWrapper = styled(motion.div)`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   margin-bottom: 15px;
   word-break: break-all;
+  position: relative;
 `
 
 const Username = styled.span`
@@ -282,4 +311,24 @@ const ExpandButton = styled(motion.div)`
     z-index: -1;
     border-radius: 5px;
   }
+`
+
+const MessageImage = styled.img`
+  max-width: 100%;
+`
+
+const DownloadIcon = styled(FaFileDownload)`
+  position: absolute;
+  top: 1.5rem;
+  right: 4.5rem;
+  cursor: pointer;
+  color: var(--textColor);
+`
+
+const ExpandIcon = styled(FaExpand)`
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  cursor: pointer;
+  color: var(--textColor);
 `

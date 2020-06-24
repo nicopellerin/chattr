@@ -3,7 +3,7 @@ import dynamic from "next/dynamic"
 import styled from "styled-components"
 import { useRouter } from "next/router"
 
-const ChatMainClient = dynamic(() => import("../components/Chat/ChatMain"), {
+const ChatMainClient = dynamic(() => import("../../components/Chat/ChatMain"), {
   ssr: false,
 })
 

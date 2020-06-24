@@ -177,10 +177,6 @@ const ChatMain = () => {
       setFileName(data.fileName)
       setOtherUsername(data.username)
       setReceivingFile(true)
-      // socket.current.emit("chatMessage", {
-      //   user: username,
-      //   msg: "YO",
-      // })
     })
 
     // socket.current.on("receivingFile", (data: any) => {
@@ -375,20 +371,34 @@ const ChatMain = () => {
 
     peer.signal(callerFileSignal)
 
-    peer.on("data", (data) => {
+    const blobToBase64 = (blob) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      return new Promise((resolve) => {
+        reader.onloadend = () => {
+          resolve(reader.result)
+        }
+      })
+    }
+
+    peer.on("data", async (data) => {
       if (data.toString() === "Done!") {
         const file = new Blob(fileChunks)
 
+        const b64 = await blobToBase64(file)
+
         // TODO
-        // if (filename.match(/\.(jpg|gif|png)$/) !== null) {
-        //   socket.current.emit("chatMessage", {
-        //     user: username,
-        //     msg: URL.createObjectURL(file),
-        //   })
-        // }
+        if (filename.match(/\.(jpg|gif|png)$/) !== null) {
+          socket.current.emit("chatMessage", {
+            user: username,
+            msg: b64,
+            filename,
+          })
+          setSendingFile(false)
+          return
+        }
 
         saveAs(file, filename)
-
         setSendingFile(false)
       } else {
         fileChunks.push(data)
@@ -439,11 +449,7 @@ const ChatMain = () => {
       {!username && <NoUsername />}
       <OutterWrapper>
         <Wrapper animate theatreMode={displayTheatreMode}>
-          <LeftColumn
-            // animate
-            // transition={{ type: "spring", damping: 20 }}
-            theatreMode={displayTheatreMode}
-          >
+          <LeftColumn theatreMode={displayTheatreMode}>
             <ChatVideo
               socket={socket}
               selfVideoRef={selfVideoRef}
@@ -451,32 +457,19 @@ const ChatMain = () => {
               acceptCall={acceptCall}
               acceptFile={acceptFile}
             />
-            <motion.div
-              animate
-              // transition={{ type: "spring", damping: 50 }}
-            >
+            <motion.div animate>
               <ChatTextBar socket={socket} />
             </motion.div>
           </LeftColumn>
-          <RightColumn
-            animate
-            // transition={{ type: "spring", damping: 50 }}
-            theatreMode={displayTheatreMode}
-          >
+          <RightColumn animate theatreMode={displayTheatreMode}>
             <>
               <LogoStyled src="/logo-3d.svg" alt="logo" />
               {!expandChatWindow && (
                 <>
-                  <motion.div
-                    animate
-                    // transition={{ type: "spring", damping: 30 }}
-                  >
+                  <motion.div animate>
                     <ChatUsername />
                   </motion.div>
-                  <motion.div
-                    animate
-                    // transition={{ type: "spring", damping: 30 }}
-                  >
+                  <motion.div animate>
                     <ChatCommands
                       callFriend={callFriend}
                       sendFile={sendFile}
@@ -485,10 +478,7 @@ const ChatMain = () => {
                   </motion.div>
                 </>
               )}
-              <motion.div
-                animate
-                // transition={{ type: "spring", damping: 20 }}
-              >
+              <motion.div animate>
                 <ChatTextWindow />
               </motion.div>
             </>
