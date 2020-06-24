@@ -201,6 +201,11 @@ const ChatMain = () => {
             username: "sultan1640@gmail.com",
             credential: "98376683",
           },
+          {
+            urls: "turn:numb.viagenie.ca",
+            credential: "muazkh",
+            username: "webrtc@live.com",
+          },
         ],
       },
       stream: stream,
@@ -223,9 +228,6 @@ const ChatMain = () => {
     peer.on("close", () => {
       console.log("Closing WEBRTC")
       peer.removeAllListeners()
-      if (peer) {
-        peer.destroy()
-      }
     })
 
     peer.on("error", (err) => {
@@ -269,11 +271,7 @@ const ChatMain = () => {
     peer2.signal(callerSignal)
 
     peer2.on("close", () => {
-      // friendVideoRef.current.srcObject = null
       peer2.removeAllListeners()
-      if (peer2) {
-        peer2.destroy()
-      }
     })
   }
 
@@ -293,6 +291,11 @@ const ChatMain = () => {
             urls: "turn:numb.viagenie.ca",
             username: "sultan1640@gmail.com",
             credential: "98376683",
+          },
+          {
+            urls: "turn:numb.viagenie.ca",
+            credential: "muazkh",
+            username: "webrtc@live.com",
           },
         ],
       },
@@ -333,7 +336,6 @@ const ChatMain = () => {
 
       peer.on("close", () => {
         peer.removeAllListeners()
-        peer.destroy()
       })
     })
 
@@ -349,20 +351,6 @@ const ChatMain = () => {
     const peer = new Peer({
       initiator: false,
       trickle: false,
-      config: {
-        iceServers: [
-          {
-            urls: "stun:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
-          },
-          {
-            urls: "turn:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
-          },
-        ],
-      },
     })
 
     peer.on("signal", (data) => {
@@ -387,7 +375,6 @@ const ChatMain = () => {
 
         const b64 = await blobToBase64(file)
 
-        // TODO
         if (filename.match(/\.(jpg|gif|png)$/) !== null) {
           socket.current.emit("chatMessage", {
             user: username,
@@ -407,7 +394,6 @@ const ChatMain = () => {
 
     peer.on("close", () => {
       peer.removeAllListeners()
-      peer.destroy()
     })
   }
 
