@@ -57,6 +57,20 @@ export default class MyDocument extends Document {
           <link rel="icon" type="image/png" href="/favicon.png" />
           <meta name="msapplication-TileColor" content="#8352FD" />
           <meta name="theme-color" content="#ffffff" />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170612872-1"></script>
+              <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+              
+                gtag('config', 'UA-170612872-1');
+              </script>
+              `,
+            }}
+          />
         </Head>
         <body>
           <Main />
