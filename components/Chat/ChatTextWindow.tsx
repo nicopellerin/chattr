@@ -3,12 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
-import {
-  FaKiwiBird,
-  FaChevronCircleUp,
-  FaFileDownload,
-  FaExpand,
-} from "react-icons/fa"
+import { FaChevronCircleUp, FaFileDownload, FaExpand } from "react-icons/fa"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
 import { saveAs } from "file-saver"

@@ -40,7 +40,7 @@ const UsernameModal: React.FC<Props> = ({
   }
 
   return (
-    <Container noUsernameModal={noUsernameModal}>
+    <Container>
       <Form onSubmit={handleSubmit}>
         <Tagline htmlFor="username">Pick a username</Tagline>
         <Input
