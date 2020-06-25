@@ -20,17 +20,19 @@ const RoomPage = () => {
 
   const browser = detect()
 
+  const notSupported =
+    browser?.name === "safari" ||
+    browser?.name === "ie" ||
+    browser?.os === "iOS" ||
+    browser?.os === "Android OS"
+
   return (
     <>
       <Head>
         <title>{`Chattr | Room: ${query?.room}`}</title>
       </Head>
       <Wrapper>
-        {browser?.name === "safari" || browser?.name === "ie" ? (
-          <DetectWrongBrowser />
-        ) : (
-          <ChatMainClient />
-        )}
+        {notSupported ? <DetectWrongBrowser /> : <ChatMainClient />}
       </Wrapper>
     </>
   )

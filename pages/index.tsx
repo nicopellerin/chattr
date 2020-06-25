@@ -18,13 +18,19 @@ const DetectWrongBrowser = dynamic(
 const IndexPage = () => {
   const browser = detect()
 
+  const notSupported =
+    browser?.name === "safari" ||
+    browser?.name === "ie" ||
+    browser?.os === "iOS" ||
+    browser?.os === "Android OS"
+
   return (
     <>
       <Head>
         <title>Chattr | Free P2P audio/video + chat platform</title>
       </Head>
 
-      {browser?.name === "safari" || browser?.name === "ie" ? (
+      {notSupported ? (
         <DetectWrongBrowser />
       ) : (
         <Layout>
