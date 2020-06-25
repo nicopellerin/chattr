@@ -28,7 +28,8 @@ export default Layout
 const Wrapper = styled.div`
   height: 100%;
   width: 100%;
-  background: url("/bg-2.jpg");
+  background: rgba(12, 6, 19, 1);
+  background: url("/bg-2.webp");
   background-size: cover;
 
   @media (max-width: 500px) {

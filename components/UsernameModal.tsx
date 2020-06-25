@@ -76,10 +76,10 @@ const Container = styled.div`
   padding: 5rem;
   border-radius: 10%;
   border-bottom: 7px solid var(--primaryColor);
-  filter: ${(props: { noUsernameModal: boolean }) =>
+  /* filter: ${(props: { noUsernameModal: boolean }) =>
     props.noUsernameModal
       ? "none"
-      : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.35))"};
+      : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.35))"}; */
 
   @media (max-width: 500px) {
     width: 90vw;
