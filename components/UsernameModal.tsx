@@ -23,8 +23,6 @@ const UsernameModal: React.FC<Props> = ({
 
   const listUsers = useRecoilValue(listUsersState)
 
-  console.log(listUsers)
-
   const [user, setUser] = useState("")
 
   const router = useRouter()

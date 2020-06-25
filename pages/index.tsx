@@ -2,42 +2,49 @@ import * as React from "react"
 import Head from "next/head"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import { detect } from "detect-browser"
+import dynamic from "next/dynamic"
 
 import UsernameModal from "../components/UsernameModal"
 import Layout from "../components/Layout"
-import DetectWrongBrowser from "../components/DetectWrongBrowser"
+
+const DetectWrongBrowser = dynamic(
+  () => import("../components/DetectWrongBrowser"),
+  {
+    ssr: false,
+  }
+)
 
 const IndexPage = () => {
-  if (
-    typeof window !== "undefined" &&
-    window.navigator.userAgent.search("Safari") >= 0 &&
-    window.navigator.userAgent.search("Chrome") < 0
-  ) {
-    return <DetectWrongBrowser />
-  }
+  const browser = detect()
 
   return (
     <>
       <Head>
         <title>Chattr | Free P2P audio/video + chat platform</title>
       </Head>
-      <Layout>
-        <Container
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", damping: 80 }}
-        >
-          <UsernameModal />
-          <Note
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "spring", damping: 80, delay: 0.5 }}
+
+      {browser?.name === "safari" || browser?.name === "ie" ? (
+        <DetectWrongBrowser />
+      ) : (
+        <Layout>
+          <Container
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", damping: 80 }}
           >
-            At the moment, please use a desktop Chromium-based browser for the
-            best experience
-          </Note>
-        </Container>
-      </Layout>
+            <UsernameModal />
+            <Note
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ type: "spring", damping: 80, delay: 0.5 }}
+            >
+              At the moment, please use a desktop Chromium-based browser for the
+              best experience
+            </Note>
+          </Container>
+        </Layout>
+      )}
     </>
   )
 }

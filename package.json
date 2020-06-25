@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "better-react-spinkit": "^2.0.4",
+    "detect-browser": "^5.1.1",
     "emoji-picker-react": "^3.2.1",
     "express": "^4.17.1",
     "file-saver": "^2.0.2",

@@ -2,26 +2,41 @@ import Head from "next/head"
 import dynamic from "next/dynamic"
 import styled from "styled-components"
 import { useRouter } from "next/router"
+import { detect } from "detect-browser"
 
 const ChatMainClient = dynamic(() => import("../../components/Chat/ChatMain"), {
   ssr: false,
 })
 
-const IndexPage = () => {
+const DetectWrongBrowser = dynamic(
+  () => import("../../components/DetectWrongBrowser"),
+  {
+    ssr: false,
+  }
+)
+
+const RoomPage = () => {
   const { query } = useRouter()
+
+  const browser = detect()
+
   return (
     <>
       <Head>
         <title>{`Chattr | Room: ${query?.room}`}</title>
       </Head>
       <Wrapper>
-        <ChatMainClient />
+        {browser?.name === "safari" || browser?.name === "ie" ? (
+          <DetectWrongBrowser />
+        ) : (
+          <ChatMainClient />
+        )}
       </Wrapper>
     </>
   )
 }
 
-export default IndexPage
+export default RoomPage
 
 // Styles
 const Wrapper = styled.div`

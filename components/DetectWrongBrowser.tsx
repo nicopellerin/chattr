@@ -1,47 +1,64 @@
 import * as React from "react"
 import styled from "styled-components"
+import Portal from "./Chat/Portal"
 
 const DetectWrongBrowser = () => {
   return (
-    <Wrapper>
-      <Logo src="/logo-3d.svg" alt="logo" />
-      <Text>
+    <WrapperDetectBrowser>
+      <LogoDetectBrowser src="/logo-3d.svg" alt="logo" />
+      <TextDetectBrowser>
         Chattr doesn't currently support your browser. Please use a
         Chromium-based browser (Chrome, Edge, Brave) or Firefox.
-      </Text>
-    </Wrapper>
+      </TextDetectBrowser>
+      <Portal />
+    </WrapperDetectBrowser>
   )
 }
 
 export default DetectWrongBrowser
 
 // Styles
-const Wrapper = styled.div`
+const WrapperDetectBrowser = styled.div`
+  top: 0;
+  left: 0;
   height: 100%;
   width: 100%;
-  background: rgba(12, 6, 19, 1);
   background: url("/bg-2.jpg");
+  background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: fixed;
+  z-index: 2000;
 
   @media (max-width: 500px) {
     min-height: 100vh;
   }
 `
 
-const Logo = styled.img`
+const LogoDetectBrowser = styled.img`
   width: 60rem;
   margin-bottom: 8rem;
+
+  @media (max-width: 600px) {
+    width: 35rem;
+    margin-bottom: 5rem;
+  }
 `
 
-const Text = styled.span`
+const TextDetectBrowser = styled.span`
   font-size: 2.4rem;
   font-weight: 600;
   color: var(--textColor);
   max-width: 60ch;
   text-align: center;
   line-height: 1.4;
+
+  @media (max-width: 600px) {
+    font-size: 2rem;
+    padding: 0 2rem;
+    max-width: 30ch;
+  }
 `
