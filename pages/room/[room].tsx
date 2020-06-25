@@ -29,9 +29,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100%;
-
   width: 100%;
-  /* background: #0c0613; */
   background: linear-gradient(
       45deg,
       rgba(12, 6, 19, 0.85),

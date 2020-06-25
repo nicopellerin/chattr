@@ -72,7 +72,7 @@ const Container = styled.div`
   border-bottom: 7px solid var(--primaryColor);
   filter: ${(props: { noUsernameModal: boolean }) =>
     props.noUsernameModal
-      ? "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.9))"
+      ? "none"
       : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.35))"};
 
   @media (max-width: 500px) {
