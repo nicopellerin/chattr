@@ -104,7 +104,9 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   return (
     <>
       <Wrapper theatreMode={displayTheatreMode} onSubmit={handleSubmit}>
+        <Label htmlFor="message">Message</Label>
         <TextInput
+          id="message"
           ref={inputTextRef}
           disabled={noConnection}
           placeholder="Type message..."
@@ -164,6 +166,11 @@ const Wrapper = styled.form`
     props.theatreMode ? "none" : "grid"};
   grid-template-columns: 1fr auto;
   position: relative;
+`
+
+const Label = styled.label`
+  position: absolute;
+  left: -9999px;
 `
 
 const TextInput = styled.input`
