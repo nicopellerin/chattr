@@ -105,7 +105,7 @@ const CopyButton = styled(motion.button)`
   border: none;
   border-radius: 5px;
   padding: 1rem 1.5rem;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 600;
   cursor: pointer;
   outline: transparent;

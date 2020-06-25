@@ -67,14 +67,10 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(-45deg, #1a0d2b 50%,  #4D2F72);
+  background: linear-gradient(-45deg, #1a0d2b 50%, #4d2f72);
   padding: 5rem;
   border-radius: 10%;
   border-bottom: 7px solid var(--primaryColor);
-  /* filter: ${(props: { noUsernameModal: boolean }) =>
-    props.noUsernameModal
-      ? "none"
-      : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.35))"}; */
 
   @media (max-width: 500px) {
     width: 90vw;

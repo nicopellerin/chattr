@@ -144,12 +144,14 @@ const ChatTextWindow: React.FC = () => {
           {msgs.length === 0 && hasConnection && (
             <NoMessages hasConnection={hasConnection}>
               <NoMessagesText>
-                <FaKiwiBird
-                  size={50}
-                  style={{ marginBottom: 20 }}
-                  color="var(--primaryColor)"
+                <IconLogo
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ type: "spring", damping: 80 }}
+                  src="/favicon.png"
+                  alt="Icon"
                 />
-                <span style={{ fontSize: "2rem" }}>{welcomeMsg}</span>
+                <span>{welcomeMsg}</span>
               </NoMessagesText>
             </NoMessages>
           )}
@@ -180,10 +182,12 @@ const ChatTextWindow: React.FC = () => {
                 exit={{ opacity: 0 }}
                 transition={{ type: "spring", damping: 80 }}
               >
-                <FaKiwiBird
-                  size={50}
-                  style={{ marginBottom: 20 }}
-                  color="var(--primaryColor)"
+                <IconLogo
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ type: "spring", damping: 80 }}
+                  src="/favicon.png"
+                  alt="Icon"
                 />
                 <UserDisconnectedText>{userLeftChattr}</UserDisconnectedText>
               </UserDisconnectedWrapper>
@@ -253,6 +257,7 @@ const NoMessages = styled(motion.div)`
 `
 
 const NoMessagesText = styled.span`
+  font-size: 2.4rem;
   font-weight: 600;
   color: var(--primaryColorLight);
   display: flex;
@@ -290,7 +295,7 @@ const UserDisconnectedWrapper = styled(motion.div)`
 `
 
 const UserDisconnectedText = styled.span`
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 700;
   color: var(--secondaryColor);
 `
@@ -351,5 +356,14 @@ const ExpandIcon = styled(FaExpand)`
 
   &:hover {
     color: #d852fd;
+  }
+`
+
+const IconLogo = styled(motion.img)`
+  margin-bottom: 2.4rem;
+  width: 12rem;
+
+  @media (max-width: 500px) {
+    margin-bottom: 1.7rem;
   }
 `
