@@ -7,7 +7,7 @@ const DetectWrongBrowser = () => {
     <WrapperDetectBrowser>
       <LogoDetectBrowser src="/logo-3d.svg" alt="logo" />
       <TextDetectBrowser>
-        Chattr doesn't currently support your browser. Please use a
+        Chattr doesn't currently support your browser. Please use a desktop
         Chromium-based browser (Chrome, Edge, Brave) or Firefox.
       </TextDetectBrowser>
       <Portal />

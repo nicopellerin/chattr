@@ -11,8 +11,6 @@
     "type-check": "tsc"
   },
   "dependencies": {
-    "@giphy/js-fetch-api": "^1.5.9",
-    "@giphy/react-components": "^1.1.0",
     "better-react-spinkit": "^2.0.4",
     "detect-browser": "^5.1.1",
     "emoji-picker-react": "^3.2.1",
