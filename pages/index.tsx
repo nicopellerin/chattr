@@ -5,8 +5,17 @@ import { motion } from "framer-motion"
 
 import UsernameModal from "../components/UsernameModal"
 import Layout from "../components/Layout"
+import DetectWrongBrowser from "../components/DetectWrongBrowser"
 
 const IndexPage = () => {
+  if (
+    typeof window !== "undefined" &&
+    window.navigator.userAgent.search("Safari") >= 0 &&
+    window.navigator.userAgent.search("Chrome") < 0
+  ) {
+    return <DetectWrongBrowser />
+  }
+
   return (
     <>
       <Head>
