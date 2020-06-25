@@ -49,6 +49,8 @@ export default class MyDocument extends Document {
             property="og:description"
             content="One-on-one hangouts in a fun and secure way"
           />
+          <link rel="preconnect" href="https://fonts.gstatic.com">
+          <link rel="preconnect" href="https://www.google-analytics.com">
           <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
