@@ -7,7 +7,8 @@ import { useSetRecoilState } from "recoil"
 import { useRouter } from "next/router"
 import shortid from "shortid"
 
-import { usernameState } from "../store/users"
+import { usernameState, listUsersState } from "../store/users"
+import { useRecoilValue } from "recoil"
 
 interface Props {
   buttonText?: string
@@ -19,6 +20,11 @@ const UsernameModal: React.FC<Props> = ({
   noUsernameModal = false,
 }) => {
   const setUsername = useSetRecoilState(usernameState)
+
+  const listUsers = useRecoilValue(listUsersState)
+
+  console.log(listUsers)
+
   const [user, setUser] = useState("")
 
   const router = useRouter()
@@ -48,7 +54,7 @@ const UsernameModal: React.FC<Props> = ({
           value={user}
           onChange={(e) => setUser(e.target.value)}
           placeholder="Eg. koolz69"
-          maxLength={20}
+          maxLength={18}
         />
         <Button whileTap={{ y: 1 }} whileHover={{ y: -1 }}>
           {buttonText} <FaRocket style={{ marginLeft: 7 }} />

@@ -21,8 +21,8 @@ export default NoUsername
 const Wrapper = styled.div`
   position: fixed;
   z-index: 2000;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(15px);
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9));
+  /* backdrop-filter: blur(15px); */
   height: 100%;
   width: 100%;
   display: flex;
