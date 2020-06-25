@@ -67,7 +67,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #1a0d2b;
+  background: linear-gradient(-45deg, #1a0d2b 50%,  #4D2F72);
   padding: 5rem;
   border-radius: 10%;
   border-bottom: 7px solid var(--primaryColor);

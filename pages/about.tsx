@@ -40,7 +40,13 @@ const AboutPage = () => {
             transition={{ type: "spring", damping: 80 }}
           >
             <Container>
-              <Title>About Chattr</Title>
+              <IconLogo
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: "spring", damping: 80 }}
+                src="/favicon.png"
+                alt="Icon"
+              />
               <Text>
                 Chattr is a free 1-to-1 P2P audio/video and chat platform built.
                 It provides a secure way of communicating on the web. File
@@ -87,10 +93,9 @@ const Container = styled.div`
   align-items: center;
 `
 
-const Title = styled.h2`
-  font-size: 4rem;
-  color: var(--tertiaryColor);
-  text-align: center;
+const IconLogo = styled(motion.img)`
+  margin-bottom: 2rem;
+  width: 15rem;
 
   @media (max-width: 500px) {
     margin-bottom: 1.7rem;
