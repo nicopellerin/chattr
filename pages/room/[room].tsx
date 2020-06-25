@@ -31,7 +31,15 @@ const Wrapper = styled.div`
   min-height: 100%;
 
   width: 100%;
-  background: #0c0613;
+  /* background: #0c0613; */
+  background: linear-gradient(
+      45deg,
+      rgba(12, 6, 19, 0.85),
+      rgba(12, 6, 19, 0.97)
+    ),
+    url("/bg-2.jpg");
+  background-size: cover;
+  background-position: center left;
 
   @media (max-width: 500px) {
     min-height: 100%;

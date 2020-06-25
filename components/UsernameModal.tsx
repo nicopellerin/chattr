@@ -73,7 +73,7 @@ const Container = styled.div`
   filter: ${(props: { noUsernameModal: boolean }) =>
     props.noUsernameModal
       ? "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.9))"
-      : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.45))"};
+      : "drop-shadow(0 0 20rem rgba(131, 82, 253, 0.35))"};
 
   @media (max-width: 500px) {
     width: 90vw;
