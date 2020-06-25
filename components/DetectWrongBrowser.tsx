@@ -52,9 +52,9 @@ const TextDetectBrowser = styled.span`
   font-size: 2.4rem;
   font-weight: 600;
   color: var(--textColor);
-  max-width: 60ch;
+  max-width: 55ch;
   text-align: center;
-  line-height: 1.4;
+  line-height: 1.6;
 
   @media (max-width: 600px) {
     font-size: 2rem;
