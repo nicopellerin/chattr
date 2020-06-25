@@ -109,10 +109,6 @@ io.on("connection", (socket) => {
 })
 
 nextApp.prepare().then(() => {
-  // app.get("/images/:id", (req: Request, res: Response) => {
-  //   res.send(req.params.id)
-  // })
-
   app.get("*", (req: Request, res: Response) => {
     return nextHandler(req, res)
   })

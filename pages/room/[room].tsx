@@ -35,7 +35,7 @@ const Wrapper = styled.div`
       rgba(12, 6, 19, 0.85),
       rgba(12, 6, 19, 0.97)
     ),
-    url("/bg-2.jpg");
+    url("/bg-2.webp");
   background-size: cover;
   background-position: center left;
 
