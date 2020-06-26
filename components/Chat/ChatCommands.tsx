@@ -120,8 +120,8 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             />
             {!sendingFile && fileTransferProgress === "0" ? (
               <>
-                <FaRocket size={22} style={{ marginBottom: 7 }} />
-                <span>Send file</span>
+                <FaRocket size={20} style={{ marginBottom: 7 }} />
+                <span style={{ whiteSpace: "nowrap" }}>Send file</span>
               </>
             ) : (
               <motion.div
@@ -137,7 +137,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
                   transition: "all 300ms ease-in-out",
                 }}
               >
-                <FaRocket size={22} style={{ marginBottom: 7 }} />
+                <FaRocket size={20} style={{ marginBottom: 7 }} />
                 <span>
                   {fileTransferProgress === "0"
                     ? "Waiting..."
@@ -158,12 +158,12 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
           >
             {muteMic ? (
               <>
-                <FaMicrophoneSlash size={22} style={{ marginBottom: 7 }} />
+                <FaMicrophoneSlash size={20} style={{ marginBottom: 7 }} />
                 <span>Mic</span>
               </>
             ) : (
               <>
-                <FaMicrophone size={22} style={{ marginBottom: 7 }} />
+                <FaMicrophone size={20} style={{ marginBottom: 7 }} />
                 <span>Mic</span>
               </>
             )}
@@ -181,7 +181,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             {showSelfWebcam ? (
               <>
                 <FaVideo
-                  size={22}
+                  size={20}
                   style={{
                     marginBottom: 7,
                   }}
@@ -190,7 +190,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               </>
             ) : (
               <>
-                <FaVideoSlash size={22} style={{ marginBottom: 7 }} />
+                <FaVideoSlash size={20} style={{ marginBottom: 7 }} />
                 <span>Webcam</span>
               </>
             )}
@@ -204,7 +204,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
                     setCancelCallRequest(true)
                     socket.current.emit("cancelCallRequest")
                   }}
-                  size={22}
+                  size={20}
                   style={{ marginBottom: 7 }}
                 />
                 <span>End</span>
@@ -219,7 +219,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
                       beepOn.play()
                     }
                   }}
-                  size={22}
+                  size={20}
                   style={{
                     marginBottom: 7,
                   }}

@@ -514,7 +514,7 @@ const OutterWrapper = styled.div`
 const Wrapper = styled(motion.div)`
   display: grid;
   grid-template-columns: ${(props: { theatreMode: boolean }) =>
-    props.theatreMode ? "1fr" : "3fr 1fr"};
+    props.theatreMode ? "1fr" : "3fr 1.1fr"};
   grid-gap: 3rem;
   width: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? "100%" : "85%"};
