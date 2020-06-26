@@ -28,7 +28,7 @@ const AboutPage = () => {
   return (
     <>
       <Head>
-        <title>Chattr | About</title>
+        <title>Chattr · About</title>
       </Head>
       {notSupported ? (
         <DetectWrongBrowser />
