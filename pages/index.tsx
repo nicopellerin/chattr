@@ -9,6 +9,9 @@ import dynamic from "next/dynamic"
 import UsernameModal from "../components/UsernameModal"
 import Layout from "../components/Layout"
 import { FaDownload } from "react-icons/fa"
+import { useRecoilState } from "recoil"
+
+import { supportsPWAState } from "../store/app"
 
 const DetectWrongBrowser = dynamic(
   () => import("../components/DetectWrongBrowser"),
@@ -18,8 +21,10 @@ const DetectWrongBrowser = dynamic(
 )
 
 const IndexPage = () => {
-  const [supportsPWA, setSupportsPWA] = useState(false)
+  const [supportsPWA, setSupportsPWA] = useRecoilState(supportsPWAState)
+
   const [promptInstall, setPromptInstall] = useState<any>(null)
+  const [installMsg, setInstallMsg] = useState("Install the app")
 
   const browser = detect()
 
@@ -44,9 +49,13 @@ const IndexPage = () => {
   const downloadTheApp = (e: React.MouseEvent) => {
     e.preventDefault()
 
-    if (promptInstall) {
-      promptInstall.prompt()
-    }
+    promptInstall.prompt()
+
+    promptInstall.userChoice.then((choiceResult: any) => {
+      if (choiceResult.outcome === "accepted") {
+        setInstallMsg("App installed")
+      }
+    })
   }
 
   return (
@@ -63,6 +72,7 @@ const IndexPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", damping: 80 }}
+            style={{ height: promptInstall ? "47rem" : "auto" }}
           >
             <UsernameModal />
             <Note
@@ -75,12 +85,18 @@ const IndexPage = () => {
             </Note>
             {supportsPWA && (
               <AppButton
-                onClick={(e) => downloadTheApp(e)}
+                onClick={(e) =>
+                  installMsg === "Install the app" ? downloadTheApp(e) : null
+                }
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", damping: 80, delay: 0.7 }}
+                style={{
+                  cursor:
+                    installMsg === "Install the app" ? "cursor" : "initial",
+                }}
               >
-                <FaDownload style={{ marginRight: 5 }} /> Install the app
+                <FaDownload style={{ marginRight: 5 }} /> {installMsg}
               </AppButton>
             )}
           </Container>
