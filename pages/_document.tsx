@@ -64,17 +64,12 @@ export default class MyDocument extends Document {
           <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/public/icons/apple-touch-icon.png"
+            href="/icons/apple-touch-icon.png"
           />
           <link
             rel="mask-icon"
             href="/icons/safari-pinned-tab.svg"
             color="#5bbad5"
-          />
-          <meta name="msapplication-TileColor" content="#603cba" />
-          <meta
-            name="msapplication-config"
-            content="/icons/browserconfig.xml"
           />
           <link rel="manifest" href="/manifest.json" />
           <script
