@@ -19,7 +19,7 @@ const DetectWrongBrowser = dynamic(
 
 const IndexPage = () => {
   const [supportsPWA, setSupportsPWA] = useState(false)
-  const [promptInstall, setPromptInstall] = useState(null)
+  const [promptInstall, setPromptInstall] = useState<any>(null)
 
   const browser = detect()
 
@@ -35,16 +35,17 @@ const IndexPage = () => {
       setSupportsPWA(true)
       setPromptInstall(e)
     }
+
     window.addEventListener("beforeinstallprompt", handler)
+
     return () => window.removeEventListener("transitionend", handler)
   }, [])
 
-  const downloadTheApp = (e) => {
+  const downloadTheApp = (e: React.MouseEvent) => {
     e.preventDefault()
+
     if (promptInstall) {
-      promptInstall?.prompt()
-    } else {
-      return
+      promptInstall.prompt()
     }
   }
 
@@ -74,7 +75,7 @@ const IndexPage = () => {
             </Note>
             {supportsPWA && (
               <AppButton
-                onClick={downloadTheApp}
+                onClick={(e) => downloadTheApp(e)}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", damping: 80, delay: 0.7 }}
