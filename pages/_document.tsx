@@ -40,24 +40,11 @@ export default class MyDocument extends Document {
             content="One-on-one hangouts in a fun and secure way"
           />
           <meta name="theme-color" content="#8352FD" />
-          <meta
-            property="og:title"
-            content="Chattr · Free P2P audio/video + chat platform"
-          />
-          <meta property="og:url" content="https://chattr.lol" />
-          <meta
-            property="og:description"
-            content="One-on-one hangouts in a fun and secure way"
-          />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link rel="preconnect" href="https://www.google-analytics.com" />
           <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
-          />
-          <meta
-            property="og:image"
-            content="https://chattr.lol/og-image4.png"
           />
           <link rel="icon" type="image/png" href="/favicon.png" />
           <meta name="theme-color" content="#8352FD" />
