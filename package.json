@@ -8,7 +8,8 @@
     "build": "npm run build:next && npm run build:server",
     "start": "NODE_ENV=production node dist/server.js",
     "stop": "pm2 stop dist/server.js",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "export": "next export"
   },
   "dependencies": {
     "better-react-spinkit": "^2.0.4",
@@ -19,6 +20,7 @@
     "framer-motion": "^2.0.0-beta.76",
     "get-user-media-promise": "^1.1.4",
     "next": "latest",
+    "next-pwa": "^2.6.1",
     "pm2": "^4.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

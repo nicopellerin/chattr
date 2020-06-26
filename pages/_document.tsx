@@ -60,8 +60,23 @@ export default class MyDocument extends Document {
             content="https://chattr.lol/og-image4.png"
           />
           <link rel="icon" type="image/png" href="/favicon.png" />
-          <meta name="msapplication-TileColor" content="#8352FD" />
-          <meta name="theme-color" content="#ffffff" />
+          <meta name="theme-color" content="#8352FD" />
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/public/icons/apple-touch-icon.png"
+          />
+          <link
+            rel="mask-icon"
+            href="/icons/safari-pinned-tab.svg"
+            color="#5bbad5"
+          />
+          <meta name="msapplication-TileColor" content="#603cba" />
+          <meta
+            name="msapplication-config"
+            content="/icons/browserconfig.xml"
+          />
+
           <script
             async
             src="https://www.googletagmanager.com/gtag/js?id=UA-170612872-1"
