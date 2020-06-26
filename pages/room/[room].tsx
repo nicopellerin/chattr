@@ -29,7 +29,7 @@ const RoomPage = () => {
   return (
     <>
       <Head>
-        <title>{`Chattr | Room: ${query?.room}`}</title>
+        <title>{`Chattr · Room: ${query?.room}`}</title>
       </Head>
       <Wrapper>
         {notSupported ? <DetectWrongBrowser /> : <ChatMainClient />}
