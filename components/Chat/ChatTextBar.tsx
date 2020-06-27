@@ -71,7 +71,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         sound.volume = 0.5
       })
     }
-  }, [])
+  }, [socket.current])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
