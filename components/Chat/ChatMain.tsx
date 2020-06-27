@@ -3,8 +3,9 @@ import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import io from "socket.io-client"
 import Peer from "simple-peer"
-import { useRouter } from "next/router"
+import Router, { useRouter } from "next/router"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { motion } from "framer-motion"
 
 import {
   streamState,
@@ -26,11 +27,6 @@ import {
   userLeftChattrState,
   otherUsernameState,
 } from "../../store/users"
-import ChatVideo from "./ChatVideo"
-import ChatTextBar from "./ChatTextBar"
-import ChatCommands from "./ChatCommands"
-import ChatTextWindow from "./ChatTextWindow"
-import ChatUsername from "./ChatUsername"
 import {
   chatWelcomeMessageState,
   chatWindowState,
@@ -41,9 +37,13 @@ import {
   sendingFileState,
   expandChatWindowState,
 } from "../../store/chat"
+
+import ChatVideo from "./ChatVideo"
+import ChatTextBar from "./ChatTextBar"
+import ChatCommands from "./ChatCommands"
+import ChatTextWindow from "./ChatTextWindow"
+import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
-import Router from "next/router"
-import { motion } from "framer-motion"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
