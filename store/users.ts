@@ -18,9 +18,9 @@ export const usernameState = atom<string>({
     "",
 })
 
-export const userLeftChattrState = atom({
+export const userLeftChattrState = atom<boolean>({
   key: "userLeftChattrState",
-  default: "",
+  default: false,
 })
 
 export const userSoundOnState = atom<boolean>({

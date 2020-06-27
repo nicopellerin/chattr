@@ -124,20 +124,20 @@ const ChatMain = () => {
       }
     )
 
-    socket.current.on("userLeftChattr", (msg: string) => {
-      setUserLeftChattr(msg)
+    socket.current.on("userLeftChattr", () => {
+      setUserLeftChattr(true)
       setPressedCall(false)
       setCallAccepted(false)
       setReceivingCall(false)
       setCancelCallRequest(true)
-      setTimeout(() => setUserLeftChattr(""), 3000)
+      setTimeout(() => setUserLeftChattr(false), 3000)
       setChatMsgs([])
       setSendingFile(false)
       setFileTransferProgress("0")
     })
 
     socket.current.on("userJoinedChattr", (username: string) => {
-      setUserLeftChattr("")
+      setUserLeftChattr(false)
       setOtherUsername(username)
     })
 
@@ -213,8 +213,8 @@ const ChatMain = () => {
       console.log("WEBRTC ERROR", err)
     })
 
-    socket.current.on("userLeftChattr", (msg: string) => {
-      setUserLeftChattr(msg)
+    socket.current.on("userLeftChattr", () => {
+      setUserLeftChattr(true)
       peer.removeAllListeners()
     })
 

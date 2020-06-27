@@ -178,7 +178,7 @@ const ChatTextWindow: React.FC = () => {
               </NoMessagesText>
             </NoMessages>
           )}
-          {noConnection && !userLeftChattr?.length && (
+          {noConnection && !userLeftChattr && (
             <motion.div animate style={{ height: 400 }}>
               <Invite />
             </motion.div>
@@ -212,7 +212,9 @@ const ChatTextWindow: React.FC = () => {
                   src="/favicon.png"
                   alt="Icon"
                 />
-                <UserDisconnectedText>{userLeftChattr}</UserDisconnectedText>
+                <UserDisconnectedText>
+                  {otherUsername} has left Chattr
+                </UserDisconnectedText>
               </UserDisconnectedWrapper>
             )}
           </AnimatePresence>
