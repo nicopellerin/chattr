@@ -46,6 +46,10 @@ io.on("connection", (socket) => {
 
   socket.emit("selfId", socket.id)
 
+  socket.on("username", (username: string) => {
+    socket.broadcast.to(room).emit("usernameJoined", username)
+  })
+
   socket.on("chatMessage", (msg) => {
     io.to(room).emit("chatMessages", msg)
   })

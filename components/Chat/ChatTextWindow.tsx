@@ -20,6 +20,7 @@ import {
   userLeftChattrState,
   listUsersState,
   userSoundOnState,
+  otherUsernameState,
 } from "../../store/users"
 import Invite from "./Invite"
 import PhotoExpander from "./PhotoExpander"
@@ -38,6 +39,7 @@ const ChatTextWindow: React.FC = () => {
   const userLeftChattr = useRecoilValue(userLeftChattrState)
   const listUsers = useRecoilValue(listUsersState)
   const soundOn = useRecoilValue(userSoundOnState)
+  const otherUsername = useRecoilValue(otherUsernameState)
 
   const [fileTransferProgress, setFileTransferProgress] = useRecoilState(
     fileTransferProgressState
@@ -48,6 +50,26 @@ const ChatTextWindow: React.FC = () => {
 
   const [togglePhotoExpander, setTogglePhotoExpander] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState("")
+  const [showJoinMsg, setShowJoinMsg] = useState(false)
+
+  const joined = new Audio("/sounds/joined.mp3")
+  joined.volume = 0.25
+
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+
+    if (otherUsername) {
+      setShowJoinMsg(true)
+
+      joined.play()
+
+      idx = setTimeout(() => {
+        setShowJoinMsg(false)
+      }, 4000)
+    }
+
+    return () => clearTimeout(idx)
+  }, [otherUsername])
 
   const scrollRef = useRef() as React.MutableRefObject<HTMLElement>
 
@@ -146,7 +168,13 @@ const ChatTextWindow: React.FC = () => {
                   src="/favicon.png"
                   alt="Icon"
                 />
-                <span>{welcomeMsg}</span>
+                {showJoinMsg ? (
+                  <UserJoinedText>
+                    {otherUsername} joined the room
+                  </UserJoinedText>
+                ) : (
+                  <span>{welcomeMsg}</span>
+                )}
               </NoMessagesText>
             </NoMessages>
           )}
@@ -291,6 +319,12 @@ const UserDisconnectedWrapper = styled(motion.div)`
 `
 
 const UserDisconnectedText = styled.span`
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--secondaryColor);
+`
+
+const UserJoinedText = styled.span`
   font-size: 2.4rem;
   font-weight: 700;
   color: var(--secondaryColor);

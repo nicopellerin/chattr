@@ -4,11 +4,19 @@ import styled from "styled-components"
 import UsernameModal from "../UsernameModal"
 import Portal from "./Portal"
 
-const NoUsername = () => {
+interface Props {
+  socket: React.MutableRefObject<SocketIOClient.Socket>
+}
+
+const NoUsername: React.FC<Props> = ({ socket }) => {
   return (
     <>
       <Wrapper>
-        <UsernameModal buttonText="Join room" noUsernameModal={true} />
+        <UsernameModal
+          buttonText="Join room"
+          noUsernameModal={true}
+          socket={socket}
+        />
       </Wrapper>
       <Portal />
     </>

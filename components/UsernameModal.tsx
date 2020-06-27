@@ -12,11 +12,13 @@ import { usernameState } from "../store/users"
 interface Props {
   buttonText?: string
   noUsernameModal?: boolean
+  socket?: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 const UsernameModal: React.FC<Props> = ({
   buttonText = "Launch chat",
   noUsernameModal = false,
+  socket,
 }) => {
   const setUsername = useSetRecoilState(usernameState)
 
@@ -31,9 +33,12 @@ const UsernameModal: React.FC<Props> = ({
     setUsername(user)
 
     typeof window !== "undefined" &&
-      window.localStorage.setItem("chattr-username", JSON.stringify(user))
+      window.sessionStorage.setItem("chattr-username", JSON.stringify(user))
 
-    if (noUsernameModal) return
+    if (noUsernameModal && socket) {
+      socket.current.emit("username", user)
+      return
+    }
 
     const room = shortid.generate()
     router.push(`/room/[room]`, `/room/${room}`)
@@ -41,7 +46,11 @@ const UsernameModal: React.FC<Props> = ({
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit}>
+      <Form
+        onSubmit={(e) => {
+          handleSubmit(e)
+        }}
+      >
         <Tagline htmlFor="username">Pick a username</Tagline>
         <Input
           id="username"

@@ -14,7 +14,7 @@ export const usernameState = atom<string>({
   key: "usernameState",
   default:
     (typeof window !== "undefined" &&
-      JSON.parse(window.localStorage.getItem("chattr-username")!)) ||
+      JSON.parse(window.sessionStorage.getItem("chattr-username")!)) ||
     "",
 })
 
@@ -27,7 +27,7 @@ export const userSoundOnState = atom<boolean>({
   key: "userSoundOnState",
   default:
     (typeof window !== "undefined" &&
-      JSON.parse(window.localStorage.getItem("chattr-sounds-on")!)) ||
+      JSON.parse(window.sessionStorage.getItem("chattr-sounds-on")!)) ||
     true,
 })
 

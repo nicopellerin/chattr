@@ -25,6 +25,7 @@ import {
   listUsersState,
   usernameState,
   userLeftChattrState,
+  otherUsernameState,
 } from "../../store/users"
 import {
   chatWelcomeMessageState,
@@ -64,6 +65,7 @@ const ChatMain = () => {
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
+  const setOtherUsername = useSetRecoilState(otherUsernameState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -103,8 +105,6 @@ const ChatMain = () => {
       Router.push("/")
     })
 
-    socket.current.emit("username", username)
-
     socket.current.on("selfId", (id: string) => {
       setSelfId(id)
     })
@@ -136,8 +136,13 @@ const ChatMain = () => {
       setFileTransferProgress("0")
     })
 
-    socket.current.on("userJoinedChattr", () => {
+    socket.current.on("userJoinedChattr", (username: string) => {
       setUserLeftChattr("")
+      setOtherUsername(username)
+    })
+
+    socket.current.on("usernameJoined", (username: string) => {
+      setOtherUsername(username)
     })
 
     socket.current.on("listUsers", (users: string[]) => {
@@ -311,7 +316,7 @@ const ChatMain = () => {
 
   return (
     <>
-      {!username && <NoUsername />}
+      {!username && <NoUsername socket={socket} />}
       <OutterWrapper>
         <Wrapper animate theatreMode={displayTheatreMode}>
           <LeftColumn theatreMode={displayTheatreMode}>

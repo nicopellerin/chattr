@@ -34,7 +34,7 @@ const ChatUsername = () => {
               onClick={() => {
                 setSoundOn((prevState) => !prevState)
                 typeof window !== "undefined" &&
-                  window.localStorage.setItem(
+                  window.sessionStorage.setItem(
                     "chattr-sounds-on",
                     JSON.stringify(soundOn)
                   )
