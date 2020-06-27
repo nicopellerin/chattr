@@ -284,8 +284,6 @@ const ChatMain = () => {
 
     const b64 = await blobToBase64(file)
 
-    socket.current.emit("fileTransferProgress", "100")
-
     if (filename.match(/\.(jpg|gif|png|JPG|PNG)$/) !== null) {
       socket.current.emit("chatMessage", {
         user: otherUsername,
@@ -293,7 +291,7 @@ const ChatMain = () => {
         filename,
       })
       setSendingFile(false)
-
+      socket.current.emit("fileTransferProgress", "100")
       return
     }
   }

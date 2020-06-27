@@ -124,7 +124,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             {!sendingFile && fileTransferProgress === "0" ? (
               <>
                 <FaRocket size={20} style={{ marginBottom: 7 }} />
-                <span style={{ whiteSpace: "nowrap" }}>Send file</span>
+                <span style={{ whiteSpace: "nowrap" }}>Send image</span>
               </>
             ) : (
               <motion.div
