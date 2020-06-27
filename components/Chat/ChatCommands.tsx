@@ -73,8 +73,6 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
   const handleSendFile = (e: any) => {
     if (!e.target.files[0]) return
 
-    setSendingFile(true)
-
     const file = e.target.files[0]
 
     if (file && file.size > 2 * 1000000) {
@@ -84,7 +82,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
       return
     }
 
-    sendFile(otherUser, file)
+    sendFile(file, file.name)
   }
 
   useEffect(() => {
@@ -142,9 +140,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               >
                 <FaRocket size={20} style={{ marginBottom: 7 }} />
                 <span>
-                  {fileTransferProgress === "Sending"
+                  {fileTransferProgress === "0"
                     ? "Sending..."
-                    : `${fileTransferProgress}%`}
+                    : `${fileTransferProgress}`}
                 </span>
               </motion.div>
             )}

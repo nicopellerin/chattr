@@ -31,9 +31,7 @@ import {
   chatWelcomeMessageState,
   chatWindowState,
   chatUserIsTypingState,
-  fileNameState,
   fileTransferProgressState,
-  receivingFileState,
   sendingFileState,
   expandChatWindowState,
 } from "../../store/chat"
@@ -50,7 +48,6 @@ const ChatMain = () => {
   const [selfId, setSelfId] = useRecoilState(selfIdState)
   const [caller, setCaller] = useRecoilState(callerState)
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
-  const [filename, setFileName] = useRecoilState(fileNameState)
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
     cancelCallRequestState
   )
@@ -69,7 +66,6 @@ const ChatMain = () => {
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
-  const setReceivingFile = useSetRecoilState(receivingFileState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -165,18 +161,11 @@ const ChatMain = () => {
     })
 
     socket.current.on("sendingFile", (data: any) => {
-      setFileName(data.fileName)
       setOtherUsername(data.username)
-      setReceivingFile(true)
     })
 
     socket.current.on("fileTransferProgressGlobal", (progress: string) => {
       setFileTransferProgress(progress)
-    })
-
-    socket.current.on("sendFileRequestCancelled", () => {
-      setSendingFile(false)
-      setFileTransferProgress("0")
     })
   }, [])
 
@@ -264,15 +253,13 @@ const ChatMain = () => {
   }
 
   // Send file
-  const sendFile = async (id: string, file: any) => {
+  const sendFile = async (file: any, filename: string) => {
     socket.current.emit("sendFile", {
-      userToCall: id,
-      from: selfId,
-      fileName: file?.name,
+      fileName: filename,
       username,
     })
 
-    socket.current.emit("fileTransferProgress", "Sending")
+    socket.current.emit("fileTransferProgress", "Sent!")
 
     const blobToBase64 = (blob: Blob) => {
       const reader = new FileReader()
