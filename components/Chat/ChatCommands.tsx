@@ -71,6 +71,8 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
   errorSound.volume = 0.5
 
   const handleSendFile = (e: any) => {
+    if (!e.target.files[0]) return
+
     setSendingFile(true)
 
     const file = e.target.files[0]

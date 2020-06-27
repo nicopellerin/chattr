@@ -34,6 +34,7 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "socket.io-redis": "^5.3.0",
+    "streamsaver": "^2.0.4",
     "styled-components": "^5.1.1",
     "typeface-inter": "^3.12.0"
   },
@@ -54,7 +55,8 @@
     "babel-plugin-styled-components": "^1.10.7",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "worker-loader": "^2.0.0"
   },
   "license": "ISC"
 }

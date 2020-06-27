@@ -41,6 +41,8 @@ import {
   receivingFileState,
   sendingFileState,
   expandChatWindowState,
+  callerFileState,
+  callerFileSignalState,
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
 import Router from "next/router"
@@ -50,7 +52,11 @@ const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
   const [selfId, setSelfId] = useRecoilState(selfIdState)
   const [caller, setCaller] = useRecoilState(callerState)
+  const [callerFile, setCallerFile] = useRecoilState(callerFileState)
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
+  const [callerFileSignal, setCallerFileSignal] = useRecoilState(
+    callerFileSignalState
+  )
   const [filename, setFileName] = useRecoilState(fileNameState)
   const [sendingFile, setSendingFile] = useRecoilState(sendingFileState)
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
@@ -166,8 +172,8 @@ const ChatMain = () => {
     })
 
     socket.current.on("sendingFile", (data: any) => {
-      setCaller(data.from)
-      setCallerSignal(data.signal)
+      setCallerFile(data.from)
+      setCallerFileSignal(data.signal)
       setFileName(data.fileName)
       setOtherUsername(data.username)
       setReceivingFile(true)
@@ -298,8 +304,6 @@ const ChatMain = () => {
           fileName: file?.name,
           username,
         })
-
-        console.log("SIGNAL SEND", data)
       }
     })
 
@@ -333,7 +337,7 @@ const ChatMain = () => {
           setSendingFile(false)
 
           peer.send("Done!")
-          peer.removeAllListeners()
+          // peer.removeAllListeners()
         })
         .catch((err: any) => {
           setSendingFile(false)
@@ -354,7 +358,6 @@ const ChatMain = () => {
     peer.on("close", () => {
       setSendingFile(false)
       setFileTransferProgress("0")
-      console.log("PEER1 CLOSEDDDDDD")
       peer.removeAllListeners()
     })
   }
@@ -368,12 +371,10 @@ const ChatMain = () => {
       trickle: false,
     })
 
-    console.log("PEER2", peer2)
-
     // peer2._debug = console.log
 
     peer2.on("signal", (data) => {
-      socket.current.emit("acceptFile", { signal: data, to: caller })
+      socket.current.emit("acceptFile", { signal: data, to: callerFile })
     })
 
     const blobToBase64 = (blob: Blob) => {
@@ -406,10 +407,11 @@ const ChatMain = () => {
         setSendingFile(false)
       } else {
         fileChunks.push(data)
+        // worker.postMessage(data)
       }
     })
 
-    peer2.signal(callerSignal)
+    peer2.signal(callerFileSignal)
 
     peer2.on("close", () => {
       peer2.removeAllListeners()

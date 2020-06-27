@@ -83,9 +83,13 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       status: false,
       msg: "",
     })
+
     socket.current.emit("chatMessage", { user: username, msg })
+
     setMsg("")
+
     count.current = 0
+
     setTogglePicker(false)
   }
 
