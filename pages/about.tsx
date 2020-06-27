@@ -55,11 +55,10 @@ const AboutPage = () => {
                 alt="Icon"
               />
               <Text>
-                Chattr is a free 1-to-1 P2P audio/video and chat platform. It
-                provides a secure way of communicating on the web. File
-                transfering (<strong>BETA</strong>) is also available, with
-                files up to 2MB. The project is still in its infancy and more
-                features will likely be added.
+                Chattr is a free 1-to-1 P2P audio/video and chat platform. No
+                data is stored on any server, only in the browser. This means
+                that when a session ends, all data is gone forever. The project
+                is still in its infancy and more features will likely be added.
               </Text>
               <Text>
                 Please note, if you get the{" "}
