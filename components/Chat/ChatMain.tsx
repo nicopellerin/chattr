@@ -291,7 +291,7 @@ const ChatMain = () => {
         filename,
       })
       setSendingFile(false)
-      socket.current.emit("fileTransferProgress", "100")
+      socket.current.emit("fileTransferProgress", "Sent!")
       return
     }
   }

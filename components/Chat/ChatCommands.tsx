@@ -130,10 +130,10 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               <motion.div
                 style={{
                   color:
-                    fileTransferProgress === "100"
+                    fileTransferProgress === "Sent!"
                       ? "var(--successColor)"
                       : "var(--textColor)",
-                  scale: fileTransferProgress === "100" ? 1.1 : 1,
+                  scale: fileTransferProgress === "Sent!" ? 1.1 : 1,
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -143,7 +143,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
                 <FaRocket size={20} style={{ marginBottom: 7 }} />
                 <span>
                   {fileTransferProgress === "0"
-                    ? "Waiting..."
+                    ? "Sending..."
                     : `${fileTransferProgress}%`}
                 </span>
               </motion.div>
