@@ -95,6 +95,10 @@ io.on("connection", (socket) => {
     io.to(data.to).emit("receivingFile", data.signal)
   })
 
+  socket.on("sendImage", (data: any) => {
+    io.to(room).emit("getImage", data.toString("base64"))
+  })
+
   socket.on("fileTransferProgress", (progress: string) => {
     io.to(room).emit("fileTransferProgressGlobal", progress)
   })

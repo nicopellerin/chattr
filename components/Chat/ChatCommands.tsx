@@ -117,6 +117,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               name="file"
               id="file"
               type="file"
+              accept="image/*"
               ref={fileInputRef}
               onChange={(e) => handleSendFile(e)}
             />

@@ -21,6 +21,7 @@
     "get-user-media-promise": "^1.1.4",
     "next": "latest",
     "next-pwa": "^2.6.1",
+    "peerjs": "^1.2.0",
     "pm2": "^4.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

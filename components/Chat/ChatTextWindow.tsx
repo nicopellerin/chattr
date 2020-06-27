@@ -114,7 +114,7 @@ const ChatTextWindow: React.FC = () => {
                   transition={{ type: "spring", damping: 80 }}
                 >
                   <Username me={username === user}>{user}</Username>
-                  {msg.startsWith("data:application/octet-stream;base64") ? (
+                  {msg.startsWith("data:image") ? (
                     <>
                       <DownloadIcon
                         title="Download"

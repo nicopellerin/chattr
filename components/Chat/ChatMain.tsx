@@ -5,7 +5,6 @@ import io from "socket.io-client"
 import Peer from "simple-peer"
 import { useRouter } from "next/router"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
-import { saveAs } from "file-saver"
 
 import {
   streamState,
@@ -41,8 +40,6 @@ import {
   receivingFileState,
   sendingFileState,
   expandChatWindowState,
-  callerFileState,
-  callerFileSignalState,
 } from "../../store/chat"
 import NoUsername from "./NoUsernameModal"
 import Router from "next/router"
@@ -52,18 +49,14 @@ const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
   const [selfId, setSelfId] = useRecoilState(selfIdState)
   const [caller, setCaller] = useRecoilState(callerState)
-  const [callerFile, setCallerFile] = useRecoilState(callerFileState)
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
-  const [callerFileSignal, setCallerFileSignal] = useRecoilState(
-    callerFileSignalState
-  )
   const [filename, setFileName] = useRecoilState(fileNameState)
-  const [sendingFile, setSendingFile] = useRecoilState(sendingFileState)
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
     cancelCallRequestState
   )
   const [otherUsername, setOtherUsername] = useRecoilState(otherUsernameState)
 
+  const setSendingFile = useSetRecoilState(sendingFileState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
   const setReceivingCall = useSetRecoilState(receivingCallState)
   const setListUsers = useSetRecoilState(listUsersState)
@@ -172,8 +165,6 @@ const ChatMain = () => {
     })
 
     socket.current.on("sendingFile", (data: any) => {
-      setCallerFile(data.from)
-      setCallerFileSignal(data.signal)
       setFileName(data.fileName)
       setOtherUsername(data.username)
       setReceivingFile(true)
@@ -273,108 +264,12 @@ const ChatMain = () => {
   }
 
   // Send file
-  const sendFile = (id: string, file: any) => {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      config: {
-        iceServers: [
-          {
-            urls: "stun:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
-          },
-          {
-            urls: "stun:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
-          },
-        ],
-      },
-    })
-
-    // peer._debug = console.log
-
-    peer.on("signal", (data) => {
-      if (!sendingFile) {
-        socket.current.emit("sendFile", {
-          userToCall: id,
-          signalData: data,
-          from: selfId,
-          fileName: file?.name,
-          username,
-        })
-      }
-    })
-
-    peer.on("error", (err) => {
-      console.log("SENDFILE ERROR", err)
-    })
-
-    peer.on("connect", () => {
-      file
-        .arrayBuffer()
-        .then((buffer: any) => {
-          const chunkSize = 16 * 1024
-
-          let at = 0
-
-          while (buffer.byteLength) {
-            const chunk = buffer.slice(0, chunkSize)
-            buffer = buffer.slice(chunkSize, buffer.byteLength)
-
-            at += buffer.byteLength
-
-            socket.current.emit(
-              "fileTransferProgress",
-              (at / file.size).toFixed(0)
-            )
-
-            peer.send(chunk)
-          }
-
-          socket.current.emit("fileTransferProgress", "100")
-          setSendingFile(false)
-
-          peer.send("Done!")
-          // peer.removeAllListeners()
-        })
-        .catch((err: any) => {
-          setSendingFile(false)
-          setFileTransferProgress("0")
-          console.log("ERROR SENDING FILE", err)
-        })
-    })
-
-    peer.on("end", () => {
-      setSendingFile(false)
-      setFileTransferProgress("0")
-    })
-
-    socket.current.on("receivingFile", (signal: any) => {
-      peer.signal(signal)
-    })
-
-    peer.on("close", () => {
-      setSendingFile(false)
-      setFileTransferProgress("0")
-      peer.removeAllListeners()
-    })
-  }
-
-  // Receive file
-  const fileChunks: any[] = []
-
-  const acceptFile = () => {
-    const peer2 = new Peer({
-      initiator: false,
-      trickle: false,
-    })
-
-    // peer2._debug = console.log
-
-    peer2.on("signal", (data) => {
-      socket.current.emit("acceptFile", { signal: data, to: callerFile })
+  const sendFile = async (id: string, file: any) => {
+    socket.current.emit("sendFile", {
+      userToCall: id,
+      from: selfId,
+      fileName: file?.name,
+      username,
     })
 
     const blobToBase64 = (blob: Blob) => {
@@ -387,48 +282,26 @@ const ChatMain = () => {
       })
     }
 
-    peer2.on("data", async (data) => {
-      if (data.toString() === "Done!") {
-        const file = new Blob(fileChunks)
+    const b64 = await blobToBase64(file)
 
-        const b64 = await blobToBase64(file)
+    socket.current.emit("fileTransferProgress", "100")
 
-        if (filename.match(/\.(jpg|gif|png|JPG|PNG)$/) !== null) {
-          socket.current.emit("chatMessage", {
-            user: otherUsername,
-            msg: b64,
-            filename,
-          })
-          setSendingFile(false)
-          return
-        }
+    if (filename.match(/\.(jpg|gif|png|JPG|PNG)$/) !== null) {
+      socket.current.emit("chatMessage", {
+        user: otherUsername,
+        msg: b64,
+        filename,
+      })
+      setSendingFile(false)
 
-        saveAs(file, filename)
-        setSendingFile(false)
-      } else {
-        fileChunks.push(data)
-        // worker.postMessage(data)
-      }
-    })
-
-    peer2.signal(callerFileSignal)
-
-    peer2.on("close", () => {
-      peer2.removeAllListeners()
-      console.log("PEER2 CLOSEDDDDDD")
-    })
+      return
+    }
   }
 
   // End call
   useEffect(() => {
     if (cancelCallRequest) {
       socket.current.emit("cancelCallRequest")
-
-      // stream.getTracks().forEach((track: any) => {
-      //   if (track.readyState == "live") {
-      //     track.stop()
-      //   }
-      // })
     }
   }, [cancelCallRequest])
 
@@ -469,7 +342,6 @@ const ChatMain = () => {
               selfVideoRef={selfVideoRef}
               friendVideoRef={friendVideoRef}
               acceptCall={acceptCall}
-              acceptFile={acceptFile}
             />
             <motion.div animate>
               <ChatTextBar socket={socket} />

@@ -3,6 +3,7 @@ import { useRef, useState } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
+import { FaExpand } from "react-icons/fa"
 
 import Slider from "./Slider"
 import ChatScreenWaitingForConnect from "./ChatScreenWaitingForConnect"
@@ -10,7 +11,6 @@ import ChatScreenCalling from "./ChatScreenCalling"
 import ChatScreenNoVideo from "./ChatScreenNoVideo"
 import ChatScreenIncomingCall from "./ChatScreenIncomingCall"
 import ChatScreenNotSupported from "./ChatScreenNotSupported"
-import ChatScreenReceivingFile from "./ChatScreenReceivingFile"
 
 import {
   showSelfWebcamState,
@@ -21,20 +21,16 @@ import {
   displayTheatreModeState,
 } from "../../store/video"
 import { listUsersState, userSoundOnState } from "../../store/users"
-import { receivingFileState } from "../../store/chat"
-import { FaExpand } from "react-icons/fa"
 
 interface Props {
   acceptCall: () => void
   selfVideoRef: React.MutableRefObject<HTMLVideoElement>
   friendVideoRef: React.MutableRefObject<HTMLVideoElement>
-  acceptFile: () => void
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 const ChatVideo: React.FC<Props> = ({
   acceptCall,
-  acceptFile,
   selfVideoRef,
   friendVideoRef,
   socket,
@@ -45,7 +41,6 @@ const ChatVideo: React.FC<Props> = ({
   const pressedCall = useRecoilValue(pressedCallState)
   const receivingCall = useRecoilValue(receivingCallState)
   const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
-  const receivingFile = useRecoilValue(receivingFileState)
   const soundOn = useRecoilValue(userSoundOnState)
 
   const [displayTheatreMode, setDisplayTheatreMode] = useRecoilState(
@@ -75,15 +70,7 @@ const ChatVideo: React.FC<Props> = ({
 
             {pressedCall && !callAccepted && <ChatScreenCalling />}
 
-            {receivingFile && (
-              <ChatScreenReceivingFile
-                acceptFile={acceptFile}
-                socket={socket}
-              />
-            )}
-
             {!receivingCall &&
-              !receivingFile &&
               !callAccepted &&
               !pressedCall &&
               listUsers?.length >= 2 && (
