@@ -142,7 +142,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               >
                 <FaRocket size={20} style={{ marginBottom: 7 }} />
                 <span>
-                  {fileTransferProgress === "0"
+                  {fileTransferProgress === "Sending"
                     ? "Sending..."
                     : `${fileTransferProgress}%`}
                 </span>

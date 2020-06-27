@@ -272,6 +272,8 @@ const ChatMain = () => {
       username,
     })
 
+    socket.current.emit("fileTransferProgress", "Sending")
+
     const blobToBase64 = (blob: Blob) => {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
@@ -290,8 +292,8 @@ const ChatMain = () => {
         msg: b64,
         filename,
       })
-      setSendingFile(false)
       socket.current.emit("fileTransferProgress", "Sent!")
+      setSendingFile(false)
       return
     }
   }
