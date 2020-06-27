@@ -25,7 +25,6 @@ import {
   listUsersState,
   usernameState,
   userLeftChattrState,
-  otherUsernameState,
 } from "../../store/users"
 import {
   chatWelcomeMessageState,
@@ -51,7 +50,6 @@ const ChatMain = () => {
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
     cancelCallRequestState
   )
-  const [otherUsername, setOtherUsername] = useRecoilState(otherUsernameState)
 
   const setSendingFile = useSetRecoilState(sendingFileState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
@@ -158,10 +156,6 @@ const ChatMain = () => {
       setReceivingCall(false)
       setCancelCallRequest(true)
       friendVideoRef.current.srcObject = null
-    })
-
-    socket.current.on("sendingFile", (data: any) => {
-      setOtherUsername(data.username)
     })
 
     socket.current.on("fileTransferProgressGlobal", (progress: string) => {
@@ -273,16 +267,13 @@ const ChatMain = () => {
 
     const b64 = await blobToBase64(file)
 
-    if (filename.match(/\.(jpg|gif|png|JPG|PNG)$/) !== null) {
-      socket.current.emit("chatMessage", {
-        user: otherUsername,
-        msg: b64,
-        filename,
-      })
-      socket.current.emit("fileTransferProgress", "Sent!")
-      setSendingFile(false)
-      return
-    }
+    socket.current.emit("chatMessage", {
+      user: username,
+      msg: b64,
+      filename,
+    })
+
+    socket.current.emit("fileTransferProgress", "Sent!")
   }
 
   // End call
