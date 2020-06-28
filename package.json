@@ -8,10 +8,11 @@
     "build": "npm run build:next && npm run build:server",
     "start": "NODE_ENV=production node dist/server.js",
     "stop": "pm2 stop dist/server.js",
-    "type-check": "tsc",
-    "test": "jest"
+    "type-check": "tsc"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.10.3",
+    "@babel/preset-typescript": "^7.10.1",
     "@tensorflow-models/handpose": "^0.0.5",
     "@tensorflow/tfjs": "^2.0.1",
     "@tensorflow/tfjs-backend-wasm": "^2.0.1",
