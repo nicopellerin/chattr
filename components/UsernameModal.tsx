@@ -16,7 +16,7 @@ interface Props {
 }
 
 const UsernameModal: React.FC<Props> = ({
-  buttonText = "Launch chat",
+  buttonText = "Launch room",
   noUsernameModal = false,
   socket,
 }) => {
