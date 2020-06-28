@@ -41,3 +41,14 @@ export const otherUsernameQuery = selector({
     return newList[0]?.username
   },
 })
+
+export const otherUserIdQuery = selector({
+  key: "otherUserIdQuery",
+  get: ({ get }) => {
+    const me = get(usernameState)
+    const list = get(listUsersState)
+    const newList = list.filter((user) => user.username !== me)
+
+    return newList[0]?.id
+  },
+})

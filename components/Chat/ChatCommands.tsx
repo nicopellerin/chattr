@@ -23,9 +23,9 @@ import {
   disableCallIconState,
 } from "../../store/video"
 import {
-  selfIdState,
   listUsersState,
   userSoundOnState,
+  otherUserIdQuery,
 } from "../../store/users"
 import { fileTransferProgressState, sendingFileState } from "../../store/chat"
 import MessageBar from "../MessageBar"
@@ -53,17 +53,15 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
   const [sendingFile, setSendingFile] = useRecoilState(sendingFileState)
 
   const callAccepted = useRecoilValue(callAcceptedState)
-  const selfId = useRecoilValue(selfIdState)
   const listUsers = useRecoilValue(listUsersState)
   const disableCallIcon = useRecoilValue(disableCallIconState)
   const soundOn = useRecoilValue(userSoundOnState)
   const fileTransferProgress = useRecoilValue(fileTransferProgressState)
+  const otherUserId = useRecoilValue(otherUserIdQuery)
 
   const [errorMsg, setErrorMsg] = useState("")
 
   const fileInputRef = useRef() as React.RefObject<HTMLInputElement>
-
-  const otherUser = listUsers?.filter((user) => user !== selfId).join("")
 
   const beepOn = new Audio("/sounds/click_snip.mp3")
   beepOn.volume = 0.3
@@ -214,7 +212,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               <>
                 <FaPhone
                   onClick={() => {
-                    callFriend(otherUser)
+                    callFriend(otherUserId)
                     setPressedCall(true)
                     if (soundOn) {
                       beepOn.play()
