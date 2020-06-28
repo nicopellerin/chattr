@@ -1,4 +1,4 @@
-import { atom } from "recoil"
+import { atom, selector } from "recoil"
 
 export const selfIdState = atom<string>({
   key: "selfIdState",
@@ -34,4 +34,15 @@ export const userSoundOnState = atom<boolean>({
 export const otherUsernameState = atom<string>({
   key: "otherUsernameState",
   default: "",
+})
+
+export const otherUsernameQuery = selector({
+  key: "otherUsernameQuery",
+  get: ({ get }) => {
+    const me = get(usernameState)
+    const list = get(listUsersState)
+    const newList = list.filter((user) => user.username !== me)
+
+    return newList[0]?.username
+  },
 })

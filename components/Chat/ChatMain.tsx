@@ -25,7 +25,7 @@ import {
   listUsersState,
   usernameState,
   userLeftChattrState,
-  otherUsernameState,
+  // otherUsernameState,
 } from "../../store/users"
 import {
   chatWelcomeMessageState,
@@ -65,7 +65,7 @@ const ChatMain = () => {
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
-  const setOtherUsername = useSetRecoilState(otherUsernameState)
+  // const setOtherUsername = useSetRecoilState(otherUsernameState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -82,7 +82,17 @@ const ChatMain = () => {
   const room = query["room"]
 
   useEffect(() => {
-    socket.current = io.connect(`/?room=${room}`)
+    if (!username) return
+
+    socket.current = io.connect(`/?room=${room}`, {
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            "x-username": JSON.stringify(username),
+          },
+        },
+      },
+    })
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
@@ -136,13 +146,9 @@ const ChatMain = () => {
       setFileTransferProgress("0")
     })
 
-    socket.current.on("userJoinedChattr", (username: string) => {
-      setUserLeftChattr(false)
-      setOtherUsername(username)
-    })
-
     socket.current.on("usernameJoined", (username: string) => {
-      setOtherUsername(username)
+      setUserLeftChattr(false)
+      // setOtherUsername(username)
     })
 
     socket.current.on("listUsers", (users: string[]) => {
@@ -166,7 +172,7 @@ const ChatMain = () => {
     socket.current.on("fileTransferProgressGlobal", (progress: string) => {
       setFileTransferProgress(progress)
     })
-  }, [])
+  }, [username])
 
   // Call other connection
   const callFriend = (id: string) => {
@@ -348,7 +354,7 @@ const ChatMain = () => {
                 </>
               )}
               <motion.div animate>
-                <ChatTextWindow />
+                <ChatTextWindow socket={socket} />
               </motion.div>
             </>
           </RightColumn>

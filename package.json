@@ -12,6 +12,9 @@
     "export": "next export"
   },
   "dependencies": {
+    "@tensorflow-models/handpose": "^0.0.5",
+    "@tensorflow/tfjs": "^2.0.1",
+    "@tensorflow/tfjs-backend-wasm": "^2.0.1",
     "better-react-spinkit": "^2.0.4",
     "detect-browser": "^5.1.1",
     "emoji-picker-react": "^3.2.1",
@@ -26,6 +29,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
+    "react-lottie": "^1.2.3",
     "react-perfect-scrollbar": "^1.5.8",
     "react-resizable": "^1.10.1",
     "react-scrollbar": "^0.5.6",
@@ -45,6 +49,7 @@
     "@types/node": "^12.12.21",
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
+    "@types/react-lottie": "^1.2.5",
     "@types/react-scrollbar": "^0.5.1",
     "@types/recoil": "^0.0.1",
     "@types/shortid": "^0.0.29",

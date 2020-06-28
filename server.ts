@@ -15,9 +15,11 @@ const nextHandler = nextApp.getRequestHandler()
 
 const PORT = 3000
 
+type User = { id: string; username: string }
+
 interface Rooms {
   [room: string]: {
-    users: string[]
+    users: User[]
   }
 }
 
@@ -27,6 +29,9 @@ const rooms: Rooms = {}
 
 io.on("connection", (socket) => {
   const room: string = socket.handshake.query.room
+  const username = socket.handshake.headers["x-username"]
+    .replace('"', "")
+    .replace('"', "")
 
   if (rooms[room] && rooms[room].users.length === 2) {
     socket.emit("notAllowed")
@@ -35,13 +40,12 @@ io.on("connection", (socket) => {
   }
   socket.join(room)
 
-  const oldUsers: string[] = (rooms[room] && rooms[room].users) || []
-  rooms[room] = { users: [...oldUsers, socket.id] }
+  const oldUsers: User[] = (rooms[room] && rooms[room].users) || []
+  rooms[room] = { users: [...oldUsers, { id: socket.id, username }] }
 
   console.log(rooms[room].users)
 
   io.to(room).emit("listUsers", rooms[room].users)
-  io.to(room).emit("userJoinedChattr")
   io.to(room).emit("chatConnection", "Welcome to Chattr!")
 
   socket.emit("selfId", socket.id)
@@ -64,7 +68,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     rooms[room].users = rooms[room].users.filter(
-      (user: string) => user !== socket.id
+      (user: User) => user.id !== socket.id
     )
     io.to(room).emit("userLeftChattr")
     io.to(room).emit("listUsers", rooms[room].users)
@@ -113,6 +117,14 @@ io.on("connection", (socket) => {
 
   socket.on("playLolSound", (data: any) => {
     io.to(data.to).emit("playingLolSound", data.sound)
+  })
+
+  socket.on("startGame", () => {
+    socket.broadcast.to(room).emit("sendStartGameRequest")
+  })
+
+  socket.on("boardUpdated", (board: number[]) => {
+    io.to(room).emit("boardUpdatedGlobal", board)
   })
 })
 

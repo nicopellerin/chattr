@@ -3,7 +3,12 @@ import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
-import { FaChevronCircleUp, FaFileDownload, FaExpand } from "react-icons/fa"
+import {
+  FaChevronCircleUp,
+  FaFileDownload,
+  FaExpand,
+  FaGamepad,
+} from "react-icons/fa"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
 import { saveAs } from "file-saver"
@@ -21,9 +26,11 @@ import {
   listUsersState,
   userSoundOnState,
   otherUsernameState,
+  otherUsernameQuery,
 } from "../../store/users"
 import Invite from "./Invite"
 import PhotoExpander from "./PhotoExpander"
+import TicTacToe from "../Games/TicTacToe"
 
 interface Message {
   msg: string
@@ -31,7 +38,11 @@ interface Message {
   filename: string
 }
 
-const ChatTextWindow: React.FC = () => {
+interface Props {
+  socket: React.MutableRefObject<SocketIOClient.Socket>
+}
+
+const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const welcomeMsg = useRecoilValue(chatWelcomeMessageState)
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
@@ -39,7 +50,7 @@ const ChatTextWindow: React.FC = () => {
   const userLeftChattr = useRecoilValue(userLeftChattrState)
   const listUsers = useRecoilValue(listUsersState)
   const soundOn = useRecoilValue(userSoundOnState)
-  const otherUsername = useRecoilValue(otherUsernameState)
+  const otherUsername = useRecoilValue(otherUsernameQuery)
 
   const [fileTransferProgress, setFileTransferProgress] = useRecoilState(
     fileTransferProgressState
@@ -51,6 +62,7 @@ const ChatTextWindow: React.FC = () => {
   const [togglePhotoExpander, setTogglePhotoExpander] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState("")
   const [showJoinMsg, setShowJoinMsg] = useState(false)
+  const [playGame, setPlayGame] = useState(false)
 
   const joined = new Audio("/sounds/joined.mp3")
   joined.volume = 0.25
@@ -72,18 +84,29 @@ const ChatTextWindow: React.FC = () => {
   }, [otherUsername])
 
   const scrollRef = useRef() as React.MutableRefObject<HTMLElement>
+  const otherUsernameRef = useRef("")
+
+  useEffect(() => {
+    if (otherUsername) {
+      otherUsernameRef.current = otherUsername
+    }
+  }, [otherUsername])
 
   const pop = new Audio("/sounds/pop_drip.mp3")
   pop.volume = 0.3
   const expand = new Audio("/sounds/expand.mp3")
   expand.volume = 0.3
+  const playGameSound = new Audio("/sounds/play-game.mp3")
+  playGameSound.volume = 0.2
 
   useEffect(() => {
     if (msgs.length > 0 && soundOn) {
       pop.play()
     }
 
-    scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
+    }
   }, [msgs])
 
   useEffect(() => {
@@ -115,111 +138,129 @@ const ChatTextWindow: React.FC = () => {
       >
         <FaChevronCircleUp />
       </ExpandButton>
-      <PerfectScrollbar
-        containerRef={(ref) => {
-          scrollRef.current = ref
-        }}
-        options={{ wheelSpeed: 0.5 }}
-        style={{
-          borderRadius: "5px",
+      {/* <PlayGameButton
+        whileHover={{ opacity: 1, scale: 1 }}
+        whileTap={{ scale: 0.95 }}
+        animate={playGame ? { rotate: 180 } : { rotate: 0 }}
+        transition={{ type: "spring", damping: 15 }}
+        onClick={() => {
+          setPlayGame((prevState) => !prevState)
+          if (soundOn) {
+            playGameSound.play()
+          }
         }}
       >
-        <Container style={{ height: expandChatWindow ? 585 : 400 }}>
-          <AnimatePresence>
-            {msgs.length > 0 &&
-              msgs.map(({ msg, user, filename }: Message, i) => (
-                <MsgWrapper
-                  key={i}
+        <FaGamepad />
+      </PlayGameButton> */}
+      {playGame ? (
+        <TicTacToe socket={socket} setPlayGame={setPlayGame} />
+      ) : (
+        <PerfectScrollbar
+          containerRef={(ref) => {
+            scrollRef.current = ref
+          }}
+          options={{ wheelSpeed: 0.5 }}
+          style={{
+            borderRadius: "5px",
+          }}
+        >
+          <Container style={{ height: expandChatWindow ? 585 : 400 }}>
+            <AnimatePresence>
+              {msgs.length > 0 &&
+                msgs.map(({ msg, user, filename }: Message, i) => (
+                  <MsgWrapper
+                    key={i}
+                    initial={{ y: 5 }}
+                    animate={{ y: 0 }}
+                    exit={{ opacity: 0, transition: { duration: 0 } }}
+                    transition={{ type: "spring", damping: 80 }}
+                  >
+                    <Username me={username === user}>{user}</Username>
+                    {msg.startsWith("data:image") ? (
+                      <>
+                        <DownloadIcon
+                          title="Download"
+                          onClick={() => saveAs(msg, filename)}
+                        />
+                        <ExpandIcon
+                          title="Expand"
+                          onClick={() => {
+                            setTogglePhotoExpander((prevState) => !prevState)
+                            setSelectedPhoto(msg)
+                          }}
+                        />
+
+                        <MessageImage src={msg} alt="Sent photo" />
+                      </>
+                    ) : (
+                      <span>{msg}</span>
+                    )}
+                  </MsgWrapper>
+                ))}
+            </AnimatePresence>
+            {msgs.length === 0 && hasConnection && (
+              <NoMessages hasConnection={hasConnection}>
+                <NoMessagesText>
+                  <IconLogo
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: "spring", damping: 80 }}
+                    src="/favicon.png"
+                    alt="Icon"
+                  />
+                  {showJoinMsg ? (
+                    <UserJoinedText>
+                      {otherUsername} joined the room
+                    </UserJoinedText>
+                  ) : (
+                    <span>{welcomeMsg}</span>
+                  )}
+                </NoMessagesText>
+              </NoMessages>
+            )}
+            {noConnection && !userLeftChattr && (
+              <motion.div animate style={{ height: 400 }}>
+                <Invite />
+              </motion.div>
+            )}
+
+            {hasConnection &&
+              userIsTyping?.status &&
+              username !== userIsTyping?.username && (
+                <UserIsTypingWrapper
                   initial={{ y: 5 }}
                   animate={{ y: 0 }}
-                  exit={{ opacity: 0, transition: { duration: 0 } }}
                   transition={{ type: "spring", damping: 80 }}
                 >
-                  <Username me={username === user}>{user}</Username>
-                  {msg.startsWith("data:image") ? (
-                    <>
-                      <DownloadIcon
-                        title="Download"
-                        onClick={() => saveAs(msg, filename)}
-                      />
-                      <ExpandIcon
-                        title="Expand"
-                        onClick={() => {
-                          setTogglePhotoExpander((prevState) => !prevState)
-                          setSelectedPhoto(msg)
-                        }}
-                      />
-
-                      <MessageImage src={msg} alt="Sent photo" />
-                    </>
-                  ) : (
-                    <span>{msg}</span>
-                  )}
-                </MsgWrapper>
-              ))}
-          </AnimatePresence>
-          {msgs.length === 0 && hasConnection && (
-            <NoMessages hasConnection={hasConnection}>
-              <NoMessagesText>
-                <IconLogo
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  <UserIsTypingText>
+                    <ThreeBounce color="var(--textColor)" size={7} />
+                  </UserIsTypingText>
+                </UserIsTypingWrapper>
+              )}
+            <AnimatePresence>
+              {userLeftChattr && (
+                <UserDisconnectedWrapper
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: -20, opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ type: "spring", damping: 80 }}
-                  src="/favicon.png"
-                  alt="Icon"
-                />
-                {showJoinMsg ? (
-                  <UserJoinedText>
-                    {otherUsername} joined the room
-                  </UserJoinedText>
-                ) : (
-                  <span>{welcomeMsg}</span>
-                )}
-              </NoMessagesText>
-            </NoMessages>
-          )}
-          {noConnection && !userLeftChattr && (
-            <motion.div animate style={{ height: 400 }}>
-              <Invite />
-            </motion.div>
-          )}
-
-          {hasConnection &&
-            userIsTyping?.status &&
-            username !== userIsTyping?.username && (
-              <UserIsTypingWrapper
-                initial={{ y: 5 }}
-                animate={{ y: 0 }}
-                transition={{ type: "spring", damping: 80 }}
-              >
-                <UserIsTypingText>
-                  <ThreeBounce color="var(--textColor)" size={7} />
-                </UserIsTypingText>
-              </UserIsTypingWrapper>
-            )}
-          <AnimatePresence>
-            {userLeftChattr && (
-              <UserDisconnectedWrapper
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: -20, opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ type: "spring", damping: 80 }}
-              >
-                <IconLogo
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ type: "spring", damping: 80 }}
-                  src="/favicon.png"
-                  alt="Icon"
-                />
-                <UserDisconnectedText>
-                  {otherUsername} has left Chattr
-                </UserDisconnectedText>
-              </UserDisconnectedWrapper>
-            )}
-          </AnimatePresence>
-        </Container>
-      </PerfectScrollbar>
+                >
+                  <IconLogo
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: "spring", damping: 80 }}
+                    src="/favicon.png"
+                    alt="Icon"
+                  />
+                  <UserDisconnectedText>
+                    {otherUsernameRef.current} has left Chattr
+                  </UserDisconnectedText>
+                </UserDisconnectedWrapper>
+              )}
+            </AnimatePresence>
+          </Container>
+        </PerfectScrollbar>
+      )}
       {togglePhotoExpander && (
         <PhotoExpander
           imageSrc={selectedPhoto}
@@ -324,6 +365,7 @@ const UserDisconnectedText = styled.span`
   font-size: 2.4rem;
   font-weight: 700;
   color: var(--secondaryColor);
+  text-align: center;
 `
 
 const UserJoinedText = styled.span`
@@ -361,6 +403,10 @@ const ExpandButton = styled(motion.div)`
     z-index: -1;
     border-radius: 5px;
   }
+`
+
+const PlayGameButton = styled(ExpandButton)`
+  top: 6.5rem;
 `
 
 const MessageImage = styled.img`

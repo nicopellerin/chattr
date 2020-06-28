@@ -36,7 +36,7 @@ const UsernameModal: React.FC<Props> = ({
       window.sessionStorage.setItem("chattr-username", JSON.stringify(user))
 
     if (noUsernameModal && socket) {
-      socket.current.emit("username", user)
+      socket?.current?.emit("username", user)
       return
     }
 
