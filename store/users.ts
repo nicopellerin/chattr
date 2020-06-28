@@ -26,6 +26,7 @@ export const userLeftChattrState = atom<boolean>({
 export const userSoundOnState = atom<boolean>({
   key: "userSoundOnState",
   default:
+    typeof window !== "undefined" &&
     window.localStorage.getItem("chattr-sounds-on") !== null
       ? JSON.parse(window.localStorage.getItem("chattr-sounds-on")!)
       : true,
