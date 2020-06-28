@@ -105,7 +105,7 @@ const IndexPage = () => {
             style={{ height: promptInstall ? "47rem" : "auto" }}
           >
             <UsernameModal />
-            {!inPWA && (
+            {<!inPWA && (
               <Note
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
