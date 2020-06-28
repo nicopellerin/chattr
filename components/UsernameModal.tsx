@@ -1,13 +1,14 @@
 import * as React from "react"
 import { useState } from "react"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { FaRocket } from "react-icons/fa"
 import { useSetRecoilState } from "recoil"
 import { useRouter } from "next/router"
 import shortid from "shortid"
 
 import { usernameState } from "../store/users"
+import MessageBar from "./MessageBar"
 
 interface Props {
   buttonText?: string
@@ -23,12 +24,19 @@ const UsernameModal: React.FC<Props> = ({
   const setUsername = useSetRecoilState(usernameState)
 
   const [user, setUser] = useState("")
+  const [errorMsg, setErrorMsg] = useState("")
 
   const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!user) return
+
+    const letters = /^[0-9a-zA-Z]+$/
+    if (!user.match(letters)) {
+      setErrorMsg("Username must only contain letters & numbers")
+      return
+    }
 
     setUsername(user)
 
@@ -64,6 +72,11 @@ const UsernameModal: React.FC<Props> = ({
           {buttonText} <FaRocket style={{ marginLeft: 7 }} />
         </Button>
       </Form>
+      <AnimatePresence>
+        {errorMsg && (
+          <MessageBar errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
+        )}
+      </AnimatePresence>
     </Container>
   )
 }

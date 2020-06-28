@@ -1,14 +1,33 @@
 import * as React from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import Portal from "./Chat/Portal"
 import { motion } from "framer-motion"
 import { FaTimesCircle } from "react-icons/fa"
 
 interface Props {
-  msg: string
+  errorMsg: string
+  setErrorMsg: React.Dispact<React.SetStateAction<string>>
 }
 
-const MessageBar: React.FC<Props> = ({ msg = "An error has occured" }) => {
+const MessageBar: React.FC<Props> = ({
+  errorMsg = "An error has occured",
+  setErrorMsg,
+}) => {
+  const errorSound = new Audio("/sounds/digi_error_short.mp3")
+  errorSound.volume = 0.5
+
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+
+    if (errorMsg) {
+      errorSound.play()
+      idx = setTimeout(() => setErrorMsg(""), 3000)
+    }
+
+    return () => clearTimeout(idx)
+  }, [errorMsg])
+
   return (
     <Wrapper
       initial={{ x: "-50%", y: 50 }}
@@ -18,7 +37,7 @@ const MessageBar: React.FC<Props> = ({ msg = "An error has occured" }) => {
     >
       <Container>
         <Text>
-          <FaTimesCircle style={{ marginRight: 7 }} /> {msg}
+          <FaTimesCircle style={{ marginRight: 7 }} /> {errorMsg}
         </Text>
       </Container>
       <Portal />

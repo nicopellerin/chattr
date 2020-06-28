@@ -65,8 +65,6 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
 
   const beepOn = new Audio("/sounds/click_snip.mp3")
   beepOn.volume = 0.3
-  const errorSound = new Audio("/sounds/digi_error_short.mp3")
-  errorSound.volume = 0.5
 
   const handleSendFile = (e: any) => {
     if (!e.target.files[0]) return
@@ -82,17 +80,6 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
 
     sendFile(file, file.name)
   }
-
-  useEffect(() => {
-    let idx: ReturnType<typeof setTimeout>
-
-    if (errorMsg) {
-      errorSound.play()
-      idx = setTimeout(() => setErrorMsg(""), 3000)
-    }
-
-    return () => clearTimeout(idx)
-  }, [errorMsg])
 
   return (
     <>
@@ -230,7 +217,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
         </Container>
       </Wrapper>
       <AnimatePresence>
-        {errorMsg && <MessageBar msg={errorMsg} />}
+        {errorMsg && (
+          <MessageBar errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
+        )}
       </AnimatePresence>
     </>
   )
