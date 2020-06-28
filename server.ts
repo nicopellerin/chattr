@@ -43,8 +43,6 @@ io.on("connection", (socket) => {
   const oldUsers: User[] = (rooms[room] && rooms[room].users) || []
   rooms[room] = { users: [...oldUsers, { id: socket.id, username }] }
 
-  console.log(rooms[room].users)
-
   io.to(room).emit("listUsers", rooms[room].users)
   io.to(room).emit("chatConnection", "Welcome to Chattr!")
 

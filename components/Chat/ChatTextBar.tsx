@@ -1,13 +1,13 @@
-import * as React from "react";
-import { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import { useRecoilValue } from "recoil";
-import { motion } from "framer-motion";
+import * as React from "react"
+import { useState, useEffect, useRef } from "react"
+import styled from "styled-components"
+import { useRecoilValue } from "recoil"
+import { motion } from "framer-motion"
 
-import { usernameState, listUsersState, selfIdState } from "../../store/users";
-import { displayTheatreModeState } from "../../store/video";
-import EmojiPicker from "./EmojiPicker";
-import { FaVolumeUp } from "react-icons/fa";
+import { usernameState, listUsersState, selfIdState } from "../../store/users"
+import { displayTheatreModeState } from "../../store/video"
+import EmojiPicker from "./EmojiPicker"
+import { FaVolumeUp } from "react-icons/fa"
 
 const lolSounds = [
   "/sounds/lol/laugh.mp3",
@@ -30,77 +30,77 @@ const lolSounds = [
   "/sounds/lol/samuelcreep.mp3",
   "/sounds/lol/cardi-b-hahaha.mp3",
   "/sounds/lol/samuelcreep_uAqES0U.mp3",
-];
+]
 
 interface Props {
-  socket: React.MutableRefObject<SocketIOClient.Socket>;
+  socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 const ChatTextBar: React.FC<Props> = ({ socket }) => {
-  const username = useRecoilValue(usernameState);
-  const listUsers = useRecoilValue(listUsersState);
-  const displayTheatreMode = useRecoilValue(displayTheatreModeState);
-  const selfId = useRecoilValue(selfIdState);
+  const username = useRecoilValue(usernameState)
+  const listUsers = useRecoilValue(listUsersState)
+  const displayTheatreMode = useRecoilValue(displayTheatreModeState)
+  const selfId = useRecoilValue(selfIdState)
 
-  const [msg, setMsg] = useState("");
-  const [togglePicker, setTogglePicker] = useState(false);
+  const [msg, setMsg] = useState("")
+  const [togglePicker, setTogglePicker] = useState(false)
 
-  const otherUser = listUsers?.filter((user) => user !== selfId).join("");
+  const otherUser = listUsers?.filter((user) => user !== selfId).join("")
 
-  let count = useRef(0);
-  const inputTextRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  let count = useRef(0)
+  const inputTextRef = useRef() as React.MutableRefObject<HTMLInputElement>
 
   const playLolSound = () => {
-    const randomIdx = Math.floor(Math.random() * lolSounds.length);
-    const sound = new Audio(lolSounds[randomIdx]);
-    sound.play();
-    sound.volume = 0.5;
+    const randomIdx = Math.floor(Math.random() * lolSounds.length)
+    const sound = new Audio(lolSounds[randomIdx])
+    sound.play()
+    sound.volume = 0.5
 
-    socket.current.emit("chatMessage", { user: username, msg: "LOL! 😆🤣" });
+    socket.current.emit("chatMessage", { user: username, msg: "LOL! 😆🤣" })
     socket.current.emit("playLolSound", {
       to: otherUser,
       sound: lolSounds[randomIdx],
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     if (socket.current) {
       socket.current.on("playingLolSound", (lolSound: string) => {
-        const sound = new Audio(lolSound);
-        sound.play();
-        sound.volume = 0.5;
-      });
+        const sound = new Audio(lolSound)
+        sound.play()
+        sound.volume = 0.5
+      })
     }
-  }, [socket.current]);
+  }, [socket.current])
 
-  let itiswhatitis = "";
+  let itiswhatitis = ""
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (!msg || listUsers?.length < 2) return;
+    if (!msg || listUsers?.length < 2) return
 
     socket.current.emit("chatMessageIsTyping", {
       username,
       status: false,
       msg: "",
-    });
+    })
 
     if (msg === ":itiswhatitis") {
-      itiswhatitis = "👁👄👁";
+      itiswhatitis = "👁👄👁"
     }
 
-    socket.current.emit(
-      "chatMessage",
-      { user: username, msg: itiswhatitis || msg },
-    );
+    socket.current.emit("chatMessage", {
+      user: username,
+      msg: itiswhatitis || msg,
+    })
 
-    setMsg("");
+    setMsg("")
 
-    count.current = 0;
+    count.current = 0
 
-    setTogglePicker(false);
-  };
+    setTogglePicker(false)
+  }
 
   useEffect(() => {
     if (msg.length > 0) {
@@ -108,11 +108,11 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         username,
         status: true,
         msg,
-      });
+      })
     }
-  }, [msg]);
+  }, [msg])
 
-  const noConnection = listUsers?.length < 2;
+  const noConnection = listUsers?.length < 2
 
   return (
     <>
@@ -131,18 +131,23 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
           alt="smiley"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          style={noConnection
-            ? { opacity: 0.2, pointerEvents: "none" }
-            : { opacity: 1, pointerEvents: "all" }}
+          style={
+            noConnection
+              ? { opacity: 0.2, pointerEvents: "none" }
+              : { opacity: 1, pointerEvents: "all" }
+          }
           onClick={() => setTogglePicker((prevState) => !prevState)}
         />
         <LolButton
           type="button"
           onClick={() => {
-            playLolSound();
+            playLolSound()
           }}
-          style={noConnection ? { opacity: 0.2, pointerEvents: "none" }
-          : { opacity: 1, pointerEvents: "all" }}
+          style={
+            noConnection
+              ? { opacity: 0.2, pointerEvents: "none" }
+              : { opacity: 1, pointerEvents: "all" }
+          }
           whileTap={{ scale: 0.98 }}
         >
           Lol <FaVolumeUp style={{ marginLeft: 5 }} />
@@ -159,10 +164,10 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         )}
       </Wrapper>
     </>
-  );
-};
+  )
+}
 
-export default ChatTextBar;
+export default ChatTextBar
 
 // Styles
 const Wrapper = styled.form`
@@ -171,15 +176,15 @@ const Wrapper = styled.form`
   padding: 1rem;
   border-radius: 5px;
   display: ${(props: { theatreMode: boolean }) =>
-  props.theatreMode ? "none" : "grid"};
+    props.theatreMode ? "none" : "grid"};
   grid-template-columns: 1fr auto;
   position: relative;
-`;
+`
 
 const Label = styled.label`
   position: absolute;
   left: -9999px;
-`;
+`
 
 const TextInput = styled.input`
   width: 100%;
@@ -200,19 +205,21 @@ const TextInput = styled.input`
       color: #aaa;
     }
   }
-`;
+`
 
 const SendButton = styled(motion.button)`
   padding: 1em 1.8em;
   border: none;
   background: ${(props: { disabled: boolean }) =>
-  props.disabled ? "#112" : `linear-gradient(
+    props.disabled
+      ? "#112"
+      : `linear-gradient(
     -160deg,
     var(--primaryColor),
     var(--primaryColorDark)
   )`};
   color: ${(props: { disabled: boolean }) =>
-  props.disabled ? "#aaa" : "var(--textColor)"};
+    props.disabled ? "#aaa" : "var(--textColor)"};
   font-size: 1.7rem;
   font-weight: 600;
   border-top-right-radius: 3px;
@@ -221,9 +228,9 @@ const SendButton = styled(motion.button)`
   align-items: center;
   justify-content: center;
   cursor: ${(props: { disabled: boolean }) =>
-  props.disabled ? "initial" : "pointer"};
+    props.disabled ? "initial" : "pointer"};
   outline: transparent;
-`;
+`
 
 const SmileyFace = styled(motion.img)`
   position: absolute;
@@ -231,7 +238,7 @@ const SmileyFace = styled(motion.img)`
   top: 2rem;
   width: 32px;
   cursor: pointer;
-`;
+`
 
 const LolButton = styled(motion.button)`
   position: absolute;
@@ -246,4 +253,4 @@ const LolButton = styled(motion.button)`
   display: flex;
   align-items: center;
   outline: transparent;
-`;
+`
