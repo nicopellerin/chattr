@@ -240,7 +240,11 @@ const Input = styled.input`
 const Button = styled(motion.button)`
   padding: 0.8em 1em;
   border: none;
-  background: var(--tertiaryColor);
+  background: linear-gradient(
+    140deg,
+    var(--primaryColor),
+    var(--primaryColorDark)
+  );
   color: #0c0613;
   font-size: 1.7rem;
   font-weight: 600;
