@@ -1,77 +1,76 @@
-import * as React from "react"
-import { useEffect, useState } from "react"
-import Head from "next/head"
-import styled from "styled-components"
-import { motion } from "framer-motion"
-import { detect } from "detect-browser"
-import dynamic from "next/dynamic"
+import * as React from "react";
+import { useEffect, useState } from "react";
+import Head from "next/head";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import { detect } from "detect-browser";
+import dynamic from "next/dynamic";
 
-import UsernameModal from "../components/UsernameModal"
-import Layout from "../components/Layout"
-import { FaDownload } from "react-icons/fa"
-import { useRecoilState } from "recoil"
+import UsernameModal from "../components/UsernameModal";
+import Layout from "../components/Layout";
+import { FaDownload } from "react-icons/fa";
+import { useRecoilState } from "recoil";
 
-import { supportsPWAState } from "../store/app"
+import { supportsPWAState } from "../store/app";
 
 const DetectWrongBrowser = dynamic(
   () => import("../components/DetectWrongBrowser"),
   {
     ssr: false,
-  }
-)
+  },
+);
 
 const IndexPage = () => {
-  const [supportsPWA, setSupportsPWA] = useRecoilState(supportsPWAState)
+  const [supportsPWA, setSupportsPWA] = useRecoilState(supportsPWAState);
 
-  const [promptInstall, setPromptInstall] = useState<any>(null)
-  const [installMsg, setInstallMsg] = useState("Install the app")
+  const [promptInstall, setPromptInstall] = useState<any>(null);
+  const [installMsg, setInstallMsg] = useState("Install the app");
 
-  const browser = detect()
+  const browser = detect();
 
-  const notSupported =
-    browser?.name === "safari" ||
+  const notSupported = browser?.name === "safari" ||
     browser?.name === "ie" ||
     browser?.os === "iOS" ||
-    browser?.os === "Android OS"
+    browser?.os === "Android OS";
 
   useEffect(() => {
     const handler = (e: any) => {
-      e.preventDefault()
-      setSupportsPWA(true)
-      setPromptInstall(e)
-    }
+      e.preventDefault();
+      setSupportsPWA(true);
+      setPromptInstall(e);
+    };
 
-    window.addEventListener("beforeinstallprompt", handler)
+    window.addEventListener("beforeinstallprompt", handler);
 
-    return () => window.removeEventListener("transitionend", handler)
-  }, [])
+    return () => window.removeEventListener("transitionend", handler);
+  }, []);
 
   const downloadTheApp = (e: React.MouseEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    promptInstall.prompt()
+    promptInstall.prompt();
 
     promptInstall.userChoice.then((choiceResult: any) => {
       if (choiceResult.outcome === "accepted") {
-        setInstallMsg("App installed")
+        setInstallMsg("App installed");
       }
-    })
-  }
+    });
+  };
 
-  useEffect(() => {
-    if (window.matchMedia("(display-mode: standalone)").matches) {
-      navigator.clipboard
-        .readText()
-        .then((text) => {
-          if (text.includes("chattr.lol/room/")) {
-            window.location.href = text
-          }
-        })
-        .catch((err) => {
-          console.error("Failed to read clipboard contents: ", err)
-        })
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (window.matchMedia("(display-mode: standalone)").matches) {
+  //     navigator.clipboard
+  //       .readText()
+  //       .then((text) => {
+  //         if (text.includes("chattr.lol/room/")) {
+  //           window.location.href = text
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.error("Failed to read clipboard contents: ", err)
+  //       })
+  //   }
+  // }, [])
 
   return (
     <>
@@ -89,56 +88,59 @@ const IndexPage = () => {
         <meta property="og:image" content="https://chattr.lol/og-image4.png" />
       </Head>
 
-      {notSupported ? (
-        <DetectWrongBrowser />
-      ) : (
-        <Layout>
-          <Container
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", damping: 80 }}
-            style={{ height: promptInstall ? "47rem" : "auto" }}
-          >
-            <UsernameModal />
-            <Note
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ type: "spring", damping: 80, delay: 0.5 }}
+      {notSupported
+        ? (
+          <DetectWrongBrowser />
+        )
+        : (
+          <Layout>
+            <Container
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: "spring", damping: 80 }}
+              style={{ height: promptInstall ? "47rem" : "auto" }}
             >
-              At the moment, please use a desktop Chromium-based browser for the
-              best experience
-            </Note>
-            {supportsPWA && (
-              <AppButton
-                onClick={(e) =>
-                  installMsg === "Install the app" ? downloadTheApp(e) : null
-                }
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", damping: 80, delay: 0.7 }}
-                style={{
-                  cursor:
-                    installMsg === "Install the app" ? "cursor" : "initial",
-                }}
+              <UsernameModal />
+              <Note
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ type: "spring", damping: 80, delay: 0.5 }}
               >
-                <FaDownload style={{ marginRight: 5 }} /> {installMsg}
-              </AppButton>
-            )}
-          </Container>
-        </Layout>
-      )}
+                At the moment, please use a desktop Chromium-based browser for the
+                best experience
+              </Note>
+              {supportsPWA && (
+                <AppButton
+                  onClick={(e) =>
+                    installMsg === "Install the app" ? downloadTheApp(e) : null}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ type: "spring", damping: 80, delay: 0.7 }}
+                  style={{
+                    cursor: installMsg === "Install the app"
+                      ? "cursor"
+                      : "initial",
+                  }}
+                >
+                  <FaDownload style={{ marginRight: 5 }} />
+                  {installMsg}
+                </AppButton>
+              )}
+            </Container>
+          </Layout>
+        )}
     </>
-  )
-}
+  );
+};
 
-export default IndexPage
+export default IndexPage;
 
 // Styles
 const Container = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const Note = styled(motion.span)`
   display: block;
@@ -152,7 +154,7 @@ const Note = styled(motion.span)`
     width: 80vw;
     margin: 4rem auto 0;
   }
-`
+`;
 
 const AppButton = styled(motion.button)`
   margin-top: 4rem;
@@ -171,4 +173,4 @@ const AppButton = styled(motion.button)`
   outline: transparent;
   display: flex;
   align-items: center;
-`
+`;
