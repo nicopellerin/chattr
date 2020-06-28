@@ -65,6 +65,10 @@ const IndexPage = () => {
   const handlePasteUrl = (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (!roomId) {
+      return
+    }
+
     if (roomId.startsWith(`${isDevURL}/room/`)) {
       window.location.href = roomId
       return
