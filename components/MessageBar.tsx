@@ -7,7 +7,7 @@ import { FaTimesCircle } from "react-icons/fa"
 
 interface Props {
   errorMsg: string
-  setErrorMsg: React.Dispact<React.SetStateAction<string>>
+  setErrorMsg: React.Dispatch<React.SetStateAction<string>>
 }
 
 const MessageBar: React.FC<Props> = ({
