@@ -71,7 +71,11 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
 
     if (otherUsername) {
       setShowJoinMsg(true)
-      joined.play()
+
+      if (soundOn) {
+        joined.play()
+      }
+
       idx = setTimeout(() => {
         setShowJoinMsg(false)
       }, 4000)

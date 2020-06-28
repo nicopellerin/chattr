@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 
@@ -19,6 +19,10 @@ const ChatUsername = () => {
   beepOn.volume = 0.2
   swoosh.volume = 0.2
 
+  useEffect(() => {
+    window.localStorage.setItem("chattr-sounds-on", JSON.stringify(soundOn))
+  }, [soundOn])
+
   return (
     <Wrapper>
       <AnimatePresence initial={false}>
@@ -33,11 +37,6 @@ const ChatUsername = () => {
             <ToggleSwitch
               onClick={() => {
                 setSoundOn((prevState) => !prevState)
-                typeof window !== "undefined" &&
-                  window.sessionStorage.setItem(
-                    "chattr-sounds-on",
-                    JSON.stringify(soundOn)
-                  )
                 if (!soundOn) {
                   swoosh.play()
                 }
