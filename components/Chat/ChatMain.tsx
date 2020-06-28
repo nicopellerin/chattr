@@ -125,6 +125,7 @@ const ChatMain = () => {
       setChatMsgs((prevState) => [...prevState, msg])
     })
 
+    // Other user is typing
     socket.current.on(
       "chatMessageIsTyping",
       ({ username, status }: { username: string; status: boolean }) => {
@@ -132,6 +133,7 @@ const ChatMain = () => {
       }
     )
 
+    // Other user has left the chat
     socket.current.on("userLeftChattr", () => {
       setUserLeftChattr(true)
       setPressedCall(false)

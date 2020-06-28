@@ -5,6 +5,7 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { detect } from "detect-browser"
 import dynamic from "next/dynamic"
+import Router from "next/router"
 
 import UsernameModal from "../components/UsernameModal"
 import Layout from "../components/Layout"
@@ -57,6 +58,21 @@ const IndexPage = () => {
       }
     })
   }
+
+  useEffect(() => {
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      navigator.clipboard
+        .readText()
+        .then((text) => {
+          if (text.includes("chattr.lol/room/")) {
+            window.location.href = text
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to read clipboard contents: ", err)
+        })
+    }
+  }, [])
 
   return (
     <>
