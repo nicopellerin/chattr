@@ -7,7 +7,7 @@ import {
   FaChevronCircleUp,
   FaFileDownload,
   FaExpand,
-  FaGamepad,
+  // FaGamepad,
 } from "react-icons/fa"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
@@ -25,7 +25,6 @@ import {
   userLeftChattrState,
   listUsersState,
   userSoundOnState,
-  otherUsernameState,
   otherUsernameQuery,
 } from "../../store/users"
 import Invite from "./Invite"
@@ -405,9 +404,9 @@ const ExpandButton = styled(motion.div)`
   }
 `
 
-const PlayGameButton = styled(ExpandButton)`
-  top: 6.5rem;
-`
+// const PlayGameButton = styled(ExpandButton)`
+//   top: 6.5rem;
+// `
 
 const MessageImage = styled.img`
   max-width: 100%;

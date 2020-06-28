@@ -31,11 +31,6 @@ export const userSoundOnState = atom<boolean>({
     true,
 })
 
-export const otherUsernameState = atom<string>({
-  key: "otherUsernameState",
-  default: "",
-})
-
 export const otherUsernameQuery = selector({
   key: "otherUsernameQuery",
   get: ({ get }) => {

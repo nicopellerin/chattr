@@ -25,7 +25,6 @@ import {
   listUsersState,
   usernameState,
   userLeftChattrState,
-  // otherUsernameState,
 } from "../../store/users"
 import {
   chatWelcomeMessageState,
@@ -65,7 +64,6 @@ const ChatMain = () => {
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
-  // const setOtherUsername = useSetRecoilState(otherUsernameState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -146,9 +144,8 @@ const ChatMain = () => {
       setFileTransferProgress("0")
     })
 
-    socket.current.on("usernameJoined", (username: string) => {
+    socket.current.on("usernameJoined", () => {
       setUserLeftChattr(false)
-      // setOtherUsername(username)
     })
 
     socket.current.on("listUsers", (users: string[]) => {
