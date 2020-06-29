@@ -65,7 +65,7 @@ const Wrapper = styled.nav`
 `
 
 const LogoStyled = styled.img`
-  width: 20rem;
+  width: 23rem;
   cursor: pointer;
   padding: 1rem 0;
 `
@@ -115,13 +115,14 @@ const ButtonJoin = styled(motion.button)`
   white-space: nowrap;
   margin-top: 1.3rem;
   margin-left: 2rem;
+  height: 5.1rem;
 `
 
 const Text = styled.span`
   font-size: 2rem;
   font-weight: 700;
   color: var(--textColor);
-  margin-top: 1.3rem;
+  margin-top: 1.4rem;
   text-align: center;
 
   @media (max-width: 600px) {
