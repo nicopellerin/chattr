@@ -13,7 +13,7 @@ const NoUsername: React.FC<Props> = ({ socket }) => {
     <>
       <Wrapper>
         <UsernameModal
-          buttonText="Join room"
+          buttonText="Start chatting!"
           noUsernameModal={true}
           socket={socket}
         />

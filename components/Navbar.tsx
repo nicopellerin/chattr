@@ -3,8 +3,13 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useRecoilState } from "recoil"
+
+import { joinRoomState } from "../store/app"
 
 const Navbar = () => {
+  const [joinRoom, setJoinRoom] = useRecoilState(joinRoomState)
+
   const { pathname } = useRouter()
 
   return (
@@ -13,17 +18,28 @@ const Navbar = () => {
         <LogoStyled src="/logo-3d.svg" alt="logo" />
       </Link>
       <Text>Free P2P audio/video + chat platform</Text>
-      <Link href="/about">
-        <ButtonAbout
-          style={{
-            textDecoration: pathname === "/about" ? "underline" : "none",
-          }}
-          whileTap={{ scale: 0.98 }}
-          whileHover={{ scale: 1.02 }}
-        >
-          About
-        </ButtonAbout>
-      </Link>
+      <ButtonsWrapper>
+        <Link href="/about">
+          <ButtonAbout
+            style={{
+              textDecoration: pathname === "/about" ? "underline" : "none",
+            }}
+            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            About
+          </ButtonAbout>
+        </Link>
+        <Link href="/">
+          <ButtonJoin
+            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.02 }}
+            onClick={() => setJoinRoom((prevState) => !prevState)}
+          >
+            {joinRoom ? `Start room` : `Join room`}
+          </ButtonJoin>
+        </Link>
+      </ButtonsWrapper>
     </Wrapper>
   )
 }
@@ -54,12 +70,18 @@ const LogoStyled = styled.img`
   padding: 1rem 0;
 `
 
+const ButtonsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
 const ButtonAbout = styled(motion.button)`
   border: none;
   background: transparent;
   color: var(--primaryColor);
   font-size: 2rem;
   font-weight: 600;
+  padding: 0.8em 1em;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -73,11 +95,33 @@ const ButtonAbout = styled(motion.button)`
   }
 `
 
+const ButtonJoin = styled(motion.button)`
+  padding: 0.8em 1em;
+  border: none;
+  background: linear-gradient(
+    140deg,
+    var(--primaryColor),
+    var(--primaryColorDark)
+  );
+  color: var(--secondaryColor);
+  font-size: 2rem;
+  font-weight: 600;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: transparent;
+  white-space: nowrap;
+  margin-top: 1.3rem;
+  margin-left: 2rem;
+`
+
 const Text = styled.span`
   font-size: 2rem;
   font-weight: 700;
   color: var(--textColor);
-  margin-top: 1.5rem;
+  margin-top: 1.3rem;
   text-align: center;
 
   @media (max-width: 600px) {

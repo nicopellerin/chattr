@@ -53,7 +53,11 @@ const UsernameModal: React.FC<Props> = ({
   }
 
   return (
-    <Container>
+    <Container
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", damping: 80 }}
+    >
       <Form
         onSubmit={(e) => {
           handleSubmit(e)
@@ -84,7 +88,7 @@ const UsernameModal: React.FC<Props> = ({
 export default UsernameModal
 
 // Styles
-const Container = styled.div`
+const Container = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;

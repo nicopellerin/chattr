@@ -11,7 +11,9 @@ import Layout from "../components/Layout"
 import { FaDownload } from "react-icons/fa"
 import { useRecoilState } from "recoil"
 
-import { supportsPWAState } from "../store/app"
+import { supportsPWAState, joinRoomState } from "../store/app"
+import JoinRoomModal from "../components/JoinRoomModal"
+import { useRecoilValue } from "recoil"
 
 const DetectWrongBrowser = dynamic(
   () => import("../components/DetectWrongBrowser"),
@@ -23,9 +25,10 @@ const DetectWrongBrowser = dynamic(
 const IndexPage = () => {
   const [supportsPWA, setSupportsPWA] = useRecoilState(supportsPWAState)
 
+  const joinRoom = useRecoilValue(joinRoomState)
+
   const [promptInstall, setPromptInstall] = useState<any>(null)
   const [installMsg, setInstallMsg] = useState("Install the app")
-  const [roomId, setRoomId] = useState("")
 
   const browser = detect()
 
@@ -34,11 +37,6 @@ const IndexPage = () => {
     browser?.name === "ie" ||
     browser?.os === "iOS" ||
     browser?.os === "Android OS"
-
-  const isDevURL =
-    process.env.NODE_ENV !== "production"
-      ? "http://localhost:3000"
-      : "https://chattr.lol"
 
   useEffect(() => {
     const handler = (e: any) => {
@@ -60,22 +58,6 @@ const IndexPage = () => {
         setInstallMsg("App installed")
       }
     })
-  }
-
-  const handlePasteUrl = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!roomId) {
-      return
-    }
-
-    if (roomId.startsWith(`${isDevURL}/room/`)) {
-      window.location.href = roomId
-      return
-    }
-
-    const url = `${isDevURL}/room/${roomId}`
-    window.location.href = url
   }
 
   const inPWA =
@@ -102,13 +84,8 @@ const IndexPage = () => {
         <DetectWrongBrowser />
       ) : (
         <Layout>
-          <Container
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", damping: 80 }}
-            style={{ height: promptInstall ? "47rem" : "auto" }}
-          >
-            <UsernameModal />
+          <Container style={{ height: promptInstall ? "47rem" : "auto" }}>
+            {joinRoom ? <JoinRoomModal /> : <UsernameModal />}
             {!inPWA && (
               <Note
                 initial={{ opacity: 0 }}
@@ -135,30 +112,6 @@ const IndexPage = () => {
                 <FaDownload style={{ marginRight: 5 }} />
                 {installMsg}
               </AppButton>
-            )}
-            {inPWA && (
-              <PasteUrlWrapper>
-                <PasteUrlText
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ type: "spring", damping: 80, delay: 0.3 }}
-                >
-                  OR
-                </PasteUrlText>
-                <PasteUrlForm
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ type: "spring", damping: 80, delay: 0.5 }}
-                  onSubmit={handlePasteUrl}
-                >
-                  <Input
-                    value={roomId}
-                    onChange={(e) => setRoomId(e.target.value)}
-                    placeholder="Room ID or full URL"
-                  />
-                  <Button>Join room</Button>
-                </PasteUrlForm>
-              </PasteUrlWrapper>
             )}
           </Container>
         </Layout>
@@ -207,56 +160,4 @@ const AppButton = styled(motion.button)`
   outline: transparent;
   display: flex;
   align-items: center;
-`
-
-const PasteUrlWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-
-const PasteUrlText = styled(motion.h3)`
-  margin: 4rem 0;
-  font-size: 3rem;
-  color: var(--primaryColor);
-`
-
-const PasteUrlForm = styled(motion.form)`
-  display: flex;
-  align-items: center;
-  background: linear-gradient(-45deg, #1a0d2b 50%, #4d2f72);
-  padding: 1.7rem;
-  border-radius: 5px;
-`
-
-const Input = styled.input`
-  border: none;
-  background: #0c0613;
-  color: var(--textColor);
-  padding: 0.8em 1em;
-  font-size: 1.7rem;
-  border-radius: 5px;
-  width: 100%;
-  margin-right: 1rem;
-  outline: transparent;
-`
-
-const Button = styled(motion.button)`
-  padding: 0.8em 1em;
-  border: none;
-  background: linear-gradient(
-    140deg,
-    var(--primaryColor),
-    var(--primaryColorDark)
-  );
-  color: #0c0613;
-  font-size: 1.7rem;
-  font-weight: 600;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  outline: transparent;
-  white-space: nowrap;
 `
