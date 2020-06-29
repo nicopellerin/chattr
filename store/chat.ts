@@ -1,6 +1,8 @@
 import { atom } from "recoil"
 
-export const chatWindowState = atom<Array<any>>({
+import { Message } from "../models"
+
+export const chatWindowState = atom<Array<Message>>({
   key: "chatWindowState",
   default: [],
 })
@@ -10,9 +12,9 @@ export const chatWelcomeMessageState = atom<string>({
   default: "",
 })
 
-export const chatUserIsTypingState = atom<any>({
+export const chatUserIsTypingState = atom<Partial<Message>>({
   key: "chatUserIsTypingState",
-  default: false,
+  default: { username: "", status: false },
 })
 
 export const fileNameState = atom<string>({

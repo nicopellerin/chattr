@@ -5,7 +5,7 @@ export interface User {
 
 export interface Message {
   username: string
-  status: string
+  status: boolean
   msg: string
 }
 

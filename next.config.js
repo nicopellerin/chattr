@@ -3,17 +3,21 @@ const withPWA = require("next-pwa")
 module.exports = withPWA({
   pwa: {
     dest: "public",
+    runtimeCaching: [
+      {
+        urlPattern: new RegExp("https://fonts.(?:googleapis|gstatic).com/(.*)"),
+        handler: "CacheFirst",
+        options: {
+          cacheName: "google-fonts",
+          expiration: {
+            maxEntries: 30,
+            maxAgeSeconds: 60 * 60 * 24 * 365,
+          },
+          cacheableResponse: {
+            statuses: [0, 200],
+          },
+        },
+      },
+    ],
   },
-  // webpack(config, options) {
-  //   config.module.rules.push({
-  //     test: /\.worker\.js$/,
-  //     loader: "worker-loader",
-  //     // options: { inline: true }, // also works
-  //     options: {
-  //       name: "public/[hash].worker.js",
-  //       publicPath: "/_next/",
-  //     },
-  //   })
-  //   return config
-  // },
 })
