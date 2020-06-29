@@ -105,13 +105,13 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       pop.play()
     }
 
-    if (scrollRef.current) {
+    if (scrollRef.current && scrollRef.current.scrollTop) {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
   }, [msgs])
 
   useEffect(() => {
-    if (!expandChatWindow) {
+    if (!expandChatWindow && scrollRef.current.scrollTop) {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
   }, [expandChatWindow])
@@ -151,6 +151,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
         animate={playGame ? { rotate: 180 } : { rotate: 0 }}
         transition={{ type: "spring", damping: 15 }}
         onClick={() => {
+          if (listUsers?.length < 2) return
           setPlayGame((prevState) => !prevState)
           setPlayGameShowInitialScreen(true)
           if (soundOn) {

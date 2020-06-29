@@ -38,12 +38,12 @@ export const playGamePlayerAssignQuery = selector({
   },
 })
 
-export const playerXGlobalState = atom({
+export const playerXGlobalState = atom<any>({
   key: "playerXGlobalState",
   default: null,
 })
 
-export const playerOGlobalState = atom({
+export const playerOGlobalState = atom<any>({
   key: "playerOGlobalState",
   default: null,
 })

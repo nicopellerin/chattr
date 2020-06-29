@@ -49,7 +49,6 @@ const Game: React.FC<Props> = ({ socket }) => {
   const [showWaitingScreen, setShowWaitingScreen] = useState(false)
   const [playerXGlobal, setPlayerXGlobal] = useRecoilState(playerXGlobalState)
   const [playerOGlobal, setPlayerOGlobal] = useRecoilState(playerOGlobalState)
-  const [hidePlayerAssign, setHidePlayerAssign] = useState(false)
 
   const calculateWinner = (squares: number[]) => {
     const lines = [
@@ -138,23 +137,18 @@ const Game: React.FC<Props> = ({ socket }) => {
   }, [socket.current])
 
   useEffect(() => {
-    let idx: ReturnType<typeof setTimeout>
-    console.log(playerXGlobal, playerOGlobal)
+    socket.current.on(
+      "playGameAssignPlayersGlobal",
+      ({ playerX, playerO }: any) => {
+        setPlayerXGlobal(playerX)
+        setPlayerOGlobal(playerO)
 
-    if (playerOGlobal || playerXGlobal) {
-      idx = setTimeout(() => {
-        setHidePlayerAssign(true)
-      }, 2000)
-    }
-
-    return () => clearTimeout(idx)
-  }, [playerOGlobal, playerXGlobal])
-
-  useEffect(() => {
-    socket.current.on("playGameAssignPlayersGlobal", ({ playerX, playerO }) => {
-      setPlayerXGlobal(playerX)
-      setPlayerOGlobal(playerO)
-    })
+        window.sessionStorage.setItem(
+          "tictactoePlayers",
+          JSON.stringify({ playerX, playerO })
+        )
+      }
+    )
   }, [])
 
   const handleStartGame = () => {
@@ -240,7 +234,7 @@ const Game: React.FC<Props> = ({ socket }) => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
             >
-              <WaitingText>Waiting for other play to connect...</WaitingText>
+              <WaitingText>Waiting for other player to connect...</WaitingText>
             </NoMarginContainer>
           </ScreenWrapper>
         )}
