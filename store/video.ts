@@ -71,3 +71,23 @@ export const displayTheatreModeState = atom<boolean>({
   key: "displayTheatreModeState",
   default: false,
 })
+
+export const peerAudioMutedState = atom<boolean>({
+  key: "peerAudioMutedState",
+  default: false,
+})
+
+export const peerAudioMutedQuery = selector({
+  key: "peerAudioMuted",
+  get: ({ get }) => {
+    const isStreaming = get(streamState)
+    const peerAudioMuted = get(peerAudioMutedState)
+    const listUsers = get(listUsersState)
+
+    if (isStreaming && peerAudioMuted && listUsers?.length > 1) {
+      return true
+    }
+
+    return false
+  },
+})

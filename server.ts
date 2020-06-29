@@ -124,6 +124,10 @@ io.on("connection", (socket) => {
   socket.on("boardUpdated", (board: number[]) => {
     io.to(room).emit("boardUpdatedGlobal", board)
   })
+
+  socket.on("peerMutedAudio", (status: boolean) => {
+    socket.broadcast.to(room).emit("peerMutedAudio", status)
+  })
 })
 
 nextApp.prepare().then(() => {

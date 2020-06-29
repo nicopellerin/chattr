@@ -154,7 +154,7 @@ const IndexPage = () => {
                   <Input
                     value={roomId}
                     onChange={(e) => setRoomId(e.target.value)}
-                    placeholder="Paste room ID..."
+                    placeholder="Room ID or full URL"
                   />
                   <Button>Join room</Button>
                 </PasteUrlForm>

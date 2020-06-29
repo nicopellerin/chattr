@@ -11,6 +11,7 @@ import ChatScreenCalling from "./ChatScreenCalling"
 import ChatScreenNoVideo from "./ChatScreenNoVideo"
 import ChatScreenIncomingCall from "./ChatScreenIncomingCall"
 import ChatScreenNotSupported from "./ChatScreenNotSupported"
+// import ChatScreenVisualiser from "./ChatScreenVisualiser"
 
 import {
   showSelfWebcamState,
@@ -19,8 +20,13 @@ import {
   pressedCallState,
   getUserMediaNotSupportedState,
   displayTheatreModeState,
+  peerAudioMutedQuery,
 } from "../../store/video"
-import { listUsersState, userSoundOnState } from "../../store/users"
+import {
+  listUsersState,
+  userSoundOnState,
+  otherUsernameQuery,
+} from "../../store/users"
 
 interface Props {
   acceptCall: () => void
@@ -42,6 +48,8 @@ const ChatVideo: React.FC<Props> = ({
   const receivingCall = useRecoilValue(receivingCallState)
   const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
   const soundOn = useRecoilValue(userSoundOnState)
+  const peerAudioMuted = useRecoilValue(peerAudioMutedQuery)
+  const otherUsername = useRecoilValue(otherUsernameQuery)
 
   const [displayTheatreMode, setDisplayTheatreMode] = useRecoilState(
     displayTheatreModeState
@@ -61,11 +69,15 @@ const ChatVideo: React.FC<Props> = ({
     )
   }
 
+  console.log(peerAudioMuted)
+
   return (
     <Wrapper ref={contraintsRef}>
       <>
         {!showCatSlider ? (
           <>
+            {/* {audioStream && <ChatScreenVisualiser />} */}
+
             {listUsers?.length < 2 && <ChatScreenWaitingForConnect />}
 
             {pressedCall && !callAccepted && <ChatScreenCalling />}
@@ -102,12 +114,19 @@ const ChatVideo: React.FC<Props> = ({
           theatreMode={displayTheatreMode}
           showWebcam={showWebcam}
         />
-        <FriendVideo
-          theatreMode={displayTheatreMode}
-          ref={friendVideoRef}
-          playsInline
-          autoPlay
-        />
+        <>
+          <FriendVideo
+            theatreMode={displayTheatreMode}
+            ref={friendVideoRef}
+            playsInline
+            autoPlay
+          />
+          {peerAudioMuted && (
+            <FriendAudioMuted animate={{ y: [10, 0], opacity: [0, 1] }}>
+              {otherUsername} muted audio
+            </FriendAudioMuted>
+          )}
+        </>
         <ExpandButton
           title="Theatre mode"
           initial={{ opacity: 0.5 }}
@@ -154,6 +173,15 @@ const FriendVideo = styled.video`
   @media (max-width: 500px) {
     height: 300px;
   }
+`
+
+const FriendAudioMuted = styled(motion.h3)`
+  position: absolute;
+  right: 3rem;
+  top: 2.2rem;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.6);
+  z-index: 20;
 `
 
 const SelfVideo = styled(motion.video)`

@@ -19,6 +19,7 @@ import {
   showSelfWebcamState,
   getUserMediaNotSupportedState,
   displayTheatreModeState,
+  peerAudioMutedState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -51,10 +52,10 @@ const ChatMain = () => {
     cancelCallRequestState
   )
 
+  const setListUsers = useSetRecoilState(listUsersState)
   const setSendingFile = useSetRecoilState(sendingFileState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
   const setReceivingCall = useSetRecoilState(receivingCallState)
-  const setListUsers = useSetRecoilState(listUsersState)
   const setCallAccepted = useSetRecoilState(callAcceptedState)
   const setChatWelcomeMessage = useSetRecoilState(chatWelcomeMessageState)
   const setChatUserIsTyping = useSetRecoilState(chatUserIsTypingState)
@@ -64,6 +65,9 @@ const ChatMain = () => {
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
+  const setPeerAudioMuted = useSetRecoilState(peerAudioMutedState)
+
+  // const setAudioStream = useSetRecoilState(audioStreamState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -104,7 +108,8 @@ const ChatMain = () => {
             selfVideoRef.current.srcObject = stream
           }
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log("ERR", err)
           setGetUserMediaNotSupported(true)
         })
     }
@@ -170,6 +175,14 @@ const ChatMain = () => {
 
     socket.current.on("fileTransferProgressGlobal", (progress: string) => {
       setFileTransferProgress(progress)
+    })
+
+    socket.current.on("peerMutedAudio", (status: boolean) => {
+      if (status) {
+        setPeerAudioMuted(true)
+      } else {
+        setPeerAudioMuted(false)
+      }
     })
   }, [username])
 
@@ -300,9 +313,11 @@ const ChatMain = () => {
     if (micMuted) {
       const audio = stream.getAudioTracks()
       audio[0].enabled = false
+      socket.current.emit("peerMutedAudio", true)
     } else {
       const audio = stream.getAudioTracks()
       audio[0].enabled = true
+      socket.current.emit("peerMutedAudio", false)
     }
   }, [micMuted, stream])
 
@@ -313,9 +328,11 @@ const ChatMain = () => {
     if (!showSelfWebcam) {
       const video = stream.getVideoTracks()
       video[0].enabled = false
+      socket.current.emit("peerClosedVideo", true)
     } else {
       const video = stream.getVideoTracks()
       video[0].enabled = true
+      socket.current.emit("peerClosedVideo", false)
     }
   }, [showSelfWebcam, stream])
 
