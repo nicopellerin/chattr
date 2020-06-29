@@ -31,12 +31,6 @@ import Invite from "./Invite"
 import PhotoExpander from "./PhotoExpander"
 import TicTacToe from "../Games/TicTacToe"
 
-interface Message {
-  msg: string
-  user: string
-  filename: string
-}
-
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
@@ -174,7 +168,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
           <Container style={{ height: expandChatWindow ? 585 : 400 }}>
             <AnimatePresence>
               {msgs.length > 0 &&
-                msgs.map(({ msg, user, filename }: Message, i) => (
+                msgs.map(({ msg, username: usernameMsg, filename }, i) => (
                   <MsgWrapper
                     key={i}
                     initial={{ y: 5 }}
@@ -182,7 +176,9 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
                     exit={{ opacity: 0, transition: { duration: 0 } }}
                     transition={{ type: "spring", damping: 80 }}
                   >
-                    <Username me={username === user}>{user}</Username>
+                    <Username me={username === usernameMsg}>
+                      {usernameMsg}
+                    </Username>
                     {msg.startsWith("data:image") ? (
                       <>
                         <DownloadIcon

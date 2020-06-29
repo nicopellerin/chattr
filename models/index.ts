@@ -7,6 +7,7 @@ export interface Message {
   username: string
   status: boolean
   msg: string
+  filename?: string
 }
 
 export interface Call {

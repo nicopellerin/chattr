@@ -93,7 +93,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     }
 
     socket.current.emit("chatMessage", {
-      user: username,
+      username,
       msg: itiswhatitis || msg,
     })
 

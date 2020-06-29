@@ -290,7 +290,7 @@ const ChatMain = () => {
     const b64 = await blobToBase64(file)
 
     socket.current.emit("chatMessage", {
-      user: username,
+      username,
       msg: b64,
       filename,
     })
