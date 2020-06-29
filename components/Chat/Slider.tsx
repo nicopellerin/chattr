@@ -93,7 +93,7 @@ const Slider: React.FC<Props> = ({ setShowCatSlider }) => {
             alt="Slider"
             key={page}
             loading="lazy"
-            src={`https://images.weserv.nl/?url=${`https://chattr.lol${images[imageIndex]}`}&w=800`}
+            src={images[imageIndex]}
             custom={direction}
             variants={variants}
             initial="enter"
