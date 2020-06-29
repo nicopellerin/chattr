@@ -34,6 +34,8 @@ interface Props {
 const Game: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const otherUsername = useRecoilValue(otherUsernameQuery)
+  const playerXGlobal = useRecoilValue(playerXGlobalState)
+  const playerOGlobal = useRecoilValue(playerOGlobalState)
 
   const [
     playGameShowInitialScreen,
@@ -47,8 +49,6 @@ const Game: React.FC<Props> = ({ socket }) => {
   const [won, setWon] = useState(false)
   const [, setTieGame] = useState(false)
   const [showWaitingScreen, setShowWaitingScreen] = useState(false)
-  const [playerXGlobal, setPlayerXGlobal] = useRecoilState(playerXGlobalState)
-  const [playerOGlobal, setPlayerOGlobal] = useRecoilState(playerOGlobalState)
 
   const calculateWinner = (squares: number[]) => {
     const lines = [
@@ -82,8 +82,8 @@ const Game: React.FC<Props> = ({ socket }) => {
     return false
   }
 
-  const tie = calculateTie(board)
   const winner = calculateWinner(board)
+  const tie = calculateTie(board)
 
   const click = new Audio("/sounds/tic-click.mp3")
   click.volume = 0.3
@@ -136,21 +136,6 @@ const Game: React.FC<Props> = ({ socket }) => {
     )
   }, [socket.current])
 
-  useEffect(() => {
-    socket.current.on(
-      "playGameAssignPlayersGlobal",
-      ({ playerX, playerO }: any) => {
-        setPlayerXGlobal(playerX)
-        setPlayerOGlobal(playerO)
-
-        window.sessionStorage.setItem(
-          "tictactoePlayers",
-          JSON.stringify({ playerX, playerO })
-        )
-      }
-    )
-  }, [])
-
   const handleStartGame = () => {
     setPlayGameShowInitialScreen(false)
     socket.current.emit("startGame", username)
@@ -163,10 +148,20 @@ const Game: React.FC<Props> = ({ socket }) => {
   }
 
   const handleReplay = () => {
+    // Temp
+    if (true) return
+
     setBoard(Array(9).fill(null))
     setXisNext(true)
     setWon(false)
     socket.current.emit("playGameOtherPlayerAccepted", true)
+    setPlayGameShowInitialScreen(false)
+    socket.current.emit("startGame", username)
+    socket.current.emit("playGameAssignPlayers", {
+      playerX: { username, letter: "X" },
+      playerO: { username: otherUsername, letter: "O" },
+    })
+    setShowWaitingScreen(true)
   }
 
   return (
@@ -174,7 +169,7 @@ const Game: React.FC<Props> = ({ socket }) => {
       <AnimatePresence>
         {playGameShowInitialScreen && (
           <ScreenWrapper>
-            <Container
+            <NoMarginContainer
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
@@ -192,7 +187,7 @@ const Game: React.FC<Props> = ({ socket }) => {
               >
                 Start game
               </RematchButton>
-            </Container>
+            </NoMarginContainer>
           </ScreenWrapper>
         )}
         {!playGameShowInitialScreen &&
@@ -206,7 +201,11 @@ const Game: React.FC<Props> = ({ socket }) => {
                 exit={{ scale: 0, opacity: 0 }}
               >
                 <WaitingText>
-                  {playerXGlobal?.username}'s turn ({playerXGlobal?.letter})
+                  {playerXGlobal?.username}'s turn (
+                  <span style={{ color: "var(--secondaryColor)" }}>
+                    {playerXGlobal?.letter}
+                  </span>
+                  )
                 </WaitingText>
               </NoMarginContainer>
             </NotYourTurnWrapper>
@@ -222,7 +221,11 @@ const Game: React.FC<Props> = ({ socket }) => {
                 exit={{ scale: 0, opacity: 0 }}
               >
                 <WaitingText>
-                  {playerOGlobal?.username}'s turn ({playerOGlobal?.letter})
+                  {playerOGlobal?.username}'s turn (
+                  <span style={{ color: "var(--secondaryColor)" }}>
+                    {playerOGlobal?.letter}
+                  </span>
+                  )
                 </WaitingText>
               </NoMarginContainer>
             </NotYourTurnWrapper>
@@ -259,7 +262,7 @@ const Game: React.FC<Props> = ({ socket }) => {
                     ) : (
                       <XWonText>{playerXGlobal?.username}</XWonText>
                     )}{" "}
-                    won
+                    won this game!
                   </WinnerText>
                 </>
               ) : (
@@ -313,7 +316,7 @@ const ScreenWrapper = styled(motion.div)`
 `
 
 const NotYourTurnWrapper = styled(ScreenWrapper)`
-  background: linear-gradient(45deg, rgba(0, 0, 0, 0.3), #0f0818);
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.2), #0f0818);
 `
 
 const Container = styled(motion.div)`
@@ -321,24 +324,26 @@ const Container = styled(motion.div)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: -7rem;
+  margin-top: -5rem;
 `
 
 const NoMarginContainer = styled(Container)`
-  margin-top: 0;
+  margin-top: -3rem;
 `
 
 const WinnerText = styled.h3`
   color: var(--tertiaryColor);
   font-size: 3.4rem;
+  margin: 0 auto;
   margin-bottom: 3rem;
   text-align: center;
   line-height: 1.3;
+  max-width: 90%;
 `
 
 const WaitingText = styled.h5`
   color: var(--tertiaryColor);
-  font-size: 2.4rem;
+  font-size: 3rem;
   text-align: center;
   line-height: 1.3;
   margin: 0 auto;

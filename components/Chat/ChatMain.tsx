@@ -45,6 +45,7 @@ import NoUsername from "./NoUsernameModal"
 
 import { User, Message, Call } from "../../models"
 import GamePlayBar from "../GamePlayBar"
+import { playerXGlobalState, playerOGlobalState } from "../../store/game"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -69,6 +70,8 @@ const ChatMain = () => {
     getUserMediaNotSupportedState
   )
   const setPeerAudioMuted = useSetRecoilState(peerAudioMutedState)
+  const setPlayerXGlobal = useSetRecoilState(playerXGlobalState)
+  const setPlayerOGlobal = useSetRecoilState(playerOGlobalState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -341,6 +344,21 @@ const ChatMain = () => {
       socket.current.emit("peerClosedVideo", false)
     }
   }, [showSelfWebcam, stream])
+
+  useEffect(() => {
+    socket?.current?.on(
+      "playGameAssignPlayersGlobal",
+      ({ playerX, playerO }: any) => {
+        setPlayerXGlobal(playerX)
+        setPlayerOGlobal(playerO)
+
+        window.sessionStorage.setItem(
+          "tictactoePlayers",
+          JSON.stringify({ playerX, playerO })
+        )
+      }
+    )
+  }, [socket.current])
 
   return (
     <>
