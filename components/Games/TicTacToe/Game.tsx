@@ -1,11 +1,20 @@
 import * as React from "react"
-import { useEffect } from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import Lottie from "react-lottie"
+import { useRecoilValue } from "recoil"
+import { motion, AnimatePresence } from "framer-motion"
+import { useSetRecoilState, useRecoilState } from "recoil"
 
 import Board from "./Board"
-import { motion, AnimatePresence } from "framer-motion"
+
+import { usernameState, otherUsernameQuery } from "../../../store/users"
+import {
+  playGameShowInitialScreenState,
+  playGameState,
+  playerXGlobalState,
+  playerOGlobalState,
+} from "../../../store/game"
 
 import wonAnim from "./confetti.json"
 
@@ -19,16 +28,28 @@ const animOptions = {
 }
 
 interface Props {
-  setPlayGame: React.Dispatch<React.SetStateAction<boolean>>
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
-const Game: React.FC<Props> = ({ setPlayGame, socket }) => {
+const Game: React.FC<Props> = ({ socket }) => {
+  const username = useRecoilValue(usernameState)
+  const otherUsername = useRecoilValue(otherUsernameQuery)
+
+  const [
+    playGameShowInitialScreen,
+    setPlayGameShowInitialScreen,
+  ] = useRecoilState(playGameShowInitialScreenState)
+
+  const setPlayGame = useSetRecoilState(playGameState)
+
   const [board, setBoard] = useState(Array(9).fill(null))
   const [xIsNext, setXisNext] = useState(true)
   const [won, setWon] = useState(false)
   const [, setTieGame] = useState(false)
-  const [initialScreen, setInitialScreen] = useState(true)
+  const [showWaitingScreen, setShowWaitingScreen] = useState(false)
+  const [playerXGlobal, setPlayerXGlobal] = useRecoilState(playerXGlobalState)
+  const [playerOGlobal, setPlayerOGlobal] = useRecoilState(playerOGlobalState)
+  const [hidePlayerAssign, setHidePlayerAssign] = useState(false)
 
   const calculateWinner = (squares: number[]) => {
     const lines = [
@@ -88,38 +109,76 @@ const Game: React.FC<Props> = ({ setPlayGame, socket }) => {
     if (winner || boardCopy[i]) return
     boardCopy[i] = xIsNext ? "X" : "O"
     click.play()
-    socket.current.emit("boardUpdated", boardCopy)
-    setBoard(boardCopy)
-    setXisNext((prevState) => !prevState)
+    socket.current.emit("gameBoardUpdated", boardCopy)
+    socket.current.emit("gameNextPlayer", xIsNext)
   }
 
   useEffect(() => {
-    socket.current.on("boardUpdatedGlobal", (newBoard: number[]) => {
+    socket.current.on("gameBoardUpdatedGlobal", (newBoard: number[]) => {
       setBoard(newBoard)
     })
-  }, [socket.current])
-
-  const handleStartGame = () => {
-    setInitialScreen(false)
-    socket.current.emit("startGame")
-  }
-
-  useEffect(() => {
-    socket.current.on("sendStartGameRequest", () => {
-      alert("Request to play")
+    socket.current.on("gameNextPlayerGlobal", () => {
+      setXisNext((prevState) => !prevState)
     })
   }, [socket.current])
+
+  useEffect(() => {
+    socket.current.on(
+      "playGameOtherPlayerAcceptedGlobal",
+      (accepted: boolean) => {
+        if (accepted) {
+          setShowWaitingScreen(false)
+        } else {
+          setShowWaitingScreen(false)
+          setPlayGameShowInitialScreen(true)
+          setPlayGame(false)
+        }
+      }
+    )
+  }, [socket.current])
+
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+    console.log(playerXGlobal, playerOGlobal)
+
+    if (playerOGlobal || playerXGlobal) {
+      idx = setTimeout(() => {
+        setHidePlayerAssign(true)
+      }, 2000)
+    }
+
+    return () => clearTimeout(idx)
+  }, [playerOGlobal, playerXGlobal])
+
+  useEffect(() => {
+    socket.current.on("playGameAssignPlayersGlobal", ({ playerX, playerO }) => {
+      setPlayerXGlobal(playerX)
+      setPlayerOGlobal(playerO)
+    })
+  }, [])
+
+  const handleStartGame = () => {
+    setPlayGameShowInitialScreen(false)
+    socket.current.emit("startGame", username)
+
+    socket.current.emit("playGameAssignPlayers", {
+      playerX: { username, letter: "X" },
+      playerO: { username: otherUsername, letter: "O" },
+    })
+    setShowWaitingScreen(true)
+  }
 
   const handleReplay = () => {
     setBoard(Array(9).fill(null))
     setXisNext(true)
     setWon(false)
+    socket.current.emit("playGameOtherPlayerAccepted", true)
   }
 
   return (
     <Wrapper>
       <AnimatePresence>
-        {initialScreen && (
+        {playGameShowInitialScreen && (
           <ScreenWrapper>
             <Container
               initial={{ y: 20, opacity: 0 }}
@@ -142,6 +201,49 @@ const Game: React.FC<Props> = ({ setPlayGame, socket }) => {
             </Container>
           </ScreenWrapper>
         )}
+        {!playGameShowInitialScreen &&
+          !showWaitingScreen &&
+          xIsNext &&
+          playerXGlobal?.username !== username && (
+            <NotYourTurnWrapper>
+              <NoMarginContainer
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+              >
+                <WaitingText>
+                  {playerXGlobal?.username}'s turn ({playerXGlobal?.letter})
+                </WaitingText>
+              </NoMarginContainer>
+            </NotYourTurnWrapper>
+          )}
+        {!playGameShowInitialScreen &&
+          !showWaitingScreen &&
+          !xIsNext &&
+          playerOGlobal?.username !== username && (
+            <NotYourTurnWrapper>
+              <NoMarginContainer
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+              >
+                <WaitingText>
+                  {playerOGlobal?.username}'s turn ({playerOGlobal?.letter})
+                </WaitingText>
+              </NoMarginContainer>
+            </NotYourTurnWrapper>
+          )}
+        {!playGameShowInitialScreen && showWaitingScreen && (
+          <ScreenWrapper>
+            <NoMarginContainer
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+            >
+              <WaitingText>Waiting for other play to connect...</WaitingText>
+            </NoMarginContainer>
+          </ScreenWrapper>
+        )}
         {(won || tie) && (
           <ScreenWrapper>
             <Container
@@ -158,8 +260,11 @@ const Game: React.FC<Props> = ({ setPlayGame, socket }) => {
                     isStopped={!won}
                   />
                   <WinnerText>
-                    Player{" "}
-                    {xIsNext ? <OWonText>O</OWonText> : <XWonText>X</XWonText>}{" "}
+                    {xIsNext ? (
+                      <OWonText>{playerOGlobal?.username}</OWonText>
+                    ) : (
+                      <XWonText>{playerXGlobal?.username}</XWonText>
+                    )}{" "}
                     won
                   </WinnerText>
                 </>
@@ -176,7 +281,10 @@ const Game: React.FC<Props> = ({ setPlayGame, socket }) => {
               <QuitButton
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setPlayGame(false)}
+                onClick={() => {
+                  setPlayGame(false)
+                  socket.current.emit("playGameOtherPlayerAccepted", false)
+                }}
               >
                 Quit
               </QuitButton>
@@ -210,6 +318,10 @@ const ScreenWrapper = styled(motion.div)`
   z-index: 1000;
 `
 
+const NotYourTurnWrapper = styled(ScreenWrapper)`
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.3), #0f0818);
+`
+
 const Container = styled(motion.div)`
   display: flex;
   flex-direction: column;
@@ -218,12 +330,25 @@ const Container = styled(motion.div)`
   margin-top: -7rem;
 `
 
+const NoMarginContainer = styled(Container)`
+  margin-top: 0;
+`
+
 const WinnerText = styled.h3`
   color: var(--tertiaryColor);
-  font-size: 4rem;
+  font-size: 3.4rem;
   margin-bottom: 3rem;
   text-align: center;
   line-height: 1.3;
+`
+
+const WaitingText = styled.h5`
+  color: var(--tertiaryColor);
+  font-size: 2.4rem;
+  text-align: center;
+  line-height: 1.3;
+  margin: 0 auto;
+  max-width: 80%;
 `
 
 const XWonText = styled.span`

@@ -1,11 +1,11 @@
 import * as React from "react"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 import io from "socket.io-client"
 import Peer from "simple-peer"
 import Router, { useRouter } from "next/router"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 
 import {
   streamState,
@@ -44,6 +44,7 @@ import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
 
 import { User, Message, Call } from "../../models"
+import GamePlayBar from "../GamePlayBar"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -74,6 +75,8 @@ const ChatMain = () => {
   const micMuted = useRecoilValue(muteMicState)
   const showSelfWebcam = useRecoilValue(showSelfWebcamState)
   const expandChatWindow = useRecoilValue(expandChatWindowState)
+
+  const [msg, setMsg] = useState("")
 
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
@@ -182,6 +185,10 @@ const ChatMain = () => {
       } else {
         setPeerAudioMuted(false)
       }
+    })
+
+    socket.current.on("sendStartGameRequest", (username: string) => {
+      setMsg(`${username} wants to play tictactoe`)
     })
   }, [username])
 
@@ -375,6 +382,9 @@ const ChatMain = () => {
           </RightColumn>
         </Wrapper>
       </OutterWrapper>
+      <AnimatePresence>
+        {msg && <GamePlayBar msg={msg} setMsg={setMsg} socket={socket} />}
+      </AnimatePresence>
     </>
   )
 }

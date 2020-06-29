@@ -7,7 +7,7 @@ import {
   FaChevronCircleUp,
   FaFileDownload,
   FaExpand,
-  // FaGamepad,
+  FaGamepad,
 } from "react-icons/fa"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
@@ -30,6 +30,8 @@ import {
 import Invite from "./Invite"
 import PhotoExpander from "./PhotoExpander"
 import TicTacToe from "../Games/TicTacToe"
+import { playGameState, playGameShowInitialScreenState } from "../../store/game"
+import { useSetRecoilState } from "recoil"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -51,11 +53,15 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const [expandChatWindow, setExpandChatWindow] = useRecoilState(
     expandChatWindowState
   )
+  const [playGame, setPlayGame] = useRecoilState(playGameState)
+
+  const setPlayGameShowInitialScreen = useSetRecoilState(
+    playGameShowInitialScreenState
+  )
 
   const [togglePhotoExpander, setTogglePhotoExpander] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState("")
   const [showJoinMsg, setShowJoinMsg] = useState(false)
-  const [playGame, setPlayGame] = useState(false)
 
   const joined = new Audio("/sounds/joined.mp3")
   joined.volume = 0.3
@@ -139,22 +145,23 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       >
         <FaChevronCircleUp />
       </ExpandButton>
-      {/* <PlayGameButton
+      <PlayGameButton
         whileHover={{ opacity: 1, scale: 1 }}
         whileTap={{ scale: 0.95 }}
         animate={playGame ? { rotate: 180 } : { rotate: 0 }}
         transition={{ type: "spring", damping: 15 }}
         onClick={() => {
           setPlayGame((prevState) => !prevState)
+          setPlayGameShowInitialScreen(true)
           if (soundOn) {
             playGameSound.play()
           }
         }}
       >
         <FaGamepad />
-      </PlayGameButton> */}
+      </PlayGameButton>
       {playGame ? (
-        <TicTacToe socket={socket} setPlayGame={setPlayGame} />
+        <TicTacToe socket={socket} />
       ) : (
         <PerfectScrollbar
           containerRef={(ref) => {
@@ -409,9 +416,9 @@ const ExpandButton = styled(motion.div)`
   }
 `
 
-// const PlayGameButton = styled(ExpandButton)`
-//   top: 6.5rem;
-// `
+const PlayGameButton = styled(ExpandButton)`
+  top: 6.5rem;
+`
 
 const MessageImage = styled.img`
   max-width: 100%;

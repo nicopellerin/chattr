@@ -120,12 +120,24 @@ io.on("connection", (socket) => {
     io.to(data.to).emit("playingLolSound", data.sound)
   })
 
-  socket.on("startGame", () => {
-    socket.broadcast.to(room).emit("sendStartGameRequest")
+  socket.on("startGame", (usernameStart) => {
+    socket.broadcast.to(room).emit("sendStartGameRequest", usernameStart)
   })
 
-  socket.on("boardUpdated", (board: number[]) => {
-    io.to(room).emit("boardUpdatedGlobal", board)
+  socket.on("gameBoardUpdated", (board: number[]) => {
+    io.to(room).emit("gameBoardUpdatedGlobal", board)
+  })
+
+  socket.on("gameNextPlayer", (board: number[]) => {
+    io.to(room).emit("gameNextPlayerGlobal", board)
+  })
+
+  socket.on("playGameOtherPlayerAccepted", (status: boolean) => {
+    io.to(room).emit("playGameOtherPlayerAcceptedGlobal", status)
+  })
+
+  socket.on("playGameAssignPlayers", ({ playerX, playerO }) => {
+    io.to(room).emit("playGameAssignPlayersGlobal", { playerX, playerO })
   })
 
   socket.on("peerMutedAudio", (status: boolean) => {
