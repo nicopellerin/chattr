@@ -1,11 +1,16 @@
 import { atom, selector } from "recoil"
 
+interface User {
+  id: string
+  username: string
+}
+
 export const selfIdState = atom<string>({
   key: "selfIdState",
   default: "",
 })
 
-export const listUsersState = atom<Array<any>>({
+export const listUsersState = atom<Array<User>>({
   key: "listUsersState",
   default: [],
 })

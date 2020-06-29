@@ -43,6 +43,8 @@ import ChatTextWindow from "./ChatTextWindow"
 import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
 
+import { User, Message, Call } from "../../models"
+
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
   const [selfId, setSelfId] = useRecoilState(selfIdState)
@@ -66,8 +68,6 @@ const ChatMain = () => {
     getUserMediaNotSupportedState
   )
   const setPeerAudioMuted = useSetRecoilState(peerAudioMutedState)
-
-  // const setAudioStream = useSetRecoilState(audioStreamState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -108,8 +108,7 @@ const ChatMain = () => {
             selfVideoRef.current.srcObject = stream
           }
         })
-        .catch((err) => {
-          console.log("ERR", err)
+        .catch(() => {
           setGetUserMediaNotSupported(true)
         })
     }
@@ -126,14 +125,14 @@ const ChatMain = () => {
       setChatWelcomeMessage(msg)
     })
 
-    socket.current.on("chatMessages", (msg: string) => {
+    socket.current.on("chatMessages", (msg: Message) => {
       setChatMsgs((prevState) => [...prevState, msg])
     })
 
     // Other user is typing
     socket.current.on(
       "chatMessageIsTyping",
-      ({ username, status }: { username: string; status: boolean }) => {
+      ({ username, status }: Partial<Message>) => {
         setChatUserIsTyping({ username, status })
       }
     )
@@ -155,11 +154,11 @@ const ChatMain = () => {
       setUserLeftChattr(false)
     })
 
-    socket.current.on("listUsers", (users: string[]) => {
+    socket.current.on("listUsers", (users: User[]) => {
       setListUsers(users)
     })
 
-    socket.current.on("call", (data: any) => {
+    socket.current.on("call", (data: Call) => {
       setCaller(data.from)
       setCallerSignal(data.signal)
       setReceivingCall(true)

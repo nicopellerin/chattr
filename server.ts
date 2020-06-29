@@ -4,6 +4,17 @@ import socket from "socket.io"
 import next from "next"
 // import redisAdapter from "socket.io-redis"
 
+import {
+  Rooms,
+  User,
+  SendFile,
+  AcceptFile,
+  PlayLolSound,
+  CallUser,
+  AcceptCall,
+  Message,
+} from "./models"
+
 const app = express()
 const server = http.createServer(app)
 
@@ -14,14 +25,6 @@ const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
 
 const PORT = 3000
-
-type User = { id: string; username: string }
-
-interface Rooms {
-  [room: string]: {
-    users: User[]
-  }
-}
 
 const rooms: Rooms = {}
 
@@ -52,11 +55,11 @@ io.on("connection", (socket) => {
     socket.broadcast.to(room).emit("usernameJoined", username)
   })
 
-  socket.on("chatMessage", (msg) => {
+  socket.on("chatMessage", (msg: Message) => {
     io.to(room).emit("chatMessages", msg)
   })
 
-  socket.on("chatMessageIsTyping", ({ username, status, msg }) => {
+  socket.on("chatMessageIsTyping", ({ username, status, msg }: Message) => {
     if (msg && msg.length > 1) {
       io.to(room).emit("chatMessageIsTyping", { username, status })
     } else {
@@ -73,14 +76,14 @@ io.on("connection", (socket) => {
     socket.leave(room)
   })
 
-  socket.on("callUser", (data: any) => {
+  socket.on("callUser", (data: CallUser) => {
     io.to(data.userToCall).emit("call", {
       signal: data.signalData,
       from: data.from,
     })
   })
 
-  socket.on("acceptCall", (data: any) => {
+  socket.on("acceptCall", (data: AcceptCall) => {
     io.to(data.to).emit("callAccepted", data.signal)
   })
 
@@ -88,7 +91,7 @@ io.on("connection", (socket) => {
     io.to(room).emit("callCancelled")
   })
 
-  socket.on("sendFile", (data: any) => {
+  socket.on("sendFile", (data: SendFile) => {
     io.to(data.userToCall).emit("sendingFile", {
       signal: data.signalData,
       from: data.from,
@@ -97,7 +100,7 @@ io.on("connection", (socket) => {
     })
   })
 
-  socket.on("acceptFile", (data: any) => {
+  socket.on("acceptFile", (data: AcceptFile) => {
     io.to(data.to).emit("receivingFile", data.signal)
   })
 
@@ -113,7 +116,7 @@ io.on("connection", (socket) => {
     io.to(room).emit("sendFileRequestCancelled")
   })
 
-  socket.on("playLolSound", (data: any) => {
+  socket.on("playLolSound", (data: PlayLolSound) => {
     io.to(data.to).emit("playingLolSound", data.sound)
   })
 
