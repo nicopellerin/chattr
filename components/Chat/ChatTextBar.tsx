@@ -3,11 +3,13 @@ import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { motion } from "framer-motion"
+import dynamic from "next/dynamic"
+import { FaVolumeUp } from "react-icons/fa"
+
+const EmojiPicker = dynamic(() => import("./EmojiPicker"), { ssr: false })
 
 import { usernameState, listUsersState, selfIdState } from "../../store/users"
 import { displayTheatreModeState } from "../../store/video"
-import EmojiPicker from "./EmojiPicker"
-import { FaVolumeUp } from "react-icons/fa"
 
 const lolSounds = [
   "/sounds/lol/laugh.mp3",

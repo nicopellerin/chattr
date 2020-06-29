@@ -4,14 +4,16 @@ import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { FaExpand, FaMicrophoneSlash } from "react-icons/fa"
+import dynamic from "next/dynamic"
 
-import Slider from "./Slider"
 import ChatScreenWaitingForConnect from "./ChatScreenWaitingForConnect"
 import ChatScreenCalling from "./ChatScreenCalling"
 import ChatScreenNoVideo from "./ChatScreenNoVideo"
 import ChatScreenIncomingCall from "./ChatScreenIncomingCall"
 import ChatScreenNotSupported from "./ChatScreenNotSupported"
 // import ChatScreenVisualiser from "./ChatScreenVisualiser"
+
+const Slider = dynamic(() => import("./Slider"), { ssr: false })
 
 import {
   showSelfWebcamState,
