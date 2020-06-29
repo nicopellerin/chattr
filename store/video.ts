@@ -80,11 +80,11 @@ export const peerAudioMutedState = atom<boolean>({
 export const peerAudioMutedQuery = selector({
   key: "peerAudioMuted",
   get: ({ get }) => {
-    const isStreaming = get(streamState)
+    const callAccepted = get(callAcceptedState)
     const peerAudioMuted = get(peerAudioMutedState)
     const listUsers = get(listUsersState)
 
-    if (isStreaming && peerAudioMuted && listUsers?.length > 1) {
+    if (callAccepted && peerAudioMuted && listUsers?.length > 1) {
       return true
     }
 

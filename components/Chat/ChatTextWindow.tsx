@@ -64,7 +64,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const [playGame, setPlayGame] = useState(false)
 
   const joined = new Audio("/sounds/joined.mp3")
-  joined.volume = 0.25
+  joined.volume = 0.3
 
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
@@ -109,6 +109,12 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
   }, [msgs])
+
+  useEffect(() => {
+    if (!expandChatWindow) {
+      scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
+    }
+  }, [expandChatWindow])
 
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
@@ -238,6 +244,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
                   </UserIsTypingText>
                 </UserIsTypingWrapper>
               )}
+
             <AnimatePresence>
               {userLeftChattr && (
                 <UserDisconnectedWrapper

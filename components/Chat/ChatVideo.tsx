@@ -3,7 +3,7 @@ import { useRef, useState } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
-import { FaExpand } from "react-icons/fa"
+import { FaExpand, FaMicrophoneSlash } from "react-icons/fa"
 
 import Slider from "./Slider"
 import ChatScreenWaitingForConnect from "./ChatScreenWaitingForConnect"
@@ -69,8 +69,6 @@ const ChatVideo: React.FC<Props> = ({
     )
   }
 
-  console.log(peerAudioMuted)
-
   return (
     <Wrapper ref={contraintsRef}>
       <>
@@ -123,7 +121,8 @@ const ChatVideo: React.FC<Props> = ({
           />
           {peerAudioMuted && (
             <FriendAudioMuted animate={{ y: [10, 0], opacity: [0, 1] }}>
-              {otherUsername} muted audio
+              {otherUsername} muted mic{" "}
+              <FaMicrophoneSlash style={{ marginLeft: 5 }} />
             </FriendAudioMuted>
           )}
         </>
@@ -177,11 +176,14 @@ const FriendVideo = styled.video`
 
 const FriendAudioMuted = styled(motion.h3)`
   position: absolute;
-  right: 3rem;
-  top: 2.2rem;
-  font-size: 2rem;
-  color: rgba(255, 255, 255, 0.6);
+  right: 6rem;
+  bottom: 1.45rem;
+  font-size: 1.7rem;
+  color: rgba(255, 255, 255, 0.5);
   z-index: 20;
+  display: flex;
+  align-items: center;
+  margin: 0;
 `
 
 const SelfVideo = styled(motion.video)`
@@ -215,4 +217,5 @@ const ExpandButton = styled(motion.button)`
   position: absolute;
   bottom: 0.5rem;
   right: 1rem;
+  z-index: 21;
 `
