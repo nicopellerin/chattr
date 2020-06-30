@@ -35,6 +35,7 @@ import {
   sendingFileState,
   expandChatWindowState,
 } from "../../store/chat"
+import { playerXGlobalState, playerOGlobalState } from "../../store/game"
 
 import ChatVideo from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
@@ -42,10 +43,9 @@ import ChatCommands from "./ChatCommands"
 import ChatTextWindow from "./ChatTextWindow"
 import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
+import GamePlayBar from "../GamePlayBar"
 
 import { User, Message, Call } from "../../models"
-import GamePlayBar from "../GamePlayBar"
-import { playerXGlobalState, playerOGlobalState } from "../../store/game"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)

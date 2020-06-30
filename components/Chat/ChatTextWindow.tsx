@@ -12,6 +12,7 @@ import {
 import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
 import { saveAs } from "file-saver"
+import CryptoJS from "crypto-js"
 
 import {
   chatWindowState,
@@ -176,38 +177,47 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
           <Container style={{ height: expandChatWindow ? 585 : 400 }}>
             <AnimatePresence>
               {msgs.length > 0 &&
-                msgs.map(({ msg, username: usernameMsg, filename }, i) => (
-                  <MsgWrapper
-                    key={i}
-                    initial={{ y: 5 }}
-                    animate={{ y: 0 }}
-                    exit={{ opacity: 0, transition: { duration: 0 } }}
-                    transition={{ type: "spring", damping: 80 }}
-                  >
-                    <Username me={username === usernameMsg}>
-                      {usernameMsg}
-                    </Username>
-                    {msg.startsWith("data:image") ? (
-                      <>
-                        <DownloadIcon
-                          title="Download"
-                          onClick={() => saveAs(msg, filename)}
-                        />
-                        <ExpandIcon
-                          title="Expand"
-                          onClick={() => {
-                            setTogglePhotoExpander((prevState) => !prevState)
-                            setSelectedPhoto(msg)
-                          }}
-                        />
+                msgs.map(({ msg, username: usernameMsg, filename }, i) => {
+                  const bytes = CryptoJS.AES.decrypt(
+                    msg,
+                    String(process.env.NEXT_PUBLIC_KEY)
+                  )
+                  const decryptedData = JSON.parse(
+                    bytes.toString(CryptoJS.enc.Utf8)
+                  )
+                  return (
+                    <MsgWrapper
+                      key={i}
+                      initial={{ y: 5 }}
+                      animate={{ y: 0 }}
+                      exit={{ opacity: 0, transition: { duration: 0 } }}
+                      transition={{ type: "spring", damping: 80 }}
+                    >
+                      <Username me={username === usernameMsg}>
+                        {usernameMsg}
+                      </Username>
+                      {msg.startsWith("data:image") ? (
+                        <>
+                          <DownloadIcon
+                            title="Download"
+                            onClick={() => saveAs(msg, filename)}
+                          />
+                          <ExpandIcon
+                            title="Expand"
+                            onClick={() => {
+                              setTogglePhotoExpander((prevState) => !prevState)
+                              setSelectedPhoto(msg)
+                            }}
+                          />
 
-                        <MessageImage src={msg} alt="Sent photo" />
-                      </>
-                    ) : (
-                      <span>{msg}</span>
-                    )}
-                  </MsgWrapper>
-                ))}
+                          <MessageImage src={msg} alt="Sent photo" />
+                        </>
+                      ) : (
+                        <span>{decryptedData}</span>
+                      )}
+                    </MsgWrapper>
+                  )
+                })}
             </AnimatePresence>
             {msgs.length === 0 && hasConnection && (
               <NoMessages hasConnection={hasConnection}>

@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil"
 import { motion } from "framer-motion"
 import dynamic from "next/dynamic"
 import { FaVolumeUp } from "react-icons/fa"
+import CryptoJS from "crypto-js"
 
 const EmojiPicker = dynamic(() => import("./EmojiPicker"), { ssr: false })
 
@@ -92,9 +93,14 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       itiswhatitis = "👁👄👁"
     }
 
+    const ciphertext = CryptoJS.AES.encrypt(
+      JSON.stringify(msg),
+      String(process.env.NEXT_PUBLIC_KEY)
+    ).toString()
+
     socket.current.emit("chatMessage", {
       username,
-      msg: itiswhatitis || msg,
+      msg: itiswhatitis || ciphertext,
     })
 
     setMsg("")

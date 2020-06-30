@@ -1,5 +1,5 @@
 declare module "better-react-spinkit"
-declare module "get-user-media-promise"
+declare module "socket.io-encrypt"
 
 // type ShareData = {
 //   title?: string
