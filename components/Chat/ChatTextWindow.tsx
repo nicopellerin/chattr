@@ -155,7 +155,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
         animate={playGame ? { rotate: 180 } : { rotate: 0 }}
         transition={{ type: "spring", damping: 15 }}
         onClick={() => {
-          if (listUsers?.length < 2) return
+          if (noConnection) return
           setPlayGame((prevState) => !prevState)
           setPlayGameShowInitialScreen(true)
           if (soundOn) {
