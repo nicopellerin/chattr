@@ -13,6 +13,7 @@ import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
 import { saveAs } from "file-saver"
 import CryptoJS from "crypto-js"
+import dompurify from "dompurify"
 
 import {
   chatWindowState,
@@ -130,6 +131,8 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const hasConnection = listUsers?.length > 1
   const noConnection = listUsers?.length < 2
 
+  const sanitizer = dompurify.sanitize
+
   return (
     <Wrapper>
       <ExpandButton
@@ -178,13 +181,26 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
             <AnimatePresence>
               {msgs.length > 0 &&
                 msgs.map(({ msg, username: usernameMsg, filename }, i) => {
-                  const bytes = CryptoJS.AES.decrypt(
-                    msg,
-                    String(process.env.NEXT_PUBLIC_KEY)
-                  )
-                  const decryptedData = JSON.parse(
-                    bytes.toString(CryptoJS.enc.Utf8)
-                  )
+                  let decryptedData
+
+                  if (!msg.startsWith("data:image")) {
+                    const bytes = CryptoJS.AES.decrypt(
+                      msg,
+                      String(process.env.NEXT_PUBLIC_KEY)
+                    )
+                    decryptedData = JSON.parse(
+                      bytes.toString(CryptoJS.enc.Utf8)
+                    )
+                  }
+
+                  const convertLinkToHTML = (text: string) => {
+                    const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
+                    return text?.replace(
+                      reg,
+                      `<a href='$1$2' target='_blank' rel='nofollower'>$1$2</a>`
+                    )
+                  }
+
                   return (
                     <MsgWrapper
                       key={i}
@@ -213,7 +229,13 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
                           <MessageImage src={msg} alt="Sent photo" />
                         </>
                       ) : (
-                        <span>{decryptedData}</span>
+                        <MessageOutput
+                          dangerouslySetInnerHTML={{
+                            __html: convertLinkToHTML(
+                              sanitizer(decryptedData) || msg
+                            ),
+                          }}
+                        />
                       )}
                     </MsgWrapper>
                   )
@@ -331,6 +353,12 @@ const Username = styled.span`
   color: ${(props: { me: boolean }) =>
     props.me ? "var(--tertiaryColor)" : "var(--secondaryColor)"};
   font-weight: 600;
+`
+
+const MessageOutput = styled.div`
+  a {
+    color: var(--primaryColorLight);
+  }
 `
 
 const NoMessages = styled(motion.div)`
