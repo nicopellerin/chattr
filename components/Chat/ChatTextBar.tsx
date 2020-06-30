@@ -58,7 +58,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     sound.play()
     sound.volume = 0.5
 
-    socket.current.emit("chatMessage", { user: username, msg: "LOL! 😆🤣" })
+    socket.current.emit("chatMessage", { username, msg: "LOL! 😆🤣" })
     socket.current.emit("playLolSound", {
       to: otherUser,
       sound: lolSounds[randomIdx],
