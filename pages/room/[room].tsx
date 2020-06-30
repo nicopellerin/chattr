@@ -33,7 +33,7 @@ const RoomPage = () => {
           content={
             typeof window !== "undefined"
               ? window.location.href
-              : "https://chattr.lol/room"
+              : "https://chattr.lol"
           }
         />
         <meta
