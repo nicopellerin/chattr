@@ -31,7 +31,10 @@ const RoomPage = () => {
       <Head>
         <title>{`Chattr · Room: ${query?.room}`}</title>
         <meta property="og:title" content={`Chattr · Room: ${query?.room}`} />
-        <meta property="og:url" content="https://chattr.lol" />
+        <meta
+          property="og:url"
+          content={`https://chattr.lol/room/${query?.room}`}
+        />
         <meta
           property="og:description"
           content="One-on-one hangouts in a fun and secure way"
