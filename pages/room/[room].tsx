@@ -1,7 +1,6 @@
 import Head from "next/head"
 import dynamic from "next/dynamic"
 import styled from "styled-components"
-import { useRouter } from "next/router"
 import { detect } from "detect-browser"
 
 const ChatMainClient = dynamic(() => import("../../components/Chat/ChatMain"), {
@@ -16,8 +15,6 @@ const DetectWrongBrowser = dynamic(
 )
 
 const RoomPage = () => {
-  const { query } = useRouter()
-
   const browser = detect()
 
   const notSupported =
@@ -29,11 +26,15 @@ const RoomPage = () => {
   return (
     <>
       <Head>
-        <title>{`Chattr · Room: ${query?.room}`}</title>
-        <meta property="og:title" content={`Chattr · Room: ${query?.room}`} />
+        <title>Chattr · Join Room</title>
+        <meta property="og:title" content="Chattr · Join Room" />
         <meta
           property="og:url"
-          content={`https://chattr.lol/room/${query?.room}`}
+          content={
+            typeof window !== "undefined"
+              ? window.location.href
+              : "https://chattr.lol/room"
+          }
         />
         <meta
           property="og:description"

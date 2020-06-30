@@ -55,10 +55,11 @@ const AboutPage = () => {
                 alt="Icon"
               />
               <Text>
-                Chattr is a free 1-to-1 P2P audio/video and chat platform. No
-                data is stored on any server, only in the browser. This means
-                that when a session ends, all data is gone forever. The project
-                is still in its infancy and more features will likely be added.
+                Chattr is a free 1-to-1 P2P audio/video and chat platform. Text
+                is encrypted and no data is stored on any server, only in the
+                browser. This means that when a session ends, all data is gone
+                forever. The project is still in its infancy and more features
+                will likely be added.
               </Text>
               <Text>
                 Please note, if you get the{" "}
