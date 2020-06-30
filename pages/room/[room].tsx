@@ -29,14 +29,6 @@ const RoomPage = () => {
         <title>Chattr · Join Room</title>
         <meta property="og:title" content="Chattr · Join Room" />
         <meta
-          property="og:url"
-          content={
-            typeof window !== "undefined"
-              ? window.location.href
-              : "https://chattr.lol"
-          }
-        />
-        <meta
           property="og:description"
           content="One-on-one hangouts in a fun and secure way"
         />
