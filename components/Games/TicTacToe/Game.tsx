@@ -2,7 +2,7 @@ import * as React from "react"
 import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import { useSetRecoilState, useRecoilState } from "recoil"
 
 import Board from "./Board"
@@ -152,43 +152,4 @@ export default Game
 // Styles
 const Wrapper = styled.div`
   height: 400px;
-`
-
-const ScreenWrapper = styled(motion.div)`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, rgba(0, 0, 0, 0.9), #0f0818);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`
-
-const NotYourTurnWrapper = styled(ScreenWrapper)`
-  background: linear-gradient(45deg, rgba(0, 0, 0, 0.2), #0f0818);
-`
-
-const Container = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: -5rem;
-`
-
-const NoMarginContainer = styled(Container)`
-  margin-top: -3rem;
-`
-
-const WaitingText = styled.h5`
-  color: var(--tertiaryColor);
-  font-size: 3rem;
-  text-align: center;
-  line-height: 1.3;
-  margin: 0 auto;
-  max-width: 80%;
 `
