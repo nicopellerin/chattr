@@ -202,16 +202,6 @@ const NoMarginContainer = styled(Container)`
   margin-top: -3rem;
 `
 
-const WinnerText = styled.h3`
-  color: var(--tertiaryColor);
-  font-size: 3.4rem;
-  margin: 0 auto;
-  margin-bottom: 3rem;
-  text-align: center;
-  line-height: 1.3;
-  max-width: 90%;
-`
-
 const WaitingText = styled.h5`
   color: var(--tertiaryColor);
   font-size: 3rem;
@@ -219,29 +209,4 @@ const WaitingText = styled.h5`
   line-height: 1.3;
   margin: 0 auto;
   max-width: 80%;
-`
-
-const XWonText = styled.span`
-  color: var(--primaryColor);
-`
-
-const OWonText = styled.span`
-  color: var(--secondaryColor);
-`
-
-const RematchButton = styled(motion.button)`
-  background: linear-gradient(45deg, #d852fd, #9c74fe);
-  border: none;
-  border-radius: 5px;
-  padding: 1rem 1.5rem;
-  font-weight: 600;
-  font-size: 1.7rem;
-  color: var(--textColor);
-  cursor: pointer;
-  outline: transparent;
-`
-
-const QuitButton = styled(RematchButton)`
-  background: var(--primaryColorDark);
-  margin-top: 2rem;
 `

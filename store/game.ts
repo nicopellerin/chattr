@@ -89,8 +89,8 @@ export const startGameState = selector({
   },
 })
 
-export const resetGameState = selector({
-  key: "resetGameState",
-  get: () => {},
-  set: ({ set }) => {},
-})
+// export const resetGameState = selector({
+//   key: "resetGameState",
+//   get: () => {},
+//   set: ({ set }) => {},
+// })
