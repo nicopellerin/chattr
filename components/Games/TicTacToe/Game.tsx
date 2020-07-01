@@ -10,7 +10,6 @@ import Board from "./Board"
 import { usernameState } from "../../../store/users"
 import {
   playGameShowInitialScreenState,
-  playGameState,
   playerXGlobalState,
   playerOGlobalState,
   showWaitingScreenState,
@@ -18,6 +17,7 @@ import {
   tieGameState,
   xIsNextState,
   boardState,
+  resetGameState,
 } from "../../../store/game"
 
 import { calculateWinner, calculateTie } from "./utils"
@@ -40,7 +40,7 @@ const Game: React.FC<Props> = ({ socket }) => {
   const playerXGlobal = useRecoilValue(playerXGlobalState)
   const playerOGlobal = useRecoilValue(playerOGlobalState)
 
-  const setPlayGame = useSetRecoilState(playGameState)
+  const setResetGame = useSetRecoilState(resetGameState)
   const setTieGame = useSetRecoilState(tieGameState)
 
   const [board, setBoard] = useRecoilState(boardState)
@@ -96,7 +96,7 @@ const Game: React.FC<Props> = ({ socket }) => {
         } else {
           setShowWaitingScreen(false)
           setPlayGameShowInitialScreen(true)
-          setPlayGame(false)
+          setResetGame()
         }
       }
     )

@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
 import {
   FaChevronCircleUp,
@@ -14,6 +14,10 @@ import { ThreeBounce } from "better-react-spinkit"
 import { saveAs } from "file-saver"
 import CryptoJS from "crypto-js"
 import dompurify from "dompurify"
+
+import Invite from "./Invite"
+import PhotoExpander from "./PhotoExpander"
+import TicTacToe from "../Games/TicTacToe"
 
 import {
   chatWindowState,
@@ -29,11 +33,11 @@ import {
   userSoundOnState,
   otherUsernameQuery,
 } from "../../store/users"
-import Invite from "./Invite"
-import PhotoExpander from "./PhotoExpander"
-import TicTacToe from "../Games/TicTacToe"
-import { playGameState, playGameShowInitialScreenState } from "../../store/game"
-import { useSetRecoilState } from "recoil"
+import {
+  playGameState,
+  playGameShowInitialScreenState,
+  wonGameState,
+} from "../../store/game"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -60,6 +64,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const setPlayGameShowInitialScreen = useSetRecoilState(
     playGameShowInitialScreenState
   )
+  const setWon = useSetRecoilState(wonGameState)
 
   const [togglePhotoExpander, setTogglePhotoExpander] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState("")
@@ -70,14 +75,11 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
 
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
-
     if (otherUsername) {
       setShowJoinMsg(true)
-
       if (soundOn) {
         joined.play()
       }
-
       idx = setTimeout(() => {
         setShowJoinMsg(false)
       }, 4000)
@@ -113,7 +115,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   }, [msgs])
 
   useEffect(() => {
-    if (!expandChatWindow && scrollRef.current.scrollTop) {
+    if (!expandChatWindow && scrollRef.current && scrollRef.current.scrollTop) {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
   }, [expandChatWindow])
@@ -157,6 +159,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
         onClick={() => {
           if (noConnection) return
           setPlayGame((prevState) => !prevState)
+          setWon(false)
           setPlayGameShowInitialScreen(true)
           if (soundOn) {
             playGameSound.play()

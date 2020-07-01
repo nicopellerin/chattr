@@ -86,11 +86,16 @@ export const startGameState = selector({
   set: ({ set }) => {
     set(playGameShowInitialScreenState, false)
     set(showWaitingScreenState, true)
+    set(wonGameState, false)
   },
 })
 
-// export const resetGameState = selector({
-//   key: "resetGameState",
-//   get: () => {},
-//   set: ({ set }) => {},
-// })
+export const resetGameState = selector({
+  key: "resetGameState",
+  get: () => {},
+  set: ({ set }) => {
+    set(boardState, Array(9).fill(null))
+    set(xIsNextState, true)
+    set(wonGameState, false)
+  },
+})

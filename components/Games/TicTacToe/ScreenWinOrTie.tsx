@@ -16,8 +16,8 @@ import {
   playerXGlobalState,
   playerOGlobalState,
   wonGameState,
-  playGameState,
   xIsNextState,
+  resetGameState,
 } from "../../../store/game"
 
 import wonAnim from "./confetti.json"
@@ -38,25 +38,14 @@ interface Props {
 const ScreenWinOrTie: React.FC<Props> = ({ socket }) => {
   const playerXGlobal = useRecoilValue(playerXGlobalState)
   const playerOGlobal = useRecoilValue(playerOGlobalState)
-  const wonGame = useRecoilValue(wonGameState)
   const xIsNext = useRecoilValue(xIsNextState)
+  const wonGame = useRecoilValue(wonGameState)
 
-  const setPlayGame = useSetRecoilState(playGameState)
+  const setResetGame = useSetRecoilState(resetGameState)
 
-  const handleReplay = () => {
-    // Temp
-    // if (true) return
-    // setBoard(Array(9).fill(null))
-    // setXisNext(true)
-    // setWon(false)
-    // setPlayGameShowInitialScreen(false)
-    // setShowWaitingScreen(true)
-    // socket.current.emit("playGameOtherPlayerAccepted", true)
-    // socket.current.emit("startGame", username)
-    // socket.current.emit("playGameAssignPlayers", {
-    //   playerX: { username, letter: "X" },
-    //   playerO: { username: otherUsername, letter: "O" },
-    // })
+  const handleQuit = () => {
+    socket.current.emit("playGameOtherPlayerAccepted", false)
+    setResetGame()
   }
 
   return (
@@ -89,17 +78,14 @@ const ScreenWinOrTie: React.FC<Props> = ({ socket }) => {
         <RematchButton
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={handleReplay}
+          onClick={() => setResetGame()}
         >
           Re-match
         </RematchButton>
         <QuitButton
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => {
-            setPlayGame(false)
-            socket.current.emit("playGameOtherPlayerAccepted", false)
-          }}
+          onClick={handleQuit}
         >
           Quit
         </QuitButton>
