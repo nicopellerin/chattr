@@ -1,7 +1,8 @@
 enum SquareValue {
-  "X",
-  "O",
+  X = "X",
+  O = "O",
 }
+
 export const calculateWinner = (squares: Array<SquareValue | null>) => {
   const lines = [
     [0, 1, 2],

@@ -8,8 +8,8 @@ interface Player {
 }
 
 enum SquareValue {
-  "X",
-  "O",
+  X = "X",
+  O = "O",
 }
 
 export const playGameState = atom<boolean>({
@@ -27,9 +27,9 @@ export const playGameShowInitialScreenState = atom<boolean>({
   default: true,
 })
 
-export const playGamePlayerTurn = atom<string>({
+export const playGamePlayerTurn = atom<SquareValue>({
   key: "playGamePlayerTurn",
-  default: "X",
+  default: SquareValue.X,
 })
 
 export const playGameStartedUsernameState = atom<string>({

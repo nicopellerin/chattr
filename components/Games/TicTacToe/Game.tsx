@@ -31,8 +31,8 @@ interface Props {
 }
 
 enum SquareValue {
-  "X",
-  "O",
+  X = "X",
+  O = "O",
 }
 
 const Game: React.FC<Props> = ({ socket }) => {
