@@ -29,8 +29,13 @@ const Wrapper = styled(motion.div)`
   position: absolute;
   height: 100%;
   width: 100%;
-  z-index: 9999;
+  z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(
+    45deg,
+    rgba(235, 87, 87, 0.2),
+    rgba(235, 87, 87, 0.4)
+  );
 `

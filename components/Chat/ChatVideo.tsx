@@ -91,11 +91,6 @@ const ChatVideo: React.FC<Props> = ({
 
   return (
     <Wrapper ref={contraintsRef}>
-      <AnimatePresence>
-        {messageContainsHeartEmoji &&
-          callAccepted &&
-          listUsers?.length >= 2 && <ChatScreenHeart />}
-      </AnimatePresence>
       <>
         {!showCatSlider ? (
           <>
@@ -137,6 +132,11 @@ const ChatVideo: React.FC<Props> = ({
           theatreMode={displayTheatreMode}
           showWebcam={showWebcam}
         />
+        <AnimatePresence>
+          {messageContainsHeartEmoji &&
+            callAccepted &&
+            listUsers?.length >= 2 && <ChatScreenHeart />}
+        </AnimatePresence>
         <>
           <FriendVideo
             theatreMode={displayTheatreMode}
