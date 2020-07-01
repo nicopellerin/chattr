@@ -5,8 +5,8 @@ import { motion } from "framer-motion"
 import Square from "./Square"
 
 enum SquareValue {
-  "X",
-  "O",
+  X = "X",
+  O = "O",
 }
 
 interface Props {
