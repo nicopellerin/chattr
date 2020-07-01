@@ -10,12 +10,7 @@ import shortid from "shortid"
 
 const EmojiPicker = dynamic(() => import("./EmojiPicker"), { ssr: false })
 
-import {
-  usernameState,
-  listUsersState,
-  selfIdState,
-  otherUserIdQuery,
-} from "../../store/users"
+import { usernameState, listUsersState } from "../../store/users"
 import { displayTheatreModeState } from "../../store/video"
 
 const lolSounds = [
@@ -49,7 +44,6 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const listUsers = useRecoilValue(listUsersState)
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
-  const otherUserId = useRecoilValue(otherUserIdQuery)
 
   const [msg, setMsg] = useState("")
   const [togglePicker, setTogglePicker] = useState(false)
