@@ -97,6 +97,13 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
     }
   }, [otherUsername])
 
+  // If other user disconnects while user is in game mode, revert to chat
+  useEffect(() => {
+    if (listUsers?.length < 2) {
+      setPlayGame(false)
+    }
+  }, [listUsers])
+
   const pop = new Audio("/sounds/pop_drip.mp3")
   pop.volume = 0.3
   const expand = new Audio("/sounds/expand.mp3")
