@@ -4,6 +4,7 @@ export interface User {
 }
 
 export interface Message {
+  id: string
   username: string
   status: boolean
   msg: string

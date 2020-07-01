@@ -59,6 +59,10 @@ io.on("connection", (socket) => {
     io.to(room).emit("chatMessages", msg)
   })
 
+  socket.on("removeChatTextMessage", (messages: Message[]) => {
+    io.to(room).emit("removeChatTextMessageAndUpdateMessages", messages)
+  })
+
   socket.on("chatMessageIsTyping", ({ username, status, msg }: Message) => {
     if (msg && msg.length > 1) {
       io.to(room).emit("chatMessageIsTyping", { username, status })

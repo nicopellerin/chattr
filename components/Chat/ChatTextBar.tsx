@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import dynamic from "next/dynamic"
 import { FaVolumeUp } from "react-icons/fa"
 import CryptoJS from "crypto-js"
+import shortid from "shortid"
 
 const EmojiPicker = dynamic(() => import("./EmojiPicker"), { ssr: false })
 
@@ -99,14 +100,13 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     ).toString()
 
     socket.current.emit("chatMessage", {
+      id: shortid.generate(),
       username,
       msg: itiswhatitis || ciphertext,
     })
 
     setMsg("")
-
     count.current = 0
-
     setTogglePicker(false)
   }
 

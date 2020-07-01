@@ -135,6 +135,13 @@ const ChatMain = () => {
       setChatMsgs((prevState) => [...prevState, msg])
     })
 
+    socket.current.on(
+      "removeChatTextMessageAndUpdateMessages",
+      (messages: Message[]) => {
+        setChatMsgs(messages)
+      }
+    )
+
     // Other user is typing
     socket.current.on(
       "chatMessageIsTyping",

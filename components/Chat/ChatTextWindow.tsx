@@ -3,20 +3,12 @@ import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
-import {
-  FaChevronCircleUp,
-  FaFileDownload,
-  FaExpand,
-  FaGamepad,
-} from "react-icons/fa"
+import { FaChevronCircleUp, FaGamepad } from "react-icons/fa"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
-import { saveAs } from "file-saver"
 import CryptoJS from "crypto-js"
-import dompurify from "dompurify"
 
 import Invite from "./Invite"
-import PhotoExpander from "./PhotoExpander"
 import TicTacToe from "../Games/TicTacToe"
 
 import {
@@ -38,6 +30,7 @@ import {
   playGameShowInitialScreenState,
   wonGameState,
 } from "../../store/game"
+import ChatTextMessage from "./ChatTextMessage"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -66,8 +59,6 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   )
   const setWon = useSetRecoilState(wonGameState)
 
-  const [togglePhotoExpander, setTogglePhotoExpander] = useState(false)
-  const [selectedPhoto, setSelectedPhoto] = useState("")
   const [showJoinMsg, setShowJoinMsg] = useState(false)
 
   const joined = new Audio("/sounds/joined.mp3")
@@ -140,8 +131,6 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const hasConnection = listUsers?.length > 1
   const noConnection = listUsers?.length < 2
 
-  const sanitizer = dompurify.sanitize
-
   return (
     <Wrapper>
       <ExpandButton
@@ -188,9 +177,9 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
           }}
         >
           <Container style={{ height: expandChatWindow ? 585 : 400 }}>
-            <AnimatePresence>
+            <>
               {msgs.length > 0 &&
-                msgs.map(({ msg, username: usernameMsg, filename }, i) => {
+                msgs.map(({ msg, username: usernameMsg, filename, id }) => {
                   let decryptedData
 
                   if (!msg.startsWith("data:image")) {
@@ -203,54 +192,18 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
                     )
                   }
 
-                  const convertLinkToHTML = (text: string) => {
-                    const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
-                    return text?.replace(
-                      reg,
-                      `<a href='$1$2' target='_blank' rel='nofollower'>$1$2</a>`
-                    )
-                  }
-
                   return (
-                    <MsgWrapper
-                      key={i}
-                      initial={{ y: 5 }}
-                      animate={{ y: 0 }}
-                      exit={{ opacity: 0, transition: { duration: 0 } }}
-                      transition={{ type: "spring", damping: 80 }}
-                    >
-                      <Username me={username === usernameMsg}>
-                        {usernameMsg}
-                      </Username>
-                      {msg.startsWith("data:image") ? (
-                        <>
-                          <DownloadIcon
-                            title="Download"
-                            onClick={() => saveAs(msg, filename)}
-                          />
-                          <ExpandIcon
-                            title="Expand"
-                            onClick={() => {
-                              setTogglePhotoExpander((prevState) => !prevState)
-                              setSelectedPhoto(msg)
-                            }}
-                          />
-
-                          <MessageImage src={msg} alt="Sent photo" />
-                        </>
-                      ) : (
-                        <MessageOutput
-                          dangerouslySetInnerHTML={{
-                            __html: convertLinkToHTML(
-                              sanitizer(decryptedData) || msg
-                            ),
-                          }}
-                        />
-                      )}
-                    </MsgWrapper>
+                    <ChatTextMessage
+                      id={id}
+                      msg={msg}
+                      decryptedData={decryptedData}
+                      filename={filename}
+                      usernameMsg={usernameMsg}
+                      socket={socket}
+                    />
                   )
                 })}
-            </AnimatePresence>
+            </>
             {msgs.length === 0 && hasConnection && (
               <NoMessages hasConnection={hasConnection}>
                 <NoMessagesText>
@@ -315,12 +268,6 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
           </Container>
         </PerfectScrollbar>
       )}
-      {togglePhotoExpander && (
-        <PhotoExpander
-          imageSrc={selectedPhoto}
-          setToggle={setTogglePhotoExpander}
-        />
-      )}
     </Wrapper>
   )
 }
@@ -343,32 +290,6 @@ const Container = styled.div`
   font-size: 1.7rem;
   line-height: 1.4;
   position: relative;
-`
-
-const MsgWrapper = styled(motion.div)`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 1rem;
-  padding: 1.5rem;
-  border-bottom: 1px solid #222;
-  background: linear-gradient(45deg, #0c0613, #0f0818);
-  border-radius: 5px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  margin-bottom: 15px;
-  word-break: break-all;
-  position: relative;
-`
-
-const Username = styled.span`
-  color: ${(props: { me: boolean }) =>
-    props.me ? "var(--tertiaryColor)" : "var(--secondaryColor)"};
-  font-weight: 600;
-`
-
-const MessageOutput = styled.div`
-  a {
-    color: var(--primaryColorLight);
-  }
 `
 
 const NoMessages = styled(motion.div)`
@@ -467,34 +388,6 @@ const ExpandButton = styled(motion.div)`
 
 const PlayGameButton = styled(ExpandButton)`
   top: 6.5rem;
-`
-
-const MessageImage = styled.img`
-  max-width: 100%;
-`
-
-const DownloadIcon = styled(FaFileDownload)`
-  position: absolute;
-  top: 1.5rem;
-  right: 4.5rem;
-  cursor: pointer;
-  color: var(--textColor);
-
-  &:hover {
-    color: #9c74fe;
-  }
-`
-
-const ExpandIcon = styled(FaExpand)`
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  cursor: pointer;
-  color: var(--textColor);
-
-  &:hover {
-    color: #d852fd;
-  }
 `
 
 const IconLogo = styled(motion.img)`
