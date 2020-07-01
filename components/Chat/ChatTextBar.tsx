@@ -76,7 +76,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       sound.play()
       sound.volume = 0.5
     })
-  }, [])
+  }, [socket.current])
 
   let itiswhatitis = ""
 
