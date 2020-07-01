@@ -121,7 +121,7 @@ io.on("connection", (socket) => {
   })
 
   socket.on("playLolSound", (data: PlayLolSound) => {
-    io.to(data.to).emit("playingLolSound", data.sound)
+    socket.broadcast.to(room).emit("playingLolSound", data.sound)
   })
 
   socket.on("startGame", (usernameStart) => {

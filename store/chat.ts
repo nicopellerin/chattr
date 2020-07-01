@@ -41,3 +41,8 @@ export const expandChatWindowState = atom<boolean>({
   key: "expandChatWindowState",
   default: false,
 })
+
+export const messageDeletedState = atom<boolean>({
+  key: "messageDeletedState",
+  default: false,
+})

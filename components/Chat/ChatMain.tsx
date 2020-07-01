@@ -34,6 +34,7 @@ import {
   fileTransferProgressState,
   sendingFileState,
   expandChatWindowState,
+  messageDeletedState,
 } from "../../store/chat"
 import { playerXGlobalState, playerOGlobalState } from "../../store/game"
 
@@ -55,6 +56,9 @@ const ChatMain = () => {
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
   const [cancelCallRequest, setCancelCallRequest] = useRecoilState(
     cancelCallRequestState
+  )
+  const [messageDeleted, setMessageDeleted] = useRecoilState(
+    messageDeletedState
   )
 
   const setListUsers = useSetRecoilState(listUsersState)
@@ -139,6 +143,7 @@ const ChatMain = () => {
     socket.current.on(
       "removeChatTextMessageAndUpdateMessages",
       (messages: string) => {
+        setMessageDeleted(true)
         const bytes = CryptoJS.AES.decrypt(
           messages,
           String(process.env.NEXT_PUBLIC_KEY)
@@ -369,6 +374,14 @@ const ChatMain = () => {
       }
     )
   }, [socket.current])
+
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+    if (messageDeleted) {
+      setTimeout(() => setMessageDeleted(false), 1500)
+    }
+    return () => clearTimeout(idx)
+  }, [messageDeleted])
 
   return (
     <>

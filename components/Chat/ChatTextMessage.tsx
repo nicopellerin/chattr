@@ -61,7 +61,6 @@ const ChatTextMessage: React.FC<Props> = React.memo(
     return (
       <>
         <MsgWrapper
-          key={id}
           initial={{ y: 5 }}
           animate={{ y: 0 }}
           exit={{ opacity: 0, transition: { duration: 0 } }}

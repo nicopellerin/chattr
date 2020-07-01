@@ -17,6 +17,7 @@ import {
   chatUserIsTypingState,
   fileTransferProgressState,
   expandChatWindowState,
+  messageDeletedState,
 } from "../../store/chat"
 import {
   usernameState,
@@ -45,6 +46,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const listUsers = useRecoilValue(listUsersState)
   const soundOn = useRecoilValue(userSoundOnState)
   const otherUsername = useRecoilValue(otherUsernameQuery)
+  const messagedDeleted = useRecoilValue(messageDeletedState)
 
   const [fileTransferProgress, setFileTransferProgress] = useRecoilState(
     fileTransferProgressState
@@ -64,6 +66,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const joined = new Audio("/sounds/joined.mp3")
   joined.volume = 0.3
 
+  // Plays sound when other user connects
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
     if (otherUsername) {
@@ -102,8 +105,9 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const playGameSound = new Audio("/sounds/play-game.mp3")
   playGameSound.volume = 0.2
 
+  // Play sound when new message is added
   useEffect(() => {
-    if (msgs.length > 0 && soundOn) {
+    if (msgs.length > 0 && soundOn && !messagedDeleted) {
       pop.play()
     }
 
@@ -113,7 +117,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   }, [msgs])
 
   useEffect(() => {
-    if (!expandChatWindow && scrollRef.current && scrollRef.current.scrollTop) {
+    if (!expandChatWindow && scrollRef.current.scrollTop) {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
   }, [expandChatWindow])
@@ -194,6 +198,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
 
                   return (
                     <ChatTextMessage
+                      key={id}
                       id={id}
                       msg={msg}
                       decryptedData={decryptedData}

@@ -10,7 +10,12 @@ import shortid from "shortid"
 
 const EmojiPicker = dynamic(() => import("./EmojiPicker"), { ssr: false })
 
-import { usernameState, listUsersState, selfIdState } from "../../store/users"
+import {
+  usernameState,
+  listUsersState,
+  selfIdState,
+  otherUserIdQuery,
+} from "../../store/users"
 import { displayTheatreModeState } from "../../store/video"
 
 const lolSounds = [
@@ -44,12 +49,10 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const listUsers = useRecoilValue(listUsersState)
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
-  const selfId = useRecoilValue(selfIdState)
+  const otherUserId = useRecoilValue(otherUserIdQuery)
 
   const [msg, setMsg] = useState("")
   const [togglePicker, setTogglePicker] = useState(false)
-
-  const otherUser = listUsers?.filter((user) => user.id !== selfId).join("")
 
   let count = useRef(0)
   const inputTextRef = useRef() as React.MutableRefObject<HTMLInputElement>
@@ -60,22 +63,26 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     sound.play()
     sound.volume = 0.5
 
-    socket.current.emit("chatMessage", { username, msg: "LOL! 😆🤣" })
+    const msg = "LOL! 😆🤣"
+
+    const encryptedMessage = CryptoJS.AES.encrypt(
+      JSON.stringify(msg),
+      String(process.env.NEXT_PUBLIC_KEY)
+    ).toString()
+
+    socket.current.emit("chatMessage", { username, msg: encryptedMessage })
     socket.current.emit("playLolSound", {
-      to: otherUser,
       sound: lolSounds[randomIdx],
     })
   }
 
   useEffect(() => {
-    if (socket.current) {
-      socket.current.on("playingLolSound", (lolSound: string) => {
-        const sound = new Audio(lolSound)
-        sound.play()
-        sound.volume = 0.5
-      })
-    }
-  }, [socket.current])
+    socket?.current?.on("playingLolSound", (lolSound: string) => {
+      const sound = new Audio(lolSound)
+      sound.play()
+      sound.volume = 0.5
+    })
+  }, [])
 
   let itiswhatitis = ""
 
@@ -94,7 +101,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       itiswhatitis = "👁👄👁"
     }
 
-    const ciphertext = CryptoJS.AES.encrypt(
+    const encryptedText = CryptoJS.AES.encrypt(
       JSON.stringify(msg),
       String(process.env.NEXT_PUBLIC_KEY)
     ).toString()
@@ -102,7 +109,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     socket.current.emit("chatMessage", {
       id: shortid.generate(),
       username,
-      msg: itiswhatitis || ciphertext,
+      msg: itiswhatitis || encryptedText,
     })
 
     setMsg("")
@@ -134,18 +141,6 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
           value={msg}
           onChange={(e) => (noConnection ? null : setMsg(e.target.value))}
         />
-        <SmileyFace
-          src="/smiley.png"
-          alt="smiley"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          style={
-            noConnection
-              ? { opacity: 0.2, pointerEvents: "none" }
-              : { opacity: 1, pointerEvents: "all" }
-          }
-          onClick={() => setTogglePicker((prevState) => !prevState)}
-        />
         <LolButton
           type="button"
           onClick={() => {
@@ -160,6 +155,18 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         >
           Lol <FaVolumeUp style={{ marginLeft: 5 }} />
         </LolButton>
+        <SmileyFace
+          src="/smiley.png"
+          alt="smiley"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          style={
+            noConnection
+              ? { opacity: 0.2, pointerEvents: "none" }
+              : { opacity: 1, pointerEvents: "all" }
+          }
+          onClick={() => setTogglePicker((prevState) => !prevState)}
+        />
         <SendButton disabled={noConnection} whileTap={{ scale: 0.98 }}>
           Send
         </SendButton>
