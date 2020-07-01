@@ -175,7 +175,9 @@ const ChatMain = () => {
       setCallAccepted(false)
       setReceivingCall(false)
       setCancelCallRequest(true)
-      friendVideoRef.current.srcObject = null
+      if (friendVideoRef.current) {
+        friendVideoRef.current.srcObject = null
+      }
     })
 
     socket.current.on("fileTransferProgressGlobal", (progress: string) => {
@@ -351,11 +353,6 @@ const ChatMain = () => {
       ({ playerX, playerO }: any) => {
         setPlayerXGlobal(playerX)
         setPlayerOGlobal(playerO)
-
-        window.sessionStorage.setItem(
-          "tictactoePlayers",
-          JSON.stringify({ playerX, playerO })
-        )
       }
     )
   }, [socket.current])

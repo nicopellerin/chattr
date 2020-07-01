@@ -97,5 +97,6 @@ export const resetGameState = selector({
     set(boardState, Array(9).fill(null))
     set(xIsNextState, true)
     set(wonGameState, false)
+    set(playGameState, false)
   },
 })

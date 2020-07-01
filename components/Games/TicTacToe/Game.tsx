@@ -25,6 +25,7 @@ import { calculateWinner, calculateTie } from "./utils"
 import ScreenInitial from "./ScreenInitial"
 import ScreenWaitingForConnection from "./ScreenWaitingForConnection"
 import ScreenWinOrTie from "./ScreenWinOrTie"
+import ScreenNotYourTurn from "./ScreenNotYourTurn"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -102,6 +103,7 @@ const Game: React.FC<Props> = ({ socket }) => {
     )
   }, [socket.current])
 
+  // Game square click
   const handleClick = (i: number) => {
     const boardCopy = [...board]
     if (winner || boardCopy[i]) return
@@ -111,54 +113,34 @@ const Game: React.FC<Props> = ({ socket }) => {
     socket.current.emit("gameNextPlayer", xIsNext)
   }
 
+  // Screen show state
+  const showInitialScreen = playGameShowInitialScreen
+  const showNotYourTurnPlayerOScreen =
+    !playGameShowInitialScreen &&
+    !showWaitingScreen &&
+    xIsNext &&
+    playerXGlobal?.username !== username
+  const showNotYourTurnPlayerXScreen =
+    !playGameShowInitialScreen &&
+    !showWaitingScreen &&
+    !xIsNext &&
+    playerOGlobal?.username !== username
+  const showWinOrTieScreen = won || tie
+  const showWaitingForConnectionScreen =
+    !playGameShowInitialScreen && showWaitingScreen
+
   return (
     <Wrapper>
       <AnimatePresence>
-        {playGameShowInitialScreen && <ScreenInitial socket={socket} />}
-        {!playGameShowInitialScreen &&
-          !showWaitingScreen &&
-          xIsNext &&
-          playerXGlobal?.username !== username && (
-            <NotYourTurnWrapper>
-              <NoMarginContainer
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-              >
-                <WaitingText>
-                  {playerXGlobal?.username}'s turn (
-                  <span style={{ color: "var(--secondaryColor)" }}>
-                    {playerXGlobal?.letter}
-                  </span>
-                  )
-                </WaitingText>
-              </NoMarginContainer>
-            </NotYourTurnWrapper>
-          )}
-        {!playGameShowInitialScreen &&
-          !showWaitingScreen &&
-          !xIsNext &&
-          playerOGlobal?.username !== username && (
-            <NotYourTurnWrapper>
-              <NoMarginContainer
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-              >
-                <WaitingText>
-                  {playerOGlobal?.username}'s turn (
-                  <span style={{ color: "var(--secondaryColor)" }}>
-                    {playerOGlobal?.letter}
-                  </span>
-                  )
-                </WaitingText>
-              </NoMarginContainer>
-            </NotYourTurnWrapper>
-          )}
-        {!playGameShowInitialScreen && showWaitingScreen && (
-          <ScreenWaitingForConnection />
+        {showInitialScreen && <ScreenInitial socket={socket} />}
+        {showNotYourTurnPlayerOScreen && (
+          <ScreenNotYourTurn player={playerXGlobal} />
         )}
-        {(won || tie) && <ScreenWinOrTie socket={socket} />}
+        {showNotYourTurnPlayerXScreen && (
+          <ScreenNotYourTurn player={playerOGlobal} />
+        )}
+        {showWaitingForConnectionScreen && <ScreenWaitingForConnection />}
+        {showWinOrTieScreen && <ScreenWinOrTie socket={socket} />}
       </AnimatePresence>
       <Board squares={board} onClick={handleClick} />
     </Wrapper>
