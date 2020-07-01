@@ -1,89 +1,61 @@
 import * as React from "react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
-import Lottie from "react-lottie"
 import { useRecoilValue } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSetRecoilState, useRecoilState } from "recoil"
 
 import Board from "./Board"
 
-import { usernameState, otherUsernameQuery } from "../../../store/users"
+import { usernameState } from "../../../store/users"
 import {
   playGameShowInitialScreenState,
   playGameState,
   playerXGlobalState,
   playerOGlobalState,
+  showWaitingScreenState,
+  wonGameState,
+  tieGameState,
+  xIsNextState,
+  boardState,
 } from "../../../store/game"
 
-import wonAnim from "./confetti.json"
+import { calculateWinner, calculateTie } from "./utils"
 
-const animOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: wonAnim,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-}
+import ScreenInitial from "./ScreenInitial"
+import ScreenWaitingForConnection from "./ScreenWaitingForConnection"
+import ScreenWinOrTie from "./ScreenWinOrTie"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
+enum SquareValue {
+  "X",
+  "O",
+}
+
 const Game: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
-  const otherUsername = useRecoilValue(otherUsernameQuery)
   const playerXGlobal = useRecoilValue(playerXGlobalState)
   const playerOGlobal = useRecoilValue(playerOGlobalState)
 
+  const setPlayGame = useSetRecoilState(playGameState)
+  const setTieGame = useSetRecoilState(tieGameState)
+
+  const [board, setBoard] = useRecoilState(boardState)
+  const [xIsNext, setXisNext] = useRecoilState(xIsNextState)
+  const [won, setWon] = useRecoilState(wonGameState)
+  const [showWaitingScreen, setShowWaitingScreen] = useRecoilState(
+    showWaitingScreenState
+  )
   const [
     playGameShowInitialScreen,
     setPlayGameShowInitialScreen,
   ] = useRecoilState(playGameShowInitialScreenState)
 
-  const setPlayGame = useSetRecoilState(playGameState)
-
-  const [board, setBoard] = useState(Array(9).fill(null))
-  const [xIsNext, setXisNext] = useState(true)
-  const [won, setWon] = useState(false)
-  const [, setTieGame] = useState(false)
-  const [showWaitingScreen, setShowWaitingScreen] = useState(false)
-
-  const calculateWinner = (squares: number[]) => {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ]
-
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i]
-      if (
-        squares[a] &&
-        squares[a] === squares[b] &&
-        squares[a] === squares[c]
-      ) {
-        return true
-      }
-    }
-    return false
-  }
-
-  const calculateTie = (squares: number[]) => {
-    if (squares.every((square) => square !== null) && !winner) {
-      return true
-    }
-    return false
-  }
-
   const winner = calculateWinner(board)
-  const tie = calculateTie(board)
+  const tie = calculateTie(board, winner)
 
   const click = new Audio("/sounds/tic-click.mp3")
   click.volume = 0.3
@@ -103,19 +75,13 @@ const Game: React.FC<Props> = ({ socket }) => {
     }
   }, [tie])
 
-  const handleClick = (i: number) => {
-    const boardCopy = [...board]
-    if (winner || boardCopy[i]) return
-    boardCopy[i] = xIsNext ? "X" : "O"
-    click.play()
-    socket.current.emit("gameBoardUpdated", boardCopy)
-    socket.current.emit("gameNextPlayer", xIsNext)
-  }
-
   useEffect(() => {
-    socket.current.on("gameBoardUpdatedGlobal", (newBoard: number[]) => {
-      setBoard(newBoard)
-    })
+    socket.current.on(
+      "gameBoardUpdatedGlobal",
+      (newBoard: Array<SquareValue | null>) => {
+        setBoard(newBoard)
+      }
+    )
     socket.current.on("gameNextPlayerGlobal", () => {
       setXisNext((prevState) => !prevState)
     })
@@ -136,60 +102,19 @@ const Game: React.FC<Props> = ({ socket }) => {
     )
   }, [socket.current])
 
-  const handleStartGame = () => {
-    setPlayGameShowInitialScreen(false)
-    socket.current.emit("startGame", username)
-
-    socket.current.emit("playGameAssignPlayers", {
-      playerX: { username, letter: "X" },
-      playerO: { username: otherUsername, letter: "O" },
-    })
-    setShowWaitingScreen(true)
-  }
-
-  const handleReplay = () => {
-    // Temp
-    if (true) return
-
-    setBoard(Array(9).fill(null))
-    setXisNext(true)
-    setWon(false)
-    socket.current.emit("playGameOtherPlayerAccepted", true)
-    setPlayGameShowInitialScreen(false)
-    socket.current.emit("startGame", username)
-    socket.current.emit("playGameAssignPlayers", {
-      playerX: { username, letter: "X" },
-      playerO: { username: otherUsername, letter: "O" },
-    })
-    setShowWaitingScreen(true)
+  const handleClick = (i: number) => {
+    const boardCopy = [...board]
+    if (winner || boardCopy[i]) return
+    boardCopy[i] = xIsNext ? SquareValue.X : SquareValue.O
+    click.play()
+    socket.current.emit("gameBoardUpdated", boardCopy)
+    socket.current.emit("gameNextPlayer", xIsNext)
   }
 
   return (
     <Wrapper>
       <AnimatePresence>
-        {playGameShowInitialScreen && (
-          <ScreenWrapper>
-            <NoMarginContainer
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-            >
-              <WinnerText>
-                Welcome to{" "}
-                <span style={{ color: "var(--secondaryColor)" }}>Tic</span>
-                <span style={{ color: "var(--successColor)" }}>Tac</span>
-                <span style={{ color: "var(--primaryColor)" }}>Toe</span>
-              </WinnerText>
-              <RematchButton
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleStartGame}
-              >
-                Start game
-              </RematchButton>
-            </NoMarginContainer>
-          </ScreenWrapper>
-        )}
+        {playGameShowInitialScreen && <ScreenInitial socket={socket} />}
         {!playGameShowInitialScreen &&
           !showWaitingScreen &&
           xIsNext &&
@@ -231,63 +156,9 @@ const Game: React.FC<Props> = ({ socket }) => {
             </NotYourTurnWrapper>
           )}
         {!playGameShowInitialScreen && showWaitingScreen && (
-          <ScreenWrapper>
-            <NoMarginContainer
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-            >
-              <WaitingText>Waiting for other player to connect...</WaitingText>
-            </NoMarginContainer>
-          </ScreenWrapper>
+          <ScreenWaitingForConnection />
         )}
-        {(won || tie) && (
-          <ScreenWrapper>
-            <Container
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-            >
-              {won ? (
-                <>
-                  <Lottie
-                    options={animOptions}
-                    height={125}
-                    width={150}
-                    isStopped={!won}
-                  />
-                  <WinnerText>
-                    {xIsNext ? (
-                      <OWonText>{playerOGlobal?.username}</OWonText>
-                    ) : (
-                      <XWonText>{playerXGlobal?.username}</XWonText>
-                    )}{" "}
-                    won this game!
-                  </WinnerText>
-                </>
-              ) : (
-                <WinnerText>It's a draw!</WinnerText>
-              )}
-              <RematchButton
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleReplay}
-              >
-                Re-match
-              </RematchButton>
-              <QuitButton
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  setPlayGame(false)
-                  socket.current.emit("playGameOtherPlayerAccepted", false)
-                }}
-              >
-                Quit
-              </QuitButton>
-            </Container>
-          </ScreenWrapper>
-        )}
+        {(won || tie) && <ScreenWinOrTie socket={socket} />}
       </AnimatePresence>
       <Board squares={board} onClick={handleClick} />
     </Wrapper>

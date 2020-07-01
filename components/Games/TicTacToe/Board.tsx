@@ -4,8 +4,13 @@ import { motion } from "framer-motion"
 
 import Square from "./Square"
 
+enum SquareValue {
+  "X",
+  "O",
+}
+
 interface Props {
-  squares: number[]
+  squares: Array<SquareValue | null>
   onClick: (i: number) => void
 }
 
