@@ -4,26 +4,20 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { FaRocket } from "react-icons/fa"
 
+import { isDevURL } from "../config"
+
 const JoinRoomModal = () => {
   const [roomId, setRoomId] = useState("")
 
-  const isDevURL =
-    process.env.NODE_ENV !== "production"
-      ? "http://localhost:3000"
-      : "https://chattr.lol"
-
   const handlePasteUrl = (e: React.FormEvent) => {
     e.preventDefault()
-
     if (!roomId) {
       return
     }
-
     if (roomId.startsWith(`${isDevURL}/room/`)) {
       window.location.href = roomId
       return
     }
-
     const url = `${isDevURL}/room/${roomId}`
     window.location.href = url
   }
