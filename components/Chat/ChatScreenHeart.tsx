@@ -45,7 +45,7 @@ const Wrapper = styled(motion.div)`
   align-items: center;
   background: linear-gradient(
     45deg,
-    rgba(235, 87, 87, 0.2),
-    rgba(235, 87, 87, 0.4)
+    rgba(235, 87, 87, 0.1),
+    rgba(235, 87, 87, 0.3)
   );
 `

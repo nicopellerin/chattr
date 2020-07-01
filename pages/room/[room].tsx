@@ -33,10 +33,10 @@ const RoomPage = () => {
           content="One-on-one hangouts in a fun and secure way"
         />
         <meta property="og:image" content="https://chattr.lol/og-image4.jpg" />
-        <script>
+        {/* <script>
           if(/^\?fbclid=/.test(location.search))
           location.replace(location.href.replace(/\?fbclid.+/, ""));
-        </script>
+        </script> */}
       </Head>
       <Wrapper>
         {notSupported ? <DetectWrongBrowser /> : <ChatMainClient />}
