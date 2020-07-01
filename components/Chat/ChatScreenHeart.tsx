@@ -16,8 +16,18 @@ const animOptions = {
 
 const ChatScreenHeart = () => {
   return (
-    <Wrapper initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-      <Lottie options={animOptions} height={550} width={550} />
+    <Wrapper
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0 }}
+      >
+        <Lottie options={animOptions} height={550} width={550} />
+      </motion.div>
     </Wrapper>
   )
 }
