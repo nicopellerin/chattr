@@ -58,8 +58,7 @@ const AboutPage = () => {
                 Chattr is a free 1-to-1 P2P audio/video and chat platform. Text
                 is encrypted and no data is stored on any server, only in the
                 browser. This means that when a session ends, all data is gone
-                forever. The project is still in its infancy and more features
-                will likely be added.
+                forever.
               </Text>
               <Text>
                 Please note, if you get the{" "}
@@ -67,6 +66,10 @@ const AboutPage = () => {
                 you accepted the request to allow video/audio. If this still
                 doesn't work, try using a recent Chromium-based browser or
                 Firefox. IE is not supported.
+              </Text>
+              <Text>
+                Got a suggestion or questions?{" "}
+                <a href="mailto:sup@chattrl.lol">sup@chattrl.lol</a>
               </Text>
               <Link href="/">
                 <BackButton
@@ -97,12 +100,12 @@ const Container = styled.div`
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  align-items: center;
 `
 
 const IconLogo = styled(motion.img)`
   margin-bottom: 2rem;
   width: 15rem;
+  align-self: center;
 
   @media (max-width: 500px) {
     margin-bottom: 1.7rem;
@@ -114,6 +117,12 @@ const Text = styled.p`
   font-size: 1.7rem;
   line-height: 1.47059;
   margin-bottom: 1rem;
+
+  a {
+    color: var(--primaryColorLight);
+    text-decoration: none;
+    font-weight: 600;
+  }
 `
 
 const BackButton = styled(motion.button)`
@@ -127,6 +136,7 @@ const BackButton = styled(motion.button)`
   margin-top: 5rem;
   outline: transparent;
   cursor: pointer;
+  align-self: center;
 
   @media (max-width: 500px) {
     margin-top: 3rem;
