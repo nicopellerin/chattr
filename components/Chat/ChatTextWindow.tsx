@@ -161,6 +161,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
           setPlayGame((prevState) => !prevState)
           setWon(false)
           setPlayGameShowInitialScreen(true)
+          socket.current.emit("playGameOtherPlayerAccepted", false)
           if (soundOn) {
             playGameSound.play()
           }
