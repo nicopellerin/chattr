@@ -95,6 +95,10 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       itiswhatitis = "👁👄👁"
     }
 
+    if (msg.split("").includes("❤")) {
+      socket.current.emit("messageContainsHeartEmoiji")
+    }
+
     const encryptedText = CryptoJS.AES.encrypt(
       JSON.stringify(msg),
       String(process.env.NEXT_PUBLIC_KEY)

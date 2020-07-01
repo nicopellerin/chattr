@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
@@ -14,6 +14,9 @@ import ChatScreenNotSupported from "./ChatScreenNotSupported"
 // import ChatScreenVisualiser from "./ChatScreenVisualiser"
 
 const Slider = dynamic(() => import("./Slider"), { ssr: false })
+const ChatScreenHeart = dynamic(() => import("./ChatScreenHeart"), {
+  ssr: false,
+})
 
 import {
   showSelfWebcamState,
@@ -29,6 +32,7 @@ import {
   userSoundOnState,
   otherUsernameQuery,
 } from "../../store/users"
+import { messageContainsHeartEmojiState } from "../../store/chat"
 
 interface Props {
   acceptCall: () => void
@@ -52,6 +56,10 @@ const ChatVideo: React.FC<Props> = ({
   const soundOn = useRecoilValue(userSoundOnState)
   const peerAudioMuted = useRecoilValue(peerAudioMutedQuery)
   const otherUsername = useRecoilValue(otherUsernameQuery)
+  const [
+    messageContainsHeartEmoji,
+    setMessageContainsHeartEmoji,
+  ] = useRecoilState(messageContainsHeartEmojiState)
 
   const [displayTheatreMode, setDisplayTheatreMode] = useRecoilState(
     displayTheatreModeState
@@ -71,8 +79,23 @@ const ChatVideo: React.FC<Props> = ({
     )
   }
 
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+
+    if (messageContainsHeartEmoji) {
+      idx = setTimeout(() => setMessageContainsHeartEmoji(false), 3000)
+    }
+
+    return () => clearTimeout(idx)
+  }, [messageContainsHeartEmoji])
+
   return (
     <Wrapper ref={contraintsRef}>
+      <AnimatePresence>
+        {messageContainsHeartEmoji &&
+          callAccepted &&
+          listUsers?.length >= 2 && <ChatScreenHeart />}
+      </AnimatePresence>
       <>
         {!showCatSlider ? (
           <>

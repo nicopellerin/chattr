@@ -63,6 +63,10 @@ io.on("connection", (socket) => {
     io.to(room).emit("removeChatTextMessageAndUpdateMessages", messages)
   })
 
+  socket.on("messageContainsHeartEmoiji", () => {
+    socket.broadcast.to(room).emit("messageContainsHeartEmoijiGlobal")
+  })
+
   socket.on("chatMessageIsTyping", ({ username, status, msg }: Message) => {
     if (msg && msg.length > 1) {
       io.to(room).emit("chatMessageIsTyping", { username, status })

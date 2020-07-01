@@ -46,3 +46,8 @@ export const messageDeletedState = atom<boolean>({
   key: "messageDeletedState",
   default: false,
 })
+
+export const messageContainsHeartEmojiState = atom<boolean>({
+  key: "messageContainsHeartEmojiState",
+  default: false,
+})

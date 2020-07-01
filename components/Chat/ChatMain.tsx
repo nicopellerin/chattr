@@ -35,6 +35,7 @@ import {
   sendingFileState,
   expandChatWindowState,
   messageDeletedState,
+  messageContainsHeartEmojiState,
 } from "../../store/chat"
 import { playerXGlobalState, playerOGlobalState } from "../../store/game"
 
@@ -77,6 +78,9 @@ const ChatMain = () => {
   const setPeerAudioMuted = useSetRecoilState(peerAudioMutedState)
   const setPlayerXGlobal = useSetRecoilState(playerXGlobalState)
   const setPlayerOGlobal = useSetRecoilState(playerOGlobalState)
+  const setMessageContainsHeartEmoji = useSetRecoilState(
+    messageContainsHeartEmojiState
+  )
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -152,6 +156,10 @@ const ChatMain = () => {
         setChatMsgs(decryptedData)
       }
     )
+
+    socket.current.on("messageContainsHeartEmoijiGlobal", () => {
+      setMessageContainsHeartEmoji(true)
+    })
 
     // Other user is typing
     socket.current.on(
