@@ -6,6 +6,7 @@ import dompurify from "dompurify"
 import { saveAs } from "file-saver"
 import { FaExpand, FaFileDownload, FaTimes } from "react-icons/fa"
 import { useRecoilValue, useRecoilCallback } from "recoil"
+import CryptoJS from "crypto-js"
 
 import PhotoExpander from "./PhotoExpander"
 
@@ -34,7 +35,13 @@ const ChatTextMessage: React.FC<Props> = React.memo(
           (message: Partial<Message>) => message.id !== id
         )
         set(chatWindowState, newMessages)
-        socket.current.emit("removeChatTextMessage", newMessages)
+
+        const encryptedMessages = CryptoJS.AES.encrypt(
+          JSON.stringify(newMessages),
+          String(process.env.NEXT_PUBLIC_KEY)
+        ).toString()
+
+        socket.current.emit("removeChatTextMessage", encryptedMessages)
       }
     })
 
@@ -89,6 +96,7 @@ const ChatTextMessage: React.FC<Props> = React.memo(
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => removeChatTextMessage(id)}
+              isImage={!decryptedData}
             >
               <FaTimes />
             </DeleteButton>
@@ -168,8 +176,9 @@ const DeleteButton = styled(motion.button)`
   color: crimson;
   font-size: 2rem;
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 1.3rem;
+  right: ${(props: { isImage: boolean }) =>
+    props.isImage ? "6.5rem" : "1rem"};
   cursor: pointer;
   opacity: 0;
   transition: 150ms ease-in-out;

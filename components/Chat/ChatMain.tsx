@@ -46,6 +46,7 @@ import NoUsername from "./NoUsernameModal"
 import GamePlayBar from "../GamePlayBar"
 
 import { User, Message, Call } from "../../models"
+import CryptoJS from "crypto-js"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -137,8 +138,13 @@ const ChatMain = () => {
 
     socket.current.on(
       "removeChatTextMessageAndUpdateMessages",
-      (messages: Message[]) => {
-        setChatMsgs(messages)
+      (messages: string) => {
+        const bytes = CryptoJS.AES.decrypt(
+          messages,
+          String(process.env.NEXT_PUBLIC_KEY)
+        )
+        const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+        setChatMsgs(decryptedData)
       }
     )
 
