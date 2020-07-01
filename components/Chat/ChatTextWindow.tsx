@@ -111,13 +111,13 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       pop.play()
     }
 
-    if (scrollRef.current && scrollRef.current.scrollTop) {
+    if (scrollRef.current && scrollRef.current) {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
   }, [msgs])
 
   useEffect(() => {
-    if (!expandChatWindow && scrollRef.current.scrollTop) {
+    if (!expandChatWindow && scrollRef.current) {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
   }, [expandChatWindow])
