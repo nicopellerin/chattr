@@ -307,15 +307,23 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
           }}
         >
           <Container style={{ height: expandChatWindow ? 585 : 400 }}>
-            {photoGallery.map(({ msg, filename, id, username }) => (
-              // <img style={{ maxWidth: "100%" }} src={photo} alt="gallery" />
-              <ChatTextMessage
-                msg={msg}
-                usernameMsg={username}
-                id={id}
-                filename={filename}
-              />
-            ))}
+            {photoGallery.length > 0 ? (
+              photoGallery.map(({ msg, filename, id, username }) => (
+                <ChatTextMessage
+                  msg={msg}
+                  usernameMsg={username}
+                  id={id}
+                  filename={filename}
+                />
+              ))
+            ) : (
+              <NoImages>
+                <NoImagesTitle>No images yet</NoImagesTitle>
+                <NoImagesTagline>
+                  Images sent through the chat will be available here
+                </NoImagesTagline>
+              </NoImages>
+            )}
           </Container>
         </PerfectScrollbar>
       )}
@@ -452,4 +460,24 @@ const IconLogo = styled(motion.img)`
   @media (max-width: 500px) {
     margin-bottom: 1.7rem;
   }
+`
+
+const NoImages = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const NoImagesTitle = styled.h2`
+  color: var(--tertiaryColor);
+  font-size: 3rem;
+`
+
+const NoImagesTagline = styled.span`
+  color: var(--textColor);
+  font-size: 1.7rem;
+  font-weight: 600;
+  text-align: center;
 `

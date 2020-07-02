@@ -156,6 +156,10 @@ io.on("connection", (socket) => {
   socket.on("peerMutedAudio", (status: boolean) => {
     socket.broadcast.to(room).emit("peerMutedAudio", status)
   })
+
+  socket.on("addImageToPhotoGallery", (data: any) => {
+    io.to(room).emit("addImageToPhotoGalleryGlobal", data)
+  })
 })
 
 nextApp.prepare().then(() => {

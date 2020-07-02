@@ -224,6 +224,10 @@ const ChatMain = () => {
     socket.current.on("sendStartGameRequest", (username: string) => {
       setMsg(`${username} wants to play tictactoe`)
     })
+
+    socket.current.on("addImageToPhotoGalleryGlobal", (data: any) => {
+      setPhotoGallery((prevState) => [data, ...prevState])
+    })
   }, [username])
 
   // Call other connection
@@ -337,10 +341,12 @@ const ChatMain = () => {
       id: shortid.generate(),
     })
 
-    setPhotoGallery((prevState) => [
-      { username, msg: b64, filename, id: shortid.generate() },
-      ...prevState,
-    ])
+    socket.current.emit("addImageToPhotoGallery", {
+      username,
+      msg: b64,
+      filename,
+      id: shortid.generate(),
+    })
 
     socket.current.emit("fileTransferProgress", "Done!")
   }
