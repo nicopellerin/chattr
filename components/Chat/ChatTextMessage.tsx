@@ -17,11 +17,11 @@ import { Message } from "../../models"
 
 interface Props {
   msg: string
-  decryptedData: string
+  decryptedData?: string
   filename: string | undefined
   usernameMsg: string
   id: string
-  socket: React.MutableRefObject<SocketIOClient.Socket>
+  socket?: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 const ChatTextMessage: React.FC<Props> = React.memo(
@@ -41,7 +41,7 @@ const ChatTextMessage: React.FC<Props> = React.memo(
           String(process.env.NEXT_PUBLIC_KEY)
         ).toString()
 
-        socket.current.emit("removeChatTextMessage", encryptedMessages)
+        socket?.current?.emit("removeChatTextMessage", encryptedMessages)
       }
     })
 
@@ -52,23 +52,6 @@ const ChatTextMessage: React.FC<Props> = React.memo(
 
     const convertLinkToHTML = (text: string) => {
       const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
-      // if (text.match(reg)) {
-      //   fetch(text)
-      //     .then((html) => {
-      //       return html.text()
-      //     })
-      //     .then((res) => {
-      //       const parser = new DOMParser()
-      //       const parsedHtml = parser.parseFromString(res, "text/html")
-
-      //       // if (parsedHtml.querySelector("meta[property='og:image']")) {
-      //       //   const img = parsedHtml
-      //       //     .querySelector("meta[property='og:image']")
-      //       //     .getAttribute("content")
-      //       // }
-      //       console.log("IMAGE", parsedHtml)
-      //     })
-      // }
       return text?.replace(
         reg,
         `<a href='$1$2' target='_blank' rel='nofollower'>$1$2</a>`
@@ -103,13 +86,14 @@ const ChatTextMessage: React.FC<Props> = React.memo(
           ) : (
             <MessageOutput
               dangerouslySetInnerHTML={{
-                __html: convertLinkToHTML(sanitizer(decryptedData) || msg),
+                __html: convertLinkToHTML(sanitizer(decryptedData!) || msg),
               }}
             />
           )}
           {usernameMsg === username && (
             <>
               <DeleteButton
+                title="Delete message"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => removeChatTextMessage(id)}
@@ -144,7 +128,7 @@ const MsgWrapper = styled(motion.div)`
   border-radius: 5px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   margin-bottom: 15px;
-  word-break: break-all;
+  overflow-wrap: anywhere;
   position: relative;
 `
 

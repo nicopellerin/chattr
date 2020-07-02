@@ -51,3 +51,8 @@ export const messageContainsHeartEmojiState = atom<boolean>({
   key: "messageContainsHeartEmojiState",
   default: false,
 })
+
+export const photoGalleryState = atom<Array<any>>({
+  key: "photoGalleryState",
+  default: [],
+})

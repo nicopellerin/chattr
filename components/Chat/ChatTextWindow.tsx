@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { AnimatePresence, motion } from "framer-motion"
-import { FaChevronCircleUp, FaGamepad } from "react-icons/fa"
+import { FaChevronCircleUp, FaGamepad, FaPhotoVideo } from "react-icons/fa"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
 import CryptoJS from "crypto-js"
@@ -18,6 +18,7 @@ import {
   fileTransferProgressState,
   expandChatWindowState,
   messageDeletedState,
+  photoGalleryState,
 } from "../../store/chat"
 import {
   usernameState,
@@ -47,6 +48,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const soundOn = useRecoilValue(userSoundOnState)
   const otherUsername = useRecoilValue(otherUsernameQuery)
   const messagedDeleted = useRecoilValue(messageDeletedState)
+  const photoGallery = useRecoilValue(photoGalleryState)
 
   const [fileTransferProgress, setFileTransferProgress] = useRecoilState(
     fileTransferProgressState
@@ -62,6 +64,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const setWon = useSetRecoilState(wonGameState)
 
   const [showJoinMsg, setShowJoinMsg] = useState(false)
+  const [showPhotoGallery, setShowPhotoGallery] = useState(false)
 
   const joined = new Audio("/sounds/joined.mp3")
   joined.volume = 0.3
@@ -122,8 +125,16 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   }, [expandChatWindow])
 
   useEffect(() => {
+    if (showPhotoGallery && scrollRef.current) {
+      scrollRef.current.scrollTop = 0
+    } else {
+      scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
+    }
+  }, [showPhotoGallery])
+
+  useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
-    if (fileTransferProgress === "Sent!") {
+    if (fileTransferProgress === "Done!") {
       idx = setTimeout(() => setFileTransferProgress("0"), 1500)
     }
     return () => clearTimeout(idx)
@@ -167,9 +178,26 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
           <FaGamepad />
         </PlayGameButton>
       )}
-      {playGame ? (
+      {hasConnection && (
+        <PhotoGalleryButton
+          whileHover={{ opacity: 1, scale: 1 }}
+          whileTap={{ scale: 0.95 }}
+          animate={showPhotoGallery ? { rotate: 180 } : { rotate: 0 }}
+          transition={{ type: "spring", damping: 15 }}
+          onClick={() => {
+            if (noConnection) return
+            setShowPhotoGallery((prevState) => !prevState)
+            if (soundOn) {
+              playGameSound.play()
+            }
+          }}
+        >
+          <FaPhotoVideo />
+        </PhotoGalleryButton>
+      )}
+      {playGame && !showPhotoGallery ? (
         <TicTacToe socket={socket} />
-      ) : (
+      ) : !playGame && !showPhotoGallery ? (
         <PerfectScrollbar
           containerRef={(ref) => {
             scrollRef.current = ref
@@ -180,34 +208,31 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
           }}
         >
           <Container style={{ height: expandChatWindow ? 585 : 400 }}>
-            <>
-              {msgs.length > 0 &&
-                msgs.map(({ msg, username: usernameMsg, filename, id }) => {
-                  let decryptedData
-
-                  if (!msg.startsWith("data:image")) {
-                    const bytes = CryptoJS.AES.decrypt(
-                      msg,
-                      String(process.env.NEXT_PUBLIC_KEY)
-                    )
-                    decryptedData = JSON.parse(
-                      bytes.toString(CryptoJS.enc.Utf8)
-                    )
-                  }
-
-                  return (
-                    <ChatTextMessage
-                      key={id}
-                      id={id}
-                      msg={msg}
-                      decryptedData={decryptedData}
-                      filename={filename}
-                      usernameMsg={usernameMsg}
-                      socket={socket}
-                    />
+            {msgs.length > 0 &&
+              msgs.map(({ msg, username: usernameMsg, filename, id }) => {
+                let decryptedData
+                // If message is not an image, encrypt it. TODO: Need to fix this
+                if (!msg.startsWith("data:image")) {
+                  const bytes = CryptoJS.AES.decrypt(
+                    msg,
+                    String(process.env.NEXT_PUBLIC_KEY)
                   )
-                })}
-            </>
+                  decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+                }
+
+                return (
+                  <ChatTextMessage
+                    key={id}
+                    id={id}
+                    msg={msg}
+                    decryptedData={decryptedData}
+                    filename={filename}
+                    usernameMsg={usernameMsg}
+                    socket={socket}
+                  />
+                )
+              })}
+
             {msgs.length === 0 && hasConnection && (
               <NoMessages hasConnection={hasConnection}>
                 <NoMessagesText>
@@ -269,6 +294,28 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
                 </UserDisconnectedWrapper>
               )}
             </AnimatePresence>
+          </Container>
+        </PerfectScrollbar>
+      ) : (
+        <PerfectScrollbar
+          containerRef={(ref) => {
+            scrollRef.current = ref
+          }}
+          options={{ wheelSpeed: 0.5 }}
+          style={{
+            borderRadius: "5px",
+          }}
+        >
+          <Container style={{ height: expandChatWindow ? 585 : 400 }}>
+            {photoGallery.map(({ msg, filename, id, username }) => (
+              // <img style={{ maxWidth: "100%" }} src={photo} alt="gallery" />
+              <ChatTextMessage
+                msg={msg}
+                usernameMsg={username}
+                id={id}
+                filename={filename}
+              />
+            ))}
           </Container>
         </PerfectScrollbar>
       )}
@@ -392,6 +439,10 @@ const ExpandButton = styled(motion.div)`
 
 const PlayGameButton = styled(ExpandButton)`
   top: 6.5rem;
+`
+
+const PhotoGalleryButton = styled(ExpandButton)`
+  top: 11.5rem;
 `
 
 const IconLogo = styled(motion.img)`

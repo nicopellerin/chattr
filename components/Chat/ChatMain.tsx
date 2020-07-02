@@ -36,6 +36,7 @@ import {
   expandChatWindowState,
   messageDeletedState,
   messageContainsHeartEmojiState,
+  photoGalleryState,
 } from "../../store/chat"
 import { playerXGlobalState, playerOGlobalState } from "../../store/game"
 
@@ -49,6 +50,7 @@ import GamePlayBar from "../GamePlayBar"
 
 import { User, Message, Call } from "../../models"
 import CryptoJS from "crypto-js"
+import shortid from "shortid"
 
 const ChatMain = () => {
   const [stream, setStream] = useRecoilState(streamState)
@@ -61,6 +63,7 @@ const ChatMain = () => {
   const [messageDeleted, setMessageDeleted] = useRecoilState(
     messageDeletedState
   )
+  const [photoGallery, setPhotoGallery] = useRecoilState(photoGalleryState)
 
   const setListUsers = useSetRecoilState(listUsersState)
   const setSendingFile = useSetRecoilState(sendingFileState)
@@ -313,7 +316,7 @@ const ChatMain = () => {
       username,
     })
 
-    socket.current.emit("fileTransferProgress", "Sent!")
+    socket.current.emit("fileTransferProgress", "Done!")
 
     const blobToBase64 = (blob: Blob) => {
       const reader = new FileReader()
@@ -331,9 +334,15 @@ const ChatMain = () => {
       username,
       msg: b64,
       filename,
+      id: shortid.generate(),
     })
 
-    socket.current.emit("fileTransferProgress", "Sent!")
+    setPhotoGallery((prevState) => [
+      { username, msg: b64, filename, id: shortid.generate() },
+      ...prevState,
+    ])
+
+    socket.current.emit("fileTransferProgress", "Done!")
   }
 
   // End call
@@ -390,6 +399,8 @@ const ChatMain = () => {
     }
     return () => clearTimeout(idx)
   }, [messageDeleted])
+
+  console.log(photoGallery)
 
   return (
     <>

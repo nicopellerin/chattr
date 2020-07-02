@@ -113,10 +113,10 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
               <motion.div
                 style={{
                   color:
-                    fileTransferProgress === "Sent!"
+                    fileTransferProgress === "Done!"
                       ? "var(--successColor)"
                       : "var(--textColor)",
-                  scale: fileTransferProgress === "Sent!" ? 1.1 : 1,
+                  scale: fileTransferProgress === "Done!" ? 1.1 : 1,
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
