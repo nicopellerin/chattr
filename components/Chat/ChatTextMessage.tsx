@@ -52,6 +52,23 @@ const ChatTextMessage: React.FC<Props> = React.memo(
 
     const convertLinkToHTML = (text: string) => {
       const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
+      // if (text.match(reg)) {
+      //   fetch(text)
+      //     .then((html) => {
+      //       return html.text()
+      //     })
+      //     .then((res) => {
+      //       const parser = new DOMParser()
+      //       const parsedHtml = parser.parseFromString(res, "text/html")
+
+      //       // if (parsedHtml.querySelector("meta[property='og:image']")) {
+      //       //   const img = parsedHtml
+      //       //     .querySelector("meta[property='og:image']")
+      //       //     .getAttribute("content")
+      //       // }
+      //       console.log("IMAGE", parsedHtml)
+      //     })
+      // }
       return text?.replace(
         reg,
         `<a href='$1$2' target='_blank' rel='nofollower'>$1$2</a>`
@@ -91,14 +108,16 @@ const ChatTextMessage: React.FC<Props> = React.memo(
             />
           )}
           {usernameMsg === username && (
-            <DeleteButton
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => removeChatTextMessage(id)}
-              isImage={!decryptedData}
-            >
-              <FaTimes />
-            </DeleteButton>
+            <>
+              <DeleteButton
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => removeChatTextMessage(id)}
+                isImage={!decryptedData}
+              >
+                <FaTimes />
+              </DeleteButton>
+            </>
           )}
         </MsgWrapper>
         {togglePhotoExpander && (
@@ -176,13 +195,16 @@ const DeleteButton = styled(motion.button)`
   font-size: 2rem;
   position: absolute;
   top: 1.3rem;
+  padding-left: 2rem;
   right: ${(props: { isImage: boolean }) =>
-    props.isImage ? "6.5rem" : "1rem"};
+    props.isImage ? "7.5rem" : "1rem"};
   cursor: pointer;
-  opacity: 0;
+  opacity: 0.1;
   transition: 150ms ease-in-out;
+  z-index: 6;
+  outline: transparent;
 
-  ${MsgWrapper}:hover & {
+  &:hover {
     opacity: 1;
   }
 `

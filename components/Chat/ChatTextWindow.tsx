@@ -110,7 +110,6 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
     if (msgs.length > 0 && soundOn && !messagedDeleted) {
       pop.play()
     }
-
     if (scrollRef.current && scrollRef.current) {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
@@ -124,11 +123,9 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
 
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
-
     if (fileTransferProgress === "Sent!") {
       idx = setTimeout(() => setFileTransferProgress("0"), 1500)
     }
-
     return () => clearTimeout(idx)
   }, [fileTransferProgress])
 
@@ -151,23 +148,25 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       >
         <FaChevronCircleUp />
       </ExpandButton>
-      <PlayGameButton
-        whileHover={{ opacity: 1, scale: 1 }}
-        whileTap={{ scale: 0.95 }}
-        animate={playGame ? { rotate: 180 } : { rotate: 0 }}
-        transition={{ type: "spring", damping: 15 }}
-        onClick={() => {
-          if (noConnection) return
-          setPlayGame((prevState) => !prevState)
-          setWon(false)
-          setPlayGameShowInitialScreen(true)
-          if (soundOn) {
-            playGameSound.play()
-          }
-        }}
-      >
-        <FaGamepad />
-      </PlayGameButton>
+      {hasConnection && (
+        <PlayGameButton
+          whileHover={{ opacity: 1, scale: 1 }}
+          whileTap={{ scale: 0.95 }}
+          animate={playGame ? { rotate: 180 } : { rotate: 0 }}
+          transition={{ type: "spring", damping: 15 }}
+          onClick={() => {
+            if (noConnection) return
+            setPlayGame((prevState) => !prevState)
+            setWon(false)
+            setPlayGameShowInitialScreen(true)
+            if (soundOn) {
+              playGameSound.play()
+            }
+          }}
+        >
+          <FaGamepad />
+        </PlayGameButton>
+      )}
       {playGame ? (
         <TicTacToe socket={socket} />
       ) : (

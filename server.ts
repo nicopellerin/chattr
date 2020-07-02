@@ -49,6 +49,8 @@ io.on("connection", (socket) => {
   io.to(room).emit("listUsers", rooms[room].users)
   io.to(room).emit("chatConnection", "Welcome to Chattr!")
 
+  console.log("USERS", rooms[room].users)
+
   socket.emit("selfId", socket.id)
 
   socket.on("username", (username: string) => {
@@ -79,6 +81,9 @@ io.on("connection", (socket) => {
     rooms[room].users = rooms[room].users.filter(
       (user: User) => user.id !== socket.id
     )
+    if (!rooms[room].users) {
+      rooms[room].users = []
+    }
     io.to(room).emit("userLeftChattr")
     io.to(room).emit("listUsers", rooms[room].users)
     socket.leave(room)
