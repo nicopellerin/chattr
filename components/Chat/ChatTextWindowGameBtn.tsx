@@ -9,6 +9,7 @@ import {
   playGameState,
   wonGameState,
   playGameShowInitialScreenState,
+  resetGameState,
 } from "../../store/game"
 import { chatHomeState, showPhotoGalleryState } from "../../store/chat"
 
@@ -28,6 +29,7 @@ const ChatTextWindowGameBtn = () => {
   const setPlayGameShowInitialScreen = useSetRecoilState(
     playGameShowInitialScreenState
   )
+  const setResetGame = useSetRecoilState(resetGameState)
 
   const playGameSound = new Audio("/sounds/play-game.mp3")
   playGameSound.volume = 0.2
@@ -43,7 +45,7 @@ const ChatTextWindowGameBtn = () => {
       }}
       onClick={() => {
         showGameWindow()
-        setWon(false)
+        setResetGame()
         setPlayGameShowInitialScreen(true)
         if (soundOn && !playGame) {
           playGameSound.play()

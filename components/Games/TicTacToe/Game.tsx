@@ -107,7 +107,6 @@ const Game: React.FC<Props> = ({ socket }) => {
       {!state.isIn("initialScreen") && (
         <ScreenYourTurn player={xIsNext ? playerXGlobal : playerOGlobal} />
       )}
-
       {state.whenIn({
         initialScreen: <ScreenInitial socket={socket} />,
         waitingConnectionScreen: <ScreenWaitingForConnection socket={socket} />,

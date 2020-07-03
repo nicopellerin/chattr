@@ -8,7 +8,7 @@ import { NoMarginContainer, WinnerText, RematchButton } from "./GameStyles"
 import { gameScreens } from "./Game"
 
 import { usernameState, otherUsernameQuery } from "../../../store/users"
-import { startGameState } from "../../../store/game"
+import { startGameState, resetGameState } from "../../../store/game"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -21,8 +21,11 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
   const otherUsername = useRecoilValue(otherUsernameQuery)
 
   const startGame = useSetRecoilState(startGameState)
+  const setResetGame = useSetRecoilState(resetGameState)
 
   const handleStartGame = () => {
+    setResetGame()
+
     state.forceTransition("waitingConnectionScreen")
 
     socket.current.emit("startGame", username)

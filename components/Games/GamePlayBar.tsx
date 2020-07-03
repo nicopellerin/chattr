@@ -10,6 +10,7 @@ import {
   playGameState,
   playGameShowInitialScreenState,
   showGamePlayBarState,
+  resetGameState,
 } from "../../store/game"
 import { chatHomeState, showPhotoGalleryState } from "../../store/chat"
 
@@ -29,6 +30,7 @@ const GamePlayBar: React.FC<Props> = ({
   const state = useStateDesigner(gameScreens)
 
   const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
+  const setResetGame = useSetRecoilState(resetGameState)
 
   const showGameWindow = useRecoilCallback(({ set }) => {
     return () => {
@@ -58,6 +60,7 @@ const GamePlayBar: React.FC<Props> = ({
                 setMsg("")
                 setShowGamePlayBar(false)
                 showGameWindow()
+                setResetGame()
                 state.forceTransition("yourTurnScreen")
                 socket.current.emit("playGameOtherPlayerAccepted", true)
               }}
