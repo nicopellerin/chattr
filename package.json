@@ -13,6 +13,8 @@
   "dependencies": {
     "@babel/preset-env": "^7.10.3",
     "@babel/preset-typescript": "^7.10.1",
+    "@state-designer/core": "^1.2.23",
+    "@state-designer/react": "^1.2.23",
     "@tensorflow-models/handpose": "^0.0.5",
     "@tensorflow/tfjs": "^2.0.1",
     "@tensorflow/tfjs-backend-wasm": "^2.0.1",

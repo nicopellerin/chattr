@@ -32,3 +32,6 @@ yarn-error.log*
 .env*.local
 
 .now
+
+public/workbox*.js
+public/workbox*.js.map

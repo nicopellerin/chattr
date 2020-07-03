@@ -9,9 +9,11 @@ import {
   useRecoilValue,
   useSetRecoilState,
   useRecoilCallback,
-  // useRecoilCallback,
 } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
+import CryptoJS from "crypto-js"
+import shortid from "shortid"
+import { useStateDesigner } from "@state-designer/react"
 
 import {
   streamState,
@@ -50,10 +52,7 @@ import {
   playerXGlobalState,
   playerOGlobalState,
   showGamePlayBarState,
-  showWaitingScreenState,
-  playGameShowInitialScreenState,
   playGameState,
-  resetGameState,
 } from "../../store/game"
 
 import ChatVideo from "./ChatVideo"
@@ -62,13 +61,14 @@ import ChatCommands from "./ChatCommands"
 import ChatTextWindow from "./ChatTextWindow"
 import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
-import GamePlayBar from "../GamePlayBar"
+import GamePlayBar from "../Games/GamePlayBar"
 
 import { User, Message, Call } from "../../models"
-import CryptoJS from "crypto-js"
-import shortid from "shortid"
+import { gameScreens } from "../Games/TicTacToe/Game"
 
 const ChatMain = () => {
+  const state = useStateDesigner(gameScreens)
+
   const [stream, setStream] = useRecoilState(streamState)
   const [selfId, setSelfId] = useRecoilState(selfIdState)
   const [caller, setCaller] = useRecoilState(callerState)
@@ -101,11 +101,6 @@ const ChatMain = () => {
     messageContainsHeartEmojiState
   )
   const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
-  const setShowWaitingScreen = useSetRecoilState(showWaitingScreenState)
-  const setPlayGameShowInitialScreen = useSetRecoilState(
-    playGameShowInitialScreenState
-  )
-  const setResetGame = useSetRecoilState(resetGameState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -273,14 +268,9 @@ const ChatMain = () => {
       "playGameOtherPlayerAcceptedGlobal",
       (accepted: boolean) => {
         if (accepted) {
-          setShowWaitingScreen(false)
-          setPlayGameShowInitialScreen(false)
-          setResetGame()
+          state.forceTransition("yourTurnScreen")
         } else {
-          setShowWaitingScreen(false)
-          setPlayGameShowInitialScreen(true)
-          setShowGamePlayBar(false)
-          setResetGame()
+          state.reset()
           showChatHome()
         }
       }

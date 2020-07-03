@@ -1,6 +1,7 @@
 import * as React from "react"
 import Lottie from "react-lottie"
 import { useRecoilValue, useSetRecoilState } from "recoil"
+import { useStateDesigner } from "@state-designer/react"
 
 import {
   QuitButton,
@@ -21,6 +22,7 @@ import {
 } from "../../../store/game"
 
 import wonAnim from "./confetti.json"
+import { gameScreens } from "./Game"
 
 const animOptions = {
   loop: true,
@@ -36,6 +38,8 @@ interface Props {
 }
 
 const ScreenWinOrTie: React.FC<Props> = ({ socket }) => {
+  const state = useStateDesigner(gameScreens)
+
   const playerXGlobal = useRecoilValue(playerXGlobalState)
   const playerOGlobal = useRecoilValue(playerOGlobalState)
   const xIsNext = useRecoilValue(xIsNextState)
@@ -44,6 +48,7 @@ const ScreenWinOrTie: React.FC<Props> = ({ socket }) => {
   const setResetGame = useSetRecoilState(resetGameState)
 
   const handleQuit = () => {
+    state.reset()
     socket.current.emit("playGameOtherPlayerAccepted", false)
     setResetGame()
   }

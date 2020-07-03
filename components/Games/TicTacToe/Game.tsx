@@ -3,15 +3,14 @@ import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { useSetRecoilState, useRecoilState } from "recoil"
+import { createState } from "@state-designer/core"
+import { useStateDesigner } from "@state-designer/react"
 
 import Board from "./Board"
 
-import { usernameState } from "../../../store/users"
 import {
-  playGameShowInitialScreenState,
   playerXGlobalState,
   playerOGlobalState,
-  showWaitingScreenState,
   wonGameState,
   tieGameState,
   xIsNextState,
@@ -23,7 +22,19 @@ import { calculateWinner, calculateTie } from "./utils"
 import ScreenInitial from "./ScreenInitial"
 import ScreenWaitingForConnection from "./ScreenWaitingForConnection"
 import ScreenWinOrTie from "./ScreenWinOrTie"
-import ScreenNotYourTurn from "./ScreenNotYourTurn"
+import ScreenYourTurn from "./ScreenYourTurn"
+
+export const gameScreens = createState({
+  id: "gameScreens",
+  initial: "initialScreen",
+  states: {
+    initialScreen: {},
+    waitingConnectionScreen: {},
+    turnScreen: {},
+    yourTurnScreen: {},
+    winOrTieScreen: {},
+  },
+})
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -35,19 +46,16 @@ enum SquareValue {
 }
 
 const Game: React.FC<Props> = ({ socket }) => {
-  const username = useRecoilValue(usernameState)
+  const state = useStateDesigner(gameScreens)
+
   const playerXGlobal = useRecoilValue(playerXGlobalState)
   const playerOGlobal = useRecoilValue(playerOGlobalState)
-  const showWaitingScreen = useRecoilValue(showWaitingScreenState)
-  const playGameShowInitialScreen = useRecoilValue(
-    playGameShowInitialScreenState
-  )
 
   const setTieGame = useSetRecoilState(tieGameState)
+  const setWon = useSetRecoilState(wonGameState)
 
   const [board, setBoard] = useRecoilState(boardState)
   const [xIsNext, setXisNext] = useRecoilState(xIsNextState)
-  const [won, setWon] = useRecoilState(wonGameState)
 
   const winner = calculateWinner(board)
   const tie = calculateTie(board, winner)
@@ -60,6 +68,7 @@ const Game: React.FC<Props> = ({ socket }) => {
   useEffect(() => {
     if (winner && !tie) {
       setWon(true)
+      state.forceTransition("winOrTieScreen")
       win.play()
     }
   }, [winner])
@@ -67,6 +76,7 @@ const Game: React.FC<Props> = ({ socket }) => {
   useEffect(() => {
     if (tie) {
       setTieGame(true)
+      state.forceTransition("winOrTieScreen")
     }
   }, [tie])
 
@@ -82,8 +92,6 @@ const Game: React.FC<Props> = ({ socket }) => {
     })
   }, [socket.current])
 
-  console.log("PLAYERS", playerXGlobal, playerOGlobal)
-
   // Game square click
   const handleClick = (i: number) => {
     const boardCopy = [...board]
@@ -94,31 +102,17 @@ const Game: React.FC<Props> = ({ socket }) => {
     socket?.current?.emit("gameNextPlayer", xIsNext)
   }
 
-  // Screen show state
-  const showInitialScreen = playGameShowInitialScreen && !showWaitingScreen
-  const showNotYourTurnPlayerOScreen =
-    !showInitialScreen && xIsNext && playerXGlobal?.username !== username
-  const showNotYourTurnPlayerXScreen =
-    !showInitialScreen && !xIsNext && playerOGlobal?.username !== username
-  const showWinOrTieScreen = won || tie
-  const showWaitingForConnectionScreen =
-    !playGameShowInitialScreen && showWaitingScreen
-
   return (
     <Wrapper>
-      <>
-        {showInitialScreen && <ScreenInitial socket={socket} />}
-        {showNotYourTurnPlayerOScreen && !showWinOrTieScreen && (
-          <ScreenNotYourTurn player={playerXGlobal} />
-        )}
-        {showNotYourTurnPlayerXScreen && !showWinOrTieScreen && (
-          <ScreenNotYourTurn player={playerOGlobal} />
-        )}
-        {showWaitingForConnectionScreen && (
-          <ScreenWaitingForConnection socket={socket} />
-        )}
-        {showWinOrTieScreen && <ScreenWinOrTie socket={socket} />}
-      </>
+      {!state.isIn("initialScreen") && (
+        <ScreenYourTurn player={xIsNext ? playerXGlobal : playerOGlobal} />
+      )}
+
+      {state.whenIn({
+        initialScreen: <ScreenInitial socket={socket} />,
+        waitingConnectionScreen: <ScreenWaitingForConnection socket={socket} />,
+        winOrTieScreen: <ScreenWinOrTie socket={socket} />,
+      })}
       <Board squares={board} onClick={handleClick} />
     </Wrapper>
   )

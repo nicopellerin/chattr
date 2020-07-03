@@ -1,16 +1,19 @@
 import * as React from "react"
 import styled from "styled-components"
-import Portal from "./Chat/Portal"
+import Portal from "../Chat/Portal"
 import { motion } from "framer-motion"
 import { FaGamepad } from "react-icons/fa"
 import { useRecoilCallback, useSetRecoilState } from "recoil"
+import { useStateDesigner } from "@state-designer/react"
 
 import {
   playGameState,
   playGameShowInitialScreenState,
   showGamePlayBarState,
-} from "../store/game"
-import { chatHomeState, showPhotoGalleryState } from "../store/chat"
+} from "../../store/game"
+import { chatHomeState, showPhotoGalleryState } from "../../store/chat"
+
+import { gameScreens } from "./TicTacToe/Game"
 
 interface Props {
   msg: string
@@ -23,6 +26,8 @@ const GamePlayBar: React.FC<Props> = ({
   setMsg,
   socket,
 }) => {
+  const state = useStateDesigner(gameScreens)
+
   const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
 
   const showGameWindow = useRecoilCallback(({ set }) => {
@@ -53,6 +58,7 @@ const GamePlayBar: React.FC<Props> = ({
                 setMsg("")
                 setShowGamePlayBar(false)
                 showGameWindow()
+                state.forceTransition("yourTurnScreen")
                 socket.current.emit("playGameOtherPlayerAccepted", true)
               }}
             >

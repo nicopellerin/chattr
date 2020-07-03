@@ -26,7 +26,7 @@ const ChatTextWindowGallery = () => {
     } else {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
-  }, [showPhotoGallery])
+  }, [showPhotoGallery, expandChatWindow])
 
   return (
     <PerfectScrollbar

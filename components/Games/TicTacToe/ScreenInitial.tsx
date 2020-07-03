@@ -1,24 +1,30 @@
 import * as React from "react"
 import styled from "styled-components"
 import { useRecoilValue, useSetRecoilState } from "recoil"
+import { motion } from "framer-motion"
+import { useStateDesigner } from "@state-designer/react"
 
 import { NoMarginContainer, WinnerText, RematchButton } from "./GameStyles"
+import { gameScreens } from "./Game"
 
 import { usernameState, otherUsernameQuery } from "../../../store/users"
 import { startGameState } from "../../../store/game"
-import { motion } from "framer-motion"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 const ScreenInitial: React.FC<Props> = ({ socket }) => {
+  const state = useStateDesigner(gameScreens)
+
   const username = useRecoilValue(usernameState)
   const otherUsername = useRecoilValue(otherUsernameQuery)
 
   const startGame = useSetRecoilState(startGameState)
 
   const handleStartGame = () => {
+    state.forceTransition("waitingConnectionScreen")
+
     socket.current.emit("startGame", username)
     socket.current.emit("playGameAssignPlayers", {
       playerX: { username, letter: "X" },

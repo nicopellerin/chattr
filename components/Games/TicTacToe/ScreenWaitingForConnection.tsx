@@ -2,15 +2,19 @@ import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useSetRecoilState } from "recoil"
+import { useStateDesigner } from "@state-designer/react"
 
 import { ScreenWrapper, NoMarginContainer } from "./GameStyles"
 import { showGamePlayBarState } from "../../../store/game"
+import { gameScreens } from "./Game"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 const ScreenWaitingForConnection: React.FC<Props> = ({ socket }) => {
+  const state = useStateDesigner(gameScreens)
+
   const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
 
   return (
@@ -25,6 +29,7 @@ const ScreenWaitingForConnection: React.FC<Props> = ({ socket }) => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => {
+            state.forceTransition("initialScreen")
             setShowGamePlayBar(false)
             socket.current.emit("playGameOtherPlayerAccepted", false)
           }}

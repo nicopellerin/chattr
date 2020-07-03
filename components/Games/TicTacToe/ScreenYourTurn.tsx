@@ -1,15 +1,25 @@
 import * as React from "react"
+import { useRecoilValue } from "recoil"
+
 import {
   NotYourTurnWrapper,
   NoMarginContainer,
   WaitingText,
 } from "./GameStyles"
 
+import { usernameState } from "../../../store/users"
+
 interface Props {
   player: any
 }
 
-const ScreenNotYourTurn: React.FC<Props> = ({ player }) => {
+const ScreenYourTurn: React.FC<Props> = ({ player }) => {
+  const username = useRecoilValue(usernameState)
+
+  if (username === player.username) {
+    return null
+  }
+
   return (
     <NotYourTurnWrapper>
       <NoMarginContainer
@@ -29,4 +39,4 @@ const ScreenNotYourTurn: React.FC<Props> = ({ player }) => {
   )
 }
 
-export default ScreenNotYourTurn
+export default ScreenYourTurn
