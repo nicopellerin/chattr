@@ -80,17 +80,17 @@ const Game: React.FC<Props> = ({ socket }) => {
     }
   }, [tie])
 
-  useEffect(() => {
-    socket?.current?.on(
-      "gameBoardUpdatedGlobal",
-      (newBoard: Array<SquareValue | null>) => {
-        setBoard(newBoard)
-      }
-    )
-    socket?.current?.on("gameNextPlayerGlobal", () => {
-      setXisNext((prevState) => !prevState)
-    })
-  }, [socket.current])
+  // useEffect(() => {
+  //   socket?.current?.on(
+  //     "gameBoardUpdatedGlobal",
+  //     (newBoard: Array<SquareValue | null>) => {
+  //       setBoard(newBoard)
+  //     }
+  //   )
+  //   socket?.current?.on("gameNextPlayerGlobal", () => {
+  //     setXisNext((prevState) => !prevState)
+  //   })
+  // }, [socket.current])
 
   // Game square click
   const handleClick = (i: number) => {

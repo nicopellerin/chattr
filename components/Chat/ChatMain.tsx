@@ -53,6 +53,8 @@ import {
   playerOGlobalState,
   showGamePlayBarState,
   playGameState,
+  boardState,
+  xIsNextState,
 } from "../../store/game"
 
 import ChatVideo from "./ChatVideo"
@@ -65,6 +67,11 @@ import GamePlayBar from "../Games/GamePlayBar"
 
 import { User, Message, Call } from "../../models"
 import { gameScreens } from "../Games/TicTacToe/Game"
+
+enum SquareValue {
+  X = "X",
+  O = "O",
+}
 
 const ChatMain = () => {
   const state = useStateDesigner(gameScreens)
@@ -101,6 +108,8 @@ const ChatMain = () => {
     messageContainsHeartEmojiState
   )
   const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
+  const setBoard = useSetRecoilState(boardState)
+  const setXisNext = useSetRecoilState(xIsNextState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -275,6 +284,16 @@ const ChatMain = () => {
         }
       }
     )
+
+    socket.current.on(
+      "gameBoardUpdatedGlobal",
+      (newBoard: Array<SquareValue | null>) => {
+        setBoard(newBoard)
+      }
+    )
+    socket?.current?.on("gameNextPlayerGlobal", () => {
+      setXisNext((prevState) => !prevState)
+    })
   }, [username])
 
   // Call other connection
