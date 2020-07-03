@@ -7,7 +7,6 @@ import { FaGamepad } from "react-icons/fa"
 import { userSoundOnState } from "../../store/users"
 import {
   playGameState,
-  wonGameState,
   playGameShowInitialScreenState,
   resetGameState,
 } from "../../store/game"
@@ -25,7 +24,6 @@ const ChatTextWindowGameBtn = () => {
     }
   })
 
-  const setWon = useSetRecoilState(wonGameState)
   const setPlayGameShowInitialScreen = useSetRecoilState(
     playGameShowInitialScreenState
   )
