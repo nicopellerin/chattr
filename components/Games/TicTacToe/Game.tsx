@@ -2,7 +2,7 @@ import * as React from "react"
 import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
-import { useSetRecoilState, useRecoilState } from "recoil"
+import { useSetRecoilState } from "recoil"
 import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
 
@@ -50,12 +50,11 @@ const Game: React.FC<Props> = ({ socket }) => {
 
   const playerXGlobal = useRecoilValue(playerXGlobalState)
   const playerOGlobal = useRecoilValue(playerOGlobalState)
+  const board = useRecoilValue(boardState)
+  const xIsNext = useRecoilValue(xIsNextState)
 
   const setTieGame = useSetRecoilState(tieGameState)
   const setWon = useSetRecoilState(wonGameState)
-
-  const [board, setBoard] = useRecoilState(boardState)
-  const [xIsNext, setXisNext] = useRecoilState(xIsNextState)
 
   const winner = calculateWinner(board)
   const tie = calculateTie(board, winner)
