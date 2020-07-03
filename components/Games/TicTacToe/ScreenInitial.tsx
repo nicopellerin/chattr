@@ -7,7 +7,11 @@ import { useStateDesigner } from "@state-designer/react"
 import { NoMarginContainer, WinnerText, RematchButton } from "./GameStyles"
 import { gameScreens } from "./Game"
 
-import { usernameState, otherUsernameQuery } from "../../../store/users"
+import {
+  usernameState,
+  otherUsernameQuery,
+  listUsersState,
+} from "../../../store/users"
 import { startGameState, resetGameState } from "../../../store/game"
 
 interface Props {
@@ -19,15 +23,18 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
 
   const username = useRecoilValue(usernameState)
   const otherUsername = useRecoilValue(otherUsernameQuery)
+  const listUsers = useRecoilValue(listUsersState)
 
   const startGame = useSetRecoilState(startGameState)
   const setResetGame = useSetRecoilState(resetGameState)
 
+  const noConnection = listUsers?.length < 2
+
   const handleStartGame = () => {
+    if (noConnection) return
+
     setResetGame()
-
     state.forceTransition("waitingConnectionScreen")
-
     socket.current.emit("startGame", username)
     socket.current.emit("playGameAssignPlayers", {
       playerX: { username, letter: "X" },
@@ -53,8 +60,9 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleStartGame}
+          style={{ cursor: noConnection ? "initial" : "pointer" }}
         >
-          Start game
+          {noConnection ? `Waiting for friend to connect` : `Start game`}
         </RematchButton>
       </NoMarginContainer>
     </Wrapper>

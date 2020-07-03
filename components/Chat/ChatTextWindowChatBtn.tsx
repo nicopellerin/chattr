@@ -2,30 +2,20 @@ import * as React from "react"
 import { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilValue, useRecoilCallback } from "recoil"
+import { useRecoilValue } from "recoil"
 import { FaComment } from "react-icons/fa"
 
 import { userSoundOnState, usernameState } from "../../store/users"
-import {
-  chatHomeState,
-  showPhotoGalleryState,
-  chatWindowState,
-} from "../../store/chat"
-import { playGameState } from "../../store/game"
+import { chatWindowState } from "../../store/chat"
+import { useStateDesigner } from "@state-designer/react"
+import { chatTextWindowScreens } from "./ChatTextWindow"
 
 const ChatTextWindowChatBtn = () => {
+  const state = useStateDesigner(chatTextWindowScreens)
+
   const soundOn = useRecoilValue(userSoundOnState)
   const msgs = useRecoilValue(chatWindowState)
-  const chatHome = useRecoilValue(chatHomeState)
   const username = useRecoilValue(usernameState)
-
-  const showChatHome = useRecoilCallback(({ set }) => {
-    return () => {
-      set(playGameState, false)
-      set(showPhotoGalleryState, false)
-      set(chatHomeState, true)
-    }
-  })
 
   const [newMsgsAlert, setNewMsgsAlert] = useState(false)
 
@@ -44,7 +34,7 @@ const ChatTextWindowChatBtn = () => {
     if (
       msgs.length > prevLength &&
       msgs[msgs.length - 1].username !== username &&
-      !chatHome
+      !state.isIn("chatScreen")
     ) {
       setNewMsgsAlert(true)
       msgsRef.current = msgs
@@ -57,13 +47,15 @@ const ChatTextWindowChatBtn = () => {
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", damping: 15 }}
       style={{
-        color: chatHome ? "var(--primaryColor)" : "var(--primaryColorDark)",
-        cursor: chatHome ? "initial" : "pointer",
+        color: state.isIn("chatScreen")
+          ? "var(--primaryColor)"
+          : "var(--primaryColorDark)",
+        cursor: state.isIn("chatScreen") ? "initial" : "pointer",
       }}
       onClick={() => {
-        showChatHome()
+        state.forceTransition("chatScreen")
         setNewMsgsAlert(false)
-        if (soundOn && !chatHome) {
+        if (soundOn && !state.isIn("chatScreen")) {
           expand.play()
         }
       }}

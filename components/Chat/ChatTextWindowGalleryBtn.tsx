@@ -1,24 +1,18 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilValue, useRecoilCallback } from "recoil"
+import { useRecoilValue } from "recoil"
 import { FaPhotoVideo } from "react-icons/fa"
+import { useStateDesigner } from "@state-designer/react"
 
 import { userSoundOnState } from "../../store/users"
-import { showPhotoGalleryState, chatHomeState } from "../../store/chat"
-import { playGameState } from "../../store/game"
+
+import { chatTextWindowScreens } from "./ChatTextWindow"
 
 const ChatTextWindowGalleryBtn = () => {
-  const soundOn = useRecoilValue(userSoundOnState)
-  const showPhotoGallery = useRecoilValue(showPhotoGalleryState)
+  const state = useStateDesigner(chatTextWindowScreens)
 
-  const showPhotoGalleryWindow = useRecoilCallback(({ set }) => {
-    return () => {
-      set(playGameState, false)
-      set(chatHomeState, false)
-      set(showPhotoGalleryState, true)
-    }
-  })
+  const soundOn = useRecoilValue(userSoundOnState)
 
   const photoGallerySound = new Audio("/sounds/click_marker_cap.mp3")
   photoGallerySound.volume = 0.5
@@ -29,14 +23,14 @@ const ChatTextWindowGalleryBtn = () => {
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", damping: 15 }}
       style={{
-        color: showPhotoGallery
+        color: state.isIn("photoGalleryScreen")
           ? "var(--primaryColor)"
           : "var(--primaryColorDark)",
-        cursor: showPhotoGallery ? "initial" : "pointer",
+        cursor: state.isIn("photoGalleryScreen") ? "initial" : "pointer",
       }}
       onClick={() => {
-        showPhotoGalleryWindow()
-        if (soundOn && !showPhotoGallery) {
+        state.forceTransition("photoGalleryScreen")
+        if (soundOn && !state.isIn("photoGalleryScreen")) {
           photoGallerySound.play()
         }
       }}

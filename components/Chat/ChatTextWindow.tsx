@@ -2,7 +2,9 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
+import { createState } from "@state-designer/core"
+import { useStateDesigner } from "@state-designer/react"
 
 import TicTacToe from "../Games/TicTacToe"
 import ChatTextWindowGalleryBtn from "./ChatTextWindowGalleryBtn"
@@ -12,27 +14,27 @@ import ChatTextWindowGallery from "./ChatTextWindowGallery"
 import ChatTextWindowMain from "./ChatTextWindowMain"
 import ChatTextWindowChatBtn from "./ChatTextWindowChatBtn"
 
-import { showPhotoGalleryState, chatHomeState } from "../../store/chat"
-import {
-  listUsersState,
-  otherUsernameQuery,
-  userSoundOnState,
-} from "../../store/users"
-import { playGameState } from "../../store/game"
+import { otherUsernameQuery, userSoundOnState } from "../../store/users"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
+export const chatTextWindowScreens = createState({
+  id: "chatTextWindowScreens",
+  initial: "chatScreen",
+  states: {
+    chatScreen: {},
+    gameScreen: {},
+    photoGalleryScreen: {},
+  },
+})
+
 const ChatTextWindow: React.FC<Props> = ({ socket }) => {
-  const listUsers = useRecoilValue(listUsersState)
-  const showPhotoGallery = useRecoilValue(showPhotoGalleryState)
-  const playGame = useRecoilValue(playGameState)
+  const state = useStateDesigner(chatTextWindowScreens)
+
   const otherUsername = useRecoilValue(otherUsernameQuery)
   const soundOn = useRecoilValue(userSoundOnState)
-  const chatHome = useRecoilValue(chatHomeState)
-
-  const hasConnection = listUsers?.length > 1
 
   const [showJoinMsg, setShowJoinMsg] = useState(false)
 
@@ -58,25 +60,17 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   return (
     <Wrapper>
       <ChatTextWindowExpandBtn />
-      {hasConnection && <ChatTextWindowChatBtn />}
-      {hasConnection && <ChatTextWindowGameBtn />}
-      {hasConnection && <ChatTextWindowGalleryBtn />}
+      <ChatTextWindowChatBtn />
+      <ChatTextWindowGameBtn />
+      <ChatTextWindowGalleryBtn />
       <AnimatePresence initial={false}>
-        {chatHome && (
-          <motion.div initial={{ x: 30 }} animate={{ x: 0 }} exit={{ x: -300 }}>
+        {state.whenIn({
+          chatScreen: (
             <ChatTextWindowMain showJoinMsg={showJoinMsg} socket={socket} />
-          </motion.div>
-        )}
-        {playGame && (
-          <motion.div initial={{ x: 30 }} animate={{ x: 0 }} exit={{ x: -30 }}>
-            <TicTacToe socket={socket} />
-          </motion.div>
-        )}
-        {showPhotoGallery && (
-          <motion.div initial={{ x: 30 }} animate={{ x: 0 }} exit={{ x: -30 }}>
-            <ChatTextWindowGallery />
-          </motion.div>
-        )}
+          ),
+          gameScreen: <TicTacToe socket={socket} />,
+          photoGalleryScreen: <ChatTextWindowGallery />,
+        })}
       </AnimatePresence>
     </Wrapper>
   )

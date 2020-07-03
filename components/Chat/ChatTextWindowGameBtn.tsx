@@ -1,33 +1,18 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilValue, useSetRecoilState, useRecoilCallback } from "recoil"
+import { useRecoilValue } from "recoil"
 import { FaGamepad } from "react-icons/fa"
+import { useStateDesigner } from "@state-designer/react"
 
 import { userSoundOnState } from "../../store/users"
-import {
-  playGameState,
-  playGameShowInitialScreenState,
-  resetGameState,
-} from "../../store/game"
-import { chatHomeState, showPhotoGalleryState } from "../../store/chat"
+
+import { chatTextWindowScreens } from "./ChatTextWindow"
 
 const ChatTextWindowGameBtn = () => {
+  const state = useStateDesigner(chatTextWindowScreens)
+
   const soundOn = useRecoilValue(userSoundOnState)
-  const playGame = useRecoilValue(playGameState)
-
-  const showGameWindow = useRecoilCallback(({ set }) => {
-    return () => {
-      set(playGameState, true)
-      set(chatHomeState, false)
-      set(showPhotoGalleryState, false)
-    }
-  })
-
-  const setPlayGameShowInitialScreen = useSetRecoilState(
-    playGameShowInitialScreenState
-  )
-  const setResetGame = useSetRecoilState(resetGameState)
 
   const playGameSound = new Audio("/sounds/play-game.mp3")
   playGameSound.volume = 0.2
@@ -38,14 +23,14 @@ const ChatTextWindowGameBtn = () => {
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", damping: 15 }}
       style={{
-        color: playGame ? "var(--primaryColor)" : "var(--primaryColorDark)",
-        cursor: playGame ? "initial" : "pointer",
+        color: state.isIn("gameScreen")
+          ? "var(--primaryColor)"
+          : "var(--primaryColorDark)",
+        cursor: state.isIn("gameScreen") ? "initial" : "pointer",
       }}
       onClick={() => {
-        showGameWindow()
-        setResetGame()
-        setPlayGameShowInitialScreen(true)
-        if (soundOn && !playGame) {
+        state.forceTransition("gameScreen")
+        if (soundOn && !state.isIn("gameScreen")) {
           playGameSound.play()
         }
       }}

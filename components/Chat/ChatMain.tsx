@@ -291,7 +291,7 @@ const ChatMain = () => {
         setBoard(newBoard)
       }
     )
-    socket?.current?.on("gameNextPlayerGlobal", () => {
+    socket.current.on("gameNextPlayerGlobal", () => {
       setXisNext((prevState) => !prevState)
     })
   }, [username])
