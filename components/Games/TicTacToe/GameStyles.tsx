@@ -12,7 +12,7 @@ const ScreenWrapper = styled(motion.div)`
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, rgba(0, 0, 0, 0.9), #0f0818);
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.8), #0f0818);
   display: flex;
   flex-direction: column;
   justify-content: center;

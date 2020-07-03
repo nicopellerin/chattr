@@ -2,7 +2,6 @@ import * as React from "react"
 import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
-import { AnimatePresence } from "framer-motion"
 import { useSetRecoilState, useRecoilState } from "recoil"
 
 import Board from "./Board"
@@ -17,7 +16,6 @@ import {
   tieGameState,
   xIsNextState,
   boardState,
-  resetGameState,
 } from "../../../store/game"
 
 import { calculateWinner, calculateTie } from "./utils"
@@ -40,20 +38,16 @@ const Game: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
   const playerXGlobal = useRecoilValue(playerXGlobalState)
   const playerOGlobal = useRecoilValue(playerOGlobalState)
+  const showWaitingScreen = useRecoilValue(showWaitingScreenState)
+  const playGameShowInitialScreen = useRecoilValue(
+    playGameShowInitialScreenState
+  )
 
-  const setResetGame = useSetRecoilState(resetGameState)
   const setTieGame = useSetRecoilState(tieGameState)
 
   const [board, setBoard] = useRecoilState(boardState)
   const [xIsNext, setXisNext] = useRecoilState(xIsNextState)
   const [won, setWon] = useRecoilState(wonGameState)
-  const [showWaitingScreen, setShowWaitingScreen] = useRecoilState(
-    showWaitingScreenState
-  )
-  const [
-    playGameShowInitialScreen,
-    setPlayGameShowInitialScreen,
-  ] = useRecoilState(playGameShowInitialScreenState)
 
   const winner = calculateWinner(board)
   const tie = calculateTie(board, winner)
@@ -77,31 +71,18 @@ const Game: React.FC<Props> = ({ socket }) => {
   }, [tie])
 
   useEffect(() => {
-    socket.current.on(
+    socket?.current?.on(
       "gameBoardUpdatedGlobal",
       (newBoard: Array<SquareValue | null>) => {
         setBoard(newBoard)
       }
     )
-    socket.current.on("gameNextPlayerGlobal", () => {
+    socket?.current?.on("gameNextPlayerGlobal", () => {
       setXisNext((prevState) => !prevState)
     })
   }, [socket.current])
 
-  useEffect(() => {
-    socket.current.on(
-      "playGameOtherPlayerAcceptedGlobal",
-      (accepted: boolean) => {
-        if (accepted) {
-          setShowWaitingScreen(false)
-        } else {
-          setShowWaitingScreen(false)
-          setPlayGameShowInitialScreen(true)
-          setResetGame()
-        }
-      }
-    )
-  }, [socket.current])
+  console.log("PLAYERS", playerXGlobal, playerOGlobal)
 
   // Game square click
   const handleClick = (i: number) => {
@@ -109,39 +90,35 @@ const Game: React.FC<Props> = ({ socket }) => {
     if (winner || boardCopy[i]) return
     boardCopy[i] = xIsNext ? SquareValue.X : SquareValue.O
     click.play()
-    socket.current.emit("gameBoardUpdated", boardCopy)
-    socket.current.emit("gameNextPlayer", xIsNext)
+    socket?.current?.emit("gameBoardUpdated", boardCopy)
+    socket?.current?.emit("gameNextPlayer", xIsNext)
   }
 
   // Screen show state
-  const showInitialScreen = playGameShowInitialScreen
+  const showInitialScreen = playGameShowInitialScreen && !showWaitingScreen
   const showNotYourTurnPlayerOScreen =
-    !playGameShowInitialScreen &&
-    !showWaitingScreen &&
-    xIsNext &&
-    playerXGlobal?.username !== username
+    !showInitialScreen && xIsNext && playerXGlobal?.username !== username
   const showNotYourTurnPlayerXScreen =
-    !playGameShowInitialScreen &&
-    !showWaitingScreen &&
-    !xIsNext &&
-    playerOGlobal?.username !== username
+    !showInitialScreen && !xIsNext && playerOGlobal?.username !== username
   const showWinOrTieScreen = won || tie
   const showWaitingForConnectionScreen =
     !playGameShowInitialScreen && showWaitingScreen
 
   return (
     <Wrapper>
-      <AnimatePresence>
+      <>
         {showInitialScreen && <ScreenInitial socket={socket} />}
-        {showNotYourTurnPlayerOScreen && (
+        {showNotYourTurnPlayerOScreen && !showWinOrTieScreen && (
           <ScreenNotYourTurn player={playerXGlobal} />
         )}
-        {showNotYourTurnPlayerXScreen && (
+        {showNotYourTurnPlayerXScreen && !showWinOrTieScreen && (
           <ScreenNotYourTurn player={playerOGlobal} />
         )}
-        {showWaitingForConnectionScreen && <ScreenWaitingForConnection />}
+        {showWaitingForConnectionScreen && (
+          <ScreenWaitingForConnection socket={socket} />
+        )}
         {showWinOrTieScreen && <ScreenWinOrTie socket={socket} />}
-      </AnimatePresence>
+      </>
       <Board squares={board} onClick={handleClick} />
     </Wrapper>
   )

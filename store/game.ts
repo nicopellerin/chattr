@@ -87,6 +87,7 @@ export const startGameState = selector({
     set(playGameShowInitialScreenState, false)
     set(showWaitingScreenState, true)
     set(wonGameState, false)
+    set(xIsNextState, true)
   },
 })
 
@@ -94,9 +95,15 @@ export const resetGameState = selector({
   key: "resetGameState",
   get: () => {},
   set: ({ set }) => {
+    set(playGameShowInitialScreenState, false)
     set(boardState, Array(9).fill(null))
     set(xIsNextState, true)
     set(wonGameState, false)
-    set(playGameState, false)
+    set(playGameState, true)
   },
+})
+
+export const showGamePlayBarState = atom<boolean>({
+  key: "showGamePlayBarState",
+  default: false,
 })

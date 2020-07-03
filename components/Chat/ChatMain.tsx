@@ -4,7 +4,13 @@ import styled from "styled-components"
 import io from "socket.io-client"
 import Peer from "simple-peer"
 import Router, { useRouter } from "next/router"
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import {
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+  useRecoilCallback,
+  // useRecoilCallback,
+} from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
 
 import {
@@ -37,8 +43,18 @@ import {
   messageDeletedState,
   messageContainsHeartEmojiState,
   photoGalleryState,
+  showPhotoGalleryState,
+  chatHomeState,
 } from "../../store/chat"
-import { playerXGlobalState, playerOGlobalState } from "../../store/game"
+import {
+  playerXGlobalState,
+  playerOGlobalState,
+  showGamePlayBarState,
+  showWaitingScreenState,
+  playGameShowInitialScreenState,
+  playGameState,
+  resetGameState,
+} from "../../store/game"
 
 import ChatVideo from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
@@ -63,8 +79,8 @@ const ChatMain = () => {
   const [messageDeleted, setMessageDeleted] = useRecoilState(
     messageDeletedState
   )
-  const [photoGallery, setPhotoGallery] = useRecoilState(photoGalleryState)
 
+  const setPhotoGallery = useSetRecoilState(photoGalleryState)
   const setListUsers = useSetRecoilState(listUsersState)
   const setSendingFile = useSetRecoilState(sendingFileState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
@@ -84,12 +100,27 @@ const ChatMain = () => {
   const setMessageContainsHeartEmoji = useSetRecoilState(
     messageContainsHeartEmojiState
   )
+  const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
+  const setShowWaitingScreen = useSetRecoilState(showWaitingScreenState)
+  const setPlayGameShowInitialScreen = useSetRecoilState(
+    playGameShowInitialScreenState
+  )
+  const setResetGame = useSetRecoilState(resetGameState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
   const micMuted = useRecoilValue(muteMicState)
   const showSelfWebcam = useRecoilValue(showSelfWebcamState)
   const expandChatWindow = useRecoilValue(expandChatWindowState)
+  const showGamePlayBar = useRecoilValue(showGamePlayBarState)
+
+  const showChatHome = useRecoilCallback(({ set }) => {
+    return () => {
+      set(playGameState, false)
+      set(showPhotoGalleryState, false)
+      set(chatHomeState, true)
+    }
+  })
 
   const [msg, setMsg] = useState("")
 
@@ -223,11 +254,37 @@ const ChatMain = () => {
 
     socket.current.on("sendStartGameRequest", (username: string) => {
       setMsg(`${username} wants to play tictactoe`)
+      setShowGamePlayBar(true)
     })
+
+    socket.current.on(
+      "playGameAssignPlayersGlobal",
+      ({ playerX, playerO }: any) => {
+        setPlayerXGlobal(playerX)
+        setPlayerOGlobal(playerO)
+      }
+    )
 
     socket.current.on("addImageToPhotoGalleryGlobal", (data: any) => {
       setPhotoGallery((prevState) => [data, ...prevState])
     })
+
+    socket.current.on(
+      "playGameOtherPlayerAcceptedGlobal",
+      (accepted: boolean) => {
+        if (accepted) {
+          setShowWaitingScreen(false)
+          setPlayGameShowInitialScreen(false)
+          setResetGame()
+        } else {
+          setShowWaitingScreen(false)
+          setPlayGameShowInitialScreen(true)
+          setShowGamePlayBar(false)
+          setResetGame()
+          showChatHome()
+        }
+      }
+    )
   }, [username])
 
   // Call other connection
@@ -389,24 +446,12 @@ const ChatMain = () => {
   }, [showSelfWebcam, stream])
 
   useEffect(() => {
-    socket?.current?.on(
-      "playGameAssignPlayersGlobal",
-      ({ playerX, playerO }: any) => {
-        setPlayerXGlobal(playerX)
-        setPlayerOGlobal(playerO)
-      }
-    )
-  }, [socket.current])
-
-  useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
     if (messageDeleted) {
       setTimeout(() => setMessageDeleted(false), 1500)
     }
     return () => clearTimeout(idx)
   }, [messageDeleted])
-
-  console.log(photoGallery)
 
   return (
     <>
@@ -449,7 +494,9 @@ const ChatMain = () => {
         </Wrapper>
       </OutterWrapper>
       <AnimatePresence>
-        {msg && <GamePlayBar msg={msg} setMsg={setMsg} socket={socket} />}
+        {showGamePlayBar && (
+          <GamePlayBar msg={msg} setMsg={setMsg} socket={socket} />
+        )}
       </AnimatePresence>
     </>
   )

@@ -56,3 +56,13 @@ export const photoGalleryState = atom<Array<any>>({
   key: "photoGalleryState",
   default: [],
 })
+
+export const showPhotoGalleryState = atom<boolean>({
+  key: "showPhotoGalleryState",
+  default: false,
+})
+
+export const chatHomeState = atom<boolean>({
+  key: "chatHomeState",
+  default: true,
+})

@@ -3,8 +3,14 @@ import styled from "styled-components"
 import Portal from "./Chat/Portal"
 import { motion } from "framer-motion"
 import { FaGamepad } from "react-icons/fa"
-import { useSetRecoilState } from "recoil"
-import { playGameState, playGameShowInitialScreenState } from "../store/game"
+import { useRecoilCallback, useSetRecoilState } from "recoil"
+
+import {
+  playGameState,
+  playGameShowInitialScreenState,
+  showGamePlayBarState,
+} from "../store/game"
+import { chatHomeState, showPhotoGalleryState } from "../store/chat"
 
 interface Props {
   msg: string
@@ -17,10 +23,16 @@ const GamePlayBar: React.FC<Props> = ({
   setMsg,
   socket,
 }) => {
-  const setPlayGame = useSetRecoilState(playGameState)
-  const setplayGameShowInitialScreen = useSetRecoilState(
-    playGameShowInitialScreenState
-  )
+  const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
+
+  const showGameWindow = useRecoilCallback(({ set }) => {
+    return () => {
+      set(playGameState, true)
+      set(chatHomeState, false)
+      set(showPhotoGalleryState, false)
+      set(playGameShowInitialScreenState, false)
+    }
+  })
 
   const gameSound = new Audio("/play-game.mp3")
   gameSound.volume = 0.5
@@ -39,8 +51,8 @@ const GamePlayBar: React.FC<Props> = ({
             <ButtonAccept
               onClick={() => {
                 setMsg("")
-                setPlayGame(true)
-                setplayGameShowInitialScreen(false)
+                setShowGamePlayBar(false)
+                showGameWindow()
                 socket.current.emit("playGameOtherPlayerAccepted", true)
               }}
             >
@@ -49,7 +61,7 @@ const GamePlayBar: React.FC<Props> = ({
             <ButtonReject
               onClick={() => {
                 setMsg("")
-                setPlayGame(false)
+                setShowGamePlayBar(false)
                 socket.current.emit("playGameOtherPlayerAccepted", false)
               }}
             >

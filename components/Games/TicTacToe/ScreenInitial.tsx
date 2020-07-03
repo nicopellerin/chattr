@@ -1,15 +1,12 @@
 import * as React from "react"
+import styled from "styled-components"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 
-import {
-  ScreenWrapper,
-  NoMarginContainer,
-  WinnerText,
-  RematchButton,
-} from "./GameStyles"
+import { NoMarginContainer, WinnerText, RematchButton } from "./GameStyles"
 
 import { usernameState, otherUsernameQuery } from "../../../store/users"
 import { startGameState } from "../../../store/game"
+import { motion } from "framer-motion"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -32,7 +29,7 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
   }
 
   return (
-    <ScreenWrapper>
+    <Wrapper>
       <NoMarginContainer
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -51,8 +48,22 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
           Start game
         </RematchButton>
       </NoMarginContainer>
-    </ScreenWrapper>
+    </Wrapper>
   )
 }
 
 export default ScreenInitial
+
+// Styles
+const Wrapper = styled(motion.div)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`
