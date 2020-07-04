@@ -4,12 +4,7 @@ import styled from "styled-components"
 import io from "socket.io-client"
 import Peer from "simple-peer"
 import Router, { useRouter } from "next/router"
-import {
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-  useRecoilCallback,
-} from "recoil"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
 import CryptoJS from "crypto-js"
 import shortid from "shortid"
@@ -45,19 +40,17 @@ import {
   messageDeletedState,
   messageContainsHeartEmojiState,
   photoGalleryState,
-  showPhotoGalleryState,
-  chatHomeState,
 } from "../../store/chat"
 import {
   playerXGlobalState,
   playerOGlobalState,
   showGamePlayBarState,
-  playGameState,
   boardState,
   xIsNextState,
+  resetGameState,
 } from "../../store/game"
 
-import ChatVideo from "./ChatVideo"
+import ChatVideo, { chatVideoScreens } from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
 import ChatCommands from "./ChatCommands"
 import ChatTextWindow from "./ChatTextWindow"
@@ -75,6 +68,7 @@ enum SquareValue {
 
 const ChatMain = () => {
   const state = useStateDesigner(gameScreens)
+  const chatVideoScreensState = useStateDesigner(chatVideoScreens)
 
   const [stream, setStream] = useRecoilState(streamState)
   const [selfId, setSelfId] = useRecoilState(selfIdState)
@@ -87,12 +81,12 @@ const ChatMain = () => {
     messageDeletedState
   )
 
+  const setCallAccepted = useSetRecoilState(callAcceptedState)
+  const setReceivingCall = useSetRecoilState(receivingCallState)
   const setPhotoGallery = useSetRecoilState(photoGalleryState)
   const setListUsers = useSetRecoilState(listUsersState)
   const setSendingFile = useSetRecoilState(sendingFileState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
-  const setReceivingCall = useSetRecoilState(receivingCallState)
-  const setCallAccepted = useSetRecoilState(callAcceptedState)
   const setChatWelcomeMessage = useSetRecoilState(chatWelcomeMessageState)
   const setChatUserIsTyping = useSetRecoilState(chatUserIsTypingState)
   const setChatMsgs = useSetRecoilState(chatWindowState)
@@ -110,6 +104,7 @@ const ChatMain = () => {
   const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
   const setBoard = useSetRecoilState(boardState)
   const setXisNext = useSetRecoilState(xIsNextState)
+  const setResetGame = useSetRecoilState(resetGameState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -117,14 +112,6 @@ const ChatMain = () => {
   const showSelfWebcam = useRecoilValue(showSelfWebcamState)
   const expandChatWindow = useRecoilValue(expandChatWindowState)
   const showGamePlayBar = useRecoilValue(showGamePlayBarState)
-
-  const showChatHome = useRecoilCallback(({ set }) => {
-    return () => {
-      set(playGameState, false)
-      set(showPhotoGalleryState, false)
-      set(chatHomeState, true)
-    }
-  })
 
   const [msg, setMsg] = useState("")
 
@@ -176,6 +163,7 @@ const ChatMain = () => {
 
     socket.current.on("chatConnection", (msg: string) => {
       setChatWelcomeMessage(msg)
+      chatVideoScreensState.forceTransition("noVideoScreen")
     })
 
     socket.current.on("chatMessages", (msg: Message) => {
@@ -218,6 +206,7 @@ const ChatMain = () => {
       setChatMsgs([])
       setSendingFile(false)
       setFileTransferProgress("0")
+      chatVideoScreensState.forceTransition("waitingForConnectionScreen")
     })
 
     socket.current.on("usernameJoined", () => {
@@ -231,7 +220,11 @@ const ChatMain = () => {
     socket.current.on("call", (data: Call) => {
       setCaller(data.from)
       setCallerSignal(data.signal)
+    })
+
+    socket.current.on("receivingCall", () => {
       setReceivingCall(true)
+      chatVideoScreensState.forceTransition("incomingCallScreen.visible")
     })
 
     socket.current.on("callCancelled", () => {
@@ -239,6 +232,7 @@ const ChatMain = () => {
       setCallAccepted(false)
       setReceivingCall(false)
       setCancelCallRequest(true)
+      chatVideoScreensState.forceTransition("noVideoScreen")
       if (friendVideoRef.current) {
         friendVideoRef.current.srcObject = null
       }
@@ -280,7 +274,7 @@ const ChatMain = () => {
           state.forceTransition("yourTurnScreen")
         } else {
           state.reset()
-          showChatHome()
+          setResetGame()
         }
       }
     )
@@ -318,12 +312,18 @@ const ChatMain = () => {
       stream: stream,
     })
 
+    chatVideoScreensState.forceTransition("callingScreen.visible")
+
     peer.on("signal", (data) => {
       socket.current.emit("callUser", {
         userToCall: id,
         signalData: data,
         from: selfId,
       })
+    })
+
+    socket.current.emit("sendingCall", {
+      userToCall: id,
     })
 
     peer.on("stream", (stream) => {
@@ -333,7 +333,6 @@ const ChatMain = () => {
     })
 
     peer.on("close", () => {
-      console.log("Closing WEBRTC")
       peer.removeAllListeners()
     })
 
@@ -349,6 +348,7 @@ const ChatMain = () => {
     socket.current.on("callAccepted", (signal: any) => {
       setReceivingCall(false)
       setCallAccepted(true)
+      chatVideoScreensState.forceTransition("callingScreen.hidden")
       peer.signal(signal)
     })
   }
@@ -357,6 +357,8 @@ const ChatMain = () => {
   const acceptCall = () => {
     setCallAccepted(true)
     setReceivingCall(false)
+
+    chatVideoScreensState.forceTransition("incomingCallScreen.hidden")
 
     const peer2 = new Peer({
       initiator: false,

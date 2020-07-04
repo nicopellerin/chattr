@@ -1,12 +1,13 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import { useStateDesigner } from "@state-designer/react"
 
-interface Props {
-  setShowCatSlider: React.Dispatch<React.SetStateAction<boolean>>
-}
+import { catSliderScreen } from "./ChatVideo"
 
-const ChatScreenNoVideo: React.FC<Props> = ({ setShowCatSlider }) => {
+const ChatScreenNoVideo = () => {
+  const catSliderScreenState = useStateDesigner(catSliderScreen)
+
   return (
     <Wrapper
       initial={{ opacity: 0, scale: 0.8 }}
@@ -21,7 +22,7 @@ const ChatScreenNoVideo: React.FC<Props> = ({ setShowCatSlider }) => {
           start video/audio call
         </Tagline>
         <SlideshowButton
-          onClick={() => setShowCatSlider(true)}
+          onClick={() => catSliderScreenState.send("SHOW")}
           whileTap={{ y: 1 }}
           whileHover={{ y: -1 }}
         >

@@ -1,38 +1,43 @@
 import * as React from "react"
-import { useState } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
+import { useStateDesigner } from "@state-designer/react"
+
 import Slider from "./Slider"
 
+import { catSliderScreen } from "./ChatVideo"
+
 const ChatScreenNotSupported: React.FC = () => {
-  const [showCatSlider, setShowCatSlider] = useState(false)
+  const catSliderScreenState = useStateDesigner(catSliderScreen)
 
   return (
     <Wrapper>
-      {!showCatSlider ? (
-        <Container
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ type: "spring", damping: 80 }}
+      <Container
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ type: "spring", damping: 80 }}
+      >
+        <Title>{"Streaming is not supported :("}</Title>
+        <Tagline>
+          Make sure you allowed video/audio or try using a different browser
+        </Tagline>
+        <SlideshowButton
+          onClick={() => catSliderScreenState.send("SHOW")}
+          whileTap={{ y: 1 }}
+          whileHover={{ y: -1 }}
         >
-          <Title>{"Streaming is not supported :("}</Title>
-          <Tagline>
-            Make sure you allowed video/audio or try using a different browser
-          </Tagline>
-          <SlideshowButton
-            onClick={() => setShowCatSlider(true)}
-            whileTap={{ y: 1 }}
-            whileHover={{ y: -1 }}
-          >
-            Show me cats instead :3
-          </SlideshowButton>
-        </Container>
-      ) : (
-        <AnimatePresence>
-          <Slider setShowCatSlider={setShowCatSlider} />
-        </AnimatePresence>
-      )}
+          Show me cats instead :3
+        </SlideshowButton>
+      </Container>
+
+      {catSliderScreenState.whenIn({
+        visible: (
+          <AnimatePresence>
+            <Slider />
+          </AnimatePresence>
+        ),
+      })}
     </Wrapper>
   )
 }

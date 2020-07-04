@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "framer-motion"
 import { wrap } from "@popmotion/popcorn"
 import styled from "styled-components"
 import { FaTimesCircle } from "react-icons/fa"
+import { useStateDesigner } from "@state-designer/react"
+
+import { catSliderScreen } from "./ChatVideo"
 
 const images = [
   "/cats/cat1.jpg",
@@ -27,11 +30,9 @@ const images = [
   "/cats/cat19.jpg",
 ]
 
-interface Props {
-  setShowCatSlider: React.Dispatch<React.SetStateAction<boolean>>
-}
+const Slider = () => {
+  const catSliderScreenState = useStateDesigner(catSliderScreen)
 
-const Slider: React.FC<Props> = ({ setShowCatSlider }) => {
   const [[page, direction], setPage] = useState([
     0 + Math.floor(Math.random() * images?.length),
     0,
@@ -87,7 +88,7 @@ const Slider: React.FC<Props> = ({ setShowCatSlider }) => {
       }}
     >
       <Container>
-        <CloseIcon onClick={() => setShowCatSlider(false)} />
+        <CloseIcon onClick={() => catSliderScreenState.send("SHOW")} />
         <AnimatePresence initial={false} custom={direction}>
           <ImageStyled
             alt="Slider"

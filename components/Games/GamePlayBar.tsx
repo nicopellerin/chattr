@@ -3,18 +3,13 @@ import styled from "styled-components"
 import Portal from "../Chat/Portal"
 import { motion } from "framer-motion"
 import { FaGamepad } from "react-icons/fa"
-import { useRecoilCallback, useSetRecoilState } from "recoil"
+import { useSetRecoilState } from "recoil"
 import { useStateDesigner } from "@state-designer/react"
 
-import {
-  playGameState,
-  playGameShowInitialScreenState,
-  showGamePlayBarState,
-  resetGameState,
-} from "../../store/game"
-import { chatHomeState, showPhotoGalleryState } from "../../store/chat"
+import { showGamePlayBarState } from "../../store/game"
 
 import { gameScreens } from "./TicTacToe/Game"
+import { chatTextWindowScreens } from "../Chat/ChatTextWindow"
 
 interface Props {
   msg: string
@@ -27,19 +22,10 @@ const GamePlayBar: React.FC<Props> = ({
   setMsg,
   socket,
 }) => {
-  const state = useStateDesigner(gameScreens)
+  const gameScreensState = useStateDesigner(gameScreens)
+  const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
 
   const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
-  const setResetGame = useSetRecoilState(resetGameState)
-
-  const showGameWindow = useRecoilCallback(({ set }) => {
-    return () => {
-      set(playGameState, true)
-      set(chatHomeState, false)
-      set(showPhotoGalleryState, false)
-      set(playGameShowInitialScreenState, false)
-    }
-  })
 
   const gameSound = new Audio("/play-game.mp3")
   gameSound.volume = 0.5
@@ -59,9 +45,8 @@ const GamePlayBar: React.FC<Props> = ({
               onClick={() => {
                 setMsg("")
                 setShowGamePlayBar(false)
-                showGameWindow()
-                setResetGame()
-                state.forceTransition("yourTurnScreen")
+                chatTextWindowScreensState.forceTransition("gameScreen")
+                gameScreensState.forceTransition("yourTurnScreen")
                 socket.current.emit("playGameOtherPlayerAccepted", true)
               }}
             >

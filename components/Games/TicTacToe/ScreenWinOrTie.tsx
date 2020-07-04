@@ -49,8 +49,8 @@ const ScreenWinOrTie: React.FC<Props> = ({ socket }) => {
 
   const handleQuit = () => {
     state.reset()
-    socket.current.emit("playGameOtherPlayerAccepted", false)
     setResetGame()
+    socket.current.emit("playGameOtherPlayerAccepted", false)
   }
 
   return (
@@ -83,7 +83,7 @@ const ScreenWinOrTie: React.FC<Props> = ({ socket }) => {
         <RematchButton
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => setResetGame()}
+          // onClick={() => setResetGame()}
         >
           Re-match
         </RematchButton>

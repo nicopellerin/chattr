@@ -1,10 +1,11 @@
 import * as React from "react"
-import { useRef, useState, useEffect } from "react"
+import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { FaExpand, FaMicrophoneSlash } from "react-icons/fa"
 import dynamic from "next/dynamic"
+import { createState } from "@state-designer/core"
 
 import ChatScreenWaitingForConnect from "./ChatScreenWaitingForConnect"
 import ChatScreenCalling from "./ChatScreenCalling"
@@ -20,9 +21,7 @@ const ChatScreenHeart = dynamic(() => import("./ChatScreenHeart"), {
 
 import {
   showSelfWebcamState,
-  receivingCallState,
   callAcceptedState,
-  pressedCallState,
   getUserMediaNotSupportedState,
   displayTheatreModeState,
   peerAudioMutedQuery,
@@ -33,6 +32,43 @@ import {
   otherUsernameQuery,
 } from "../../store/users"
 import { messageContainsHeartEmojiState } from "../../store/chat"
+import { useStateDesigner } from "@state-designer/react"
+
+export const chatVideoScreens = createState({
+  id: "chatTextWindowScreens",
+  initial: "waitingForConnectionScreen",
+  states: {
+    waitingForConnectionScreen: {},
+    callingScreen: {
+      initial: "hidden",
+      states: {
+        hidden: {},
+        visible: {},
+      },
+    },
+    noVideoScreen: {},
+    incomingCallScreen: {
+      initial: "hidden",
+      states: {
+        hidden: {},
+        visible: {},
+      },
+    },
+  },
+})
+
+export const catSliderScreen = createState({
+  id: "catSliderScreen",
+  initial: "hidden",
+  states: {
+    hidden: {
+      on: { SHOW: { to: "visible" } },
+    },
+    visible: {
+      on: { SHOW: { to: "hidden" } },
+    },
+  },
+})
 
 interface Props {
   acceptCall: () => void
@@ -47,25 +83,24 @@ const ChatVideo: React.FC<Props> = ({
   friendVideoRef,
   socket,
 }) => {
+  const chatVideoScreensState = useStateDesigner(chatVideoScreens)
+  const catSliderScreenState = useStateDesigner(catSliderScreen)
+
   const showWebcam = useRecoilValue(showSelfWebcamState)
   const callAccepted = useRecoilValue(callAcceptedState)
   const listUsers = useRecoilValue(listUsersState)
-  const pressedCall = useRecoilValue(pressedCallState)
-  const receivingCall = useRecoilValue(receivingCallState)
   const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
   const soundOn = useRecoilValue(userSoundOnState)
   const peerAudioMuted = useRecoilValue(peerAudioMutedQuery)
   const otherUsername = useRecoilValue(otherUsernameQuery)
+
   const [
     messageContainsHeartEmoji,
     setMessageContainsHeartEmoji,
   ] = useRecoilState(messageContainsHeartEmojiState)
-
   const [displayTheatreMode, setDisplayTheatreMode] = useRecoilState(
     displayTheatreModeState
   )
-
-  const [showCatSlider, setShowCatSlider] = useState(false)
 
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
 
@@ -79,44 +114,32 @@ const ChatVideo: React.FC<Props> = ({
     )
   }
 
+  // Removes heart animation from screen
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
-
     if (messageContainsHeartEmoji) {
       idx = setTimeout(() => setMessageContainsHeartEmoji(false), 3000)
     }
-
     return () => clearTimeout(idx)
   }, [messageContainsHeartEmoji])
 
   return (
     <Wrapper ref={contraintsRef}>
-      <>
-        {!showCatSlider ? (
-          <>
-            {/* {audioStream && <ChatScreenVisualiser />} */}
-
-            {listUsers?.length < 2 && <ChatScreenWaitingForConnect />}
-
-            {pressedCall && !callAccepted && <ChatScreenCalling />}
-
-            {!receivingCall &&
-              !callAccepted &&
-              !pressedCall &&
-              listUsers?.length >= 2 && (
-                <ChatScreenNoVideo setShowCatSlider={setShowCatSlider} />
-              )}
-
-            {receivingCall && !callAccepted && (
-              <ChatScreenIncomingCall acceptCall={acceptCall} socket={socket} />
-            )}
-          </>
-        ) : (
+      {chatVideoScreensState.whenIn({
+        waitingForConnectionScreen: <ChatScreenWaitingForConnect />,
+        "callingScreen.visible": <ChatScreenCalling />,
+        noVideoScreen: <ChatScreenNoVideo />,
+        "incomingCallScreen.visible": (
+          <ChatScreenIncomingCall acceptCall={acceptCall} socket={socket} />
+        ),
+      })}
+      {catSliderScreenState.whenIn({
+        visible: (
           <AnimatePresence>
-            <Slider setShowCatSlider={setShowCatSlider} />
+            <Slider />
           </AnimatePresence>
-        )}
-      </>
+        ),
+      })}
       <>
         <SelfVideo
           muted

@@ -13,6 +13,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 
+import MessageBar from "../MessageBar"
+
 import {
   showSelfWebcamState,
   callAcceptedState,
@@ -28,7 +30,6 @@ import {
   otherUserIdQuery,
 } from "../../store/users"
 import { fileTransferProgressState, sendingFileState } from "../../store/chat"
-import MessageBar from "../MessageBar"
 
 interface Props {
   callFriend: (id: string) => void
@@ -68,16 +69,13 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
 
   const handleSendFile = (e: any) => {
     if (!e.target.files[0]) return
-
     const file = e.target.files[0]
-
     if (file && file.size > 2 * 1000000) {
       setErrorMsg("File too big. Max size is 2 mb")
       e.target.value = ""
       setSendingFile(false)
       return
     }
-
     sendFile(file, file.name)
   }
 

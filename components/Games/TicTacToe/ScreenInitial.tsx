@@ -32,7 +32,6 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
 
   const handleStartGame = () => {
     if (noConnection) return
-
     setResetGame()
     state.forceTransition("waitingConnectionScreen")
     socket.current.emit("startGame", username)
@@ -40,7 +39,6 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
       playerX: { username, letter: "X" },
       playerO: { username: otherUsername, letter: "O" },
     })
-
     startGame()
   }
 

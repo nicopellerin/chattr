@@ -96,6 +96,10 @@ io.on("connection", (socket) => {
     })
   })
 
+  socket.on("sendingCall", (data: CallUser) => {
+    io.to(data.userToCall).emit("receivingCall")
+  })
+
   socket.on("acceptCall", (data: AcceptCall) => {
     io.to(data.to).emit("callAccepted", data.signal)
   })
