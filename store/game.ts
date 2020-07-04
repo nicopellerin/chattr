@@ -102,8 +102,3 @@ export const resetGameState = selector({
     set(playGameState, true)
   },
 })
-
-export const showGamePlayBarState = atom<boolean>({
-  key: "showGamePlayBarState",
-  default: false,
-})

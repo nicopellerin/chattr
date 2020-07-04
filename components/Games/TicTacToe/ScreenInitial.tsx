@@ -58,7 +58,10 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleStartGame}
-          style={{ cursor: noConnection ? "initial" : "pointer" }}
+          style={{
+            cursor: noConnection ? "initial" : "pointer",
+            pointerEvents: noConnection ? "none" : "all",
+          }}
         >
           {noConnection ? `Waiting for friend to connect` : `Start game`}
         </RematchButton>

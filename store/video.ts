@@ -7,6 +7,11 @@ export const streamState = atom<MediaStream | any>({
   default: null,
 })
 
+export const streamOtherPeerState = atom<MediaStream | any>({
+  key: "streamOtherPeerState",
+  default: null,
+})
+
 export const receivingCallState = atom<boolean>({
   key: "receivingCallState",
   default: false,

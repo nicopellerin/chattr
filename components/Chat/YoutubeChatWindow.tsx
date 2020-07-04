@@ -9,6 +9,7 @@ import { FaPauseCircle, FaPlayCircle } from "react-icons/fa"
 import { expandChatWindowState } from "../../store/chat"
 
 import { playYoutubeVideoState, youtubeUrlState } from "../../store/youtube"
+import { listUsersState } from "../../store/users"
 
 export const youtubeChatWindowScreens = createState({
   id: "youtubeChatWindow",
@@ -31,6 +32,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
 
   const expandChatWindow = useRecoilValue(expandChatWindowState)
   const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
+  const listUsers = useRecoilValue(listUsersState)
 
   const setYoutubeUrl = useSetRecoilState(youtubeUrlState)
 
@@ -44,6 +46,8 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
     socket.current.emit("sendYoutubeUrl", url)
     youtubeChatWindowScreensState.forceTransition("waitingScreen")
   }
+
+  const noConnection = listUsers?.length < 2
 
   return (
     <Wrapper style={{ height: expandChatWindow ? 585 : 400 }}>
@@ -64,8 +68,17 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
                   onChange={(e) => setUrl(e.target.value)}
                   required
                 />
-                <Button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  Send request
+                <Button
+                  style={{
+                    cursor: noConnection ? "initial" : "cursor",
+                    pointerEvents: noConnection ? "none" : "all",
+                  }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {noConnection
+                    ? `Waiting for friend to connect`
+                    : `Send request`}
                 </Button>
               </Form>
             </Container>
@@ -104,6 +117,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
                   onClick={() => {
                     setUrl("")
                     youtubeChatWindowScreensState.reset()
+                    socket.current.emit("sendingYoutubeVideoAccepted", false)
                   }}
                 >
                   Quit watching

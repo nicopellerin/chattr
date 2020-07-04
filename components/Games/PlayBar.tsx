@@ -2,11 +2,11 @@ import * as React from "react"
 import styled from "styled-components"
 import Portal from "../Chat/Portal"
 import { motion } from "framer-motion"
-import { FaGamepad } from "react-icons/fa"
+import { FaGamepad, FaYoutube } from "react-icons/fa"
 import { useSetRecoilState } from "recoil"
 import { useStateDesigner } from "@state-designer/react"
 
-import { showGamePlayBarState } from "../../store/game"
+import { showPlayBarState } from "../../store/chat"
 
 import { gameScreens } from "./TicTacToe/Game"
 import { chatTextWindowScreens } from "../Chat/ChatTextWindow"
@@ -18,7 +18,7 @@ interface Props {
   type: string
 }
 
-const GamePlayBar: React.FC<Props> = ({
+const PlayBar: React.FC<Props> = ({
   msg = "An error has occured",
   setMsg,
   socket,
@@ -27,7 +27,7 @@ const GamePlayBar: React.FC<Props> = ({
   const gameScreensState = useStateDesigner(gameScreens)
   const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
 
-  const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
+  const setShowPlayBar = useSetRecoilState(showPlayBarState)
 
   const gameSound = new Audio("/play-game.mp3")
   gameSound.volume = 0.5
@@ -41,21 +41,26 @@ const GamePlayBar: React.FC<Props> = ({
     >
       <Container>
         <Text>
-          <FaGamepad style={{ marginRight: 7 }} /> {msg}
+          {type === "game" ? (
+            <FaGamepad size={24} style={{ marginRight: 10 }} />
+          ) : (
+            <FaYoutube size={24} style={{ marginRight: 10 }} />
+          )}{" "}
+          {msg}
           <ButtonGroup>
             <ButtonAccept
               onClick={() => {
                 switch (type) {
                   case "game":
                     setMsg("")
-                    setShowGamePlayBar(false)
+                    setShowPlayBar(false)
                     chatTextWindowScreensState.forceTransition("gameScreen")
                     gameScreensState.forceTransition("yourTurnScreen")
                     socket.current.emit("playGameOtherPlayerAccepted", true)
                     break
                   case "youtube":
                     setMsg("")
-                    setShowGamePlayBar(false)
+                    setShowPlayBar(false)
                     chatTextWindowScreensState.forceTransition(
                       "youtubeVideoStartScreen"
                     )
@@ -67,9 +72,18 @@ const GamePlayBar: React.FC<Props> = ({
             </ButtonAccept>
             <ButtonReject
               onClick={() => {
-                setMsg("")
-                setShowGamePlayBar(false)
-                socket.current.emit("playGameOtherPlayerAccepted", false)
+                switch (type) {
+                  case "game":
+                    setMsg("")
+                    setShowPlayBar(false)
+                    socket.current.emit("playGameOtherPlayerAccepted", false)
+                    break
+                  case "youtube":
+                    setMsg("")
+                    setShowPlayBar(false)
+                    chatTextWindowScreensState.reset()
+                    socket.current.emit("sendingYoutubeVideoAccepted", false)
+                }
               }}
             >
               Nope
@@ -82,7 +96,7 @@ const GamePlayBar: React.FC<Props> = ({
   )
 }
 
-export default GamePlayBar
+export default PlayBar
 
 // Styles
 const Wrapper = styled(motion.div)`

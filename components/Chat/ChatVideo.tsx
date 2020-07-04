@@ -108,6 +108,16 @@ const ChatVideo: React.FC<Props> = ({
 
   let sound = new Audio("/sounds/expand.mp3")
 
+  useEffect(() => {
+    console.log("LISTTTTT", listUsers)
+    if (listUsers?.length > 1) {
+      chatVideoScreensState.forceTransition("noVideoScreen")
+    } else {
+      console.log("INNNNNN")
+      chatVideoScreensState.forceTransition("waitingForConnectionScreen")
+    }
+  }, [listUsers])
+
   if (getUserMediaNotSupported) {
     return (
       <Wrapper ref={contraintsRef}>
@@ -134,12 +144,7 @@ const ChatVideo: React.FC<Props> = ({
         "incomingCallScreen.visible": (
           <ChatScreenIncomingCall acceptCall={acceptCall} socket={socket} />
         ),
-        youtubeVideoScreen: (
-          <YoutubeVideoScreen
-            selfVideoRef={selfVideoRef}
-            friendVideoRef={friendVideoRef}
-          />
-        ),
+        youtubeVideoScreen: <YoutubeVideoScreen />,
       })}
       {catSliderScreenState.whenIn({
         visible: (

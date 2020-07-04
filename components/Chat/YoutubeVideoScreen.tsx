@@ -4,23 +4,24 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue } from "recoil"
 
-import { showSelfWebcamState } from "../../store/video"
+import {
+  showSelfWebcamState,
+  streamState,
+  streamOtherPeerState,
+} from "../../store/video"
 import { youtubeUrlState, playYoutubeVideoState } from "../../store/youtube"
 
-interface Props {
-  selfVideoRef: React.MutableRefObject<HTMLVideoElement>
-  friendVideoRef: React.MutableRefObject<HTMLVideoElement>
-}
-
-const YoutubeVideoScreen: React.FC<Props> = ({
-  selfVideoRef,
-  friendVideoRef,
-}) => {
+const YoutubeVideoScreen = () => {
   const showWebcam = useRecoilValue(showSelfWebcamState)
   const youtubeUrl = useRecoilValue(youtubeUrlState)
   const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
+  const stream = useRecoilValue(streamState)
+  const streamOtherPeer = useRecoilValue(streamOtherPeerState)
 
   const youtubePlayerRef = useRef() as React.MutableRefObject<any>
+  const selfVideo2Ref = useRef() as React.MutableRefObject<HTMLVideoElement>
+  const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
+
   // const youtubeLoadVideoBtnRef = useRef() as React.MutableRefObject<
   //   HTMLButtonElement
   // >
@@ -31,7 +32,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({
     // @ts-ignore
     const player = new window.YT.Player("player", {
       height: "390",
-      width: "100%",
+      width: "800",
     })
 
     youtubePlayerRef.current = player
@@ -54,7 +55,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({
 
   useEffect(() => {
     if (youtubeUrl || (!playYoutubeVideo && !loadedVideo.current)) {
-      youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1])
+      youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1], 0)
       loadedVideo.current = true
     }
     if (playYoutubeVideo) {
@@ -63,6 +64,19 @@ const YoutubeVideoScreen: React.FC<Props> = ({
       youtubePlayerRef?.current?.pauseVideo()
     }
   }, [youtubeUrl, playYoutubeVideo])
+
+  useEffect(() => {
+    if (selfVideo2Ref.current) {
+      selfVideo2Ref.current.srcObject = stream
+      friendVideoRef.current.srcObject = streamOtherPeer
+    }
+  }, [stream])
+
+  useEffect(() => {
+    if (friendVideoRef.current) {
+      friendVideoRef.current.srcObject = streamOtherPeer
+    }
+  }, [streamOtherPeer])
 
   return (
     <Wrapper
@@ -78,7 +92,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({
             muted
             initial={{ scaleX: -1 }}
             exit={{ scaleX: 0 }}
-            ref={selfVideoRef}
+            ref={selfVideo2Ref}
             playsInline
             autoPlay
             showWebcam={showWebcam}
@@ -126,15 +140,30 @@ const Container = styled(motion.div)`
 
 const VideoContainer = styled.div`
   display: grid;
-  width: 100%;
+  width: auto;
   grid-template-columns: auto auto;
-  grid-gap: 2rem;
   justify-content: center;
   justify-items: center;
+  padding: 2rem;
+  border-radius: 5px;
+  /* filter: drop-shadow(0 0.75rem 10rem rgba(131, 82, 253, 0.15)); */
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.01),
+    rgba(156, 116, 254, 0.05)
+  );
 `
 
 const YoutubeVideo = styled.div`
   margin-bottom: 4rem;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.01),
+    rgba(156, 116, 254, 0.05)
+  );
+  padding: 2rem;
+  border-radius: 5px;
+  filter: drop-shadow(0 0.75rem 10rem rgba(131, 82, 253, 0.35));
 `
 
 const FriendVideo = styled.video`
@@ -142,21 +171,19 @@ const FriendVideo = styled.video`
   width: 300px;
   margin: 0;
   padding: 0;
+  border-radius: 5px;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
-  outline: 2px solid red;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 `
 
 const SelfVideo = styled(motion.video)`
   height: 150px;
   width: 300px;
-  object-fit: cover;
-  /* position: absolute;
-  bottom: 3vh;
-  left: 5vh; */
   z-index: 2;
   margin: 0;
   padding: 0;
-  border-radius: 3px;
+  border-radius: 5px;
   opacity: ${(props: { showWebcam: boolean }) => (props.showWebcam ? 1 : 0)};
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 `

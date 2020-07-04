@@ -67,7 +67,7 @@ const RematchButton = styled(motion.button)`
   background: linear-gradient(45deg, #d852fd, #9c74fe);
   border: none;
   border-radius: 5px;
-  padding: 1rem 1.5rem;
+  padding: 0.8em 1em;
   font-weight: 600;
   font-size: 1.7rem;
   color: var(--textColor);

@@ -66,3 +66,8 @@ export const chatHomeState = atom<boolean>({
   key: "chatHomeState",
   default: true,
 })
+
+export const showPlayBarState = atom<boolean>({
+  key: "showPlayBarState",
+  default: false,
+})

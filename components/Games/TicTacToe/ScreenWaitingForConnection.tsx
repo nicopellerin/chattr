@@ -5,7 +5,7 @@ import { useSetRecoilState } from "recoil"
 import { useStateDesigner } from "@state-designer/react"
 
 import { ScreenWrapper, NoMarginContainer } from "./GameStyles"
-import { showGamePlayBarState } from "../../../store/game"
+import { showPlayBarState } from "../../../store/chat"
 import { gameScreens } from "./Game"
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 const ScreenWaitingForConnection: React.FC<Props> = ({ socket }) => {
   const state = useStateDesigner(gameScreens)
 
-  const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
+  const setShowPlayBar = useSetRecoilState(showPlayBarState)
 
   return (
     <ScreenWrapper>
@@ -30,7 +30,7 @@ const ScreenWaitingForConnection: React.FC<Props> = ({ socket }) => {
           whileTap={{ scale: 0.98 }}
           onClick={() => {
             state.forceTransition("initialScreen")
-            setShowGamePlayBar(false)
+            setShowPlayBar(false)
             socket.current.emit("playGameOtherPlayerAccepted", false)
           }}
         >

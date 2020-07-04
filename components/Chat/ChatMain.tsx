@@ -23,6 +23,7 @@ import {
   getUserMediaNotSupportedState,
   displayTheatreModeState,
   peerAudioMutedState,
+  streamOtherPeerState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -40,11 +41,11 @@ import {
   messageDeletedState,
   messageContainsHeartEmojiState,
   photoGalleryState,
+  showPlayBarState,
 } from "../../store/chat"
 import {
   playerXGlobalState,
   playerOGlobalState,
-  showGamePlayBarState,
   boardState,
   xIsNextState,
   resetGameState,
@@ -57,7 +58,7 @@ import ChatCommands from "./ChatCommands"
 import ChatTextWindow, { chatTextWindowScreens } from "./ChatTextWindow"
 import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
-import GamePlayBar from "../Games/GamePlayBar"
+import PlayBar from "../Games/PlayBar"
 
 import { User, Message, Call } from "../../models"
 
@@ -108,21 +109,23 @@ const ChatMain = () => {
   const setMessageContainsHeartEmoji = useSetRecoilState(
     messageContainsHeartEmojiState
   )
-  const setShowGamePlayBar = useSetRecoilState(showGamePlayBarState)
+  const setShowPlayBar = useSetRecoilState(showPlayBarState)
   const setBoard = useSetRecoilState(boardState)
   const setXisNext = useSetRecoilState(xIsNextState)
   const setResetGame = useSetRecoilState(resetGameState)
   const setYoutubeUrl = useSetRecoilState(youtubeUrlState)
   const setPlayYoutubeVideo = useSetRecoilState(playYoutubeVideoState)
+  const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
   const micMuted = useRecoilValue(muteMicState)
   const showSelfWebcam = useRecoilValue(showSelfWebcamState)
   const expandChatWindow = useRecoilValue(expandChatWindowState)
-  const showGamePlayBar = useRecoilValue(showGamePlayBarState)
+  const showPlayBar = useRecoilValue(showPlayBarState)
 
   const [msg, setMsg] = useState("")
+  const [playBarType, setPlayBarType] = useState("")
 
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
@@ -172,7 +175,6 @@ const ChatMain = () => {
 
     socket.current.on("chatConnection", (msg: string) => {
       setChatWelcomeMessage(msg)
-      chatVideoScreensState.forceTransition("noVideoScreen")
     })
 
     socket.current.on("chatMessages", (msg: Message) => {
@@ -210,7 +212,6 @@ const ChatMain = () => {
       setPressedCall(false)
       setCallAccepted(false)
       setReceivingCall(false)
-      setCancelCallRequest(true)
       setTimeout(() => setUserLeftChattr(false), 3000)
       setChatMsgs([])
       setSendingFile(false)
@@ -263,7 +264,8 @@ const ChatMain = () => {
 
     socket.current.on("sendStartGameRequest", (username: string) => {
       setMsg(`${username} wants to play tictactoe`)
-      setShowGamePlayBar(true)
+      setPlayBarType("game")
+      setShowPlayBar(true)
     })
 
     socket.current.on(
@@ -302,7 +304,8 @@ const ChatMain = () => {
 
     socket.current.on("sendingYoutubeUrl", (url: string) => {
       setYoutubeUrl(url)
-      setShowGamePlayBar(true)
+      setPlayBarType("youtube")
+      setShowPlayBar(true)
       setMsg(`${username} wants to watch a Youtube video with you`)
     })
 
@@ -312,6 +315,8 @@ const ChatMain = () => {
         if (status) {
           chatVideoScreensState.forceTransition("youtubeVideoScreen")
           youtubeChatWindowScreensState.forceTransition("commandScreen")
+        } else {
+          youtubeChatWindowScreensState.reset()
         }
       }
     )
@@ -360,6 +365,7 @@ const ChatMain = () => {
     peer.on("stream", (stream) => {
       if (friendVideoRef.current) {
         friendVideoRef.current.srcObject = stream
+        setStreamOtherPeer(stream)
       }
     })
 
@@ -403,6 +409,7 @@ const ChatMain = () => {
 
     peer2.on("stream", (stream) => {
       friendVideoRef.current.srcObject = stream
+      setStreamOtherPeer(stream)
     })
 
     peer2.signal(callerSignal)
@@ -538,12 +545,12 @@ const ChatMain = () => {
         </Wrapper>
       </OutterWrapper>
       <AnimatePresence>
-        {showGamePlayBar && (
-          <GamePlayBar
+        {showPlayBar && (
+          <PlayBar
             msg={msg}
             setMsg={setMsg}
             socket={socket}
-            type="youtube"
+            type={playBarType}
           />
         )}
       </AnimatePresence>
