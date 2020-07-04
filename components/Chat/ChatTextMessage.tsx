@@ -11,9 +11,9 @@ import CryptoJS from "crypto-js"
 import PhotoExpander from "./PhotoExpander"
 
 import { usernameState } from "../../store/users"
-import { chatWindowState } from "../../store/chat"
+import { chatWindowState, photoGalleryState } from "../../store/chat"
 
-import { Message } from "../../models"
+import { Message, PhotoGallery } from "../../models"
 
 interface Props {
   msg: string
@@ -28,6 +28,7 @@ const ChatTextMessage: React.FC<Props> = React.memo(
   ({ msg, decryptedData, filename, usernameMsg, id, socket }) => {
     const username = useRecoilValue(usernameState)
     const messages = useRecoilValue(chatWindowState)
+    const photoGallery = useRecoilValue(photoGalleryState)
 
     const removeChatTextMessage = useRecoilCallback(({ set }) => {
       return (id: string) => {
@@ -35,6 +36,13 @@ const ChatTextMessage: React.FC<Props> = React.memo(
           (message: Partial<Message>) => message.id !== id
         )
         set(chatWindowState, newMessages)
+
+        if (!decryptedData) {
+          const newPhotoGallery = photoGallery.filter(
+            (photo: Partial<PhotoGallery>) => photo.id !== id
+          )
+          set(photoGalleryState, newPhotoGallery)
+        }
 
         const encryptedMessages = CryptoJS.AES.encrypt(
           JSON.stringify(newMessages),

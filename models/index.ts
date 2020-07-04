@@ -11,6 +11,13 @@ export interface Message {
   filename?: string
 }
 
+export interface PhotoGallery {
+  id: string
+  username: string
+  msg: string
+  filename?: string
+}
+
 export interface Call {
   signal: any
   from: string

@@ -53,12 +53,13 @@ import {
 import ChatVideo, { chatVideoScreens } from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
 import ChatCommands from "./ChatCommands"
-import ChatTextWindow from "./ChatTextWindow"
+import ChatTextWindow, { chatTextWindowScreens } from "./ChatTextWindow"
 import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
 import GamePlayBar from "../Games/GamePlayBar"
 
 import { User, Message, Call } from "../../models"
+
 import { gameScreens } from "../Games/TicTacToe/Game"
 
 enum SquareValue {
@@ -69,6 +70,7 @@ enum SquareValue {
 const ChatMain = () => {
   const state = useStateDesigner(gameScreens)
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
+  const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
 
   const [stream, setStream] = useRecoilState(streamState)
   const [selfId, setSelfId] = useRecoilState(selfIdState)
@@ -207,6 +209,7 @@ const ChatMain = () => {
       setSendingFile(false)
       setFileTransferProgress("0")
       chatVideoScreensState.forceTransition("waitingForConnectionScreen")
+      chatTextWindowScreensState.forceTransition("chatScreen")
     })
 
     socket.current.on("usernameJoined", () => {
@@ -402,18 +405,20 @@ const ChatMain = () => {
 
     const b64 = await blobToBase64(file)
 
+    const id = shortid.generate()
+
     socket.current.emit("chatMessage", {
       username,
       msg: b64,
       filename,
-      id: shortid.generate(),
+      id,
     })
 
     socket.current.emit("addImageToPhotoGallery", {
       username,
       msg: b64,
       filename,
-      id: shortid.generate(),
+      id,
     })
 
     socket.current.emit("fileTransferProgress", "Done!")
