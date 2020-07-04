@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { useRecoilValue } from "recoil"
 import { FaComment } from "react-icons/fa"
 
-import { userSoundOnState, usernameState } from "../../store/users"
+import { usernameState } from "../../store/users"
 import { chatWindowState } from "../../store/chat"
 import { useStateDesigner } from "@state-designer/react"
 import { chatTextWindowScreens } from "./ChatTextWindow"
@@ -13,14 +13,14 @@ import { chatTextWindowScreens } from "./ChatTextWindow"
 const ChatTextWindowChatBtn = () => {
   const state = useStateDesigner(chatTextWindowScreens)
 
-  const soundOn = useRecoilValue(userSoundOnState)
+  // const soundOn = useRecoilValue(userSoundOnState)
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
 
   const [newMsgsAlert, setNewMsgsAlert] = useState(false)
 
-  const expand = new Audio("/sounds/expand.mp3")
-  expand.volume = 0.3
+  // const expand = new Audio("/sounds/click_topple.mp3")
+  // expand.volume = 0.3
 
   const msgsRef = useRef(msgs)
 
@@ -55,9 +55,9 @@ const ChatTextWindowChatBtn = () => {
       onClick={() => {
         state.forceTransition("chatScreen")
         setNewMsgsAlert(false)
-        if (soundOn && !state.isIn("chatScreen")) {
-          expand.play()
-        }
+        // if (soundOn && state.isIn("chatScreen")) {
+        //   expand.play()
+        // }
       }}
     >
       <FaComment />

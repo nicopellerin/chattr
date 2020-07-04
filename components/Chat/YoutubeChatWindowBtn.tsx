@@ -2,20 +2,20 @@ import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue } from "recoil"
-import { FaPhotoVideo } from "react-icons/fa"
+import { FaYoutubeSquare } from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
 
 import { userSoundOnState } from "../../store/users"
 
 import { chatTextWindowScreens } from "./ChatTextWindow"
 
-const ChatTextWindowGalleryBtn = () => {
+const YoutubeChatWindowBtn = () => {
   const state = useStateDesigner(chatTextWindowScreens)
 
   const soundOn = useRecoilValue(userSoundOnState)
 
-  const photoGallerySound = new Audio("/sounds/click_marker_cap.mp3")
-  photoGallerySound.volume = 0.5
+  const click = new Audio("/sounds/click_topple.mp3")
+  click.volume = 0.3
 
   return (
     <PhotoGalleryButton
@@ -23,24 +23,24 @@ const ChatTextWindowGalleryBtn = () => {
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", damping: 15 }}
       style={{
-        color: state.isIn("photoGalleryScreen")
+        color: state.isIn("youtubeVideoStartScreen")
           ? "var(--primaryColor)"
           : "var(--primaryColorDark)",
-        cursor: state.isIn("photoGalleryScreen") ? "initial" : "pointer",
+        cursor: state.isIn("youtubeVideoStartScreen") ? "initial" : "pointer",
       }}
       onClick={() => {
-        state.forceTransition("photoGalleryScreen")
-        if (soundOn && state.isIn("photoGalleryScreen")) {
-          photoGallerySound.play()
+        state.forceTransition("youtubeVideoStartScreen")
+        if (soundOn && state.isIn("youtubeVideoStartScreen")) {
+          click.play()
         }
       }}
     >
-      <FaPhotoVideo />
+      <FaYoutubeSquare />
     </PhotoGalleryButton>
   )
 }
 
-export default ChatTextWindowGalleryBtn
+export default YoutubeChatWindowBtn
 
 // Styles
 const PhotoGalleryButton = styled(motion.button)`
@@ -49,7 +49,7 @@ const PhotoGalleryButton = styled(motion.button)`
   background: linear-gradient(45deg, #d852fd, #9c74fe);
   border-radius: 50%;
   position: absolute;
-  top: 16.5rem;
+  top: 21.5rem;
   z-index: 0;
   cursor: pointer;
   display: flex;

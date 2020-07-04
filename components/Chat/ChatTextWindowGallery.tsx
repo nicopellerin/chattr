@@ -39,7 +39,7 @@ const ChatTextWindowGallery = () => {
       }}
     >
       <Container
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", damping: 80 }}
         style={{ height: expandChatWindow ? 585 : 400 }}
@@ -96,4 +96,5 @@ const NoImagesTagline = styled.span`
   font-size: 1.7rem;
   font-weight: 600;
   text-align: center;
+  max-width: 80%;
 `

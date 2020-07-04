@@ -27,31 +27,66 @@ const ChatUsername = () => {
     <Wrapper>
       <AnimatePresence initial={false}>
         {toggleDrawer ? (
-          <ToggleWrapper
-            initial={{ y: -30 }}
-            animate={{ y: 0 }}
-            exit={{ y: 30 }}
-            transition={{ type: "spring", damping: 15 }}
-          >
-            <Text style={{ marginRight: 20 }}>Sound effects</Text>
-            <ToggleSwitch
-              onClick={() => {
-                setSoundOn((prevState) => !prevState)
-                if (!soundOn) {
-                  swoosh.play()
-                }
-              }}
+          <>
+            <ToggleWrapper
+              initial={{ y: -30 }}
+              animate={{ y: 0 }}
+              exit={{ y: 30 }}
+              transition={{ type: "spring", damping: 15 }}
             >
-              <ToggleSwitchCheckbox type="checkbox" name="status" id="status" />
-              <ToggleSwitchLabel>
-                <ToggleSwitchInner animate isOn={soundOn ? true : false} />
-                <ToggleSwitchSwitch
-                  animate
-                  isOn={soundOn ? true : false}
-                ></ToggleSwitchSwitch>
-              </ToggleSwitchLabel>
-            </ToggleSwitch>
-          </ToggleWrapper>
+              <Text style={{ marginRight: 20 }}>Sound FX</Text>
+              <ToggleSwitch
+                onClick={() => {
+                  setSoundOn((prevState) => !prevState)
+                  if (!soundOn) {
+                    swoosh.play()
+                  }
+                }}
+              >
+                <ToggleSwitchCheckbox
+                  type="checkbox"
+                  name="status"
+                  id="status"
+                />
+                <ToggleSwitchLabel>
+                  <ToggleSwitchInner animate isOn={soundOn ? true : false} />
+                  <ToggleSwitchSwitch
+                    animate
+                    isOn={soundOn ? true : false}
+                  ></ToggleSwitchSwitch>
+                </ToggleSwitchLabel>
+              </ToggleSwitch>
+            </ToggleWrapper>
+            {/* <ToggleWrapper
+              initial={{ y: -30 }}
+              animate={{ y: 0 }}
+              exit={{ y: 30 }}
+              transition={{ type: "spring", damping: 15 }}
+            >
+              <Text style={{ marginRight: 20 }}>Menu sounds</Text>
+              <ToggleSwitch
+                onClick={() => {
+                  setSoundOn((prevState) => !prevState)
+                  if (!soundOn) {
+                    swoosh.play()
+                  }
+                }}
+              >
+                <ToggleSwitchCheckbox
+                  type="checkbox"
+                  name="status"
+                  id="status"
+                />
+                <ToggleSwitchLabel>
+                  <ToggleSwitchInner animate isOn={soundOn ? true : false} />
+                  <ToggleSwitchSwitch
+                    animate
+                    isOn={soundOn ? true : false}
+                  ></ToggleSwitchSwitch>
+                </ToggleSwitchLabel>
+              </ToggleSwitch>
+            </ToggleWrapper> */}
+          </>
         ) : (
           <UsernameWrapper
             initial={{ y: -30 }}

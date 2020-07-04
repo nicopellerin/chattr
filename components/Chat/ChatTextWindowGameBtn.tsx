@@ -30,7 +30,7 @@ const ChatTextWindowGameBtn = () => {
       }}
       onClick={() => {
         state.forceTransition("gameScreen")
-        if (soundOn && !state.isIn("gameScreen")) {
+        if (soundOn && state.isIn("gameScreen")) {
           playGameSound.play()
         }
       }}

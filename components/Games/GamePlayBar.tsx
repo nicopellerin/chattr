@@ -15,12 +15,14 @@ interface Props {
   msg: string
   setMsg: React.Dispatch<React.SetStateAction<string>>
   socket: React.MutableRefObject<SocketIOClient.Socket>
+  type: string
 }
 
 const GamePlayBar: React.FC<Props> = ({
   msg = "An error has occured",
   setMsg,
   socket,
+  type,
 }) => {
   const gameScreensState = useStateDesigner(gameScreens)
   const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
@@ -43,11 +45,22 @@ const GamePlayBar: React.FC<Props> = ({
           <ButtonGroup>
             <ButtonAccept
               onClick={() => {
-                setMsg("")
-                setShowGamePlayBar(false)
-                chatTextWindowScreensState.forceTransition("gameScreen")
-                gameScreensState.forceTransition("yourTurnScreen")
-                socket.current.emit("playGameOtherPlayerAccepted", true)
+                switch (type) {
+                  case "game":
+                    setMsg("")
+                    setShowGamePlayBar(false)
+                    chatTextWindowScreensState.forceTransition("gameScreen")
+                    gameScreensState.forceTransition("yourTurnScreen")
+                    socket.current.emit("playGameOtherPlayerAccepted", true)
+                    break
+                  case "youtube":
+                    setMsg("")
+                    setShowGamePlayBar(false)
+                    chatTextWindowScreensState.forceTransition(
+                      "youtubeVideoStartScreen"
+                    )
+                    socket.current.emit("sendingYoutubeVideoAccepted", true)
+                }
               }}
             >
               Play

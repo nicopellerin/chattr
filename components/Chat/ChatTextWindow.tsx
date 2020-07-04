@@ -15,6 +15,8 @@ import ChatTextWindowMain from "./ChatTextWindowMain"
 import ChatTextWindowChatBtn from "./ChatTextWindowChatBtn"
 
 import { otherUsernameQuery, userSoundOnState } from "../../store/users"
+import YoutubeChatWindow from "./YoutubeChatWindow"
+// import YoutubeChatWindowBtn from "./YoutubeChatWindowBtn"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -27,6 +29,7 @@ export const chatTextWindowScreens = createState({
     chatScreen: {},
     gameScreen: {},
     photoGalleryScreen: {},
+    youtubeVideoStartScreen: {},
   },
 })
 
@@ -63,6 +66,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       <ChatTextWindowChatBtn />
       <ChatTextWindowGameBtn />
       <ChatTextWindowGalleryBtn />
+      {/* <YoutubeChatWindowBtn /> */}
       <AnimatePresence initial={false}>
         {state.whenIn({
           chatScreen: (
@@ -70,6 +74,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
           ),
           gameScreen: <TicTacToe socket={socket} />,
           photoGalleryScreen: <ChatTextWindowGallery />,
+          youtubeVideoStartScreen: <YoutubeChatWindow socket={socket} />,
         })}
       </AnimatePresence>
     </Wrapper>

@@ -49,6 +49,7 @@ import {
   xIsNextState,
   resetGameState,
 } from "../../store/game"
+import { youtubeUrlState, playYoutubeVideoState } from "../../store/youtube"
 
 import ChatVideo, { chatVideoScreens } from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
@@ -61,6 +62,7 @@ import GamePlayBar from "../Games/GamePlayBar"
 import { User, Message, Call } from "../../models"
 
 import { gameScreens } from "../Games/TicTacToe/Game"
+import { youtubeChatWindowScreens } from "./YoutubeChatWindow"
 
 enum SquareValue {
   X = "X",
@@ -71,6 +73,9 @@ const ChatMain = () => {
   const state = useStateDesigner(gameScreens)
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
   const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
+  const youtubeChatWindowScreensState = useStateDesigner(
+    youtubeChatWindowScreens
+  )
 
   const [stream, setStream] = useRecoilState(streamState)
   const [selfId, setSelfId] = useRecoilState(selfIdState)
@@ -107,6 +112,8 @@ const ChatMain = () => {
   const setBoard = useSetRecoilState(boardState)
   const setXisNext = useSetRecoilState(xIsNextState)
   const setResetGame = useSetRecoilState(resetGameState)
+  const setYoutubeUrl = useSetRecoilState(youtubeUrlState)
+  const setPlayYoutubeVideo = useSetRecoilState(playYoutubeVideoState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -208,8 +215,9 @@ const ChatMain = () => {
       setChatMsgs([])
       setSendingFile(false)
       setFileTransferProgress("0")
-      chatVideoScreensState.forceTransition("waitingForConnectionScreen")
-      chatTextWindowScreensState.forceTransition("chatScreen")
+      chatVideoScreensState.reset()
+      chatTextWindowScreensState.reset()
+      youtubeChatWindowScreensState.reset()
     })
 
     socket.current.on("usernameJoined", () => {
@@ -290,6 +298,26 @@ const ChatMain = () => {
     )
     socket.current.on("gameNextPlayerGlobal", () => {
       setXisNext((prevState) => !prevState)
+    })
+
+    socket.current.on("sendingYoutubeUrl", (url: string) => {
+      setYoutubeUrl(url)
+      setShowGamePlayBar(true)
+      setMsg(`${username} wants to watch a Youtube video with you`)
+    })
+
+    socket.current.on(
+      "sendingYoutubeVideoAcceptedGlobal",
+      (status: boolean) => {
+        if (status) {
+          chatVideoScreensState.forceTransition("youtubeVideoScreen")
+          youtubeChatWindowScreensState.forceTransition("commandScreen")
+        }
+      }
+    )
+
+    socket.current.on("playYoutubeVideoGlobal", () => {
+      setPlayYoutubeVideo((prevState) => !prevState)
     })
   }, [username])
 
@@ -511,7 +539,12 @@ const ChatMain = () => {
       </OutterWrapper>
       <AnimatePresence>
         {showGamePlayBar && (
-          <GamePlayBar msg={msg} setMsg={setMsg} socket={socket} />
+          <GamePlayBar
+            msg={msg}
+            setMsg={setMsg}
+            socket={socket}
+            type="youtube"
+          />
         )}
       </AnimatePresence>
     </>

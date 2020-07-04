@@ -43,8 +43,6 @@ export const otherUsernameQuery = selector({
     const me = get(usernameState)
     const list = get(listUsersState)
 
-    console.log("USERSssss", list)
-
     const newList = list.filter((user) => user.username !== me)
 
     return newList[0]?.username

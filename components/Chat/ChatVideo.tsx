@@ -33,6 +33,7 @@ import {
 } from "../../store/users"
 import { messageContainsHeartEmojiState } from "../../store/chat"
 import { useStateDesigner } from "@state-designer/react"
+import YoutubeVideoScreen from "./YoutubeVideoScreen"
 
 export const chatVideoScreens = createState({
   id: "chatTextWindowScreens",
@@ -54,6 +55,7 @@ export const chatVideoScreens = createState({
         visible: {},
       },
     },
+    youtubeVideoScreen: {},
   },
 })
 
@@ -132,6 +134,12 @@ const ChatVideo: React.FC<Props> = ({
         "incomingCallScreen.visible": (
           <ChatScreenIncomingCall acceptCall={acceptCall} socket={socket} />
         ),
+        youtubeVideoScreen: (
+          <YoutubeVideoScreen
+            selfVideoRef={selfVideoRef}
+            friendVideoRef={friendVideoRef}
+          />
+        ),
       })}
       {catSliderScreenState.whenIn({
         visible: (
@@ -141,39 +149,41 @@ const ChatVideo: React.FC<Props> = ({
         ),
       })}
       <>
-        <SelfVideo
-          muted
-          initial={{ scaleX: -1 }}
-          exit={{ scaleX: 0 }}
-          drag
-          dragMomentum={false}
-          // @ts-ignore
-          dragConstraints={contraintsRef}
-          ref={selfVideoRef}
-          playsInline
-          autoPlay
-          theatreMode={displayTheatreMode}
-          showWebcam={showWebcam}
-        />
-        <AnimatePresence>
-          {messageContainsHeartEmoji &&
-            callAccepted &&
-            listUsers?.length >= 2 && <ChatScreenHeart />}
-        </AnimatePresence>
-        <>
-          <FriendVideo
-            theatreMode={displayTheatreMode}
-            ref={friendVideoRef}
-            playsInline
-            autoPlay
-          />
-          {peerAudioMuted && (
-            <FriendAudioMuted animate={{ y: [10, 0], opacity: [0, 1] }}>
-              {otherUsername} muted mic{" "}
-              <FaMicrophoneSlash style={{ marginLeft: 5 }} />
-            </FriendAudioMuted>
-          )}
-        </>
+        {!chatVideoScreensState.isIn("youtubeVideoScreen") && (
+          <>
+            <SelfVideo
+              muted
+              initial={{ scaleX: -1 }}
+              exit={{ scaleX: 0 }}
+              drag
+              dragMomentum={false}
+              // @ts-ignore
+              dragConstraints={contraintsRef}
+              ref={selfVideoRef}
+              playsInline
+              autoPlay
+              theatreMode={displayTheatreMode}
+              showWebcam={showWebcam}
+            />
+            <AnimatePresence>
+              {messageContainsHeartEmoji &&
+                callAccepted &&
+                listUsers?.length >= 2 && <ChatScreenHeart />}
+            </AnimatePresence>
+            <FriendVideo
+              theatreMode={displayTheatreMode}
+              ref={friendVideoRef}
+              playsInline
+              autoPlay
+            />
+            {peerAudioMuted && (
+              <FriendAudioMuted animate={{ y: [10, 0], opacity: [0, 1] }}>
+                {otherUsername} muted mic{" "}
+                <FaMicrophoneSlash style={{ marginLeft: 5 }} />
+              </FriendAudioMuted>
+            )}
+          </>
+        )}
         <ExpandButton
           title="Theatre mode"
           initial={{ opacity: 0.5 }}

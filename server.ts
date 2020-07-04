@@ -164,6 +164,18 @@ io.on("connection", (socket) => {
   socket.on("addImageToPhotoGallery", (data: any) => {
     io.to(room).emit("addImageToPhotoGalleryGlobal", data)
   })
+
+  socket.on("sendYoutubeUrl", (url: string) => {
+    socket.broadcast.to(room).emit("sendingYoutubeUrl", url)
+  })
+
+  socket.on("sendingYoutubeVideoAccepted", (status: boolean) => {
+    io.to(room).emit("sendingYoutubeVideoAcceptedGlobal", status)
+  })
+
+  socket.on("playYoutubeVideo", () => {
+    io.to(room).emit("playYoutubeVideoGlobal")
+  })
 })
 
 nextApp.prepare().then(() => {

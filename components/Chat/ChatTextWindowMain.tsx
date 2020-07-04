@@ -137,7 +137,10 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
                 alt="Icon"
               />
               {showJoinMsg ? (
-                <UserJoinedText>{otherUsername} joined the room</UserJoinedText>
+                <UserJoinedText>
+                  {otherUsername}
+                  <br /> joined the room
+                </UserJoinedText>
               ) : (
                 <span>{welcomeMsg}</span>
               )}
