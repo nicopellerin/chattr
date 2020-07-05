@@ -1,15 +1,29 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
-import { useRecoilValue, useSetRecoilState } from "recoil"
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
 import { useStateDesigner, createState } from "@state-designer/react"
-import { FaPauseCircle, FaPlayCircle } from "react-icons/fa"
+import {
+  FaPauseCircle,
+  FaPlayCircle,
+  FaVolumeMute,
+  FaVolumeUp,
+  FaFastBackward,
+} from "react-icons/fa"
 
 import { expandChatWindowState } from "../../store/chat"
-
-import { playYoutubeVideoState, youtubeUrlState } from "../../store/youtube"
+import {
+  playYoutubeVideoState,
+  youtubeUrlState,
+  youtubeVideoMuteSoundState,
+  youtubeVideoMetaDataState,
+  youtubeVideoRewindState,
+} from "../../store/youtube"
 import { listUsersState } from "../../store/users"
+import { streamOtherPeerState } from "../../store/video"
+
+import { maxLength } from "../../utils/maxLength"
 
 export const youtubeChatWindowScreens = createState({
   id: "youtubeChatWindow",
@@ -33,21 +47,67 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
   const expandChatWindow = useRecoilValue(expandChatWindowState)
   const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
   const listUsers = useRecoilValue(listUsersState)
+  const streamOtherPeer = useRecoilValue(streamOtherPeerState)
+
+  const [youtubeVideoMuteSound, setYoutubeVideoMuteSound] = useRecoilState(
+    youtubeVideoMuteSoundState
+  )
+  const [youtubeVideoMetaData, setYoutubeVideoMetaData] = useRecoilState(
+    youtubeVideoMetaDataState
+  )
+  const [youtubeVideoRewind, setYoutubeVideoRewind] = useRecoilState(
+    youtubeVideoRewindState
+  )
 
   const setYoutubeUrl = useSetRecoilState(youtubeUrlState)
 
   const [url, setUrl] = useState("")
+
+  const noConnection = listUsers?.length < 2
+  const hasConnection = listUsers?.length > 1
+
+  const buttonText = () => {
+    switch (true) {
+      case noConnection || !streamOtherPeer:
+        return `Waiting for call connection`
+      case hasConnection:
+        return `Send request`
+    }
+  }
+
+  const fetchMetaData = async () => {
+    const videoId = url.split("=")[1]
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${process.env.NEXT_PUBLIC_YTKEY}`
+    )
+    const data = await res.json()
+    return data?.items[0]?.snippet
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!url) return
 
     setYoutubeUrl(url)
-    socket.current.emit("sendYoutubeUrl", url)
-    youtubeChatWindowScreensState.forceTransition("waitingScreen")
+    fetchMetaData().then((meta) => {
+      setYoutubeVideoMetaData(meta)
+      socket.current.emit("sendYoutubeUrl", { url, meta })
+      youtubeChatWindowScreensState.forceTransition("waitingScreen")
+    })
   }
 
-  const noConnection = listUsers?.length < 2
+  const rewindVideo = () => {
+    socket.current.emit("rewindYoutubeVideo")
+  }
+
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+    if (youtubeVideoRewind) {
+      idx = setTimeout(() => setYoutubeVideoRewind(false), 500)
+    }
+
+    return () => clearTimeout(idx)
+  }, [youtubeVideoRewind])
 
   return (
     <Wrapper style={{ height: expandChatWindow ? 585 : 400 }}>
@@ -68,25 +128,25 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
                   onChange={(e) => setUrl(e.target.value)}
                   required
                 />
-                <Button
+                <WaitingButton
                   style={{
-                    cursor: noConnection ? "initial" : "cursor",
-                    pointerEvents: noConnection ? "none" : "all",
+                    cursor:
+                      noConnection && !streamOtherPeer ? "initial" : "cursor",
+                    pointerEvents:
+                      noConnection || !streamOtherPeer ? "none" : "all",
                   }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {noConnection
-                    ? `Waiting for friend to connect`
-                    : `Send request`}
-                </Button>
+                  {buttonText()}
+                </WaitingButton>
               </Form>
             </Container>
           ),
           waitingScreen: (
             <Container>
               <Title>Waiting for your friend to accept...</Title>
-              <Button
+              <WaitingButton
                 type="button"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -96,13 +156,20 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
                 }}
               >
                 Cancel
-              </Button>
+              </WaitingButton>
             </Container>
           ),
           commandScreen: (
             <Container>
+              <WatchingWrapper>
+                <WatchingTitle>Watching</WatchingTitle>
+                <WatchingText>
+                  {maxLength(youtubeVideoMetaData?.title, 30)}
+                </WatchingText>
+              </WatchingWrapper>
               <CommandsWrapper>
-                <PauseButton
+                {/* <h3>{timer}</h3> */}
+                <ActionButton
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
@@ -110,19 +177,46 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
                   }}
                 >
                   {playYoutubeVideo ? <FaPauseCircle /> : <FaPlayCircle />}
-                </PauseButton>
-                <Button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    setUrl("")
-                    youtubeChatWindowScreensState.reset()
-                    socket.current.emit("sendingYoutubeVideoAccepted", false)
-                  }}
-                >
-                  Quit watching
-                </Button>
+                </ActionButton>
+                <ButtonGroup>
+                  <MuteButton
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() =>
+                      setYoutubeVideoMuteSound((prevState) => !prevState)
+                    }
+                  >
+                    {youtubeVideoMuteSound ? (
+                      <>
+                        <FaVolumeMute style={{ opacity: 0.5 }} />
+                      </>
+                    ) : (
+                      <>
+                        <FaVolumeUp />
+                      </>
+                    )}
+                  </MuteButton>
+                  <RewindButton
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={rewindVideo}
+                  >
+                    <FaFastBackward />
+                  </RewindButton>
+                </ButtonGroup>
               </CommandsWrapper>
+
+              <Button
+                whileHover={{ scale: 1.02, color: "var(--primaryColorLight)" }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  setUrl("")
+                  youtubeChatWindowScreensState.reset()
+                  socket.current.emit("sendingYoutubeVideoAccepted", false)
+                }}
+              >
+                Quit watching
+              </Button>
             </Container>
           ),
         })}
@@ -184,6 +278,7 @@ const Input = styled.input`
   width: 100%;
   max-width: 90%;
   outline: transparent;
+  height: 48px;
 `
 
 const CommandsWrapper = styled.div`
@@ -192,32 +287,30 @@ const CommandsWrapper = styled.div`
     rgba(255, 255, 255, 0.01),
     rgba(156, 116, 254, 0.1)
   );
-  padding: 4rem;
+  padding: 2rem 4rem;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  margin-bottom: 3rem;
+  /* filter: drop-shadow(0 0.75rem 8rem rgba(131, 82, 253, 0.45)); */
 `
 
 const Button = styled(motion.button)`
-  background: linear-gradient(
-    140deg,
-    var(--primaryColor),
-    var(--primaryColorDark)
-  );
+  background: rgba(255, 255, 255, 0.01);
   border: none;
   border-radius: 5px;
   padding: 0.8em 1em;
   font-weight: 600;
   font-size: 1.7rem;
-  color: var(--textColor);
+  color: var(--primaryColor);
   cursor: pointer;
   outline: transparent;
   height: 48px;
 `
 
-const PauseButton = styled(motion.button)`
+const ActionButton = styled(motion.button)`
   background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), #9c74fe);
   padding: 1rem;
   border: none;
@@ -232,5 +325,64 @@ const PauseButton = styled(motion.button)`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+`
+
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const MuteButton = styled(motion.button)`
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(156, 116, 254, 0.1)
+  );
+  padding: 1rem;
+  border: none;
+  font-weight: 600;
+  font-size: 2.4rem;
+  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
+  font-weight: 600;
+  color: var(--primaryColorLight);
+  cursor: pointer;
+  outline: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+`
+
+const WaitingButton = styled(Button)`
+  background: linear-gradient(45deg, #d852fd, #9c74fe);
+  color: var(--textColor);
+`
+
+const RewindButton = styled(MuteButton)`
+  margin-left: 2rem;
+`
+
+const WatchingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   margin-bottom: 3rem;
+`
+
+const WatchingTitle = styled.h5`
+  margin: 0;
+  color: var(--tertiaryColor);
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+`
+
+const WatchingText = styled.span`
+  margin: 0;
+  color: var(--textColor);
+  font-size: 1.7rem;
+  font-weight: 600;
 `

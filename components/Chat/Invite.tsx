@@ -85,7 +85,7 @@ const Container = styled(motion.div)`
 `
 
 const Text = styled.span`
-  font-size: 2rem;
+  font-size: 2.4rem;
   color: var(--textColor);
   font-weight: 600;
   margin-bottom: 2rem;
@@ -105,7 +105,7 @@ const CopyButton = styled(motion.button)`
   border: none;
   border-radius: 5px;
   padding: 1.4rem 1.5rem;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 600;
   cursor: pointer;
   outline: transparent;
@@ -114,5 +114,5 @@ const CopyButton = styled(motion.button)`
 `
 
 const FbookMessengerIcon = styled(motion.img)`
-  width: 6rem;
+  width: 8rem;
 `

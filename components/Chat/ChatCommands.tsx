@@ -104,8 +104,8 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             />
             {!sendingFile && fileTransferProgress === "0" ? (
               <>
-                <FaRocket size={20} style={{ marginBottom: 7 }} />
-                <span style={{ whiteSpace: "nowrap" }}>Send image</span>
+                <FaRocket size={22} />
+                {/* <span style={{ whiteSpace: "nowrap" }}>Send image</span> */}
               </>
             ) : (
               <motion.div
@@ -121,12 +121,12 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
                   transition: "all 300ms ease-in-out",
                 }}
               >
-                <FaRocket size={20} style={{ marginBottom: 7 }} />
-                <span>
+                <FaRocket size={22} />
+                {/* <span>
                   {fileTransferProgress === "0"
                     ? "Sending..."
                     : `${fileTransferProgress}`}
-                </span>
+                </span> */}
               </motion.div>
             )}
           </IconWrapper>
@@ -142,13 +142,13 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
           >
             {muteMic ? (
               <>
-                <FaMicrophoneSlash size={20} style={{ marginBottom: 7 }} />
-                <span>Mic</span>
+                <FaMicrophoneSlash size={22} />
+                {/* <span>Mic</span> */}
               </>
             ) : (
               <>
-                <FaMicrophone size={20} style={{ marginBottom: 7 }} />
-                <span>Mic</span>
+                <FaMicrophone size={22} />
+                {/* <span>Mic</span> */}
               </>
             )}
           </IconWrapper>
@@ -164,18 +164,13 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
           >
             {showSelfWebcam ? (
               <>
-                <FaVideo
-                  size={20}
-                  style={{
-                    marginBottom: 7,
-                  }}
-                />
-                <span>Webcam</span>
+                <FaVideo size={22} />
+                {/* <span>Webcam</span> */}
               </>
             ) : (
               <>
-                <FaVideoSlash size={20} style={{ marginBottom: 7 }} />
-                <span>Webcam</span>
+                <FaVideoSlash size={22} />
+                {/* <span>Webcam</span> */}
               </>
             )}
           </IconWrapper>
@@ -188,10 +183,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
                     setCancelCallRequest(true)
                     socket.current.emit("cancelCallRequest")
                   }}
-                  size={20}
-                  style={{ marginBottom: 7 }}
+                  size={22}
                 />
-                <span>End</span>
+                {/* <span>End</span> */}
               </>
             ) : (
               <>
@@ -203,12 +197,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
                       beepOn.play()
                     }
                   }}
-                  size={20}
-                  style={{
-                    marginBottom: 7,
-                  }}
+                  size={22}
                 />
-                <span>Call</span>
+                {/* <span>Call</span> */}
               </>
             )}
           </IconWrapper>
@@ -254,11 +245,21 @@ const IconWrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--textColor);
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(156, 116, 254, 0.1)
+  );
+  color: var(--primaryColorLight);
   cursor: pointer;
   user-select: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
 
   ${(props: StyledProps) =>
     props.off &&

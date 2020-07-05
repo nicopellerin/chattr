@@ -31,7 +31,10 @@ import {
   userSoundOnState,
   otherUsernameQuery,
 } from "../../store/users"
-import { messageContainsHeartEmojiState } from "../../store/chat"
+import {
+  messageContainsHeartEmojiState,
+  expandChatWindowState,
+} from "../../store/chat"
 import { useStateDesigner } from "@state-designer/react"
 import YoutubeVideoScreen from "./YoutubeVideoScreen"
 
@@ -95,6 +98,7 @@ const ChatVideo: React.FC<Props> = ({
   const soundOn = useRecoilValue(userSoundOnState)
   const peerAudioMuted = useRecoilValue(peerAudioMutedQuery)
   const otherUsername = useRecoilValue(otherUsernameQuery)
+  const expandedChatWindow = useRecoilValue(expandChatWindowState)
 
   const [
     messageContainsHeartEmoji,
@@ -109,18 +113,22 @@ const ChatVideo: React.FC<Props> = ({
   let sound = new Audio("/sounds/expand.mp3")
 
   useEffect(() => {
-    console.log("LISTTTTT", listUsers)
     if (listUsers?.length > 1) {
       chatVideoScreensState.forceTransition("noVideoScreen")
     } else {
-      console.log("INNNNNN")
       chatVideoScreensState.forceTransition("waitingForConnectionScreen")
     }
   }, [listUsers])
 
   if (getUserMediaNotSupported) {
     return (
-      <Wrapper ref={contraintsRef}>
+      <Wrapper
+        isExpandedYoutubeVideo={
+          expandedChatWindow &&
+          chatVideoScreensState.isIn("youtubeVideoStartScreen")
+        }
+        ref={contraintsRef}
+      >
         <ChatScreenNotSupported />
       </Wrapper>
     )
@@ -136,7 +144,13 @@ const ChatVideo: React.FC<Props> = ({
   }, [messageContainsHeartEmoji])
 
   return (
-    <Wrapper ref={contraintsRef}>
+    <Wrapper
+      ref={contraintsRef}
+      isExpandedYoutubeVideo={
+        expandedChatWindow &&
+        chatVideoScreensState.isIn("youtubeVideoStartScreen")
+      }
+    >
       {chatVideoScreensState.whenIn({
         waitingForConnectionScreen: <ChatScreenWaitingForConnect />,
         "callingScreen.visible": <ChatScreenCalling />,
@@ -154,41 +168,46 @@ const ChatVideo: React.FC<Props> = ({
         ),
       })}
       <>
-        {!chatVideoScreensState.isIn("youtubeVideoScreen") && (
-          <>
-            <SelfVideo
-              muted
-              initial={{ scaleX: -1 }}
-              exit={{ scaleX: 0 }}
-              drag
-              dragMomentum={false}
-              // @ts-ignore
-              dragConstraints={contraintsRef}
-              ref={selfVideoRef}
-              playsInline
-              autoPlay
-              theatreMode={displayTheatreMode}
-              showWebcam={showWebcam}
-            />
-            <AnimatePresence>
-              {messageContainsHeartEmoji &&
-                callAccepted &&
-                listUsers?.length >= 2 && <ChatScreenHeart />}
-            </AnimatePresence>
-            <FriendVideo
-              theatreMode={displayTheatreMode}
-              ref={friendVideoRef}
-              playsInline
-              autoPlay
-            />
-            {peerAudioMuted && (
-              <FriendAudioMuted animate={{ y: [10, 0], opacity: [0, 1] }}>
-                {otherUsername} muted mic{" "}
-                <FaMicrophoneSlash style={{ marginLeft: 5 }} />
-              </FriendAudioMuted>
-            )}
-          </>
-        )}
+        <>
+          <SelfVideo
+            muted
+            style={{
+              opacity: chatVideoScreensState.isIn("youtubeVideoScreen") ? 0 : 1,
+            }}
+            initial={{ scaleX: -1 }}
+            exit={{ scaleX: 0 }}
+            drag
+            dragMomentum={false}
+            // @ts-ignore
+            dragConstraints={contraintsRef}
+            ref={selfVideoRef}
+            playsInline
+            autoPlay
+            theatreMode={displayTheatreMode}
+            showWebcam={showWebcam}
+          />
+          <AnimatePresence>
+            {messageContainsHeartEmoji &&
+              callAccepted &&
+              listUsers?.length >= 2 && <ChatScreenHeart />}
+          </AnimatePresence>
+          <FriendVideo
+            style={{
+              opacity: chatVideoScreensState.isIn("youtubeVideoScreen") ? 0 : 1,
+            }}
+            theatreMode={displayTheatreMode}
+            ref={friendVideoRef}
+            playsInline
+            autoPlay
+          />
+          {peerAudioMuted && (
+            <FriendAudioMuted animate={{ y: [10, 0], opacity: [0, 1] }}>
+              {otherUsername} muted mic{" "}
+              <FaMicrophoneSlash style={{ marginLeft: 5 }} />
+            </FriendAudioMuted>
+          )}
+        </>
+
         <ExpandButton
           title="Theatre mode"
           initial={{ opacity: 0.5 }}
@@ -215,7 +234,8 @@ const Wrapper = styled(motion.div)`
   height: 100%;
   width: 100%;
   position: relative;
-  background: #000;
+  background: ${(props: { isExpandedYoutubeVideo: boolean }) =>
+    props.isExpandedYoutubeVideo ? "none" : "rgba(0,0,0, 0.05)"};
   margin: 0;
   padding: 0;
   border-radius: 5px;
@@ -280,5 +300,5 @@ const ExpandButton = styled(motion.button)`
   position: absolute;
   bottom: 0.5rem;
   right: 1rem;
-  z-index: 21;
+  z-index: 210000;
 `

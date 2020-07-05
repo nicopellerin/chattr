@@ -15,7 +15,7 @@ const ChatTextWindowGalleryBtn = () => {
   const soundOn = useRecoilValue(userSoundOnState)
 
   const photoGallerySound = new Audio("/sounds/click_marker_cap.mp3")
-  photoGallerySound.volume = 0.5
+  photoGallerySound.volume = 0.3
 
   return (
     <PhotoGalleryButton

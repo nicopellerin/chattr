@@ -21,12 +21,10 @@ const ChatTextWindowGallery = () => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLElement>
 
   useEffect(() => {
-    if (showPhotoGallery && scrollRef.current) {
+    if (showPhotoGallery && expandChatWindow && scrollRef.current) {
       scrollRef.current.scrollTop = 0
-    } else {
-      scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
-  }, [showPhotoGallery, expandChatWindow])
+  }, [expandChatWindow])
 
   return (
     <PerfectScrollbar

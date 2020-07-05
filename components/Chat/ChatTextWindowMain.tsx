@@ -97,8 +97,8 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
       }}
     >
       <Container
-        exit={{ x: -300 }}
-        layoutId="chatTextWindow"
+        // exit={{ x: -300 }}
+        // layoutId="chatTextWindow"
         style={{ height: expandChatWindow ? 585 : 400 }}
       >
         {msgs.length > 0 &&

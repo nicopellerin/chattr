@@ -1,42 +1,98 @@
 import * as React from "react"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
+import { FaPlayCircle } from "react-icons/fa"
 
 import {
   showSelfWebcamState,
   streamState,
   streamOtherPeerState,
 } from "../../store/video"
-import { youtubeUrlState, playYoutubeVideoState } from "../../store/youtube"
+import {
+  youtubeUrlState,
+  playYoutubeVideoState,
+  // youtubeVideoDurationState,
+  youtubeVideoMuteSoundState,
+  youtubeVideoRewindState,
+  // youtubeVideoMetaDataQuery,
+} from "../../store/youtube"
+import { usernameState, otherUsernameQuery } from "../../store/users"
 
 const YoutubeVideoScreen = () => {
   const showWebcam = useRecoilValue(showSelfWebcamState)
   const youtubeUrl = useRecoilValue(youtubeUrlState)
-  const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
   const stream = useRecoilValue(streamState)
   const streamOtherPeer = useRecoilValue(streamOtherPeerState)
+  const youtubeVideoMuteSound = useRecoilValue(youtubeVideoMuteSoundState)
+  const username = useRecoilValue(usernameState)
+  const otherUsername = useRecoilValue(otherUsernameQuery)
+  const youtubeVideoRewind = useRecoilValue(youtubeVideoRewindState)
+
+  // const setYoutubeVideoDuration = useSetRecoilState(youtubeVideoDurationState)
+  const [playYoutubeVideo, setPlayYoutubeVideo] = useRecoilState(
+    playYoutubeVideoState
+  )
 
   const youtubePlayerRef = useRef() as React.MutableRefObject<any>
   const selfVideo2Ref = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
 
-  // const youtubeLoadVideoBtnRef = useRef() as React.MutableRefObject<
-  //   HTMLButtonElement
-  // >
-
-  console.log("URL", youtubeUrl)
+  const [videoPaused, setVideoPaused] = useState(false)
 
   const loadVideoPlayer = () => {
     // @ts-ignore
     const player = new window.YT.Player("player", {
       height: "390",
       width: "800",
+      playerVars: {
+        autoplay: 0,
+        controls: 0,
+        iv_load_policy: 3,
+        disablekb: 1,
+        modestbranding: 1,
+        fs: 0,
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+      },
     })
 
     youtubePlayerRef.current = player
   }
+
+  const playVideo = () => {
+    youtubePlayerRef?.current?.playVideo()
+    // console.log("Meta", youtubeVideoMetaData)
+  }
+
+  const pauseVideo = () => {
+    youtubePlayerRef?.current?.pauseVideo()
+  }
+
+  const stopVideo = () => {
+    youtubePlayerRef?.current?.stopVideo()
+  }
+
+  const rewindVideo = () => {
+    youtubePlayerRef?.current?.seekTo(0)
+  }
+
+  const loadVideo = () => {
+    youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1])
+    // console.log("START", youtubePlayerRef?.current?.getDuration())
+    // setYoutubeVideoDuration(youtubePlayerRef?.current?.getDuration())
+  }
+
+  useEffect(() => {
+    if (youtubeVideoMuteSound) {
+      youtubePlayerRef?.current?.mute()
+    } else {
+      youtubePlayerRef?.current?.unMute()
+    }
+  }, [youtubeVideoMuteSound])
 
   useEffect(() => {
     const tag = document.createElement("script")
@@ -47,23 +103,45 @@ const YoutubeVideoScreen = () => {
     window.onYouTubeIframeAPIReady = loadVideoPlayer
   }, [])
 
-  // const loadVideo = () => {
-  //   youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1])
-  // }
-
   const loadedVideo = useRef(false)
 
+  // Play/pause video
   useEffect(() => {
-    if (youtubeUrl || (!playYoutubeVideo && !loadedVideo.current)) {
-      youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1], 0)
-      loadedVideo.current = true
-    }
     if (playYoutubeVideo) {
-      youtubePlayerRef?.current?.playVideo()
+      playVideo()
     } else {
-      youtubePlayerRef?.current?.pauseVideo()
+      pauseVideo()
     }
-  }, [youtubeUrl, playYoutubeVideo])
+  }, [playYoutubeVideo])
+
+  // Video has ended
+  const onPlayerStateChange = (event: any) => {
+    switch (event.data) {
+      case 0:
+        setPlayYoutubeVideo(false)
+        stopVideo()
+        break
+      case 1:
+        setVideoPaused(false)
+        break
+      case 2:
+        setVideoPaused(true)
+        break
+    }
+  }
+
+  // Load video
+  const onPlayerReady = () => {
+    loadVideo()
+    stopVideo()
+    loadedVideo.current = true
+  }
+
+  useEffect(() => {
+    if (youtubeVideoRewind) {
+      rewindVideo()
+    }
+  }, [youtubeVideoRewind])
 
   useEffect(() => {
     if (selfVideo2Ref.current) {
@@ -86,24 +164,41 @@ const YoutubeVideoScreen = () => {
       transition={{ type: "spring", damping: 80 }}
     >
       <Container>
-        <YoutubeVideo id="player" />
+        <YoutubeVideoWrapper isPlaying={playYoutubeVideo}>
+          <YoutubeVideo id="player" />
+          {!playYoutubeVideo && (
+            <Overlay>
+              <ActionButton>
+                <FaPlayCircle />
+              </ActionButton>
+              <Title>
+                Press play to {videoPaused ? "resume" : "start"} video
+              </Title>
+            </Overlay>
+          )}
+        </YoutubeVideoWrapper>
         <VideoContainer>
-          <SelfVideo
-            muted
-            initial={{ scaleX: -1 }}
-            exit={{ scaleX: 0 }}
-            ref={selfVideo2Ref}
-            playsInline
-            autoPlay
-            showWebcam={showWebcam}
-          />
-          <FriendVideo ref={friendVideoRef} playsInline autoPlay />
+          <WebcamVideoWrapper>
+            <SelfVideo
+              muted
+              initial={{ scaleX: -1 }}
+              exit={{ scaleX: 0 }}
+              ref={selfVideo2Ref}
+              playsInline
+              autoPlay
+              showWebcam={showWebcam}
+            />
+            <Underlay>
+              <WebcamUsername>{username}</WebcamUsername>
+            </Underlay>
+          </WebcamVideoWrapper>
+          <WebcamVideoWrapper>
+            <Underlay>
+              <WebcamOtherUsername>{otherUsername}</WebcamOtherUsername>
+            </Underlay>
+            <FriendVideo ref={friendVideoRef} playsInline autoPlay />
+          </WebcamVideoWrapper>
         </VideoContainer>
-        {/* <button
-          hidden
-          ref={youtubeLoadVideoBtnRef}
-          onClick={loadVideo}
-        ></button> */}
       </Container>
     </Wrapper>
   )
@@ -123,7 +218,7 @@ const Wrapper = styled(motion.div)`
   justify-content: center;
   flex-direction: column;
   z-index: 10000;
-  background: black;
+  background: none;
 `
 
 const Container = styled(motion.div)`
@@ -154,8 +249,18 @@ const VideoContainer = styled.div`
   );
 `
 
+const YoutubeVideoWrapper = styled.div`
+  height: 390px;
+  width: 800px;
+  position: relative;
+  margin-bottom: 2rem;
+  /* pointer-events: none; */
+  ${(props: { isPlaying: boolean }) =>
+    props.isPlaying &&
+    `filter: drop-shadow(0 0.75rem 10rem rgba(131, 82, 253, 0.35))`}
+`
+
 const YoutubeVideo = styled.div`
-  margin-bottom: 4rem;
   background: linear-gradient(
     45deg,
     rgba(255, 255, 255, 0.01),
@@ -163,27 +268,100 @@ const YoutubeVideo = styled.div`
   );
   padding: 2rem;
   border-radius: 5px;
-  filter: drop-shadow(0 0.75rem 10rem rgba(131, 82, 253, 0.35));
+  height: 390px;
+  width: 800px;
+`
+
+const WebcamVideoWrapper = styled.div`
+  position: relative;
+  height: 125px;
+  width: 275px;
+`
+
+const WebcamUsername = styled.h5`
+  color: var(--secondaryColor);
+  font-size: 2.4rem;
+  margin: 0;
+`
+
+const WebcamOtherUsername = styled.h5`
+  color: var(--tertiaryColor);
+  font-size: 2.4rem;
+  margin: 0;
 `
 
 const FriendVideo = styled.video`
-  height: 150px;
-  width: 300px;
+  height: 125px;
+  width: 275px;
   margin: 0;
   padding: 0;
   border-radius: 5px;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  position: relative;
 `
 
 const SelfVideo = styled(motion.video)`
-  height: 150px;
-  width: 300px;
+  height: 125px;
+  width: 275px;
   z-index: 2;
   margin: 0;
   padding: 0;
   border-radius: 5px;
   opacity: ${(props: { showWebcam: boolean }) => (props.showWebcam ? 1 : 0)};
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 2;
+`
+
+const ActionButton = styled(motion.button)`
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), #9c74fe);
+  padding: 1rem;
+  border: none;
+  border-radius: 50%;
+  height: 10rem;
+  width: 10rem;
+  font-weight: 600;
+  font-size: 9rem;
+  color: var(--textColor);
+  outline: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3rem;
+`
+
+const Overlay = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 100;
+`
+
+const Title = styled.h3`
+  color: var(--tertiaryColor);
+  font-size: 3rem;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+`
+
+const Underlay = styled.div`
+  position: absolute;
+  color: red;
+  top: 0;
+  left: 0;
+  height: 125px;
+  width: 275px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `

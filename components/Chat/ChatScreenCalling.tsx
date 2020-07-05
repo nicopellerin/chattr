@@ -41,7 +41,7 @@ const Container = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 3rem;
+  padding: 2rem 3rem;
   border-radius: 5px;
   z-index: 2;
 `
@@ -52,4 +52,5 @@ const Title = styled.h4`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0;
 `

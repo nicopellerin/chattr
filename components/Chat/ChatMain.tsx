@@ -50,7 +50,12 @@ import {
   xIsNextState,
   resetGameState,
 } from "../../store/game"
-import { youtubeUrlState, playYoutubeVideoState } from "../../store/youtube"
+import {
+  youtubeUrlState,
+  playYoutubeVideoState,
+  youtubeVideoMetaDataState,
+  youtubeVideoRewindState,
+} from "../../store/youtube"
 
 import ChatVideo, { chatVideoScreens } from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
@@ -116,6 +121,8 @@ const ChatMain = () => {
   const setYoutubeUrl = useSetRecoilState(youtubeUrlState)
   const setPlayYoutubeVideo = useSetRecoilState(playYoutubeVideoState)
   const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
+  const setYoutubeVideoRewind = useSetRecoilState(youtubeVideoRewindState)
+  const setYoutubeMetaData = useSetRecoilState(youtubeVideoMetaDataState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -302,11 +309,12 @@ const ChatMain = () => {
       setXisNext((prevState) => !prevState)
     })
 
-    socket.current.on("sendingYoutubeUrl", (url: string) => {
-      setYoutubeUrl(url)
+    socket.current.on("sendingYoutubeUrl", (data: any) => {
+      setYoutubeUrl(data.url)
+      setYoutubeMetaData(data.meta)
       setPlayBarType("youtube")
       setShowPlayBar(true)
-      setMsg(`${username} wants to watch a Youtube video with you`)
+      setMsg(`${username} wants to watch ${data.meta.title} with you`)
     })
 
     socket.current.on(
@@ -323,6 +331,10 @@ const ChatMain = () => {
 
     socket.current.on("playYoutubeVideoGlobal", () => {
       setPlayYoutubeVideo((prevState) => !prevState)
+    })
+
+    socket.current.on("rewindYoutubeVideoGlobal", () => {
+      setYoutubeVideoRewind(true)
     })
   }, [username])
 

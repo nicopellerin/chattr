@@ -120,6 +120,7 @@ const Text = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
 `
 
 const ButtonGroup = styled.div`

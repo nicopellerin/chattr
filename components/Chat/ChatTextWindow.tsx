@@ -2,7 +2,7 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
-import { AnimatePresence } from "framer-motion"
+// import { AnimatePresence } from "framer-motion"
 import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
 
@@ -16,7 +16,7 @@ import ChatTextWindowChatBtn from "./ChatTextWindowChatBtn"
 
 import { otherUsernameQuery, userSoundOnState } from "../../store/users"
 import YoutubeChatWindow from "./YoutubeChatWindow"
-// import YoutubeChatWindowBtn from "./YoutubeChatWindowBtn"
+import YoutubeChatWindowBtn from "./YoutubeChatWindowBtn"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -66,17 +66,17 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       <ChatTextWindowChatBtn />
       <ChatTextWindowGameBtn />
       <ChatTextWindowGalleryBtn />
-      {/* <YoutubeChatWindowBtn /> */}
-      <AnimatePresence initial={false}>
-        {state.whenIn({
-          chatScreen: (
-            <ChatTextWindowMain showJoinMsg={showJoinMsg} socket={socket} />
-          ),
-          gameScreen: <TicTacToe socket={socket} />,
-          photoGalleryScreen: <ChatTextWindowGallery />,
-          youtubeVideoStartScreen: <YoutubeChatWindow socket={socket} />,
-        })}
-      </AnimatePresence>
+      <YoutubeChatWindowBtn />
+      {/* <AnimatePresence initial={false}> */}
+      {state.whenIn({
+        chatScreen: (
+          <ChatTextWindowMain showJoinMsg={showJoinMsg} socket={socket} />
+        ),
+        gameScreen: <TicTacToe socket={socket} />,
+        photoGalleryScreen: <ChatTextWindowGallery />,
+        youtubeVideoStartScreen: <YoutubeChatWindow socket={socket} />,
+      })}
+      {/* </AnimatePresence> */}
     </Wrapper>
   )
 }

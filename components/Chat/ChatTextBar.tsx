@@ -132,6 +132,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       <Wrapper theatreMode={displayTheatreMode} onSubmit={handleSubmit}>
         <Label htmlFor="message">Message</Label>
         <TextInput
+          autoComplete="off"
           id="message"
           ref={inputTextRef}
           disabled={noConnection}
@@ -262,6 +263,7 @@ const LolButton = styled(motion.button)`
   border-radius: 5px;
   background: linear-gradient(45deg, #d852fd, #9c74fe);
   padding: 0.5rem 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
   display: flex;
   align-items: center;
