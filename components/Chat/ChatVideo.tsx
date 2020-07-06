@@ -245,7 +245,7 @@ const Wrapper = styled(motion.div)`
   width: 100%;
   position: relative;
   background: ${(props: { isExpandedYoutubeVideo: boolean }) =>
-    props.isExpandedYoutubeVideo ? "none" : "rgba(0,0,0, 0.05)"};
+    props.isExpandedYoutubeVideo ? "none" : "rgba(0,0,0, 0.6)"};
   margin: 0;
   padding: 0;
   border-radius: 5px;
