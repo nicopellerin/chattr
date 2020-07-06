@@ -42,15 +42,15 @@ const YoutubeVideoScreen = () => {
     youtubeVideoMuteSoundState
   )
 
-  const youtubePlayerRef = useRef() as React.MutableRefObject<any>
-  const selfVideo2Ref = useRef() as React.MutableRefObject<HTMLVideoElement>
-  const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
-
-  const [videoPaused, setVideoPaused] = useState(false)
-  // const [playerTotalTime, setPlayerTotalTime] = useState(0)
   const setYoutubeProgressBarWidth = useSetRecoilState(
     youtubeProgressBarWidthState
   )
+
+  const [videoPaused, setVideoPaused] = useState(false)
+
+  const youtubePlayerRef = useRef() as React.MutableRefObject<any>
+  const selfVideo2Ref = useRef() as React.MutableRefObject<HTMLVideoElement>
+  const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
 
   const playVideo = () => {
     youtubePlayerRef?.current?.playVideo()
@@ -74,23 +74,12 @@ const YoutubeVideoScreen = () => {
 
   const loadVideo = () => {
     youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1])
-    // console.log("START", youtubePlayerRef?.current?.getDuration())
-    // setYoutubeVideoDuration(youtubePlayerRef?.current?.getDuration())
   }
 
   const progress = (percent: number) => {
     const barWidth = (percent * 800) / 100
     setYoutubeProgressBarWidth(barWidth)
   }
-
-  // useEffect(() => {
-  //   if (youtubeUrl !== youtubeUrlRef.current) {
-  //     destroyVideo()
-  //     loadVideo()
-  //     stopVideo()
-  //     youtubeUrlRef.current = youtubeUrl
-  //   }
-  // }, [youtubeUrl, chatVideoScreensState])
 
   useEffect(() => {
     let idx: ReturnType<typeof setInterval>
