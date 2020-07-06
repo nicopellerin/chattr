@@ -13,7 +13,6 @@ import {
 import {
   youtubeUrlState,
   playYoutubeVideoState,
-  // youtubeVideoDurationState,
   youtubeVideoMuteSoundState,
   youtubeVideoRewindState,
   youtubeProgressBarWidthState,
