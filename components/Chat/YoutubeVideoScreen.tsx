@@ -16,18 +16,20 @@ import {
   // youtubeVideoDurationState,
   youtubeVideoMuteSoundState,
   youtubeVideoRewindState,
+  youtubeProgressBarWidthState,
   // youtubeVideoMetaDataQuery,
 } from "../../store/youtube"
 import { usernameState, otherUsernameQuery } from "../../store/users"
 
 import { youtubeReady } from "../../utils/youtubeReady"
+import { useSetRecoilState } from "recoil"
+import YoutubeProgressBar from "./YoutubeProgressBar"
 
 const YoutubeVideoScreen = () => {
   const showWebcam = useRecoilValue(showSelfWebcamState)
   const youtubeUrl = useRecoilValue(youtubeUrlState)
   const stream = useRecoilValue(streamState)
   const streamOtherPeer = useRecoilValue(streamOtherPeerState)
-  const youtubeVideoMuteSound = useRecoilValue(youtubeVideoMuteSoundState)
   const username = useRecoilValue(usernameState)
   const otherUsername = useRecoilValue(otherUsernameQuery)
   const youtubeVideoRewind = useRecoilValue(youtubeVideoRewindState)
@@ -36,12 +38,20 @@ const YoutubeVideoScreen = () => {
   const [playYoutubeVideo, setPlayYoutubeVideo] = useRecoilState(
     playYoutubeVideoState
   )
+  const [youtubeVideoMuteSound, setYoutubeVideoMuteSound] = useRecoilState(
+    youtubeVideoMuteSoundState
+  )
 
   const youtubePlayerRef = useRef() as React.MutableRefObject<any>
   const selfVideo2Ref = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
+  const progressBarRef = useRef() as React.MutableRefObject<HTMLDivElement>
 
   const [videoPaused, setVideoPaused] = useState(false)
+  // const [playerTotalTime, setPlayerTotalTime] = useState(0)
+  const setYoutubeProgressBarWidth = useSetRecoilState(
+    youtubeProgressBarWidthState
+  )
 
   const playVideo = () => {
     youtubePlayerRef?.current?.playVideo()
@@ -57,12 +67,21 @@ const YoutubeVideoScreen = () => {
 
   const rewindVideo = () => {
     youtubePlayerRef?.current?.seekTo(0)
+    stopVideo()
+    setYoutubeProgressBarWidth(0)
+    setPlayYoutubeVideo(false)
+    setYoutubeVideoMuteSound(false)
   }
 
   const loadVideo = () => {
     youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1])
     // console.log("START", youtubePlayerRef?.current?.getDuration())
     // setYoutubeVideoDuration(youtubePlayerRef?.current?.getDuration())
+  }
+
+  const progress = (percent: number) => {
+    const barWidth = (percent * 800) / 100
+    setYoutubeProgressBarWidth(barWidth)
   }
 
   // useEffect(() => {
@@ -73,6 +92,20 @@ const YoutubeVideoScreen = () => {
   //     youtubeUrlRef.current = youtubeUrl
   //   }
   // }, [youtubeUrl, chatVideoScreensState])
+
+  useEffect(() => {
+    let idx: ReturnType<typeof setInterval>
+    if (playYoutubeVideo) {
+      idx = setInterval(() => {
+        const playerCurrentTime = youtubePlayerRef?.current?.getCurrentTime()
+        const playerTotalTime = youtubePlayerRef?.current?.getDuration()
+        const playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100
+        progress(playerTimeDifference)
+      }, 50)
+    }
+
+    return () => clearInterval(idx)
+  }, [playYoutubeVideo])
 
   useEffect(() => {
     if (youtubeVideoMuteSound) {
@@ -188,6 +221,7 @@ const YoutubeVideoScreen = () => {
               </Title>
             </Overlay>
           )}
+          <YoutubeProgressBar />
         </YoutubeVideoWrapper>
         <VideoContainer>
           <WebcamVideoWrapper>
@@ -265,7 +299,7 @@ const YoutubeVideoWrapper = styled.div`
   height: 390px;
   width: 800px;
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   /* pointer-events: none; */
   ${(props: { isPlaying: boolean }) =>
     props.isPlaying &&

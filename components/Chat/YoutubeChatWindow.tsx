@@ -12,6 +12,9 @@ import {
   FaFastBackward,
 } from "react-icons/fa"
 
+import { chatVideoScreens } from "./ChatVideo"
+import MessageBar from "../MessageBar"
+
 import { expandChatWindowState } from "../../store/chat"
 import {
   playYoutubeVideoState,
@@ -24,7 +27,6 @@ import { listUsersState } from "../../store/users"
 import { streamOtherPeerState } from "../../store/video"
 
 import { maxLength } from "../../utils/maxLength"
-import { chatVideoScreens } from "./ChatVideo"
 
 export const youtubeChatWindowScreens = createState({
   id: "youtubeChatWindow",
@@ -64,6 +66,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
   const setYoutubeUrl = useSetRecoilState(youtubeUrlState)
 
   const [url, setUrl] = useState("")
+  const [errorMsg, setErrorMsg] = useState("")
 
   const noConnection = listUsers?.length < 2
   const hasConnection = listUsers?.length > 1
@@ -90,6 +93,15 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
     e.preventDefault()
     if (!url) return
 
+    if (
+      !url.match(
+        /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/
+      )
+    ) {
+      setErrorMsg("Please enter a valid Youtube URL")
+      return
+    }
+
     setYoutubeUrl(url)
     fetchMetaData().then((meta) => {
       setYoutubeVideoMetaData(meta)
@@ -112,121 +124,130 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
   }, [youtubeVideoRewind])
 
   return (
-    <Wrapper style={{ height: expandChatWindow ? 585 : 400 }}>
-      <AnimatePresence>
-        {youtubeChatWindowScreensState.whenIn({
-          initialScreen: (
-            <Container
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", damping: 80 }}
-            >
-              <Form onSubmit={handleSubmit}>
-                <Title>Watch Youtube video with friend</Title>
-                <Input
-                  name="youtubeURL"
-                  placeholder="Enter Youtube URL..."
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  required
-                />
-                <WaitingButton
-                  style={{
-                    cursor:
-                      noConnection && !streamOtherPeer ? "initial" : "cursor",
-                    pointerEvents:
-                      noConnection || !streamOtherPeer ? "none" : "all",
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {buttonText()}
-                </WaitingButton>
-              </Form>
-            </Container>
-          ),
-          waitingScreen: (
-            <Container>
-              <Title>Waiting for your friend to accept...</Title>
-              <WaitingButton
-                type="button"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  youtubeChatWindowScreensState.reset()
-                  setUrl("")
-                }}
+    <>
+      <Wrapper style={{ height: expandChatWindow ? 585 : 400 }}>
+        <AnimatePresence>
+          {youtubeChatWindowScreensState.whenIn({
+            initialScreen: (
+              <Container
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: "spring", damping: 80 }}
               >
-                Cancel
-              </WaitingButton>
-            </Container>
-          ),
-          commandScreen: (
-            <Container>
-              <WatchingWrapper>
-                <WatchingTitle>Watching</WatchingTitle>
-                <WatchingText>
-                  {maxLength(youtubeVideoMetaData?.title, 30)}
-                </WatchingText>
-              </WatchingWrapper>
-              <CommandsWrapper>
-                {/* <h3>{timer}</h3> */}
-                <ActionButton
+                <Form onSubmit={handleSubmit}>
+                  <Title>Watch Youtube video with friend</Title>
+                  <Input
+                    name="youtubeURL"
+                    placeholder="Enter Youtube URL..."
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    required
+                  />
+                  <WaitingButton
+                    style={{
+                      cursor:
+                        noConnection && !streamOtherPeer ? "initial" : "cursor",
+                      pointerEvents:
+                        noConnection || !streamOtherPeer ? "none" : "all",
+                    }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {buttonText()}
+                  </WaitingButton>
+                </Form>
+              </Container>
+            ),
+            waitingScreen: (
+              <Container>
+                <Title>Waiting for your friend to accept...</Title>
+                <WaitingButton
+                  type="button"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
-                    socket.current.emit("playYoutubeVideo")
+                    youtubeChatWindowScreensState.reset()
+                    setUrl("")
                   }}
                 >
-                  {playYoutubeVideo ? <FaPauseCircle /> : <FaPlayCircle />}
-                </ActionButton>
-                <ButtonGroup>
-                  <MuteButton
+                  Cancel
+                </WaitingButton>
+              </Container>
+            ),
+            commandScreen: (
+              <Container>
+                <WatchingWrapper>
+                  <WatchingTitle>Watching</WatchingTitle>
+                  <WatchingText>
+                    {maxLength(youtubeVideoMetaData?.title, 30)}
+                  </WatchingText>
+                </WatchingWrapper>
+                <CommandsWrapper>
+                  <ActionButton
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() =>
-                      setYoutubeVideoMuteSound((prevState) => !prevState)
-                    }
+                    onClick={() => {
+                      socket.current.emit("playYoutubeVideo")
+                    }}
                   >
-                    {youtubeVideoMuteSound ? (
-                      <>
-                        <FaVolumeMute style={{ opacity: 0.5 }} />
-                      </>
-                    ) : (
-                      <>
-                        <FaVolumeUp />
-                      </>
-                    )}
-                  </MuteButton>
-                  <RewindButton
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={rewindVideo}
-                  >
-                    <FaFastBackward />
-                  </RewindButton>
-                </ButtonGroup>
-              </CommandsWrapper>
+                    {playYoutubeVideo ? <FaPauseCircle /> : <FaPlayCircle />}
+                  </ActionButton>
+                  <ButtonGroup>
+                    <MuteButton
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() =>
+                        setYoutubeVideoMuteSound((prevState) => !prevState)
+                      }
+                    >
+                      {youtubeVideoMuteSound ? (
+                        <>
+                          <FaVolumeMute style={{ opacity: 0.5 }} />
+                        </>
+                      ) : (
+                        <>
+                          <FaVolumeUp />
+                        </>
+                      )}
+                    </MuteButton>
+                    <RewindButton
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={rewindVideo}
+                    >
+                      <FaFastBackward />
+                    </RewindButton>
+                  </ButtonGroup>
+                </CommandsWrapper>
 
-              <Button
-                whileHover={{ scale: 1.02, color: "var(--primaryColorLight)" }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  setUrl("")
-                  youtubeChatWindowScreensState.reset()
-                  socket.current.emit("sendingYoutubeVideoAccepted", false)
-                  chatVideoScreensState.forceTransition(
-                    "youtubeVideoScreen.hidden"
-                  )
-                }}
-              >
-                Quit watching
-              </Button>
-            </Container>
-          ),
-        })}
+                <Button
+                  whileHover={{
+                    scale: 1.02,
+                    color: "var(--primaryColorLight)",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setUrl("")
+                    youtubeChatWindowScreensState.reset()
+                    socket.current.emit("sendingYoutubeVideoAccepted", false)
+                    chatVideoScreensState.forceTransition(
+                      "youtubeVideoScreen.hidden"
+                    )
+                  }}
+                >
+                  Quit watching
+                </Button>
+              </Container>
+            ),
+          })}
+        </AnimatePresence>
+      </Wrapper>
+      <AnimatePresence>
+        {errorMsg && (
+          <MessageBar errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
+        )}
       </AnimatePresence>
-    </Wrapper>
+    </>
   )
 }
 

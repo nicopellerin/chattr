@@ -120,7 +120,7 @@ const ButtonWrapper = styled.div`
 export const AcceptButton = styled(motion.button)`
   padding: 1em 1.5em;
   border: none;
-  background: green;
+  background: -webkit-linear-gradient(100deg, green, var(--successColor));
   color: #ffe9ff;
   font-size: 1.7rem;
   font-weight: 600;
@@ -134,5 +134,5 @@ export const AcceptButton = styled(motion.button)`
 
 const RejectButton = styled(AcceptButton)`
   margin-left: 3rem;
-  background: crimson;
+  background: -webkit-linear-gradient(100deg, red, crimson);
 `

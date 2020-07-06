@@ -178,6 +178,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             {callAccepted || pressedCall ? (
               <>
                 <FaTimesCircle
+                  style={{
+                    color: "var(--primaryColor)",
+                  }}
                   onClick={() => {
                     setReceivingCall(false)
                     setCancelCallRequest(true)

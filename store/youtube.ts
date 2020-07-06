@@ -33,3 +33,8 @@ export const youtubeVideoRewindState = atom<boolean>({
   key: "youtubeVideoRewindState",
   default: false,
 })
+
+export const youtubeProgressBarWidthState = atom<number>({
+  key: "youtubeProgressBarWidthState",
+  default: 0,
+})
