@@ -13,7 +13,11 @@ const ChatScreenCalling = () => {
     >
       <Container>
         <Title style={{ margin: 0 }}>
-          <ThreeBounce size={24} style={{ marginBottom: 30 }} color="#f9e4fe" />
+          <ThreeBounce
+            size={24}
+            style={{ marginBottom: 24 }}
+            color="var(--secondaryColor)"
+          />
           Calling...
         </Title>
       </Container>
@@ -48,9 +52,16 @@ const Container = styled(motion.div)`
 
 const Title = styled.h4`
   font-size: 4rem;
-  color: #f9e4fe;
+  /* color: #f9e4fe; */
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0;
+  background: -webkit-linear-gradient(
+    145deg,
+    var(--primaryColor),
+    var(--tertiaryColor)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `

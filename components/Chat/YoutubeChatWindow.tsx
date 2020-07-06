@@ -24,6 +24,7 @@ import { listUsersState } from "../../store/users"
 import { streamOtherPeerState } from "../../store/video"
 
 import { maxLength } from "../../utils/maxLength"
+import { chatVideoScreens } from "./ChatVideo"
 
 export const youtubeChatWindowScreens = createState({
   id: "youtubeChatWindow",
@@ -43,6 +44,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
   const youtubeChatWindowScreensState = useStateDesigner(
     youtubeChatWindowScreens
   )
+  const chatVideoScreensState = useStateDesigner(chatVideoScreens)
 
   const expandChatWindow = useRecoilValue(expandChatWindowState)
   const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
@@ -213,6 +215,9 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
                   setUrl("")
                   youtubeChatWindowScreensState.reset()
                   socket.current.emit("sendingYoutubeVideoAccepted", false)
+                  chatVideoScreensState.forceTransition(
+                    "youtubeVideoScreen.hidden"
+                  )
                 }}
               >
                 Quit watching

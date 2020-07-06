@@ -20,6 +20,8 @@ import {
 } from "../../store/youtube"
 import { usernameState, otherUsernameQuery } from "../../store/users"
 
+import { youtubeReady } from "../../utils/youtubeReady"
+
 const YoutubeVideoScreen = () => {
   const showWebcam = useRecoilValue(showSelfWebcamState)
   const youtubeUrl = useRecoilValue(youtubeUrlState)
@@ -41,31 +43,8 @@ const YoutubeVideoScreen = () => {
 
   const [videoPaused, setVideoPaused] = useState(false)
 
-  const loadVideoPlayer = () => {
-    // @ts-ignore
-    const player = new window.YT.Player("player", {
-      height: "390",
-      width: "800",
-      playerVars: {
-        autoplay: 0,
-        controls: 0,
-        iv_load_policy: 3,
-        disablekb: 1,
-        modestbranding: 1,
-        fs: 0,
-      },
-      events: {
-        onReady: onPlayerReady,
-        onStateChange: onPlayerStateChange,
-      },
-    })
-
-    youtubePlayerRef.current = player
-  }
-
   const playVideo = () => {
     youtubePlayerRef?.current?.playVideo()
-    // console.log("Meta", youtubeVideoMetaData)
   }
 
   const pauseVideo = () => {
@@ -86,6 +65,15 @@ const YoutubeVideoScreen = () => {
     // setYoutubeVideoDuration(youtubePlayerRef?.current?.getDuration())
   }
 
+  // useEffect(() => {
+  //   if (youtubeUrl !== youtubeUrlRef.current) {
+  //     destroyVideo()
+  //     loadVideo()
+  //     stopVideo()
+  //     youtubeUrlRef.current = youtubeUrl
+  //   }
+  // }, [youtubeUrl, chatVideoScreensState])
+
   useEffect(() => {
     if (youtubeVideoMuteSound) {
       youtubePlayerRef?.current?.mute()
@@ -95,15 +83,39 @@ const YoutubeVideoScreen = () => {
   }, [youtubeVideoMuteSound])
 
   useEffect(() => {
-    const tag = document.createElement("script")
-    tag.src = "https://www.youtube.com/iframe_api"
-    const firstScriptTag = document.getElementsByTagName("script")[0]
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
-    // @ts-ignore
-    window.onYouTubeIframeAPIReady = loadVideoPlayer
+    youtubeReady.then((YT: any) => {
+      const player = new YT.Player("player", {
+        height: "390",
+        width: "800",
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          iv_load_policy: 3,
+          disablekb: 1,
+          modestbranding: 1,
+          fs: 0,
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
+        },
+      })
+
+      youtubePlayerRef.current = player
+    })
   }, [])
 
-  const loadedVideo = useRef(false)
+  useEffect(() => {
+    // @ts-ignore
+    if (!window.YT) {
+      const tag = document.createElement("script")
+      tag.src = "https://www.youtube.com/iframe_api"
+      let firstScriptTag = document.getElementsByTagName("script")[0]
+      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
+    } else {
+      loadVideo()
+    }
+  }, [])
 
   // Play/pause video
   useEffect(() => {
@@ -133,8 +145,8 @@ const YoutubeVideoScreen = () => {
   // Load video
   const onPlayerReady = () => {
     loadVideo()
+    rewindVideo()
     stopVideo()
-    loadedVideo.current = true
   }
 
   useEffect(() => {

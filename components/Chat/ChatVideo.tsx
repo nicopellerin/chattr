@@ -58,7 +58,13 @@ export const chatVideoScreens = createState({
         visible: {},
       },
     },
-    youtubeVideoScreen: {},
+    youtubeVideoScreen: {
+      initial: "hidden",
+      states: {
+        hidden: {},
+        visible: {},
+      },
+    },
   },
 })
 
@@ -158,7 +164,7 @@ const ChatVideo: React.FC<Props> = ({
         "incomingCallScreen.visible": (
           <ChatScreenIncomingCall acceptCall={acceptCall} socket={socket} />
         ),
-        youtubeVideoScreen: <YoutubeVideoScreen />,
+        "youtubeVideoScreen.visible": <YoutubeVideoScreen />,
       })}
       {catSliderScreenState.whenIn({
         visible: (
@@ -172,7 +178,9 @@ const ChatVideo: React.FC<Props> = ({
           <SelfVideo
             muted
             style={{
-              opacity: chatVideoScreensState.isIn("youtubeVideoScreen") ? 0 : 1,
+              opacity: chatVideoScreensState.isIn("youtubeVideoScreen.visible")
+                ? 0
+                : 1,
             }}
             initial={{ scaleX: -1 }}
             exit={{ scaleX: 0 }}
@@ -193,7 +201,9 @@ const ChatVideo: React.FC<Props> = ({
           </AnimatePresence>
           <FriendVideo
             style={{
-              opacity: chatVideoScreensState.isIn("youtubeVideoScreen") ? 0 : 1,
+              opacity: chatVideoScreensState.isIn("youtubeVideoScreen.visible")
+                ? 0
+                : 1,
             }}
             theatreMode={displayTheatreMode}
             ref={friendVideoRef}

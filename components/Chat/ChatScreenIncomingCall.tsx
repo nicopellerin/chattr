@@ -99,11 +99,18 @@ const Container = styled(motion.div)`
 
 const Title = styled.h4`
   font-size: 4rem;
-  color: var(--textColor);
+  /* color: var(--textColor); */
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 4rem;
+  background: -webkit-linear-gradient(
+    145deg,
+    var(--primaryColor),
+    var(--tertiaryColor)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `
 
 const ButtonWrapper = styled.div`
@@ -113,7 +120,7 @@ const ButtonWrapper = styled.div`
 export const AcceptButton = styled(motion.button)`
   padding: 1em 1.5em;
   border: none;
-  background: #28d728;
+  background: green;
   color: #ffe9ff;
   font-size: 1.7rem;
   font-weight: 600;

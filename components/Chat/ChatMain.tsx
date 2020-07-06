@@ -226,6 +226,8 @@ const ChatMain = () => {
       chatVideoScreensState.reset()
       chatTextWindowScreensState.reset()
       youtubeChatWindowScreensState.reset()
+      setStreamOtherPeer(null)
+      friendVideoRef.current.srcObject = null
     })
 
     socket.current.on("usernameJoined", () => {
@@ -321,10 +323,12 @@ const ChatMain = () => {
       "sendingYoutubeVideoAcceptedGlobal",
       (status: boolean) => {
         if (status) {
-          chatVideoScreensState.forceTransition("youtubeVideoScreen")
+          chatVideoScreensState.forceTransition("youtubeVideoScreen.visible")
           youtubeChatWindowScreensState.forceTransition("commandScreen")
         } else {
           youtubeChatWindowScreensState.reset()
+          chatVideoScreensState.forceTransition("youtubeVideoScreen.hidden")
+          setYoutubeUrl("")
         }
       }
     )
