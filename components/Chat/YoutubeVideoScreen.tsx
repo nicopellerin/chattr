@@ -45,7 +45,6 @@ const YoutubeVideoScreen = () => {
   const youtubePlayerRef = useRef() as React.MutableRefObject<any>
   const selfVideo2Ref = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
-  const progressBarRef = useRef() as React.MutableRefObject<HTMLDivElement>
 
   const [videoPaused, setVideoPaused] = useState(false)
   // const [playerTotalTime, setPlayerTotalTime] = useState(0)
