@@ -17,6 +17,7 @@ import ChatTextWindowChatBtn from "./ChatTextWindowChatBtn"
 import { otherUsernameQuery, userSoundOnState } from "../../store/users"
 import YoutubeChatWindow from "./YoutubeChatWindow"
 import YoutubeChatWindowBtn from "./YoutubeChatWindowBtn"
+import { AnimatePresence } from "framer-motion"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -67,7 +68,6 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       <ChatTextWindowGameBtn />
       <ChatTextWindowGalleryBtn />
       <YoutubeChatWindowBtn />
-      {/* <AnimatePresence initial={false}> */}
       {state.whenIn({
         chatScreen: (
           <ChatTextWindowMain showJoinMsg={showJoinMsg} socket={socket} />
@@ -76,7 +76,6 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
         photoGalleryScreen: <ChatTextWindowGallery />,
         youtubeVideoStartScreen: <YoutubeChatWindow socket={socket} />,
       })}
-      {/* </AnimatePresence> */}
     </Wrapper>
   )
 }

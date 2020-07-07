@@ -16,7 +16,6 @@ import {
   youtubeVideoMuteSoundState,
   youtubeVideoRewindState,
   youtubeProgressBarWidthState,
-  // youtubeVideoMetaDataQuery,
 } from "../../store/youtube"
 import { usernameState, otherUsernameQuery } from "../../store/users"
 
@@ -33,7 +32,6 @@ const YoutubeVideoScreen = () => {
   const otherUsername = useRecoilValue(otherUsernameQuery)
   const youtubeVideoRewind = useRecoilValue(youtubeVideoRewindState)
 
-  // const setYoutubeVideoDuration = useSetRecoilState(youtubeVideoDurationState)
   const [playYoutubeVideo, setPlayYoutubeVideo] = useRecoilState(
     playYoutubeVideoState
   )

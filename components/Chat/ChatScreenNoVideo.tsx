@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { useStateDesigner } from "@state-designer/react"
 
 import { catSliderScreen } from "./ChatVideo"
+import { FaPhone } from "react-icons/fa"
 
 const ChatScreenNoVideo = () => {
   const catSliderScreenState = useStateDesigner(catSliderScreen)
@@ -18,8 +19,16 @@ const ChatScreenNoVideo = () => {
       <Container>
         <Title>{"No video connection"}</Title>
         <Tagline>
-          Press <span style={{ color: "var(--primaryColor)" }}>Call</span> to
-          start video/audio call
+          Press{" "}
+          <span
+            style={{
+              color: "var(--primaryColorLight)",
+              margin: "0.5rem 1rem 0 1rem",
+            }}
+          >
+            <FaPhone size={22} />
+          </span>{" "}
+          to start video/audio call
         </Tagline>
         <SlideshowButton
           onClick={() => catSliderScreenState.send("SHOW")}
@@ -62,6 +71,13 @@ const Title = styled.h2`
   font-size: 5rem;
   margin-bottom: 4rem;
   color: var(--tertiaryColor);
+  background: -webkit-linear-gradient(
+    145deg,
+    var(--primaryColor),
+    var(--tertiaryColor)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,6 +88,8 @@ const Tagline = styled.h4`
   font-size: 2rem;
   color: var(--textColor);
   margin-bottom: 5rem;
+  display: flex;
+  align-items: center;
 `
 
 const Button = styled(motion.button)`

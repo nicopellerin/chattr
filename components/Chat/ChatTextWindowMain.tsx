@@ -96,11 +96,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         borderRadius: "5px",
       }}
     >
-      <Container
-        // exit={{ x: -300 }}
-        // layoutId="chatTextWindow"
-        style={{ height: expandChatWindow ? 585 : 400 }}
-      >
+      <Container style={{ height: expandChatWindow ? 585 : 400 }}>
         {msgs.length > 0 &&
           msgs.map(({ msg, username: usernameMsg, filename, id }) => {
             let decryptedData
