@@ -36,7 +36,14 @@ const PlayBar: React.FC<Props> = ({
     <Wrapper
       initial={{ x: "-50%", y: -50 }}
       animate={{ y: 0 }}
-      exit={{ scale: 0, opacity: 0 }}
+      exit={
+        type === "game"
+          ? {
+              scale: 0,
+              opacity: 0,
+            }
+          : { opacity: 0 }
+      }
       transition={{ type: "spring", damping: 12 }}
     >
       <Container>

@@ -156,7 +156,7 @@ const ChatVideo: React.FC<Props> = ({
         "incomingCallScreen.visible": (
           <ChatScreenIncomingCall acceptCall={acceptCall} socket={socket} />
         ),
-        "youtubeVideoScreen.visible": <YoutubeVideoScreen />,
+        "youtubeVideoScreen.visible": <YoutubeVideoScreen socket={socket} />,
       })}
       {catSliderScreenState.whenIn({
         visible: (

@@ -138,7 +138,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
                   <br /> joined the room
                 </UserJoinedText>
               ) : (
-                <span>{welcomeMsg}</span>
+                <WelcomeText>{welcomeMsg}</WelcomeText>
               )}
             </NoMessagesText>
           </NoMessages>
@@ -271,4 +271,14 @@ const IconLogo = styled(motion.img)`
   @media (max-width: 500px) {
     margin-bottom: 1.7rem;
   }
+`
+
+const WelcomeText = styled.span`
+  background: -webkit-linear-gradient(
+    145deg,
+    var(--primaryColor),
+    var(--primaryColorLight)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `

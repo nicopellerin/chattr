@@ -23,7 +23,11 @@ import { youtubeReady } from "../../utils/youtubeReady"
 import { useSetRecoilState } from "recoil"
 import YoutubeProgressBar from "./YoutubeProgressBar"
 
-const YoutubeVideoScreen = () => {
+interface Props {
+  socket: React.MutableRefObject<SocketIOClient.Socket>
+}
+
+const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
   const showWebcam = useRecoilValue(showSelfWebcamState)
   const youtubeUrl = useRecoilValue(youtubeUrlState)
   const stream = useRecoilValue(streamState)
@@ -153,9 +157,11 @@ const YoutubeVideoScreen = () => {
         break
       case 1:
         setVideoPaused(false)
+        socket.current.emit("playYoutubeVideo", "PLAY")
         break
       case 2:
         setVideoPaused(true)
+        socket.current.emit("playYoutubeVideo", "PAUSE")
         break
     }
   }
@@ -194,7 +200,10 @@ const YoutubeVideoScreen = () => {
       transition={{ type: "spring", damping: 80 }}
     >
       <Container>
-        <YoutubeVideoWrapper isPlaying={playYoutubeVideo}>
+        <YoutubeVideoWrapper
+          isPlaying={playYoutubeVideo}
+          onClick={() => socket.current.emit("playYoutubeVideo")}
+        >
           <YoutubeVideo id="player" />
           {!playYoutubeVideo && (
             <Overlay>
@@ -375,6 +384,7 @@ const Overlay = styled.div`
   align-items: center;
   flex-direction: column;
   z-index: 100;
+  cursor: pointer;
 `
 
 const Title = styled.h3`

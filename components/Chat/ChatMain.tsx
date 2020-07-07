@@ -335,8 +335,14 @@ const ChatMain = () => {
       }
     )
 
-    socket.current.on("playYoutubeVideoGlobal", () => {
-      setPlayYoutubeVideo((prevState) => !prevState)
+    socket.current.on("playYoutubeVideoGlobal", (status?: string) => {
+      if (status === "PLAY") {
+        setPlayYoutubeVideo(true)
+      } else if (status === "PAUSE") {
+        setPlayYoutubeVideo(false)
+      } else {
+        setPlayYoutubeVideo((prevState) => !prevState)
+      }
     })
 
     socket.current.on("rewindYoutubeVideoGlobal", () => {

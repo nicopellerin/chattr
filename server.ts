@@ -173,8 +173,8 @@ io.on("connection", (socket) => {
     io.to(room).emit("sendingYoutubeVideoAcceptedGlobal", status)
   })
 
-  socket.on("playYoutubeVideo", () => {
-    io.to(room).emit("playYoutubeVideoGlobal")
+  socket.on("playYoutubeVideo", (status?: string) => {
+    io.to(room).emit("playYoutubeVideoGlobal", status)
   })
 
   socket.on("sendYoutubeMetaData", (data: Array<any>) => {
