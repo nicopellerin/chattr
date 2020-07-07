@@ -5,15 +5,14 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { detect } from "detect-browser"
 import dynamic from "next/dynamic"
+import { useRecoilValue, useRecoilState } from "recoil"
+import { FaDownload } from "react-icons/fa"
 
 import UsernameModal from "../components/UsernameModal"
 import Layout from "../components/Layout"
-import { FaDownload } from "react-icons/fa"
-import { useRecoilState } from "recoil"
+import JoinRoomModal from "../components/JoinRoomModal"
 
 import { supportsPWAState, joinRoomState } from "../store/app"
-import JoinRoomModal from "../components/JoinRoomModal"
-import { useRecoilValue } from "recoil"
 
 const DetectWrongBrowser = dynamic(
   () => import("../components/DetectWrongBrowser"),
@@ -21,6 +20,14 @@ const DetectWrongBrowser = dynamic(
     ssr: false,
   }
 )
+
+// const Rusty = dynamic({
+//   loader: async () => {
+//     const rustMod = await import("../pkg/fetch_og_data")
+
+//     return (props: { str: string }) => <h2>{rustMod.get_og_data(props.str)}</h2>
+//   },
+// })
 
 const IndexPage = () => {
   const [supportsPWA, setSupportsPWA] = useRecoilState(supportsPWAState)
@@ -79,7 +86,7 @@ const IndexPage = () => {
         />
         <meta property="og:image" content="https://chattr.lol/og-image4.jpg" />
       </Head>
-
+      {/* <Rusty str="dfdf" /> */}
       {notSupported ? (
         <DetectWrongBrowser />
       ) : (

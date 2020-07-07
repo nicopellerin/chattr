@@ -30,7 +30,7 @@ const AboutPage = () => {
       <Head>
         <title>Chattr · About</title>
         <meta property="og:title" content="Chattr · About" />
-        <meta property="og:url" content="https://chattr.lol" />
+        <meta property="og:url" content="https://chattr.lol/about" />
         <meta
           property="og:description"
           content="One-on-one hangouts in a fun and secure way"

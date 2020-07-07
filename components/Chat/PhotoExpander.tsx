@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import Portal from "./Portal"
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const PhotoExpander: React.FC<Props> = ({ imageSrc, setToggle }) => {
+  const [fullWidth, setFullWidth] = useState(false)
+
   return (
     <Wrapper>
       <Container>
@@ -18,8 +21,15 @@ const PhotoExpander: React.FC<Props> = ({ imageSrc, setToggle }) => {
           layoutId="msgPhoto"
           src={imageSrc}
           alt="User sent"
+          isFullWidth={fullWidth}
+          onClick={() => setFullWidth((prevState) => !prevState)}
         />
-        <Button whileHover={{ rotate: 5 }} onClick={() => setToggle(false)}>
+        <Button
+          animate
+          whileHover={{ rotate: 5 }}
+          onClick={() => setToggle(false)}
+          isFullWidth={fullWidth}
+        >
           <CloseIcon title="Close" color="var(--textColor)" />
         </Button>
       </Container>
@@ -49,13 +59,17 @@ const Container = styled.div`
 `
 
 const ExpandedImage = styled(motion.img)`
-  max-height: 70vh;
+  max-height: ${(props: { isFullWidth: boolean }) =>
+    props.isFullWidth ? "100vh" : "70vh"};
+  cursor: nwse-resize;
 `
 
 const Button = styled(motion.button)`
   position: absolute;
-  top: -2rem;
-  right: -2rem;
+  top: ${(props: { isFullWidth: boolean }) =>
+    props.isFullWidth ? "1rem" : "-2rem"};
+  right: ${(props: { isFullWidth: boolean }) =>
+    props.isFullWidth ? "1rem" : "-2rem"};
   background: transparent;
   border: none;
   color: var(-textColor);

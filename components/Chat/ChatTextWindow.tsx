@@ -68,14 +68,16 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       <ChatTextWindowGameBtn />
       <ChatTextWindowGalleryBtn />
       <YoutubeChatWindowBtn />
-      {state.whenIn({
-        chatScreen: (
-          <ChatTextWindowMain showJoinMsg={showJoinMsg} socket={socket} />
-        ),
-        gameScreen: <TicTacToe socket={socket} />,
-        photoGalleryScreen: <ChatTextWindowGallery />,
-        youtubeVideoStartScreen: <YoutubeChatWindow socket={socket} />,
-      })}
+      <AnimatePresence initial={false} exitBeforeEnter>
+        {state.whenIn({
+          chatScreen: (
+            <ChatTextWindowMain showJoinMsg={showJoinMsg} socket={socket} />
+          ),
+          gameScreen: <TicTacToe socket={socket} />,
+          photoGalleryScreen: <ChatTextWindowGallery />,
+          youtubeVideoStartScreen: <YoutubeChatWindow socket={socket} />,
+        })}
+      </AnimatePresence>
     </Wrapper>
   )
 }

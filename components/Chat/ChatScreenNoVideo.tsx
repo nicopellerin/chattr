@@ -2,9 +2,9 @@ import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useStateDesigner } from "@state-designer/react"
+import { FaPhone } from "react-icons/fa"
 
 import { catSliderScreen } from "./ChatVideo"
-import { FaPhone } from "react-icons/fa"
 
 const ChatScreenNoVideo = () => {
   const catSliderScreenState = useStateDesigner(catSliderScreen)
