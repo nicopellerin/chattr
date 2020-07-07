@@ -22,9 +22,8 @@ const AboutPage = () => {
   const notSupported =
     browser?.name === "safari" ||
     browser?.name === "ie" ||
-    // browser?.os === "iOS" ||
-    browser?.os === "Android OS" ||
-    (typeof window !== "undefined" && window.innerWidth < 768)
+    browser?.os === "iOS" ||
+    browser?.os === "Android OS"
 
   return (
     <>
