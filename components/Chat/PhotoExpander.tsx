@@ -61,7 +61,8 @@ const Container = styled.div`
 const ExpandedImage = styled(motion.img)`
   max-height: ${(props: { isFullWidth: boolean }) =>
     props.isFullWidth ? "100vh" : "70vh"};
-  cursor: nwse-resize;
+  cursor: ${(props: { isFullWidth: boolean }) =>
+    props.isFullWidth ? "zoom-out" : "zoom-in"};
 `
 
 const Button = styled(motion.button)`
