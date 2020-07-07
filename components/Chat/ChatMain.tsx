@@ -64,11 +64,11 @@ import ChatTextWindow, { chatTextWindowScreens } from "./ChatTextWindow"
 import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
 import PlayBar from "../Games/PlayBar"
+import { youtubeChatWindowScreens } from "./YoutubeChatWindow"
 
 import { User, Message, Call } from "../../models"
 
 import { gameScreens } from "../Games/TicTacToe/Game"
-import { youtubeChatWindowScreens } from "./YoutubeChatWindow"
 
 enum SquareValue {
   X = "X",
@@ -227,7 +227,9 @@ const ChatMain = () => {
       chatTextWindowScreensState.reset()
       youtubeChatWindowScreensState.reset()
       setStreamOtherPeer(null)
-      friendVideoRef.current.srcObject = null
+      if (friendVideoRef.current) {
+        friendVideoRef.current.srcObject = null
+      }
     })
 
     socket.current.on("usernameJoined", () => {
@@ -533,7 +535,7 @@ const ChatMain = () => {
       {!username && <NoUsername socket={socket} />}
       <OutterWrapper>
         <Wrapper animate theatreMode={displayTheatreMode}>
-          <LeftColumn theatreMode={displayTheatreMode}>
+          <LeftColumn animate theatreMode={displayTheatreMode}>
             <ChatVideo
               socket={socket}
               selfVideoRef={selfVideoRef}
@@ -616,10 +618,12 @@ const Wrapper = styled(motion.div)`
 `
 
 const LeftColumn = styled(motion.div)`
+  position: relative;
   display: grid;
   grid-template-rows: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? "1fr" : "9fr 1fr"};
   grid-gap: 2rem;
+  z-index: 20;
 
   @media (max-width: 500px) {
     grid-template-rows: 1fr;

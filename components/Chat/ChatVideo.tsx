@@ -70,10 +70,10 @@ export const catSliderScreen = createState({
   initial: "hidden",
   states: {
     hidden: {
-      on: { SHOW: { to: "visible" } },
+      on: { SHOW: { secretlyTo: "visible" } },
     },
     visible: {
-      on: { SHOW: { to: "hidden" } },
+      on: { SHOW: { secretlyTo: "hidden" } },
     },
   },
 })

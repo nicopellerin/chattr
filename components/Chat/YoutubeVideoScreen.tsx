@@ -2,8 +2,10 @@ import * as React from "react"
 import { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { FaPlayCircle } from "react-icons/fa"
+
+import YoutubeProgressBar from "./YoutubeProgressBar"
 
 import {
   showSelfWebcamState,
@@ -20,8 +22,6 @@ import {
 import { usernameState, otherUsernameQuery } from "../../store/users"
 
 import { youtubeReady } from "../../utils/youtubeReady"
-import { useSetRecoilState } from "recoil"
-import YoutubeProgressBar from "./YoutubeProgressBar"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>

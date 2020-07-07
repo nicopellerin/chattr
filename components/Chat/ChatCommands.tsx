@@ -79,6 +79,20 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
     sendFile(file, file.name)
   }
 
+  const handleCall = () => {
+    callFriend(otherUserId)
+    setPressedCall(true)
+    if (soundOn) {
+      beepOn.play()
+    }
+  }
+
+  const handleCancelCall = () => {
+    setReceivingCall(false)
+    setCancelCallRequest(true)
+    socket.current.emit("cancelCallRequest")
+  }
+
   return (
     <>
       <Wrapper>
@@ -141,15 +155,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             whileTap={{ scale: 0.98 }}
           >
             {muteMic ? (
-              <>
-                <FaMicrophoneSlash size={22} />
-                {/* <span>Mic</span> */}
-              </>
+              <FaMicrophoneSlash size={22} />
             ) : (
-              <>
-                <FaMicrophone size={22} />
-                {/* <span>Mic</span> */}
-              </>
+              <FaMicrophone size={22} />
             )}
           </IconWrapper>
           <IconWrapper
@@ -163,47 +171,22 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             off={!showSelfWebcam}
           >
             {showSelfWebcam ? (
-              <>
-                <FaVideo size={22} />
-                {/* <span>Webcam</span> */}
-              </>
+              <FaVideo size={22} />
             ) : (
-              <>
-                <FaVideoSlash size={22} />
-                {/* <span>Webcam</span> */}
-              </>
+              <FaVideoSlash size={22} />
             )}
           </IconWrapper>
           <IconWrapper disabled={disableCallIcon} whileTap={{ scale: 0.98 }}>
             {callAccepted || pressedCall ? (
-              <>
-                <FaTimesCircle
-                  style={{
-                    color: "var(--primaryColor)",
-                  }}
-                  onClick={() => {
-                    setReceivingCall(false)
-                    setCancelCallRequest(true)
-                    socket.current.emit("cancelCallRequest")
-                  }}
-                  size={22}
-                />
-                {/* <span>End</span> */}
-              </>
+              <FaTimesCircle
+                style={{
+                  color: "var(--primaryColor)",
+                }}
+                onClick={handleCancelCall}
+                size={22}
+              />
             ) : (
-              <>
-                <FaPhone
-                  onClick={() => {
-                    callFriend(otherUserId)
-                    setPressedCall(true)
-                    if (soundOn) {
-                      beepOn.play()
-                    }
-                  }}
-                  size={22}
-                />
-                {/* <span>Call</span> */}
-              </>
+              <FaPhone onClick={handleCall} size={22} />
             )}
           </IconWrapper>
         </Container>
