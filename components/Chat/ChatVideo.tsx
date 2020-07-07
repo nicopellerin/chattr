@@ -129,10 +129,9 @@ const ChatVideo: React.FC<Props> = ({
   if (getUserMediaNotSupported) {
     return (
       <Wrapper
-        isExpandedYoutubeVideo={
-          expandedChatWindow &&
-          chatVideoScreensState.isIn("youtubeVideoStartScreen")
-        }
+        isYoutubeVideo={chatVideoScreensState.isIn(
+          "youtubeVideoScreen.visible"
+        )}
         ref={contraintsRef}
       >
         <ChatScreenNotSupported />
@@ -152,10 +151,7 @@ const ChatVideo: React.FC<Props> = ({
   return (
     <Wrapper
       ref={contraintsRef}
-      isExpandedYoutubeVideo={
-        expandedChatWindow &&
-        chatVideoScreensState.isIn("youtubeVideoStartScreen")
-      }
+      isYoutubeVideo={chatVideoScreensState.isIn("youtubeVideoScreen.visible")}
     >
       {chatVideoScreensState.whenIn({
         waitingForConnectionScreen: <ChatScreenWaitingForConnect />,
@@ -244,8 +240,8 @@ const Wrapper = styled(motion.div)`
   height: 100%;
   width: 100%;
   position: relative;
-  background: ${(props: { isExpandedYoutubeVideo: boolean }) =>
-    props.isExpandedYoutubeVideo ? "none" : "rgba(0,0,0, 0.6)"};
+  background: ${(props: { isYoutubeVideo: boolean }) =>
+    props.isYoutubeVideo ? "none" : "rgba(0,0,0, 0.6)"};
   margin: 0;
   padding: 0;
   border-radius: 5px;
