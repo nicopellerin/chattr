@@ -31,10 +31,7 @@ import {
   userSoundOnState,
   otherUsernameQuery,
 } from "../../store/users"
-import {
-  messageContainsHeartEmojiState,
-  expandChatWindowState,
-} from "../../store/chat"
+import { messageContainsHeartEmojiState } from "../../store/chat"
 import { useStateDesigner } from "@state-designer/react"
 import YoutubeVideoScreen from "./YoutubeVideoScreen"
 
@@ -104,7 +101,6 @@ const ChatVideo: React.FC<Props> = ({
   const soundOn = useRecoilValue(userSoundOnState)
   const peerAudioMuted = useRecoilValue(peerAudioMutedQuery)
   const otherUsername = useRecoilValue(otherUsernameQuery)
-  const expandedChatWindow = useRecoilValue(expandChatWindowState)
 
   const [
     messageContainsHeartEmoji,
