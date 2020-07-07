@@ -170,9 +170,9 @@ const ChatVideo: React.FC<Props> = ({
           <SelfVideo
             muted
             style={{
-              opacity: chatVideoScreensState.isIn("youtubeVideoScreen.visible")
-                ? 0
-                : 1,
+              display: chatVideoScreensState.isIn("youtubeVideoScreen.visible")
+                ? "none"
+                : "block",
             }}
             initial={{ scaleX: -1 }}
             exit={{ scaleX: 0 }}
@@ -193,9 +193,9 @@ const ChatVideo: React.FC<Props> = ({
           </AnimatePresence>
           <FriendVideo
             style={{
-              opacity: chatVideoScreensState.isIn("youtubeVideoScreen.visible")
-                ? 0
-                : 1,
+              display: chatVideoScreensState.isIn("youtubeVideoScreen.visible")
+                ? "none"
+                : "block",
             }}
             theatreMode={displayTheatreMode}
             ref={friendVideoRef}

@@ -2,6 +2,7 @@ import Head from "next/head"
 import dynamic from "next/dynamic"
 import styled from "styled-components"
 import { detect } from "detect-browser"
+import { useRouter } from "next/router"
 
 const ChatMainClient = dynamic(() => import("../../components/Chat/ChatMain"), {
   ssr: false,
@@ -23,11 +24,13 @@ const RoomPage = () => {
     browser?.os === "iOS" ||
     browser?.os === "Android OS"
 
+  const { query } = useRouter()
+
   return (
     <>
       <Head>
-        <title>Chattr · Join Room</title>
-        <meta property="og:title" content="Chattr · Join Room" />
+        <title>Chattr · Room: ${query?.room}</title>
+        <meta property="og:title" content={`Chattr · Join room`} />
         <meta
           property="og:description"
           content="One-on-one hangouts in a fun and secure way"
