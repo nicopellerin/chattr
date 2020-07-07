@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { FaPlayCircle } from "react-icons/fa"
 
@@ -205,16 +205,21 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
           onClick={() => socket.current.emit("playYoutubeVideo")}
         >
           <YoutubeVideo id="player" />
-          {!playYoutubeVideo && (
-            <Overlay>
-              <ActionButton>
-                <FaPlayCircle />
-              </ActionButton>
-              <Title>
-                Press play to {videoPaused ? "resume" : "start"} video
-              </Title>
-            </Overlay>
-          )}
+          <AnimatePresence>
+            {!playYoutubeVideo && (
+              <Overlay exit={{ opacity: 0 }}>
+                <ActionButton
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <FaPlayCircle />
+                </ActionButton>
+                <Title>
+                  Press play to {videoPaused ? "resume" : "start"} video
+                </Title>
+              </Overlay>
+            )}
+          </AnimatePresence>
           <YoutubeProgressBar />
         </YoutubeVideoWrapper>
         <VideoContainer>
@@ -370,9 +375,10 @@ const ActionButton = styled(motion.button)`
   justify-content: center;
   align-items: center;
   margin-bottom: 3rem;
+  cursor: pointer;
 `
 
-const Overlay = styled.div`
+const Overlay = styled(motion.div)`
   position: absolute;
   left: 0;
   top: 0;
