@@ -29,7 +29,7 @@ const RoomPage = () => {
   return (
     <>
       <Head>
-        <title>Chattr · Room: ${query?.room}</title>
+        <title>Chattr · Room: {query?.room}</title>
         <meta property="og:title" content={`Chattr · Join room`} />
         <meta
           property="og:description"
