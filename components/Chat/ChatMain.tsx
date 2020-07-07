@@ -600,8 +600,13 @@ const Wrapper = styled(motion.div)`
   width: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? "100%" : "85%"};
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1440px) {
     width: 95vw;
+  }
+
+  @media (max-width: 1024px) {
+    width: 90vw;
+    height: 90vh;
   }
 
   @media (max-width: 500px) {

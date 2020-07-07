@@ -39,7 +39,7 @@ const WrapperDetectBrowser = styled.div`
 `
 
 const LogoDetectBrowser = styled.img`
-  width: 60rem;
+  width: 50rem;
   margin-bottom: 8rem;
 
   @media (max-width: 600px) {

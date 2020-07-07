@@ -33,6 +33,10 @@ html {
   @media (max-width: 1500px) {
     font-size: 57.5%;
   }
+
+  @media (max-width: 1024px) {
+    font-size: 52.5%;
+  }
 }
 
 #__next {

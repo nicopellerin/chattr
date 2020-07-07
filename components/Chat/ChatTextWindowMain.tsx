@@ -96,7 +96,14 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         borderRadius: "5px",
       }}
     >
-      <Container style={{ height: expandChatWindow ? 585 : 400 }}>
+      <Container
+        isExpanded={expandChatWindow}
+        isIpad={
+          typeof window !== "undefined" && window.innerWidth < 1025
+            ? true
+            : false
+        }
+      >
         {msgs.length > 0 &&
           msgs.map(({ msg, username: usernameMsg, filename, id }) => {
             let decryptedData
@@ -194,7 +201,9 @@ export default ChatTextWindowMain
 // Styles
 const Container = styled(motion.div)`
   width: 100%;
-  height: 100%;
+  height: ${(props: { isExpanded?: boolean; isIpad: boolean }) =>
+    props.isExpanded && !props.isIpad ? "585px" : "400px"};
+  ${(props: { isIpad: boolean }) => props.isIpad && "height: 350px"};
   color: var(--textColor);
   font-size: 1.7rem;
   line-height: 1.4;

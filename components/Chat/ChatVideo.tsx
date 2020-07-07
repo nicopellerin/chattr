@@ -122,6 +122,15 @@ const ChatVideo: React.FC<Props> = ({
     }
   }, [listUsers])
 
+  // Removes heart animation from screen
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+    if (messageContainsHeartEmoji) {
+      idx = setTimeout(() => setMessageContainsHeartEmoji(false), 3000)
+    }
+    return () => clearTimeout(idx)
+  }, [messageContainsHeartEmoji])
+
   if (getUserMediaNotSupported) {
     return (
       <Wrapper
@@ -134,15 +143,6 @@ const ChatVideo: React.FC<Props> = ({
       </Wrapper>
     )
   }
-
-  // Removes heart animation from screen
-  useEffect(() => {
-    let idx: ReturnType<typeof setTimeout>
-    if (messageContainsHeartEmoji) {
-      idx = setTimeout(() => setMessageContainsHeartEmoji(false), 3000)
-    }
-    return () => clearTimeout(idx)
-  }, [messageContainsHeartEmoji])
 
   return (
     <Wrapper
