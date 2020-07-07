@@ -254,6 +254,8 @@ const ChatMain = () => {
       setReceivingCall(false)
       setCancelCallRequest(true)
       chatVideoScreensState.forceTransition("noVideoScreen")
+      youtubeChatWindowScreensState.reset()
+
       if (friendVideoRef.current) {
         friendVideoRef.current.srcObject = null
       }
