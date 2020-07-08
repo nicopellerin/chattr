@@ -56,6 +56,7 @@ const UsernameModal: React.FC<Props> = ({
     <Container
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 30 }}
       transition={{ type: "spring", damping: 80 }}
     >
       <Form

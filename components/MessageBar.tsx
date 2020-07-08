@@ -8,11 +8,13 @@ import { FaTimesCircle } from "react-icons/fa"
 interface Props {
   errorMsg: string
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>
+  delay?: number
 }
 
 const MessageBar: React.FC<Props> = ({
   errorMsg = "An error has occured",
   setErrorMsg,
+  delay = 3000,
 }) => {
   const errorSound = new Audio("/sounds/digi_error_short.mp3")
   errorSound.volume = 0.5
@@ -22,7 +24,7 @@ const MessageBar: React.FC<Props> = ({
 
     if (errorMsg) {
       errorSound.play()
-      idx = setTimeout(() => setErrorMsg(""), 3000)
+      idx = setTimeout(() => setErrorMsg(""), delay)
     }
 
     return () => clearTimeout(idx)
@@ -52,6 +54,7 @@ const Wrapper = styled(motion.div)`
   position: fixed;
   bottom: 4rem;
   left: 50%;
+  z-index: 9999;
 `
 
 const Container = styled(motion.div)`

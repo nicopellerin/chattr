@@ -50,8 +50,6 @@ io.on("connection", (socket) => {
     rooms[room].users[0] &&
     rooms[room].users[0].username
 
-  console.log("PTJER", otherUsername)
-
   if (username === otherUsername) {
     socket.emit("usernameAlreadyTaken")
     return

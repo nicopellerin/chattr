@@ -70,6 +70,7 @@ import { youtubeChatWindowScreens } from "./YoutubeChatWindow"
 import { User, Message, Call } from "../../models"
 
 import { gameScreens } from "../Games/TicTacToe/Game"
+import MessageBar from "../MessageBar"
 
 enum SquareValue {
   X = "X",
@@ -138,6 +139,7 @@ const ChatMain = () => {
 
   const [msg, setMsg] = useState("")
   const [playBarType, setPlayBarType] = useState("")
+  const [errorMsg, setErrorMsg] = useState("")
 
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
@@ -179,8 +181,10 @@ const ChatMain = () => {
     }
 
     socket.current.on("usernameAlreadyTaken", () => {
-      console.log("Error")
       setUsername("")
+      setErrorMsg(
+        `Username ${username} is already taken! Please choose another one`
+      )
     })
 
     socket.current.on("notAllowed", () => {
@@ -593,6 +597,15 @@ const ChatMain = () => {
             setMsg={setMsg}
             socket={socket}
             type={playBarType}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {errorMsg && (
+          <MessageBar
+            errorMsg={errorMsg}
+            setErrorMsg={setErrorMsg}
+            delay={5000}
           />
         )}
       </AnimatePresence>

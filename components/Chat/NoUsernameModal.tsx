@@ -1,5 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
+import { motion } from "framer-motion"
 
 import UsernameModal from "../UsernameModal"
 import Portal from "./Portal"
@@ -11,7 +12,11 @@ interface Props {
 const NoUsername: React.FC<Props> = ({ socket }) => {
   return (
     <>
-      <Wrapper>
+      <Wrapper
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
         <UsernameModal
           buttonText="Start chatting!"
           noUsernameModal={true}
@@ -26,7 +31,7 @@ const NoUsername: React.FC<Props> = ({ socket }) => {
 export default NoUsername
 
 // Styles
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   position: fixed;
   z-index: 2000;
   background: linear-gradient(45deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9));
