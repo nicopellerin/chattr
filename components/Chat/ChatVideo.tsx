@@ -131,6 +131,33 @@ const ChatVideo: React.FC<Props> = ({
     return () => clearTimeout(idx)
   }, [messageContainsHeartEmoji])
 
+  // const startFaceTrack = () => {
+  //   const faceTrack = window.JEEFACEFILTERAPI
+
+  //   faceTrack.init({
+  //     canvasId: "_webcamData",
+  //     NNCpath: "/NNC.json",
+  //     callbackReady: (error) => {
+  //       if (error) {
+  //         console.error(error)
+  //         return
+  //       }
+  //     },
+  //     callbackTrack: (detectState) => {
+  //       if (detectState.detected >= 0.8) {
+  //         // Pass the x and y rotation values to a function
+  //         // to handle the updating of the cursor
+  //         // this.handleMovement(detectState.rx, detectState.ry);
+  //         console.log("STATE", detectState)
+  //       }
+  //     },
+  //   })
+  // }
+
+  // useEffect(() => {
+  //   startFaceTrack()
+  // }, [])
+
   if (getUserMediaNotSupported) {
     return (
       <Wrapper
@@ -213,7 +240,12 @@ const ChatVideo: React.FC<Props> = ({
             </FriendAudioMuted>
           )}
         </>
-
+        <canvas
+          style={{ position: "absolute", left: 0, top: 0 }}
+          id="_webcamData"
+          width="800"
+          height="600"
+        />
         <ExpandButton
           title="Theatre mode"
           initial={{ opacity: 0.5 }}
