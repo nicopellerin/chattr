@@ -127,6 +127,7 @@ const ChatMain = () => {
   const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
   const setYoutubeVideoRewind = useSetRecoilState(youtubeVideoRewindState)
   const setYoutubeMetaData = useSetRecoilState(youtubeVideoMetaDataState)
+  const setUsername = useSetRecoilState(usernameState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -147,13 +148,14 @@ const ChatMain = () => {
   const room = query["room"]
 
   useEffect(() => {
-    if (!username) return
+    // if (!username) return
+    const tempUsername = "Anonymous"
 
     socket.current = io.connect(`/?room=${room}`, {
       transportOptions: {
         polling: {
           extraHeaders: {
-            "x-username": JSON.stringify(username),
+            "x-username": JSON.stringify(username || tempUsername),
           },
         },
       },
@@ -175,6 +177,11 @@ const ChatMain = () => {
           setGetUserMediaNotSupported(true)
         })
     }
+
+    socket.current.on("usernameAlreadyTaken", () => {
+      console.log("Error")
+      setUsername("")
+    })
 
     socket.current.on("notAllowed", () => {
       Router.push("/")

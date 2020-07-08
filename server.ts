@@ -41,10 +41,26 @@ io.on("connection", (socket) => {
     socket.disconnect()
     return
   }
-  socket.join(room)
+
+  if (username === "Anonymous") return
+
+  const otherUsername =
+    rooms[room] &&
+    rooms[room].users &&
+    rooms[room].users[0] &&
+    rooms[room].users[0].username
+
+  console.log("PTJER", otherUsername)
+
+  if (username === otherUsername) {
+    socket.emit("usernameAlreadyTaken")
+    return
+  }
 
   const oldUsers: User[] = (rooms[room] && rooms[room].users) || []
   rooms[room] = { users: [...oldUsers, { id: socket.id, username }] }
+
+  socket.join(room)
 
   io.to(room).emit("listUsers", rooms[room].users)
   io.to(room).emit("chatConnection", "Welcome to Chattr!")
