@@ -58,7 +58,7 @@ io.on("connection", (socket) => {
   })
 
   socket.on("otherUserMediaNotSupported", (status: boolean) => {
-    io.to(room).emit("otherUserMediaNotSupportedPeer", status)
+    socket.broadcast.to(room).emit("otherUserMediaNotSupportedPeer", status)
   })
 
   socket.on("chatMessage", (msg: Message) => {
