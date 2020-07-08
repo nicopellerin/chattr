@@ -8,7 +8,6 @@ import {
   FaTimesCircle,
   FaVideo,
   FaPhone,
-  FaRocket,
   FaCloudUploadAlt,
 } from "react-icons/fa"
 import { motion, AnimatePresence } from "framer-motion"

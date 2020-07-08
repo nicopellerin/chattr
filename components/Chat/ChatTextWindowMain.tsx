@@ -1,12 +1,11 @@
 import * as React from "react"
-import { useRef, useEffect, useCallback } from "react"
+import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import { ThreeBounce } from "better-react-spinkit"
 import CryptoJS from "crypto-js"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
-import { useDropzone } from "react-dropzone"
 
 import Invite from "./Invite"
 import ChatTextMessage from "./ChatTextMessage"
@@ -84,11 +83,6 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
     return () => clearTimeout(idx)
   }, [fileTransferProgress])
 
-  const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
-  }, [])
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
-
   const hasConnection = listUsers?.length > 1
   const noConnection = listUsers?.length < 2
 
@@ -110,38 +104,30 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
             : false
         }
       >
-        {/* <div style={{ height: "100%" }} {...getRootProps()}>
-          <input
-            {...getInputProps({
-              onClick: () => null,
-            })}
-          />
-          {isDragActive && <h2>DROP FILE</h2>}
-          {msgs.length > 0 &&
-            msgs.map(({ msg, username: usernameMsg, filename, id }) => {
-              let decryptedData
-              // If message is not an image, encrypt it. TODO: Need to fix this
-              if (!msg.startsWith("data:image")) {
-                const bytes = CryptoJS.AES.decrypt(
-                  msg,
-                  String(process.env.NEXT_PUBLIC_KEY)
-                )
-                decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
-              }
-
-              return (
-                <ChatTextMessage
-                  key={id}
-                  id={id}
-                  msg={msg}
-                  decryptedData={decryptedData}
-                  filename={filename}
-                  usernameMsg={usernameMsg}
-                  socket={socket}
-                />
+        {msgs.length > 0 &&
+          msgs.map(({ msg, username: usernameMsg, filename, id }) => {
+            let decryptedData
+            // If message is not an image, encrypt it. TODO: Need to fix this
+            if (!msg.startsWith("data:image")) {
+              const bytes = CryptoJS.AES.decrypt(
+                msg,
+                String(process.env.NEXT_PUBLIC_KEY)
               )
-            })}
-        </div> */}
+              decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+            }
+
+            return (
+              <ChatTextMessage
+                key={id}
+                id={id}
+                msg={msg}
+                decryptedData={decryptedData}
+                filename={filename}
+                usernameMsg={usernameMsg}
+                socket={socket}
+              />
+            )
+          })}
         {msgs.length === 0 && hasConnection && (
           <NoMessages hasConnection={hasConnection}>
             <NoMessagesText>
