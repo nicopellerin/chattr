@@ -9,6 +9,7 @@ import {
   FaVideo,
   FaPhone,
   FaRocket,
+  FaCloudUploadAlt,
 } from "react-icons/fa"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
@@ -118,8 +119,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             />
             {!sendingFile && fileTransferProgress === "0" ? (
               <>
-                <FaRocket size={22} />
-                {/* <span style={{ whiteSpace: "nowrap" }}>Send image</span> */}
+                <FaCloudUploadAlt size={22} />
               </>
             ) : (
               <motion.div
@@ -135,12 +135,7 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
                   transition: "all 300ms ease-in-out",
                 }}
               >
-                <FaRocket size={22} />
-                {/* <span>
-                  {fileTransferProgress === "0"
-                    ? "Sending..."
-                    : `${fileTransferProgress}`}
-                </span> */}
+                <FaCloudUploadAlt size={22} />
               </motion.div>
             )}
           </IconWrapper>
