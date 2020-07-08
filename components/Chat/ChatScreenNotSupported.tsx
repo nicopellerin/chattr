@@ -68,12 +68,20 @@ const Container = styled(motion.div)`
 `
 
 const Title = styled.h4`
-  font-size: 4rem;
+  font-size: 5rem;
+  margin-bottom: 3rem;
   color: var(--tertiaryColor);
+  background: -webkit-linear-gradient(
+    145deg,
+    var(--primaryColor),
+    var(--tertiaryColor)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 3rem;
+  text-align: center;
 `
 
 const Tagline = styled.span`
