@@ -281,7 +281,7 @@ const IconLogo = styled(motion.img)`
   }
 `
 
-const WelcomeText = styled.span`
+const WelcomeText = styled.h3`
   background: -webkit-linear-gradient(
     145deg,
     var(--primaryColor),

@@ -107,6 +107,7 @@ const Container = styled(motion.div)`
 `
 
 const Tagline = styled.label`
+  font-family: "Lora", sans-serif;
   font-size: 3rem;
   color: var(--textColor);
   margin-bottom: 2rem;

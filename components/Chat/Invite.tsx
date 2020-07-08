@@ -84,7 +84,7 @@ const Container = styled(motion.div)`
   cursor: pointer;
 `
 
-const Text = styled.span`
+const Text = styled.h2`
   font-size: 2.4rem;
   color: var(--textColor);
   font-weight: 600;

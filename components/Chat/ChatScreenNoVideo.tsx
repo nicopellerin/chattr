@@ -69,7 +69,7 @@ const Container = styled(motion.div)`
 
 const Title = styled.h2`
   font-size: 5rem;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
   color: var(--tertiaryColor);
   background: -webkit-linear-gradient(
     145deg,
@@ -84,10 +84,11 @@ const Title = styled.h2`
   text-align: center;
 `
 
-const Tagline = styled.h4`
+const Tagline = styled.span`
   font-size: 2rem;
+  font-weight: 700;
   color: var(--textColor);
-  margin-bottom: 5rem;
+  margin-bottom: 4rem;
   display: flex;
   align-items: center;
 `

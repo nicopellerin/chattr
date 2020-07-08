@@ -119,6 +119,7 @@ const ButtonJoin = styled(motion.button)`
 `
 
 const Text = styled.span`
+  font-family: "Lora", sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: var(--textColor);

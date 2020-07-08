@@ -263,11 +263,12 @@ const FriendVideo = styled.video`
   }
 `
 
-const FriendAudioMuted = styled(motion.h3)`
+const FriendAudioMuted = styled(motion.span)`
   position: absolute;
   right: 6rem;
   bottom: 1.45rem;
   font-size: 1.7rem;
+  font-weight: 700;
   color: rgba(255, 255, 255, 0.5);
   z-index: 20;
   display: flex;
