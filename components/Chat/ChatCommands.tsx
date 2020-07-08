@@ -24,6 +24,7 @@ import {
   cancelCallRequestState,
   disableCallIconState,
   getUserMediaNotSupportedState,
+  getUserMediaPeerNotSupportedState,
 } from "../../store/video"
 import {
   listUsersState,
@@ -61,6 +62,9 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
   const fileTransferProgress = useRecoilValue(fileTransferProgressState)
   const otherUserId = useRecoilValue(otherUserIdQuery)
   const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
+  const getUserMediaPeerNotSupported = useRecoilValue(
+    getUserMediaPeerNotSupportedState
+  )
 
   const [errorMsg, setErrorMsg] = useState("")
 
@@ -173,7 +177,11 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
             )}
           </IconWrapper>
           <IconWrapper
-            disabled={disableCallIcon || getUserMediaNotSupported}
+            disabled={
+              disableCallIcon ||
+              getUserMediaNotSupported ||
+              getUserMediaPeerNotSupported
+            }
             whileTap={{ scale: 0.98 }}
           >
             {callAccepted || pressedCall ? (

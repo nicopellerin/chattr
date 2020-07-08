@@ -72,6 +72,11 @@ export const getUserMediaNotSupportedState = atom<boolean>({
   default: false,
 })
 
+export const getUserMediaPeerNotSupportedState = atom<boolean>({
+  key: "getUserMediaPeerNotSupportedState",
+  default: false,
+})
+
 export const displayTheatreModeState = atom<boolean>({
   key: "displayTheatreModeState",
   default: false,

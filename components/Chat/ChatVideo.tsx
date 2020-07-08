@@ -18,6 +18,7 @@ const Slider = dynamic(() => import("./Slider"), { ssr: false })
 const ChatScreenHeart = dynamic(() => import("./ChatScreenHeart"), {
   ssr: false,
 })
+import ChatScreenPeerNoVideo from "./ChatScreenPeerNoVideo"
 
 import {
   showSelfWebcamState,
@@ -48,6 +49,7 @@ export const chatVideoScreens = createState({
       },
     },
     noVideoScreen: {},
+    peerNoVideoScreen: {},
     incomingCallScreen: {
       initial: "hidden",
       states: {
@@ -159,6 +161,7 @@ const ChatVideo: React.FC<Props> = ({
   // }, [])
 
   if (getUserMediaNotSupported) {
+    socket.current.emit("otherUserMediaNotSupported", true)
     return (
       <Wrapper
         isYoutubeVideo={chatVideoScreensState.isIn(
@@ -180,6 +183,7 @@ const ChatVideo: React.FC<Props> = ({
         waitingForConnectionScreen: <ChatScreenWaitingForConnect />,
         "callingScreen.visible": <ChatScreenCalling />,
         noVideoScreen: <ChatScreenNoVideo />,
+        peerNoVideoScreen: <ChatScreenPeerNoVideo />,
         "incomingCallScreen.visible": (
           <ChatScreenIncomingCall acceptCall={acceptCall} socket={socket} />
         ),

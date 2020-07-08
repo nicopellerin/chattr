@@ -24,6 +24,7 @@ import {
   displayTheatreModeState,
   peerAudioMutedState,
   streamOtherPeerState,
+  getUserMediaPeerNotSupportedState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -108,6 +109,9 @@ const ChatMain = () => {
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
+  const setGetUserMediaPeerNotSupported = useSetRecoilState(
+    getUserMediaPeerNotSupportedState
+  )
   const setPeerAudioMuted = useSetRecoilState(peerAudioMutedState)
   const setPlayerXGlobal = useSetRecoilState(playerXGlobalState)
   const setPlayerOGlobal = useSetRecoilState(playerOGlobalState)
@@ -186,6 +190,11 @@ const ChatMain = () => {
 
     socket.current.on("chatMessages", (msg: Message) => {
       setChatMsgs((prevState) => [...prevState, msg])
+    })
+
+    socket.current.on("otherUserMediaNotSupportedPeer", (status: boolean) => {
+      setGetUserMediaPeerNotSupported(status)
+      chatVideoScreensState.forceTransition("peerNoVideoScreen")
     })
 
     socket.current.on(
