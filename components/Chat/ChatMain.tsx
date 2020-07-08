@@ -603,7 +603,7 @@ const Wrapper = styled(motion.div)`
     props.theatreMode ? "100%" : "85%"};
 
   @media (max-width: 1440px) {
-    width: 95vw;
+    width: 90vw;
   }
 
   @media (max-width: 1024px) {
@@ -622,7 +622,8 @@ const LeftColumn = styled(motion.div)`
   display: grid;
   grid-template-rows: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? "1fr" : "9fr 1fr"};
-  grid-gap: 2rem;
+  grid-gap: ${(props: { theatreMode: boolean }) =>
+    props.theatreMode ? 0 : "2rem"};
   z-index: 20;
 
   @media (max-width: 500px) {
