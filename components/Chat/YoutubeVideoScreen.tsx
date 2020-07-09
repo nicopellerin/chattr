@@ -244,7 +244,9 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
           </WebcamVideoWrapper>
           <WebcamVideoWrapper>
             <Underlay>
-              <WebcamOtherUsername>{otherUsername}</WebcamOtherUsername>
+              <WebcamOtherUsername>
+                {otherUsername}'s webcam
+              </WebcamOtherUsername>
             </Underlay>
             <FriendVideo
               initial={{ scaleX: -1 }}
@@ -312,9 +314,9 @@ const YoutubeVideoWrapper = styled.div`
   position: relative;
   margin-bottom: 3rem;
   /* pointer-events: none; */
-  ${(props: { isPlaying: boolean }) =>
+  /* ${(props: { isPlaying: boolean }) =>
     props.isPlaying &&
-    `filter: drop-shadow(0 0.75rem 10rem rgba(131, 82, 253, 0.35))`}
+    `filter: drop-shadow(0 0.75rem 10rem rgba(131, 82, 253, 0.35))`} */
 `
 
 const YoutubeVideo = styled(motion.div)`
