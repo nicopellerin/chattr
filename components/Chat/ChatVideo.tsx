@@ -150,6 +150,7 @@ const ChatVideo: React.FC<Props> = ({
 
   return (
     <Wrapper
+      animate
       ref={contraintsRef}
       isYoutubeVideo={chatVideoScreensState.isIn("youtubeVideoScreen.visible")}
     >

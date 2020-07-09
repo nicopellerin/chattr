@@ -77,24 +77,24 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
     youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1])
   }
 
-  const progress = (percent: number) => {
-    const barWidth = (percent * 800) / 100
-    setYoutubeProgressBarWidth(barWidth)
-  }
+  // const progress = (percent: number) => {
+  //   const barWidth = (percent * 800) / 100
+  //   setYoutubeProgressBarWidth(barWidth)
+  // }
 
-  useEffect(() => {
-    let idx: ReturnType<typeof setInterval>
-    if (playYoutubeVideo) {
-      idx = setInterval(() => {
-        const playerCurrentTime = youtubePlayerRef?.current?.getCurrentTime()
-        const playerTotalTime = youtubePlayerRef?.current?.getDuration()
-        const playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100
-        progress(playerTimeDifference)
-      }, 50)
-    }
+  // useEffect(() => {
+  //   let idx: ReturnType<typeof setInterval>
+  //   if (playYoutubeVideo) {
+  //     idx = setInterval(() => {
+  //       const playerCurrentTime = youtubePlayerRef?.current?.getCurrentTime()
+  //       const playerTotalTime = youtubePlayerRef?.current?.getDuration()
+  //       const playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100
+  //       progress(playerTimeDifference)
+  //     }, 50)
+  //   }
 
-    return () => clearInterval(idx)
-  }, [playYoutubeVideo])
+  //   return () => clearInterval(idx)
+  // }, [playYoutubeVideo])
 
   useEffect(() => {
     if (youtubeVideoMuteSound) {
@@ -204,29 +204,35 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
           isPlaying={playYoutubeVideo}
           onClick={() => socket.current.emit("playYoutubeVideo")}
         >
-          <YoutubeVideo id="player" />
+          <YoutubeVideo animate id="player" />
           <AnimatePresence>
             {!playYoutubeVideo && (
-              <Overlay exit={{ opacity: 0 }}>
+              <Overlay
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
                 <ActionButton
+                  animate
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <FaPlayCircle />
                 </ActionButton>
-                <Title>
+                <Title animate>
                   Press play to {videoPaused ? "resume" : "start"} video
                 </Title>
               </Overlay>
             )}
           </AnimatePresence>
-          <YoutubeProgressBar />
+          <YoutubeProgressBar youtubePlayerRef={youtubePlayerRef} />
         </YoutubeVideoWrapper>
         <VideoContainer>
           <WebcamVideoWrapper>
             <SelfVideo
               muted
               initial={{ scaleX: -1 }}
+              animate={{ scaleX: -1 }}
               exit={{ scaleX: 0 }}
               ref={selfVideo2Ref}
               playsInline
@@ -241,7 +247,14 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
             <Underlay>
               <WebcamOtherUsername>{otherUsername}</WebcamOtherUsername>
             </Underlay>
-            <FriendVideo ref={friendVideoRef} playsInline autoPlay />
+            <FriendVideo
+              initial={{ scaleX: -1 }}
+              animate={{ scaleX: -1 }}
+              exit={{ scaleX: 0 }}
+              ref={friendVideoRef}
+              playsInline
+              autoPlay
+            />
           </WebcamVideoWrapper>
         </VideoContainer>
       </Container>
@@ -305,7 +318,7 @@ const YoutubeVideoWrapper = styled.div`
     `filter: drop-shadow(0 0.75rem 10rem rgba(131, 82, 253, 0.35))`}
 `
 
-const YoutubeVideo = styled.div`
+const YoutubeVideo = styled(motion.div)`
   background: linear-gradient(
     45deg,
     rgba(255, 255, 255, 0.01),
@@ -335,7 +348,7 @@ const WebcamOtherUsername = styled.h5`
   margin: 0;
 `
 
-const FriendVideo = styled.video`
+const FriendVideo = styled(motion.video)`
   height: 125px;
   width: 275px;
   margin: 0;
@@ -393,7 +406,7 @@ const Overlay = styled(motion.div)`
   cursor: pointer;
 `
 
-const Title = styled.h3`
+const Title = styled(motion.h3)`
   color: var(--tertiaryColor);
   font-size: 3rem;
   text-align: center;
