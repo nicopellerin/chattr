@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { FaPlayCircle } from "react-icons/fa"
+import html2canvas from "html2canvas"
 
 import YoutubeProgressBar from "./YoutubeProgressBar"
 
@@ -52,6 +53,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
   const youtubePlayerRef = useRef() as React.MutableRefObject<any>
   const selfVideo2Ref = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
+  const youtubeVideoRef = useRef() as React.MutableRefObject<HTMLDivElement>
 
   const playVideo = () => {
     youtubePlayerRef?.current?.playVideo()
@@ -147,6 +149,21 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
     }
   }
 
+  const downloadOgImage = async () => {
+    html2canvas(youtubeVideoRef.current, {
+      scale: 2,
+      scrollX: -7.5,
+      scrollY: -window.scrollY,
+      useCORS: true,
+    }).then((canvas: HTMLCanvasElement) => {
+      const data = canvas.toDataURL("image/png")
+      const src = encodeURI(data)
+      console.log(src)
+      const filename = `og-image-${new Date().getTime()}`
+      // saveAs(src, filename)
+    })
+  }
+
   // Load video
   const onPlayerReady = () => {
     loadVideo()
@@ -182,6 +199,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
     >
       <Container animate>
         <YoutubeVideoWrapper
+          ref={youtubeVideoRef}
           isPlaying={playYoutubeVideo}
           onClick={() => socket.current.emit("playYoutubeVideo")}
         >
@@ -207,6 +225,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
             )}
           </AnimatePresence>
           <YoutubeProgressBar youtubePlayerRef={youtubePlayerRef} />
+          <button onClick={downloadOgImage}>Take image</button>
         </YoutubeVideoWrapper>
         <VideoContainer>
           <WebcamVideoWrapper>

@@ -661,7 +661,7 @@ const LeftColumn = styled(motion.div)`
     props.theatreMode ? "1fr" : "9fr 1fr"};
   grid-gap: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? 0 : "2rem"};
-  z-index: 20;
+  z-index: 19;
 
   @media (max-width: 500px) {
     grid-template-rows: 1fr;

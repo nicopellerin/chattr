@@ -28,6 +28,7 @@
     "file-saver": "^2.0.2",
     "framer-motion": "^2.0.0-beta.77",
     "get-user-media-promise": "^1.1.4",
+    "html2canvas": "^1.0.0-rc.5",
     "next": "^9.4.4",
     "next-pwa": "^2.6.1",
     "peerjs": "^1.2.0",

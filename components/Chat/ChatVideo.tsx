@@ -288,7 +288,7 @@ const SelfVideo = styled(motion.video)`
   position: absolute;
   bottom: 3vh;
   left: 3vh;
-  z-index: 21;
+  z-index: 19;
   margin: 0;
   padding: 0;
   border-radius: 3px;
