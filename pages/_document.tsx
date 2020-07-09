@@ -87,7 +87,6 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          {/* <script src="/jeelizFaceFilter.js"></script> */}
         </body>
       </Html>
     )

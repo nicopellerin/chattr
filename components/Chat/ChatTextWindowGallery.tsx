@@ -36,30 +36,32 @@ const ChatTextWindowGallery = () => {
         borderRadius: "5px",
       }}
     >
-      <Container
+      <Wrapper
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", damping: 80 }}
         style={{ height: expandChatWindow ? 585 : 400 }}
       >
-        {photoGallery.length > 0 ? (
-          photoGallery.map(({ msg, filename, id, username }) => (
-            <ChatTextMessage
-              msg={msg}
-              usernameMsg={username}
-              id={id}
-              filename={filename}
-            />
-          ))
-        ) : (
-          <NoImages>
-            <NoImagesTitle>No images yet</NoImagesTitle>
-            <NoImagesTagline>
-              Images sent through the chat will be available here
-            </NoImagesTagline>
-          </NoImages>
-        )}
-      </Container>
+        <Container animate>
+          {photoGallery.length > 0 ? (
+            photoGallery.map(({ msg, filename, id, username }) => (
+              <ChatTextMessage
+                msg={msg}
+                usernameMsg={username}
+                id={id}
+                filename={filename}
+              />
+            ))
+          ) : (
+            <NoImages>
+              <NoImagesTitle>No images yet</NoImagesTitle>
+              <NoImagesTagline>
+                Images sent through the chat will be available here
+              </NoImagesTagline>
+            </NoImages>
+          )}
+        </Container>
+      </Wrapper>
     </PerfectScrollbar>
   )
 }
@@ -67,6 +69,15 @@ const ChatTextWindowGallery = () => {
 export default ChatTextWindowGallery
 
 // Styles
+const Wrapper = styled(motion.div)`
+  /* width: 100%;
+  height: 100%;
+  color: var(--textColor);
+  font-size: 1.7rem;
+  line-height: 1.4;
+  position: relative; */
+`
+
 const Container = styled(motion.div)`
   width: 100%;
   height: 100%;

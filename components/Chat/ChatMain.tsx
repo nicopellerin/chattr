@@ -555,7 +555,13 @@ const ChatMain = () => {
       {!username && <NoUsername socket={socket} />}
       <OutterWrapper>
         <Wrapper animate theatreMode={displayTheatreMode}>
-          <LeftColumn animate theatreMode={displayTheatreMode}>
+          <LeftColumn
+            animate
+            theatreMode={displayTheatreMode}
+            onMouseDown={(e) => {
+              e.persist()
+            }}
+          >
             <ChatVideo
               socket={socket}
               selfVideoRef={selfVideoRef}
@@ -626,7 +632,9 @@ const OutterWrapper = styled.div`
 const Wrapper = styled(motion.div)`
   display: grid;
   grid-template-columns: ${(props: { theatreMode: boolean }) =>
-    props.theatreMode ? "1fr" : "3fr 1.1fr"};
+    props.theatreMode
+      ? "1fr"
+      : "var(--mainLayoutLeftColumn) var(--mainLayoutRightColumn)"};
   grid-gap: 3rem;
   width: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? "100%" : "85%"};

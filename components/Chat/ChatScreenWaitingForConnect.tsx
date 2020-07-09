@@ -11,7 +11,7 @@ const ChatScreenWaitingForConnect = () => {
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <Container>
+      <Container animate>
         <Title style={{ margin: 0 }}>
           <ThreeBounce
             size={30}

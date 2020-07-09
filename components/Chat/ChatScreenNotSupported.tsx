@@ -11,13 +11,13 @@ const ChatScreenNotSupported: React.FC = () => {
   const catSliderScreenState = useStateDesigner(catSliderScreen)
 
   return (
-    <Wrapper>
-      <Container
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ type: "spring", damping: 80 }}
-      >
+    <Wrapper
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      transition={{ type: "spring", damping: 80 }}
+    >
+      <Container animate>
         <Title>{"Streaming is not supported :("}</Title>
         <Tagline>
           Make sure you allowed video/audio or try using a different browser

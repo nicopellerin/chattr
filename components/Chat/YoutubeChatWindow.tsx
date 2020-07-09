@@ -125,15 +125,16 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
 
   return (
     <>
-      <Wrapper style={{ height: expandChatWindow ? 585 : 400 }}>
+      <Wrapper
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", damping: 80 }}
+        style={{ height: expandChatWindow ? 585 : 400 }}
+      >
         <AnimatePresence>
           {youtubeChatWindowScreensState.whenIn({
             initialScreen: (
-              <Container
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", damping: 80 }}
-              >
+              <Container animate>
                 <Form onSubmit={handleSubmit}>
                   <Title>Watch Youtube video with friend</Title>
                   <Input
@@ -159,7 +160,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
               </Container>
             ),
             waitingScreen: (
-              <Container>
+              <Container animate>
                 <Title>Waiting for your friend to accept...</Title>
                 <WaitingButton
                   type="button"
@@ -175,7 +176,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
               </Container>
             ),
             commandScreen: (
-              <Container>
+              <Container animate>
                 <WatchingWrapper>
                   <WatchingTitle>Watching</WatchingTitle>
                   <WatchingText>

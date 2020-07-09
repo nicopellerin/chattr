@@ -43,12 +43,12 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
   }
 
   return (
-    <Wrapper>
-      <NoMarginContainer
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ scale: 0, opacity: 0 }}
-      >
+    <Wrapper
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ scale: 0, opacity: 0 }}
+    >
+      <NoMarginContainer animate>
         <WinnerText>
           Welcome to <span style={{ color: "var(--secondaryColor)" }}>Tic</span>
           <span style={{ color: "var(--successColor)" }}>Tac</span>

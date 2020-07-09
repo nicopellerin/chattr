@@ -133,6 +133,7 @@ const ChatVideo: React.FC<Props> = ({
     return () => clearTimeout(idx)
   }, [messageContainsHeartEmoji])
 
+  // If streaming is not supported
   if (getUserMediaNotSupported) {
     socket.current.emit("otherUserMediaNotSupported", true)
     return (
@@ -217,12 +218,6 @@ const ChatVideo: React.FC<Props> = ({
             </FriendAudioMuted>
           )}
         </>
-        <canvas
-          style={{ position: "absolute", left: 0, top: 0 }}
-          id="_webcamData"
-          width="800"
-          height="600"
-        />
         <ExpandButton
           title="Theatre mode"
           initial={{ opacity: 0.5 }}
@@ -292,7 +287,7 @@ const SelfVideo = styled(motion.video)`
   position: absolute;
   bottom: 3vh;
   left: 3vh;
-  z-index: 2;
+  z-index: 2111;
   margin: 0;
   padding: 0;
   border-radius: 3px;

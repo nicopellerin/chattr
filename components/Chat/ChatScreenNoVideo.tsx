@@ -16,7 +16,7 @@ const ChatScreenNoVideo = () => {
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <Container>
+      <Container animate>
         <Title>{"No video connection"}</Title>
         <Tagline>
           Press{" "}
