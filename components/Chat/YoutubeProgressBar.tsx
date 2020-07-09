@@ -8,7 +8,11 @@ import {
   playYoutubeVideoState,
 } from "../../store/youtube"
 
-const YoutubeProgressBar = ({ youtubePlayerRef }) => {
+interface Props {
+  youtubePlayerRef: React.MutableRefObject<any>
+}
+
+const YoutubeProgressBar: React.FC<Props> = ({ youtubePlayerRef }) => {
   const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
   const setYoutubeProgressBarWidth = useSetRecoilState(
     youtubeProgressBarWidthState

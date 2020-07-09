@@ -77,25 +77,6 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
     youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1])
   }
 
-  // const progress = (percent: number) => {
-  //   const barWidth = (percent * 800) / 100
-  //   setYoutubeProgressBarWidth(barWidth)
-  // }
-
-  // useEffect(() => {
-  //   let idx: ReturnType<typeof setInterval>
-  //   if (playYoutubeVideo) {
-  //     idx = setInterval(() => {
-  //       const playerCurrentTime = youtubePlayerRef?.current?.getCurrentTime()
-  //       const playerTotalTime = youtubePlayerRef?.current?.getDuration()
-  //       const playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100
-  //       progress(playerTimeDifference)
-  //     }, 50)
-  //   }
-
-  //   return () => clearInterval(idx)
-  // }, [playYoutubeVideo])
-
   useEffect(() => {
     if (youtubeVideoMuteSound) {
       youtubePlayerRef?.current?.mute()
