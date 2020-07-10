@@ -202,6 +202,14 @@ io.on("connection", (socket) => {
   socket.on("rewindYoutubeVideo", () => {
     io.to(room).emit("rewindYoutubeVideoGlobal")
   })
+
+  socket.on("sharedScreenRequest", (data) => {
+    socket.broadcast.to(room).emit("sharedScreenRequestGlobal", data)
+  })
+
+  socket.on("sharedScreenRequestAccepted", (status: boolean) => {
+    socket.broadcast.to(room).emit("sharedScreenRequestAcceptedGlobal", status)
+  })
 })
 
 nextApp.prepare().then(() => {

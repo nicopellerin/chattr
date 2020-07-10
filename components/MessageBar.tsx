@@ -4,6 +4,9 @@ import styled from "styled-components"
 import Portal from "./Chat/Portal"
 import { motion } from "framer-motion"
 import { FaTimesCircle } from "react-icons/fa"
+import { useRecoilValue } from "recoil"
+
+import { userSoundOnState } from "../store/users"
 
 interface Props {
   errorMsg: string
@@ -16,6 +19,8 @@ const MessageBar: React.FC<Props> = ({
   setErrorMsg,
   delay = 3000,
 }) => {
+  const soundOn = useRecoilValue(userSoundOnState)
+
   const errorSound = new Audio("/sounds/digi_error_short.mp3")
   errorSound.volume = 0.5
 
@@ -23,7 +28,9 @@ const MessageBar: React.FC<Props> = ({
     let idx: ReturnType<typeof setTimeout>
 
     if (errorMsg) {
-      errorSound.play()
+      if (soundOn) {
+        errorSound.play()
+      }
       idx = setTimeout(() => setErrorMsg(""), delay)
     }
 

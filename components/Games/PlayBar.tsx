@@ -16,6 +16,7 @@ interface Props {
   setMsg: React.Dispatch<React.SetStateAction<string>>
   socket: React.MutableRefObject<SocketIOClient.Socket>
   type: string
+  setFlipWebcam?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const PlayBar: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const PlayBar: React.FC<Props> = ({
   setMsg,
   socket,
   type,
+  setFlipWebcam,
 }) => {
   const gameScreensState = useStateDesigner(gameScreens)
   const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
@@ -72,6 +74,14 @@ const PlayBar: React.FC<Props> = ({
                       "youtubeVideoStartScreen"
                     )
                     socket.current.emit("sendingYoutubeVideoAccepted", true)
+                    break
+                  case "screenShare":
+                    setMsg("")
+                    setShowPlayBar(false)
+                    if (setFlipWebcam) {
+                      setFlipWebcam(true)
+                    }
+                    socket.current.emit("sharedScreenRequestAccepted", true)
                 }
               }}
             >
@@ -90,6 +100,11 @@ const PlayBar: React.FC<Props> = ({
                     setShowPlayBar(false)
                     chatTextWindowScreensState.reset()
                     socket.current.emit("sendingYoutubeVideoAccepted", false)
+                    break
+                  case "screenShare":
+                    setMsg("")
+                    setShowPlayBar(false)
+                    socket.current.emit("sharedScreenRequestAccepted", false)
                 }
               }}
             >

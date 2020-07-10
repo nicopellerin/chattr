@@ -3,7 +3,7 @@ import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
-import { FaExpand, FaMicrophoneSlash } from "react-icons/fa"
+import { FaExpand, FaMicrophoneSlash, FaLaptop } from "react-icons/fa"
 import dynamic from "next/dynamic"
 import { createState } from "@state-designer/core"
 
@@ -26,6 +26,7 @@ import {
   getUserMediaNotSupportedState,
   displayTheatreModeState,
   peerAudioMutedQuery,
+  streamOtherPeerState,
 } from "../../store/video"
 import {
   listUsersState,
@@ -85,6 +86,8 @@ interface Props {
   selfVideoRef: React.MutableRefObject<HTMLVideoElement>
   friendVideoRef: React.MutableRefObject<HTMLVideoElement>
   socket: React.MutableRefObject<SocketIOClient.Socket>
+  shareScreen: () => void
+  flipWebcam: boolean
 }
 
 const ChatVideo: React.FC<Props> = ({
@@ -92,6 +95,8 @@ const ChatVideo: React.FC<Props> = ({
   selfVideoRef,
   friendVideoRef,
   socket,
+  shareScreen,
+  flipWebcam,
 }) => {
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
   const catSliderScreenState = useStateDesigner(catSliderScreen)
@@ -103,6 +108,7 @@ const ChatVideo: React.FC<Props> = ({
   const soundOn = useRecoilValue(userSoundOnState)
   const peerAudioMuted = useRecoilValue(peerAudioMutedQuery)
   const otherUsername = useRecoilValue(otherUsernameQuery)
+  const streamOtherPeer = useRecoilValue(streamOtherPeerState)
 
   const [
     messageContainsHeartEmoji,
@@ -115,6 +121,7 @@ const ChatVideo: React.FC<Props> = ({
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
 
   let sound = new Audio("/sounds/expand.mp3")
+  sound.volume = 0.4
 
   useEffect(() => {
     if (listUsers?.length > 1) {
@@ -183,7 +190,6 @@ const ChatVideo: React.FC<Props> = ({
                 : "visible",
             }}
             initial={{ scaleX: -1 }}
-            exit={{ scaleX: 0 }}
             drag
             dragMomentum={false}
             // @ts-ignore
@@ -206,6 +212,7 @@ const ChatVideo: React.FC<Props> = ({
               )
                 ? "hidden"
                 : "visible",
+              transform: flipWebcam ? `scaleX(1)` : `scaleX(-1)`,
             }}
             theatreMode={displayTheatreMode}
             ref={friendVideoRef}
@@ -219,6 +226,17 @@ const ChatVideo: React.FC<Props> = ({
             </FriendAudioMuted>
           )}
         </>
+        <ShareScreenButton
+          title="Share screen"
+          initial={{ opacity: 0.5 }}
+          whileHover={{ opacity: 1, scale: 1.02 }}
+          disabled={!streamOtherPeer}
+          onClick={() => {
+            shareScreen()
+          }}
+        >
+          <FaLaptop />
+        </ShareScreenButton>
         <ExpandButton
           title="Theatre mode"
           initial={{ opacity: 0.5 }}
@@ -253,15 +271,15 @@ const Wrapper = styled(motion.div)`
   z-index: 100;
 `
 
-const FriendVideo = styled.video`
+const FriendVideo = styled(motion.video)`
   height: 100%;
   max-height: ${(props: { theatreMode: boolean }) =>
     props.theatreMode ? "85vh" : "670px"};
   width: 100%;
   margin: 0;
   padding: 0;
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
+  /* -webkit-transform: scaleX(-1);
+  transform: scaleX(-1); */
 
   @media (max-width: 500px) {
     height: 300px;
@@ -313,4 +331,13 @@ const ExpandButton = styled(motion.button)`
   bottom: 0.5rem;
   right: 1rem;
   z-index: 210000;
+`
+
+const ShareScreenButton = styled(ExpandButton)`
+  bottom: 4.5rem;
+
+  &:disabled {
+    pointer-events: none;
+    cursor: initial;
+  }
 `

@@ -25,6 +25,7 @@ import {
   peerAudioMutedState,
   streamOtherPeerState,
   getUserMediaPeerNotSupportedState,
+  shareVideoScreenState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -71,6 +72,7 @@ import { User, Message, Call } from "../../models"
 
 import { gameScreens } from "../Games/TicTacToe/Game"
 import MessageBar from "../MessageBar"
+import SimplePeer from "simple-peer"
 
 enum SquareValue {
   X = "X",
@@ -95,7 +97,11 @@ const ChatMain = () => {
   const [messageDeleted, setMessageDeleted] = useRecoilState(
     messageDeletedState
   )
+  const [shareVideoScreen, setSharedVideoScreen] = useRecoilState(
+    shareVideoScreenState
+  )
 
+  const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
   const setCallAccepted = useSetRecoilState(callAcceptedState)
   const setReceivingCall = useSetRecoilState(receivingCallState)
   const setPhotoGallery = useSetRecoilState(photoGalleryState)
@@ -125,7 +131,6 @@ const ChatMain = () => {
   const setResetGame = useSetRecoilState(resetGameState)
   const setYoutubeUrl = useSetRecoilState(youtubeUrlState)
   const setPlayYoutubeVideo = useSetRecoilState(playYoutubeVideoState)
-  const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
   const setYoutubeVideoRewind = useSetRecoilState(youtubeVideoRewindState)
   const setYoutubeMetaData = useSetRecoilState(youtubeVideoMetaDataState)
   const setUsername = useSetRecoilState(usernameState)
@@ -140,10 +145,20 @@ const ChatMain = () => {
   const [msg, setMsg] = useState("")
   const [playBarType, setPlayBarType] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
+  const [flipWebcam, setFlipWebcam] = useState(false)
 
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const socket = useRef() as React.MutableRefObject<SocketIOClient.Socket>
+  const sendersRef = useRef<Array<MediaStreamTrack>>([])
+
+  const selfPeerRef = useRef() as React.MutableRefObject<SimplePeer.Instance>
+  const otherPeerRef = useRef() as React.MutableRefObject<SimplePeer.Instance>
+
+  const oldStreamRef = useRef() as React.MutableRefObject<MediaStreamTrack>
+  const newStreamRef = useRef() as React.MutableRefObject<MediaStreamTrack>
+
+  const streamRef = useRef() as React.MutableRefObject<MediaStream>
 
   const { query } = useRouter()
 
@@ -171,6 +186,7 @@ const ChatMain = () => {
         })
         .then((stream: MediaStream) => {
           setStream(stream)
+          streamRef.current = stream
           if (selfVideoRef.current) {
             selfVideoRef.current.srcObject = stream
           }
@@ -340,7 +356,7 @@ const ChatMain = () => {
       setYoutubeMetaData(data.meta)
       setPlayBarType("youtube")
       setShowPlayBar(true)
-      setMsg(`${username} wants to watch ${data.meta.title} with you`)
+      setMsg(`${data.username} wants to watch ${data.meta.title} with you`)
     })
 
     socket.current.on(
@@ -370,11 +386,36 @@ const ChatMain = () => {
     socket.current.on("rewindYoutubeVideoGlobal", () => {
       setYoutubeVideoRewind(true)
     })
+
+    socket.current.on(
+      "sharedScreenRequestGlobal",
+      (data: { status: boolean; username: string }) => {
+        if (data.status === true) {
+          setMsg(`${data.username} wants to share its screen with you`)
+          setPlayBarType("screenShare")
+          setShowPlayBar(true)
+          setSharedVideoScreen(true)
+        } else {
+          setSharedVideoScreen(false)
+          setFlipWebcam(false)
+        }
+      }
+    )
+
+    socket.current.on(
+      "sharedScreenRequestAcceptedGlobal",
+      (status: boolean) => {
+        setSharedVideoScreen(true)
+        if (status === true) {
+          alert("Accepted")
+        }
+      }
+    )
   }, [username])
 
   // Call other connection
   const callFriend = (id: string) => {
-    const peer = new Peer({
+    selfPeerRef.current = new Peer({
       initiator: true,
       trickle: false,
       config: {
@@ -391,12 +432,16 @@ const ChatMain = () => {
           },
         ],
       },
-      stream: stream,
+      stream: streamRef.current,
     })
+
+    streamRef.current
+      .getTracks()
+      .forEach((track: MediaStreamTrack) => sendersRef.current.push(track))
 
     chatVideoScreensState.forceTransition("callingScreen.visible")
 
-    peer.on("signal", (data) => {
+    selfPeerRef.current.on("signal", (data) => {
       socket.current.emit("callUser", {
         userToCall: id,
         signalData: data,
@@ -408,31 +453,31 @@ const ChatMain = () => {
       userToCall: id,
     })
 
-    peer.on("stream", (stream) => {
+    selfPeerRef.current.on("stream", (stream) => {
       if (friendVideoRef.current) {
         friendVideoRef.current.srcObject = stream
         setStreamOtherPeer(stream)
       }
     })
 
-    peer.on("close", () => {
-      peer.removeAllListeners()
+    selfPeerRef.current.on("close", () => {
+      selfPeerRef.current.removeAllListeners()
     })
 
-    peer.on("error", (err) => {
+    selfPeerRef.current.on("error", (err) => {
       console.log("WEBRTC ERROR", err)
     })
 
     socket.current.on("userLeftChattr", () => {
       setUserLeftChattr(true)
-      peer.removeAllListeners()
+      selfPeerRef.current.removeAllListeners()
     })
 
     socket.current.on("callAccepted", (signal: any) => {
       setReceivingCall(false)
       setCallAccepted(true)
       chatVideoScreensState.forceTransition("callingScreen.hidden")
-      peer.signal(signal)
+      selfPeerRef.current.signal(signal)
     })
   }
 
@@ -443,26 +488,116 @@ const ChatMain = () => {
 
     chatVideoScreensState.forceTransition("incomingCallScreen.hidden")
 
-    const peer2 = new Peer({
+    otherPeerRef.current = new Peer({
       initiator: false,
       trickle: false,
-      stream: stream,
+      stream: streamRef.current,
     })
 
-    peer2.on("signal", (data) => {
+    otherPeerRef.current.on("signal", (data) => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
     })
 
-    peer2.on("stream", (stream) => {
+    streamRef.current
+      .getTracks()
+      .forEach((track: MediaStreamTrack) => sendersRef.current.push(track))
+
+    otherPeerRef.current.on("stream", (stream: MediaStream) => {
       friendVideoRef.current.srcObject = stream
       setStreamOtherPeer(stream)
     })
 
-    peer2.signal(callerSignal)
+    otherPeerRef.current.signal(callerSignal)
 
-    peer2.on("close", () => {
-      peer2.removeAllListeners()
+    otherPeerRef.current.on("close", () => {
+      otherPeerRef.current.removeAllListeners()
     })
+  }
+
+  // Show share screen if request accepted
+  useEffect(() => {
+    if (shareVideoScreen && selfPeerRef.current) {
+      selfPeerRef.current.replaceTrack(
+        oldStreamRef.current,
+        newStreamRef.current,
+        streamRef.current
+      )
+      return
+    }
+    // if (shareVideoScreen && otherPeerRef.current) {
+    //   otherPeerRef.current.replaceTrack(
+    //     oldStreamRef.current,
+    //     newStreamRef.current,
+    //     streamRef.current
+    //   )
+    //   return
+    // }
+  }, [shareVideoScreen, selfPeerRef.current, otherPeerRef.current])
+
+  const shareScreen = () => {
+    navigator.mediaDevices
+      // @ts-ignore
+      .getDisplayMedia({
+        cursor: true,
+        // video: true,
+      })
+      .then((shareStream: MediaStream) => {
+        if (selfPeerRef.current) {
+          const newStream = shareStream.getTracks()[0]
+          const oldStream = sendersRef.current.find(
+            (sender) => sender.kind === "video"
+          )!
+          // setSharedVideoScreen(true)
+          oldStreamRef.current = oldStream
+          newStreamRef.current = newStream
+
+          socket.current.emit("sharedScreenRequest", {
+            username,
+            status: true,
+          })
+
+          // socket.current.emit("sharedScreenRequest", true)
+
+          newStream.onended = function () {
+            selfPeerRef.current.replaceTrack(
+              oldStream,
+              streamRef.current.getTracks()[1],
+              streamRef.current
+            )
+            setSharedVideoScreen(false)
+            setFlipWebcam(false)
+
+            socket.current.emit("sharedScreenRequest", {
+              username: "user",
+              status: false,
+            })
+          }
+        } else if (otherPeerRef.current) {
+          const newStream = shareStream.getTracks()[0]
+          const oldStream = sendersRef.current.find(
+            (sender) => sender.kind === "video"
+          )!
+
+          oldStreamRef.current = oldStream
+          newStreamRef.current = newStream
+
+          socket.current.emit("sharedScreenRequest", {
+            username,
+            status: true,
+          })
+
+          newStream.onended = function () {
+            otherPeerRef.current.replaceTrack(
+              oldStream,
+              streamRef.current.getTracks()[1],
+              streamRef.current
+            )
+            setSharedVideoScreen(false)
+            setFlipWebcam(false)
+            // socket.current.emit("sharedScreenRequest", ("user", false))
+          }
+        }
+      })
   }
 
   // Send file
@@ -567,6 +702,8 @@ const ChatMain = () => {
               selfVideoRef={selfVideoRef}
               friendVideoRef={friendVideoRef}
               acceptCall={acceptCall}
+              shareScreen={shareScreen}
+              flipWebcam={flipWebcam}
             />
             <motion.div animate>
               <ChatTextBar socket={socket} />
@@ -603,6 +740,7 @@ const ChatMain = () => {
             setMsg={setMsg}
             socket={socket}
             type={playBarType}
+            setFlipWebcam={setFlipWebcam}
           />
         )}
       </AnimatePresence>

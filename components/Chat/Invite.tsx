@@ -3,9 +3,15 @@ import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { FaLink } from "react-icons/fa"
+import { useRecoilValue } from "recoil"
+
+import { userSoundOnState } from "../../store/users"
+
 import { copyToClipboard } from "../../utils/copyToClipboard"
 
 const Invite = () => {
+  const soundOn = useRecoilValue(userSoundOnState)
+
   const [copied, setCopied] = useState(false)
 
   let copySounds = new Audio("/sounds/etc_camera_shutter.mp3")
@@ -48,7 +54,9 @@ const Invite = () => {
           onClick={() => {
             copyToClipboard(window.location.href)
             setCopied((prevState) => !prevState)
-            copySounds.play()
+            if (soundOn) {
+              copySounds.play()
+            }
           }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}

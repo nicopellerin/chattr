@@ -101,3 +101,8 @@ export const peerAudioMutedQuery = selector({
     return false
   },
 })
+
+export const shareVideoScreenState = atom<boolean>({
+  key: "shareVideoScreenState",
+  default: false,
+})

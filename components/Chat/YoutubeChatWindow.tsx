@@ -23,7 +23,7 @@ import {
   youtubeVideoMetaDataState,
   youtubeVideoRewindState,
 } from "../../store/youtube"
-import { listUsersState } from "../../store/users"
+import { listUsersState, usernameState } from "../../store/users"
 import { streamOtherPeerState } from "../../store/video"
 
 import { maxLength } from "../../utils/maxLength"
@@ -52,6 +52,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
   const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
   const listUsers = useRecoilValue(listUsersState)
   const streamOtherPeer = useRecoilValue(streamOtherPeerState)
+  const username = useRecoilValue(usernameState)
 
   const [youtubeVideoMuteSound, setYoutubeVideoMuteSound] = useRecoilState(
     youtubeVideoMuteSoundState
@@ -105,7 +106,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
     setYoutubeUrl(url)
     fetchMetaData().then((meta) => {
       setYoutubeVideoMetaData(meta)
-      socket.current.emit("sendYoutubeUrl", { url, meta })
+      socket.current.emit("sendYoutubeUrl", { url, meta, username })
       youtubeChatWindowScreensState.forceTransition("waitingScreen")
     })
   }
