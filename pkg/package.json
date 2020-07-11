@@ -1,0 +1,15 @@
+{
+  "name": "fetch-og-data",
+  "collaborators": [
+    "Nico <nickypellerin@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "fetch_og_data_bg.wasm",
+    "fetch_og_data.js",
+    "fetch_og_data.d.ts"
+  ],
+  "module": "fetch_og_data.js",
+  "types": "fetch_og_data.d.ts",
+  "sideEffects": false
+}
