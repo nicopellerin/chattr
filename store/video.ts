@@ -106,3 +106,8 @@ export const shareVideoScreenState = atom<boolean>({
   key: "shareVideoScreenState",
   default: false,
 })
+
+export const screenSharingStartedState = atom<boolean>({
+  key: "screenSharingStartedState",
+  default: false,
+})

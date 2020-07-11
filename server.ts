@@ -2,6 +2,7 @@ import express, { Request, Response } from "express"
 import http from "http"
 import socket from "socket.io"
 import next from "next"
+import cors from "cors"
 // import redisAdapter from "socket.io-redis"
 
 import {
@@ -16,9 +17,13 @@ import {
 } from "./models"
 
 const app = express()
+app.use(cors())
+
 const server = http.createServer(app)
 
 const io = socket(server)
+
+io.origins("*:*")
 
 const dev = process.env.NODE_ENV !== "production"
 const nextApp = next({ dev })

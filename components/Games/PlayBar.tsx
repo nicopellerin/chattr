@@ -78,14 +78,14 @@ const PlayBar: React.FC<Props> = ({
                   case "screenShare":
                     setMsg("")
                     setShowPlayBar(false)
+                    socket.current.emit("sharedScreenRequestAccepted", true)
                     if (setFlipWebcam) {
                       setFlipWebcam(true)
                     }
-                    socket.current.emit("sharedScreenRequestAccepted", true)
                 }
               }}
             >
-              Play
+              Yup
             </ButtonAccept>
             <ButtonReject
               onClick={() => {

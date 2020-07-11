@@ -21,13 +21,14 @@ const DetectWrongBrowser = dynamic(
   }
 )
 
-// const Rusty = dynamic({
-//   loader: async () => {
-//     const rustMod = await import("../pkg/fetch_og_data")
-
-//     return (props: { str: string }) => <h2>{rustMod.get_og_data(props.str)}</h2>
+// const Rusty = dynamic(
+//   {
+//     loader: async () => {
+//       return (props: { str: string }) => <h2>{res}</h2>
+//     },
 //   },
-// })
+//   { ssr: false }
+// )
 
 const IndexPage = () => {
   const [supportsPWA, setSupportsPWA] = useRecoilState(supportsPWAState)
@@ -86,7 +87,7 @@ const IndexPage = () => {
         />
         <meta property="og:image" content="https://chattr.lol/og-image4.jpg" />
       </Head>
-      {/* <Rusty str="dfdf" /> */}
+      {/* <Rusty str="https://nicopellerin.io" /> */}
       {notSupported ? (
         <DetectWrongBrowser />
       ) : (

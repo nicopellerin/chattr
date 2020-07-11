@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import dompurify from "dompurify"
@@ -7,6 +7,7 @@ import { saveAs } from "file-saver"
 import { FaExpand, FaFileDownload, FaTimes } from "react-icons/fa"
 import { useRecoilValue, useRecoilCallback } from "recoil"
 import CryptoJS from "crypto-js"
+// import useForceUpdate from "use-force-update"
 
 import PhotoExpander from "./PhotoExpander"
 
@@ -56,14 +57,35 @@ const ChatTextMessage: React.FC<Props> = React.memo(
     const [togglePhotoExpander, setTogglePhotoExpander] = useState(false)
     const [selectedPhoto, setSelectedPhoto] = useState("")
 
+    const ogImageRef = useRef("")
+
     const sanitizer = dompurify.sanitize
+
+    const fetchOgImage = async (url: string) => {
+      const rustMod = await import("../../pkg/fetch_og_data")
+      const res = await rustMod.get_og_data(
+        `https://cors-anywhere.herokuapp.com/${url}`
+      )
+
+      ogImageRef.current = res
+      alert(res)
+      // return res
+    }
 
     const convertLinkToHTML = (text: string) => {
       const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
-      return text?.replace(
-        reg,
-        `<a href='$1$2' target='_blank' rel='nofollower'>$1$2</a>`
-      )
+
+      if (text.match(reg)) {
+        ogImageRef.current = ""
+        fetchOgImage(text)
+
+        return text?.replace(
+          reg,
+          `<img style="width: 100%;" src=${ogImageRef.current} /><a href='$1$2' target='_blank' rel='nofollower'>$1$2</a>`
+        )
+      } else {
+        return text
+      }
     }
 
     return (
@@ -75,7 +97,7 @@ const ChatTextMessage: React.FC<Props> = React.memo(
           transition={{ type: "spring", damping: 80 }}
         >
           <Username me={username === usernameMsg}>{usernameMsg}</Username>
-          {msg.startsWith("data:image") ? (
+          {msg.startsWith("data:image") && (
             <>
               <DownloadIcon
                 title="Download"
@@ -91,10 +113,18 @@ const ChatTextMessage: React.FC<Props> = React.memo(
 
               <MessageImage src={msg} alt="Sent photo" />
             </>
+          )}
+          {ogImageRef.current ? (
+            <MessageOutput
+              dangerouslySetInnerHTML={{
+                __html:
+                  `${convertLinkToHTML(sanitizer(decryptedData!))}` || msg,
+              }}
+            />
           ) : (
             <MessageOutput
               dangerouslySetInnerHTML={{
-                __html: convertLinkToHTML(sanitizer(decryptedData!) || msg),
+                __html: convertLinkToHTML(sanitizer(decryptedData!)) || msg,
               }}
             />
           )}

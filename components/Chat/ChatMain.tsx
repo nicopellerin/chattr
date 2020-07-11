@@ -26,6 +26,7 @@ import {
   streamOtherPeerState,
   getUserMediaPeerNotSupportedState,
   shareVideoScreenState,
+  screenSharingStartedState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -99,6 +100,9 @@ const ChatMain = () => {
   )
   const [shareVideoScreen, setSharedVideoScreen] = useRecoilState(
     shareVideoScreenState
+  )
+  const [screenSharingStarted, setScreenSharingStarted] = useRecoilState(
+    screenSharingStartedState
   )
 
   const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
@@ -407,11 +411,21 @@ const ChatMain = () => {
       (status: boolean) => {
         setSharedVideoScreen(true)
         if (status === true) {
-          alert("Accepted")
+          setScreenSharingStarted(true)
         }
       }
     )
   }, [username])
+
+  // Remove "Screen sharing started text" after 3000ms
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+    if (screenSharingStarted) {
+      setTimeout(() => setScreenSharingStarted(false), 3000)
+    }
+
+    return () => clearTimeout(idx)
+  }, [screenSharingStarted])
 
   // Call other connection
   const callFriend = (id: string) => {

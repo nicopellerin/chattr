@@ -27,6 +27,7 @@ import {
   displayTheatreModeState,
   peerAudioMutedQuery,
   streamOtherPeerState,
+  screenSharingStartedState,
 } from "../../store/video"
 import {
   listUsersState,
@@ -109,6 +110,7 @@ const ChatVideo: React.FC<Props> = ({
   const peerAudioMuted = useRecoilValue(peerAudioMutedQuery)
   const otherUsername = useRecoilValue(otherUsernameQuery)
   const streamOtherPeer = useRecoilValue(streamOtherPeerState)
+  const screenSharingStarted = useRecoilValue(screenSharingStartedState)
 
   const [
     messageContainsHeartEmoji,
@@ -204,6 +206,17 @@ const ChatVideo: React.FC<Props> = ({
             {messageContainsHeartEmoji &&
               callAccepted &&
               listUsers?.length >= 2 && <ChatScreenHeart />}
+          </AnimatePresence>
+          <AnimatePresence>
+            {screenSharingStarted && (
+              <ScreenSharingStartedText
+                initial={{ opacity: 0, x: "-50%", y: "-50%" }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                Screen sharing started
+              </ScreenSharingStartedText>
+            )}
           </AnimatePresence>
           <FriendVideo
             style={{
@@ -340,4 +353,19 @@ const ShareScreenButton = styled(ExpandButton)`
     pointer-events: none;
     cursor: initial;
   }
+`
+
+const ScreenSharingStartedText = styled(motion.h2)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 4rem;
+  background: -webkit-linear-gradient(
+    145deg,
+    var(--primaryColor),
+    var(--tertiaryColor)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: 4000;
 `
