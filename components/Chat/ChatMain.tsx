@@ -98,9 +98,6 @@ const ChatMain = () => {
   const [messageDeleted, setMessageDeleted] = useRecoilState(
     messageDeletedState
   )
-  const [shareVideoScreen, setSharedVideoScreen] = useRecoilState(
-    shareVideoScreenState
-  )
   const [screenSharingStarted, setScreenSharingStarted] = useRecoilState(
     screenSharingStartedState
   )
@@ -138,6 +135,7 @@ const ChatMain = () => {
   const setYoutubeVideoRewind = useSetRecoilState(youtubeVideoRewindState)
   const setYoutubeMetaData = useSetRecoilState(youtubeVideoMetaDataState)
   const setUsername = useSetRecoilState(usernameState)
+  const setSharedVideoScreen = useSetRecoilState(shareVideoScreenState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -411,6 +409,19 @@ const ChatMain = () => {
       (status: boolean) => {
         setSharedVideoScreen(true)
         if (status === true) {
+          if (selfPeerRef.current) {
+            selfPeerRef.current.replaceTrack(
+              oldStreamRef.current,
+              newStreamRef.current,
+              streamRef.current
+            )
+          } else if (otherPeerRef.current) {
+            otherPeerRef.current.replaceTrack(
+              oldStreamRef.current,
+              newStreamRef.current,
+              streamRef.current
+            )
+          }
           setScreenSharingStarted(true)
         }
       }
@@ -528,26 +539,6 @@ const ChatMain = () => {
     })
   }
 
-  // Show share screen if request accepted
-  useEffect(() => {
-    if (shareVideoScreen && selfPeerRef.current) {
-      selfPeerRef.current.replaceTrack(
-        oldStreamRef.current,
-        newStreamRef.current,
-        streamRef.current
-      )
-      return
-    }
-    // if (shareVideoScreen && otherPeerRef.current) {
-    //   otherPeerRef.current.replaceTrack(
-    //     oldStreamRef.current,
-    //     newStreamRef.current,
-    //     streamRef.current
-    //   )
-    //   return
-    // }
-  }, [shareVideoScreen, selfPeerRef.current, otherPeerRef.current])
-
   const shareScreen = () => {
     navigator.mediaDevices
       // @ts-ignore
@@ -561,7 +552,7 @@ const ChatMain = () => {
           const oldStream = sendersRef.current.find(
             (sender) => sender.kind === "video"
           )!
-          // setSharedVideoScreen(true)
+
           oldStreamRef.current = oldStream
           newStreamRef.current = newStream
 
@@ -569,8 +560,6 @@ const ChatMain = () => {
             username,
             status: true,
           })
-
-          // socket.current.emit("sharedScreenRequest", true)
 
           newStream.onended = function () {
             selfPeerRef.current.replaceTrack(
@@ -608,7 +597,11 @@ const ChatMain = () => {
             )
             setSharedVideoScreen(false)
             setFlipWebcam(false)
-            // socket.current.emit("sharedScreenRequest", ("user", false))
+
+            socket.current.emit("sharedScreenRequest", {
+              username: "user",
+              status: false,
+            })
           }
         }
       })
