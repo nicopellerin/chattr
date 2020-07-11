@@ -3,12 +3,19 @@ export interface User {
   username: string
 }
 
+export interface OgData {
+  title: string
+  desc: string
+  image: string
+}
+
 export interface Message {
   id: string
   username: string
   status: boolean
   msg: string
   filename?: string
+  ogData: OgData
 }
 
 export interface PhotoGallery {

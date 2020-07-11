@@ -80,7 +80,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
 
   let itiswhatitis = ""
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!msg || listUsers?.length < 2) return
@@ -99,6 +99,18 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       socket.current.emit("messageContainsHeartEmoiji")
     }
 
+    let ogData: any
+
+    const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
+
+    if (msg.match(reg)) {
+      const wasm = await import("../../pkg/fetch_og_data")
+      const res = await wasm.get_og_data(
+        `https://cors-anywhere.herokuapp.com/${msg}`
+      )
+      ogData = JSON.parse(res)
+    }
+
     const encryptedText = CryptoJS.AES.encrypt(
       JSON.stringify(msg),
       String(process.env.NEXT_PUBLIC_KEY)
@@ -108,6 +120,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       id: shortid.generate(),
       username,
       msg: itiswhatitis || encryptedText,
+      ogData,
     })
 
     setMsg("")

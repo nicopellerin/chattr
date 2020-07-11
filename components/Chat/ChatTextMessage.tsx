@@ -13,7 +13,7 @@ import PhotoExpander from "./PhotoExpander"
 import { usernameState } from "../../store/users"
 import { chatWindowState, photoGalleryState } from "../../store/chat"
 
-import { Message, PhotoGallery } from "../../models"
+import { Message, PhotoGallery, OgData } from "../../models"
 
 interface Props {
   msg: string
@@ -22,10 +22,11 @@ interface Props {
   usernameMsg: string
   id: string
   socket?: React.MutableRefObject<SocketIOClient.Socket>
+  ogData?: OgData
 }
 
 const ChatTextMessage: React.FC<Props> = React.memo(
-  ({ msg, decryptedData, filename, usernameMsg, id, socket }) => {
+  ({ msg, decryptedData, filename, usernameMsg, id, socket, ogData }) => {
     const username = useRecoilValue(usernameState)
     const messages = useRecoilValue(chatWindowState)
     const photoGallery = useRecoilValue(photoGalleryState)
@@ -91,10 +92,16 @@ const ChatTextMessage: React.FC<Props> = React.memo(
 
               <MessageImage src={msg} alt="Sent photo" />
             </>
+          ) : ogData ? (
+            <MessageOutput
+              dangerouslySetInnerHTML={{
+                __html: `<a href="${decryptedData}" style="text-decoration: none;" target="_blank" rel="noopener" ><img src="${ogData?.image}" width="100%" /><div style="background: #112; padding: 1rem; margin-bottom: 1rem;"><h4 style="color: var(--secondaryColor); margin-bottom: 0.5rem; font-family: var(--systemFont);">${ogData?.title}</h4><p style="font-size: 1.4rem; margin: 0;">${ogData?.desc}</p></div></a>`,
+              }}
+            />
           ) : (
             <MessageOutput
               dangerouslySetInnerHTML={{
-                __html: convertLinkToHTML(sanitizer(decryptedData!) || msg),
+                __html: convertLinkToHTML(sanitizer(decryptedData!)) || msg,
               }}
             />
           )}

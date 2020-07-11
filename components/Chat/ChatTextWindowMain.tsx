@@ -105,7 +105,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         }
       >
         {msgs.length > 0 &&
-          msgs.map(({ msg, username: usernameMsg, filename, id }) => {
+          msgs.map(({ msg, username: usernameMsg, filename, id, ogData }) => {
             let decryptedData
             // If message is not an image, encrypt it. TODO: Need to fix this
             if (!msg.startsWith("data:image")) {
@@ -125,6 +125,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
                 filename={filename}
                 usernameMsg={usernameMsg}
                 socket={socket}
+                ogData={ogData}
               />
             )
           })}

@@ -2,6 +2,12 @@ import { atom } from "recoil"
 
 import { Message } from "../models"
 
+interface OgData {
+  title: string
+  desc: string
+  image: string
+}
+
 export const chatWindowState = atom<Array<Message>>({
   key: "chatWindowState",
   default: [],
@@ -70,4 +76,9 @@ export const chatHomeState = atom<boolean>({
 export const showPlayBarState = atom<boolean>({
   key: "showPlayBarState",
   default: false,
+})
+
+export const messageOgDataState = atom<OgData>({
+  key: "messageOgDataState",
+  default: { title: "", desc: "", image: "" },
 })
