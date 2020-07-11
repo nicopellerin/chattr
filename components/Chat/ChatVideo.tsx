@@ -243,7 +243,10 @@ const ChatVideo: React.FC<Props> = ({
           title="Share screen"
           initial={{ opacity: 0.5 }}
           whileHover={{ opacity: 1, scale: 1.02 }}
-          disabled={!streamOtherPeer}
+          disabled={
+            !streamOtherPeer ||
+            chatVideoScreensState.isIn("youtubeVideoScreen.visible")
+          }
           onClick={() => {
             shareScreen()
           }}
