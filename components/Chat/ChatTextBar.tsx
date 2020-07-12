@@ -7,6 +7,7 @@ import dynamic from "next/dynamic"
 import { FaVolumeUp } from "react-icons/fa"
 import CryptoJS from "crypto-js"
 import shortid from "shortid"
+import axios from "axios"
 
 const EmojiPicker = dynamic(() => import("./EmojiPicker"), { ssr: false })
 
@@ -105,10 +106,16 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
 
     if (msg.match(reg)) {
       const wasm = await import("../../pkg/fetch_og_data")
-      const res = await wasm.get_og_data(
-        `https://cors-anywhere.herokuapp.com/${msg}`
-      )
-      ogData = JSON.parse(res)
+      try {
+        const url = `https://cors-anywhere.herokuapp.com/${msg}`
+        await axios.get(url, { timeout: 2000 })
+        const res = await wasm.get_og_data(url)
+
+        ogData = JSON.parse(res)
+      } catch (err) {
+        ogData = null
+        console.log("ERRORORORO", err)
+      }
     }
 
     const encryptedText = CryptoJS.AES.encrypt(
