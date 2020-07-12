@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
-* @param {string} url
+* @param {string} html
 * @returns {any}
 */
-export function get_og_data(url: string): any;
+export function get_og_data(html: string): any;

@@ -108,8 +108,8 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       const wasm = await import("../../pkg/fetch_og_data")
       try {
         const url = `https://cors-anywhere.herokuapp.com/${msg}`
-        await axios.get(url, { timeout: 2000 })
-        const res = await wasm.get_og_data(url)
+        const { data } = await axios.get(url, { timeout: 2000 })
+        const res = await wasm.get_og_data(data)
 
         ogData = JSON.parse(res)
       } catch (err) {
