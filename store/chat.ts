@@ -1,6 +1,13 @@
-import { atom } from "recoil"
+import { atom, selector } from "recoil"
 
 import { Message } from "../models"
+import { userLeftChattrState } from "./users"
+import {
+  pressedCallState,
+  callAcceptedState,
+  receivingCallState,
+  streamOtherPeerState,
+} from "./video"
 
 interface OgData {
   title: string
@@ -81,4 +88,19 @@ export const showPlayBarState = atom<boolean>({
 export const messageOgDataState = atom<OgData>({
   key: "messageOgDataState",
   default: { title: "", desc: "", image: "" },
+})
+
+export const userLeftChattrAction = selector({
+  key: "userLeftChattrQuery",
+  get: () => {},
+  set: ({ set }) => {
+    set(userLeftChattrState, true)
+    set(pressedCallState, false)
+    set(callAcceptedState, false)
+    set(receivingCallState, false)
+    set(chatWindowState, [])
+    set(sendingFileState, false)
+    set(fileTransferProgressState, "0")
+    set(streamOtherPeerState, null)
+  },
 })

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import styled, { css } from "styled-components"
 import {
   FaMicrophoneSlash,
@@ -37,6 +37,7 @@ interface Props {
   callFriend: (id: string) => void
   sendFile: (id: string, file: any) => void
   socket: React.MutableRefObject<SocketIOClient.Socket>
+  streamRef: React.MutableRefObject<MediaStream>
 }
 
 interface StyledProps {
@@ -44,7 +45,12 @@ interface StyledProps {
   disabled?: boolean
 }
 
-const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
+const ChatCommands: React.FC<Props> = ({
+  callFriend,
+  socket,
+  sendFile,
+  streamRef,
+}) => {
   const [showSelfWebcam, setShowSelfWebcam] = useRecoilState(
     showSelfWebcamState
   )
@@ -98,6 +104,36 @@ const ChatCommands: React.FC<Props> = ({ callFriend, socket, sendFile }) => {
     setCancelCallRequest(true)
     socket.current.emit("cancelCallRequest")
   }
+
+  // Mute mic
+  useEffect(() => {
+    if (!streamRef?.current?.getAudioTracks()) return
+
+    if (muteMic) {
+      const audio = streamRef?.current?.getAudioTracks()
+      audio[0].enabled = false
+      socket.current.emit("peerMutedAudio", true)
+    } else {
+      const audio = streamRef?.current?.getAudioTracks()
+      audio[0].enabled = true
+      socket.current.emit("peerMutedAudio", false)
+    }
+  }, [muteMic, streamRef?.current])
+
+  // Disable video
+  useEffect(() => {
+    if (!streamRef?.current?.getVideoTracks()) return
+
+    if (!showSelfWebcam) {
+      const video = streamRef?.current?.getVideoTracks()
+      video[0].enabled = false
+      socket.current.emit("peerClosedVideo", true)
+    } else {
+      const video = streamRef?.current?.getVideoTracks()
+      video[0].enabled = true
+      socket.current.emit("peerClosedVideo", false)
+    }
+  }, [showSelfWebcam, streamRef?.current])
 
   return (
     <>

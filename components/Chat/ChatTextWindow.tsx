@@ -35,7 +35,7 @@ export const chatTextWindowScreens = createState({
 })
 
 const ChatTextWindow: React.FC<Props> = ({ socket }) => {
-  const state = useStateDesigner(chatTextWindowScreens)
+  const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
 
   const otherUsername = useRecoilValue(otherUsernameQuery)
   const soundOn = useRecoilValue(userSoundOnState)
@@ -61,6 +61,12 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
     return () => clearTimeout(idx)
   }, [otherUsername])
 
+  useEffect(() => {
+    socket?.current?.on("userLeftChattr", () => {
+      chatTextWindowScreensState.reset()
+    })
+  }, [socket?.current])
+
   return (
     <Wrapper>
       <ChatTextWindowExpandBtn />
@@ -69,7 +75,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       <ChatTextWindowGalleryBtn />
       <YoutubeChatWindowBtn />
       <AnimatePresence initial={false} exitBeforeEnter>
-        {state.whenIn({
+        {chatTextWindowScreensState.whenIn({
           chatScreen: (
             <ChatTextWindowMain showJoinMsg={showJoinMsg} socket={socket} />
           ),

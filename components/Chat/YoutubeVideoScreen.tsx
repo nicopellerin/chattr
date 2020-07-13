@@ -8,11 +8,7 @@ import { FaPlayCircle } from "react-icons/fa"
 
 import YoutubeProgressBar from "./YoutubeProgressBar"
 
-import {
-  showSelfWebcamState,
-  streamState,
-  streamOtherPeerState,
-} from "../../store/video"
+import { showSelfWebcamState, streamOtherPeerState } from "../../store/video"
 import {
   youtubeUrlState,
   playYoutubeVideoState,
@@ -26,12 +22,12 @@ import { youtubeReady } from "../../utils/youtubeReady"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
+  streamRef: React.MutableRefObject<MediaStream>
 }
 
-const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
+const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
   const showWebcam = useRecoilValue(showSelfWebcamState)
   const youtubeUrl = useRecoilValue(youtubeUrlState)
-  const stream = useRecoilValue(streamState)
   const streamOtherPeer = useRecoilValue(streamOtherPeerState)
   const username = useRecoilValue(usernameState)
   const otherUsername = useRecoilValue(otherUsernameQuery)
@@ -179,10 +175,10 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
 
   useEffect(() => {
     if (selfVideo2Ref.current) {
-      selfVideo2Ref.current.srcObject = stream
+      selfVideo2Ref.current.srcObject = streamRef?.current
       friendVideoRef.current.srcObject = streamOtherPeer
     }
-  }, [stream])
+  }, [streamRef?.current])
 
   useEffect(() => {
     if (friendVideoRef.current) {
@@ -244,9 +240,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket }) => {
           </WebcamVideoWrapper>
           <WebcamVideoWrapper>
             <Underlay>
-              <WebcamOtherUsername>
-                {otherUsername}'s webcam
-              </WebcamOtherUsername>
+              <WebcamOtherUsername>{otherUsername}</WebcamOtherUsername>
             </Underlay>
             <FriendVideo
               initial={{ scaleX: -1 }}

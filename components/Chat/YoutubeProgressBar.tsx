@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 
@@ -25,18 +25,24 @@ const YoutubeProgressBar: React.FC<Props> = ({ youtubePlayerRef }) => {
 
   const width = useRecoilValue(youtubeProgressBarWidthState)
 
+  const requestRef = useRef() as React.MutableRefObject<
+    ReturnType<typeof requestAnimationFrame>
+  >
+
+  const barProgress = () => {
+    const playerCurrentTime = youtubePlayerRef?.current?.getCurrentTime()
+    const playerTotalTime = youtubePlayerRef?.current?.getDuration()
+    const playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100
+    progress(playerTimeDifference)
+    requestRef.current = requestAnimationFrame(barProgress)
+  }
+
   useEffect(() => {
-    let idx: ReturnType<typeof setInterval>
     if (playYoutubeVideo) {
-      idx = setInterval(() => {
-        const playerCurrentTime = youtubePlayerRef?.current?.getCurrentTime()
-        const playerTotalTime = youtubePlayerRef?.current?.getDuration()
-        const playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100
-        progress(playerTimeDifference)
-      }, 50)
+      requestRef.current = requestAnimationFrame(barProgress)
     }
 
-    return () => clearInterval(idx)
+    return () => cancelAnimationFrame(requestRef.current)
   }, [playYoutubeVideo])
 
   return <Bar style={{ width: width }} />

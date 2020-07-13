@@ -87,6 +87,7 @@ interface Props {
   selfVideoRef: React.MutableRefObject<HTMLVideoElement>
   friendVideoRef: React.MutableRefObject<HTMLVideoElement>
   socket: React.MutableRefObject<SocketIOClient.Socket>
+  streamRef: React.MutableRefObject<MediaStream>
   shareScreen: () => void
   flipWebcam: boolean
 }
@@ -96,6 +97,7 @@ const ChatVideo: React.FC<Props> = ({
   selfVideoRef,
   friendVideoRef,
   socket,
+  streamRef,
   shareScreen,
   flipWebcam,
 }) => {
@@ -171,7 +173,9 @@ const ChatVideo: React.FC<Props> = ({
         "incomingCallScreen.visible": (
           <ChatScreenIncomingCall acceptCall={acceptCall} socket={socket} />
         ),
-        "youtubeVideoScreen.visible": <YoutubeVideoScreen socket={socket} />,
+        "youtubeVideoScreen.visible": (
+          <YoutubeVideoScreen socket={socket} streamRef={streamRef} />
+        ),
       })}
       {catSliderScreenState.whenIn({
         visible: (

@@ -11,15 +11,12 @@ import shortid from "shortid"
 import { useStateDesigner } from "@state-designer/react"
 
 import {
-  streamState,
   receivingCallState,
   callerState,
   callerSignalState,
   callAcceptedState,
   cancelCallRequestState,
   pressedCallState,
-  muteMicState,
-  showSelfWebcamState,
   getUserMediaNotSupportedState,
   displayTheatreModeState,
   peerAudioMutedState,
@@ -39,12 +36,12 @@ import {
   chatWindowState,
   chatUserIsTypingState,
   fileTransferProgressState,
-  sendingFileState,
   expandChatWindowState,
   messageDeletedState,
   messageContainsHeartEmojiState,
   photoGalleryState,
   showPlayBarState,
+  userLeftChattrAction,
 } from "../../store/chat"
 import {
   playerXGlobalState,
@@ -63,7 +60,7 @@ import {
 import ChatVideo, { chatVideoScreens } from "./ChatVideo"
 import ChatTextBar from "./ChatTextBar"
 import ChatCommands from "./ChatCommands"
-import ChatTextWindow, { chatTextWindowScreens } from "./ChatTextWindow"
+import ChatTextWindow from "./ChatTextWindow"
 import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
 import PlayBar from "../Games/PlayBar"
@@ -83,12 +80,11 @@ enum SquareValue {
 const ChatMain = () => {
   const state = useStateDesigner(gameScreens)
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
-  const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
+  // const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
   const youtubeChatWindowScreensState = useStateDesigner(
     youtubeChatWindowScreens
   )
 
-  const [stream, setStream] = useRecoilState(streamState)
   const [selfId, setSelfId] = useRecoilState(selfIdState)
   const [caller, setCaller] = useRecoilState(callerState)
   const [callerSignal, setCallerSignal] = useRecoilState(callerSignalState)
@@ -107,7 +103,6 @@ const ChatMain = () => {
   const setReceivingCall = useSetRecoilState(receivingCallState)
   const setPhotoGallery = useSetRecoilState(photoGalleryState)
   const setListUsers = useSetRecoilState(listUsersState)
-  const setSendingFile = useSetRecoilState(sendingFileState)
   const setFileTransferProgress = useSetRecoilState(fileTransferProgressState)
   const setChatWelcomeMessage = useSetRecoilState(chatWelcomeMessageState)
   const setChatUserIsTyping = useSetRecoilState(chatUserIsTypingState)
@@ -136,11 +131,10 @@ const ChatMain = () => {
   const setYoutubeMetaData = useSetRecoilState(youtubeVideoMetaDataState)
   const setUsername = useSetRecoilState(usernameState)
   const setSharedVideoScreen = useSetRecoilState(shareVideoScreenState)
+  const setUserLeftChattrAction = useSetRecoilState(userLeftChattrAction)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
-  const micMuted = useRecoilValue(muteMicState)
-  const showSelfWebcam = useRecoilValue(showSelfWebcamState)
   const expandChatWindow = useRecoilValue(expandChatWindowState)
   const showPlayBar = useRecoilValue(showPlayBarState)
 
@@ -167,7 +161,6 @@ const ChatMain = () => {
   const room = query["room"]
 
   useEffect(() => {
-    // if (!username) return
     const tempUsername = "Anonymous"
 
     socket.current = io.connect(`/?room=${room}`, {
@@ -187,7 +180,7 @@ const ChatMain = () => {
           audio: true,
         })
         .then((stream: MediaStream) => {
-          setStream(stream)
+          // setStream(stream)
           streamRef.current = stream
           if (selfVideoRef.current) {
             selfVideoRef.current.srcObject = stream
@@ -253,18 +246,10 @@ const ChatMain = () => {
 
     // Other user has left the chat
     socket.current.on("userLeftChattr", () => {
-      setUserLeftChattr(true)
-      setPressedCall(false)
-      setCallAccepted(false)
-      setReceivingCall(false)
-      setTimeout(() => setUserLeftChattr(false), 3000)
-      setChatMsgs([])
-      setSendingFile(false)
-      setFileTransferProgress("0")
+      setUserLeftChattrAction()
       chatVideoScreensState.reset()
-      chatTextWindowScreensState.reset()
       youtubeChatWindowScreensState.reset()
-      setStreamOtherPeer(null)
+      setTimeout(() => setUserLeftChattr(false), 3000)
       if (friendVideoRef.current) {
         friendVideoRef.current.srcObject = null
       }
@@ -654,36 +639,6 @@ const ChatMain = () => {
     }
   }, [cancelCallRequest])
 
-  // Mute mic
-  useEffect(() => {
-    if (!stream?.getAudioTracks()) return
-
-    if (micMuted) {
-      const audio = stream.getAudioTracks()
-      audio[0].enabled = false
-      socket.current.emit("peerMutedAudio", true)
-    } else {
-      const audio = stream.getAudioTracks()
-      audio[0].enabled = true
-      socket.current.emit("peerMutedAudio", false)
-    }
-  }, [micMuted, stream])
-
-  // Disable video
-  useEffect(() => {
-    if (!stream?.getVideoTracks()) return
-
-    if (!showSelfWebcam) {
-      const video = stream.getVideoTracks()
-      video[0].enabled = false
-      socket.current.emit("peerClosedVideo", true)
-    } else {
-      const video = stream.getVideoTracks()
-      video[0].enabled = true
-      socket.current.emit("peerClosedVideo", false)
-    }
-  }, [showSelfWebcam, stream])
-
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
     if (messageDeleted) {
@@ -705,6 +660,7 @@ const ChatMain = () => {
             }}
           >
             <ChatVideo
+              streamRef={streamRef}
               socket={socket}
               selfVideoRef={selfVideoRef}
               friendVideoRef={friendVideoRef}
@@ -729,6 +685,7 @@ const ChatMain = () => {
                       callFriend={callFriend}
                       sendFile={sendFile}
                       socket={socket}
+                      streamRef={streamRef}
                     />
                   </motion.div>
                 </>

@@ -2,11 +2,6 @@ import { atom, selector } from "recoil"
 
 import { listUsersState } from "./users"
 
-export const streamState = atom<MediaStream | any>({
-  key: "streamState",
-  default: null,
-})
-
 export const streamOtherPeerState = atom<MediaStream | any>({
   key: "streamOtherPeerState",
   default: null,
