@@ -199,7 +199,9 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
           isPlaying={playYoutubeVideo}
           onClick={() => socket.current.emit("playYoutubeVideo")}
         >
-          <YoutubeVideo animate id="player" />
+          <React.Suspense fallback={null}>
+            <YoutubeVideo animate id="player" />
+          </React.Suspense>
           <AnimatePresence>
             {!playYoutubeVideo && (
               <Overlay
@@ -222,36 +224,38 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
           </AnimatePresence>
           <YoutubeProgressBar youtubePlayerRef={youtubePlayerRef} />
         </YoutubeVideoWrapper>
-        <VideoContainer>
-          <WebcamVideoWrapper>
-            <SelfVideo
-              muted
-              initial={{ scaleX: -1 }}
-              animate={{ scaleX: -1 }}
-              exit={{ scaleX: 0 }}
-              ref={selfVideo2Ref}
-              playsInline
-              autoPlay
-              showWebcam={showWebcam}
-            />
-            <Underlay>
-              <WebcamUsername>{username}</WebcamUsername>
-            </Underlay>
-          </WebcamVideoWrapper>
-          <WebcamVideoWrapper>
-            <Underlay>
-              <WebcamOtherUsername>{otherUsername}</WebcamOtherUsername>
-            </Underlay>
-            <FriendVideo
-              initial={{ scaleX: -1 }}
-              animate={{ scaleX: -1 }}
-              exit={{ scaleX: 0 }}
-              ref={friendVideoRef}
-              playsInline
-              autoPlay
-            />
-          </WebcamVideoWrapper>
-        </VideoContainer>
+        <React.Suspense fallback={null}>
+          <VideoContainer>
+            <WebcamVideoWrapper>
+              <SelfVideo
+                muted
+                initial={{ scaleX: -1 }}
+                animate={{ scaleX: -1 }}
+                exit={{ scaleX: 0 }}
+                ref={selfVideo2Ref}
+                playsInline
+                autoPlay
+                showWebcam={showWebcam}
+              />
+              <Underlay>
+                <WebcamUsername>{username}</WebcamUsername>
+              </Underlay>
+            </WebcamVideoWrapper>
+            <WebcamVideoWrapper>
+              <Underlay>
+                <WebcamOtherUsername>{otherUsername}</WebcamOtherUsername>
+              </Underlay>
+              <FriendVideo
+                initial={{ scaleX: -1 }}
+                animate={{ scaleX: -1 }}
+                exit={{ scaleX: 0 }}
+                ref={friendVideoRef}
+                playsInline
+                autoPlay
+              />
+            </WebcamVideoWrapper>
+          </VideoContainer>
+        </React.Suspense>
       </Container>
     </Wrapper>
   )

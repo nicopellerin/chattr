@@ -6,19 +6,38 @@ import { useRecoilValue, useRecoilState } from "recoil"
 import { FaExpand, FaMicrophoneSlash, FaLaptop } from "react-icons/fa"
 import dynamic from "next/dynamic"
 import { createState } from "@state-designer/core"
+import { useStateDesigner } from "@state-designer/react"
 
 import ChatScreenWaitingForConnect from "./ChatScreenWaitingForConnect"
-import ChatScreenCalling from "./ChatScreenCalling"
-import ChatScreenNoVideo from "./ChatScreenNoVideo"
-import ChatScreenIncomingCall from "./ChatScreenIncomingCall"
-import ChatScreenNotSupported from "./ChatScreenNotSupported"
-// import ChatScreenVisualiser from "./ChatScreenVisualiser"
+
+const ChatScreenCalling = dynamic(() => import("./ChatScreenCalling"), {
+  ssr: false,
+})
+const ChatScreenNoVideo = dynamic(() => import("./ChatScreenNoVideo"), {
+  ssr: false,
+})
+const ChatScreenIncomingCall = dynamic(
+  () => import("./ChatScreenIncomingCall"),
+  {
+    ssr: false,
+  }
+)
+const ChatScreenNotSupported = dynamic(
+  () => import("./ChatScreenNotSupported"),
+  {
+    ssr: false,
+  }
+)
+const ChatScreenPeerNoVideo = dynamic(() => import("./ChatScreenPeerNoVideo"), {
+  ssr: false,
+})
+
+import YoutubeVideoScreen from "./YoutubeVideoScreen"
 
 const Slider = dynamic(() => import("./Slider"), { ssr: false })
 const ChatScreenHeart = dynamic(() => import("./ChatScreenHeart"), {
   ssr: false,
 })
-import ChatScreenPeerNoVideo from "./ChatScreenPeerNoVideo"
 
 import {
   showSelfWebcamState,
@@ -35,8 +54,6 @@ import {
   otherUsernameQuery,
 } from "../../store/users"
 import { messageContainsHeartEmojiState } from "../../store/chat"
-import { useStateDesigner } from "@state-designer/react"
-import YoutubeVideoScreen from "./YoutubeVideoScreen"
 
 export const chatVideoScreens = createState({
   id: "chatTextWindowScreens",
