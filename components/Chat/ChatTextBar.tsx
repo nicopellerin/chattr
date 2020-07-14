@@ -49,6 +49,8 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const [msg, setMsg] = useState("")
   const [togglePicker, setTogglePicker] = useState(false)
 
+  const noConnection = listUsers?.length < 2
+
   let count = useRef(0)
   const inputTextRef = useRef() as React.MutableRefObject<HTMLInputElement>
 
@@ -78,6 +80,12 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       sound.volume = 0.5
     })
   }, [socket.current])
+
+  useEffect(() => {
+    if (noConnection) {
+      setMsg("")
+    }
+  }, [noConnection])
 
   let itiswhatitis = ""
 
@@ -144,8 +152,6 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       })
     }
   }, [msg])
-
-  const noConnection = listUsers?.length < 2
 
   return (
     <>

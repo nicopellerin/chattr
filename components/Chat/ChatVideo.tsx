@@ -451,20 +451,26 @@ const RotateIcon = styled(FaRedoAlt)`
 `
 
 const ExpandButton = styled(motion.button)`
-  background: transparent;
+  background: rgba(0, 0, 0, 0.4);
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   outline: transparent;
   border: none;
   color: #ffe9ff;
   font-size: 2.4rem;
   cursor: pointer;
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 1.5rem;
   right: 1rem;
   z-index: 210000;
 `
 
 const ShareScreenButton = styled(ExpandButton)`
-  bottom: 4.5rem;
+  bottom: 5.5rem;
 
   &:disabled {
     pointer-events: none;
@@ -473,7 +479,7 @@ const ShareScreenButton = styled(ExpandButton)`
 `
 
 const ScreenshotButton = styled(ExpandButton)`
-  bottom: 8.5rem;
+  bottom: 9.5rem;
 
   &:disabled {
     pointer-events: none;
