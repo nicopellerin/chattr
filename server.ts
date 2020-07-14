@@ -215,6 +215,10 @@ io.on("connection", (socket) => {
   socket.on("sharedScreenRequestAccepted", (status: boolean) => {
     socket.broadcast.to(room).emit("sharedScreenRequestAcceptedGlobal", status)
   })
+
+  socket.on("flipSelfVideo", (status: boolean) => {
+    socket.broadcast.to(room).emit("flipFriendVideo", status)
+  })
 })
 
 nextApp.prepare().then(() => {

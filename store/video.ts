@@ -106,3 +106,13 @@ export const screenSharingStartedState = atom<boolean>({
   key: "screenSharingStartedState",
   default: false,
 })
+
+export const flipSelfVideoState = atom<boolean>({
+  key: "flipSelfVideoState",
+  default: false,
+})
+
+export const flipFriendVideoState = atom<boolean>({
+  key: "flipFriendVideoState",
+  default: false,
+})

@@ -3,7 +3,13 @@ import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
-import { FaExpand, FaMicrophoneSlash, FaLaptop, FaCamera } from "react-icons/fa"
+import {
+  FaExpand,
+  FaMicrophoneSlash,
+  FaLaptop,
+  FaCamera,
+  FaRedoAlt,
+} from "react-icons/fa"
 import dynamic from "next/dynamic"
 import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
@@ -50,6 +56,8 @@ import {
   streamOtherPeerState,
   screenSharingStartedState,
   shareVideoScreenState,
+  flipSelfVideoState,
+  flipFriendVideoState,
 } from "../../store/video"
 import {
   listUsersState,
@@ -134,6 +142,7 @@ const ChatVideo: React.FC<Props> = ({
   const streamOtherPeer = useRecoilValue(streamOtherPeerState)
   const screenSharingStarted = useRecoilValue(screenSharingStartedState)
   const shareVideoScreen = useRecoilValue(shareVideoScreenState)
+  const flipFriendVideo = useRecoilValue(flipFriendVideoState)
 
   const [
     messageContainsHeartEmoji,
@@ -142,6 +151,7 @@ const ChatVideo: React.FC<Props> = ({
   const [displayTheatreMode, setDisplayTheatreMode] = useRecoilState(
     displayTheatreModeState
   )
+  const [flipSelfVideo, setFlipSelfVideo] = useRecoilState(flipSelfVideoState)
 
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
   const friendVideoCanvasRef = useRef() as React.MutableRefObject<
@@ -194,6 +204,14 @@ const ChatVideo: React.FC<Props> = ({
       .catch((error: Error) => console.error("takePhoto() error:", error))
   }
 
+  useEffect(() => {
+    socket?.current?.emit("flipSelfVideo", flipSelfVideo)
+  }, [flipSelfVideo])
+
+  const flipSelfVideoAction = () => {
+    setFlipSelfVideo((prevState) => !prevState)
+  }
+
   // If streaming is not supported
   if (getUserMediaNotSupported) {
     socket.current.emit("otherUserMediaNotSupported", true)
@@ -236,26 +254,31 @@ const ChatVideo: React.FC<Props> = ({
       })}
       <>
         <>
-          <SelfVideo
-            muted
-            style={{
-              visibility: chatVideoScreensState.isIn(
-                "youtubeVideoScreen.visible"
-              )
-                ? "hidden"
-                : "visible",
-            }}
-            initial={{ scaleX: -1 }}
+          <SelfVideoWrapper
+            animate
             drag
             dragMomentum={false}
             // @ts-ignore
             dragConstraints={contraintsRef}
-            ref={selfVideoRef}
-            playsInline
-            autoPlay
             theatreMode={displayTheatreMode}
             showWebcam={showWebcam}
-          />
+          >
+            <SelfVideo
+              muted
+              style={{
+                visibility: chatVideoScreensState.isIn(
+                  "youtubeVideoScreen.visible"
+                )
+                  ? "hidden"
+                  : "visible",
+              }}
+              animate={{ scaleX: flipSelfVideo ? 1 : -1 }}
+              ref={selfVideoRef}
+              playsInline
+              autoPlay
+            />
+            <RotateIcon onClick={flipSelfVideoAction} />
+          </SelfVideoWrapper>
           <AnimatePresence>
             {messageContainsHeartEmoji &&
               callAccepted &&
@@ -281,6 +304,7 @@ const ChatVideo: React.FC<Props> = ({
                 : "visible",
               transform: flipWebcam ? `scaleX(1)` : `scaleX(-1)`,
             }}
+            animate={{ scaleX: flipFriendVideo ? 1 : -1 }}
             theatreMode={displayTheatreMode}
             ref={friendVideoRef}
             playsInline
@@ -383,24 +407,44 @@ const FriendAudioMuted = styled(motion.span)`
   margin: 0;
 `
 
-const SelfVideo = styled(motion.video)`
+const SelfVideoWrapper = styled(motion.div)`
   height: 130px;
   width: 200px;
-  object-fit: cover;
+  opacity: ${(props: { showWebcam: boolean }) => (props.showWebcam ? 1 : 0)};
+  display: ${(props: { theatreMode: boolean; showWebcam: boolean }) =>
+    props.theatreMode ? "none" : "block"};
   position: absolute;
   bottom: 3vh;
   left: 3vh;
   z-index: 19;
+`
+
+const SelfVideo = styled(motion.video)`
+  height: 130px;
+  width: 200px;
+  object-fit: cover;
   margin: 0;
   padding: 0;
   border-radius: 3px;
   cursor: move;
-  opacity: ${(props: { showWebcam: boolean }) => (props.showWebcam ? 1 : 0)};
-  display: ${(props: { theatreMode: boolean; showWebcam: boolean }) =>
-    props.theatreMode ? "none" : "block"};
 
   @media (max-width: 500px) {
     display: none;
+  }
+`
+
+const RotateIcon = styled(FaRedoAlt)`
+  position: absolute;
+  right: 1rem;
+  bottom: 0.8rem;
+  font-size: 1.7rem;
+  color: var(--secondaryColor);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+
+  ${SelfVideoWrapper}:hover & {
+    opacity: 1;
   }
 `
 

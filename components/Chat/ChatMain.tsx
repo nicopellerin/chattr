@@ -24,6 +24,7 @@ import {
   getUserMediaPeerNotSupportedState,
   shareVideoScreenState,
   screenSharingStartedState,
+  flipFriendVideoState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -132,6 +133,7 @@ const ChatMain = () => {
   const setUsername = useSetRecoilState(usernameState)
   const setSharedVideoScreen = useSetRecoilState(shareVideoScreenState)
   const setUserLeftChattrAction = useSetRecoilState(userLeftChattrAction)
+  const setFlipFriendVideo = useSetRecoilState(flipFriendVideoState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -417,6 +419,10 @@ const ChatMain = () => {
         }
       }
     )
+
+    socket.current.on("flipFriendVideo", (status: boolean) => {
+      setFlipFriendVideo(status)
+    })
   }, [username])
 
   // Remove "Screen sharing started text" after 3000ms

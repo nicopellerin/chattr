@@ -46,7 +46,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
   const [videoPaused, setVideoPaused] = useState(false)
 
   const youtubePlayerRef = useRef() as React.MutableRefObject<any>
-  const selfVideo2Ref = useRef() as React.MutableRefObject<HTMLVideoElement>
+  const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const friendVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
   const youtubeVideoRef = useRef() as React.MutableRefObject<HTMLDivElement>
 
@@ -158,8 +158,8 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
   }, [youtubeVideoRewind])
 
   useEffect(() => {
-    if (selfVideo2Ref.current) {
-      selfVideo2Ref.current.srcObject = streamRef?.current
+    if (selfVideoRef.current) {
+      selfVideoRef.current.srcObject = streamRef?.current
       friendVideoRef.current.srcObject = streamOtherPeer
     }
   }, [streamRef?.current])
@@ -216,7 +216,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
                 initial={{ scaleX: -1 }}
                 animate={{ scaleX: -1 }}
                 exit={{ scaleX: 0 }}
-                ref={selfVideo2Ref}
+                ref={selfVideoRef}
                 playsInline
                 autoPlay
                 showWebcam={showWebcam}
