@@ -10,6 +10,7 @@ import { showPlayBarState } from "../../store/chat"
 
 import { gameScreens } from "./TicTacToe/Game"
 import { chatTextWindowScreens } from "../Chat/ChatTextWindow"
+import { shareVideoScreenState } from "../../store/video"
 
 interface Props {
   msg: string
@@ -30,6 +31,7 @@ const PlayBar: React.FC<Props> = ({
   const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
 
   const setShowPlayBar = useSetRecoilState(showPlayBarState)
+  const setSharedVideoScreen = useSetRecoilState(shareVideoScreenState)
 
   const gameSound = new Audio("/play-game.mp3")
   gameSound.volume = 0.5
@@ -78,6 +80,7 @@ const PlayBar: React.FC<Props> = ({
                   case "screenShare":
                     setMsg("")
                     setShowPlayBar(false)
+                    setSharedVideoScreen(true)
                     socket.current.emit("sharedScreenRequestAccepted", true)
                     if (setFlipWebcam) {
                       setFlipWebcam(true)

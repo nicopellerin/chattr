@@ -385,7 +385,6 @@ const ChatMain = () => {
           setMsg(`${data.username} wants to share its screen with you`)
           setPlayBarType("screenShare")
           setShowPlayBar(true)
-          setSharedVideoScreen(true)
         } else {
           setSharedVideoScreen(false)
           setFlipWebcam(false)
@@ -396,7 +395,6 @@ const ChatMain = () => {
     socket.current.on(
       "sharedScreenRequestAcceptedGlobal",
       (status: boolean) => {
-        setSharedVideoScreen(true)
         if (status === true) {
           if (selfPeerRef.current) {
             selfPeerRef.current.replaceTrack(
