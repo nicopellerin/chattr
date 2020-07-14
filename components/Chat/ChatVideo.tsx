@@ -3,12 +3,12 @@ import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
-import { FaExpand, FaMicrophoneSlash, FaLaptop } from "react-icons/fa"
+import { FaExpand, FaMicrophoneSlash, FaLaptop, FaCamera } from "react-icons/fa"
 import dynamic from "next/dynamic"
 import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
-// import html2canvas from "html2canvas"
-// import { saveAs } from "file-saver"
+import { saveAs } from "file-saver"
+import { detect } from "detect-browser"
 
 import ChatScreenWaitingForConnect from "./ChatScreenWaitingForConnect"
 
@@ -49,6 +49,7 @@ import {
   peerAudioMutedQuery,
   streamOtherPeerState,
   screenSharingStartedState,
+  shareVideoScreenState,
 } from "../../store/video"
 import {
   listUsersState,
@@ -132,6 +133,7 @@ const ChatVideo: React.FC<Props> = ({
   const otherUsername = useRecoilValue(otherUsernameQuery)
   const streamOtherPeer = useRecoilValue(streamOtherPeerState)
   const screenSharingStarted = useRecoilValue(screenSharingStartedState)
+  const shareVideoScreen = useRecoilValue(shareVideoScreenState)
 
   const [
     messageContainsHeartEmoji,
@@ -142,7 +144,9 @@ const ChatVideo: React.FC<Props> = ({
   )
 
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
-  const friendVideoCanvasRef = useRef() as React.Ref<HTMLCanvasElement>
+  const friendVideoCanvasRef = useRef() as React.MutableRefObject<
+    HTMLCanvasElement
+  >
 
   let sound = new Audio("/sounds/expand.mp3")
   sound.volume = 0.4
@@ -164,35 +168,31 @@ const ChatVideo: React.FC<Props> = ({
     return () => clearTimeout(idx)
   }, [messageContainsHeartEmoji])
 
-  // const downloadOgImage = async () => {
-  //   const canvas = friendVideoCanvasRef.current
-  //   const ctx = canvas.getContext("2d")
-  //   const width = friendVideoRef.current.width
-  //   const height = friendVideoRef.current.height
-  //   canvas.width = width
-  //   canvas.height = height
-  //   ctx.drawImage(friendVideoRef.current, 0, 0, width, height)
-  //   friendVideoRef.current.style.backgroundImage = `url(${canvas.toDataURL()})`
-  //   friendVideoRef.current.style.backgroundSize = "cover"
-  //   ctx.clearRect(0, 0, width, height)
+  const browser = detect()
 
-  //   html2canvas(friendVideoRef.current, {
-  //     scale: 2,
-  //     scrollX: 0.5,
-  //     scrollY: 0.5,
-  //     // scrollY: -window.scrollY,
-  //     useCORS: true,
-  //   }).then((canvas: HTMLCanvasElement) => {
-  //     const data = canvas.toDataURL("image/png")
-  //     const src = encodeURI(data)
-  //     console.log(src)
-  //     const filename = `og-image-${new Date().getTime()}`
-  //     saveAs(src, filename)
-  //   })
+  const supported = browser?.name !== "firefox"
 
-  //   //   const data = canvas.toDataURL("image/png")
-  //   //   console.log(data)
-  // }
+  // Capture screenshot when in screen-sharing mode
+  const captureScreenshot = () => {
+    const mediaStreamTrack = streamOtherPeer?.getVideoTracks()[0]
+    // @ts-ignore
+    const imageCapture = new ImageCapture(mediaStreamTrack)
+
+    imageCapture
+      .grabFrame()
+      .then((bitmap: any) => {
+        let canvas = friendVideoCanvasRef.current
+        let context = canvas.getContext("2d")
+        canvas.width = bitmap.width
+        canvas.height = bitmap.height
+        context!.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height)
+        const data = canvas.toDataURL("image/png")
+        const src = encodeURI(data)
+        const filename = `Chattr-Screenshot-${new Date().getTime()}`
+        saveAs(src, filename)
+      })
+      .catch((error: Error) => console.error("takePhoto() error:", error))
+  }
 
   // If streaming is not supported
   if (getUserMediaNotSupported) {
@@ -308,7 +308,16 @@ const ChatVideo: React.FC<Props> = ({
         >
           <FaLaptop />
         </ShareScreenButton>
-        {/* <button onClick={async () => await downloadOgImage()}>Screen</button> */}
+        {shareVideoScreen && supported && (
+          <ScreenshotButton
+            title="Take screenshot"
+            initial={{ opacity: 0.5 }}
+            whileHover={{ opacity: 1, scale: 1.02 }}
+            onClick={captureScreenshot}
+          >
+            <FaCamera />
+          </ScreenshotButton>
+        )}
         <ExpandButton
           title="Theatre mode"
           initial={{ opacity: 0.5 }}
@@ -407,6 +416,15 @@ const ExpandButton = styled(motion.button)`
 
 const ShareScreenButton = styled(ExpandButton)`
   bottom: 4.5rem;
+
+  &:disabled {
+    pointer-events: none;
+    cursor: initial;
+  }
+`
+
+const ScreenshotButton = styled(ExpandButton)`
+  bottom: 8.5rem;
 
   &:disabled {
     pointer-events: none;

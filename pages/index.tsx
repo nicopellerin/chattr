@@ -21,15 +21,6 @@ const DetectWrongBrowser = dynamic(
   }
 )
 
-// const Rusty = dynamic(
-//   {
-//     loader: async () => {
-//       return (props: { str: string }) => <h2>{res}</h2>
-//     },
-//   },
-//   { ssr: false }
-// )
-
 const IndexPage = () => {
   const [supportsPWA, setSupportsPWA] = useRecoilState(supportsPWAState)
 
@@ -87,7 +78,6 @@ const IndexPage = () => {
         />
         <meta property="og:image" content="https://chattr.lol/og-image4.jpg" />
       </Head>
-      {/* <Rusty str="https://nicopellerin.io" /> */}
       {notSupported ? (
         <DetectWrongBrowser />
       ) : (
