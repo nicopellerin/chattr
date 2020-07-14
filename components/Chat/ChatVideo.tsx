@@ -7,6 +7,8 @@ import { FaExpand, FaMicrophoneSlash, FaLaptop } from "react-icons/fa"
 import dynamic from "next/dynamic"
 import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
+// import html2canvas from "html2canvas"
+// import { saveAs } from "file-saver"
 
 import ChatScreenWaitingForConnect from "./ChatScreenWaitingForConnect"
 
@@ -140,6 +142,7 @@ const ChatVideo: React.FC<Props> = ({
   )
 
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
+  const friendVideoCanvasRef = useRef() as React.Ref<HTMLCanvasElement>
 
   let sound = new Audio("/sounds/expand.mp3")
   sound.volume = 0.4
@@ -160,6 +163,36 @@ const ChatVideo: React.FC<Props> = ({
     }
     return () => clearTimeout(idx)
   }, [messageContainsHeartEmoji])
+
+  // const downloadOgImage = async () => {
+  //   const canvas = friendVideoCanvasRef.current
+  //   const ctx = canvas.getContext("2d")
+  //   const width = friendVideoRef.current.width
+  //   const height = friendVideoRef.current.height
+  //   canvas.width = width
+  //   canvas.height = height
+  //   ctx.drawImage(friendVideoRef.current, 0, 0, width, height)
+  //   friendVideoRef.current.style.backgroundImage = `url(${canvas.toDataURL()})`
+  //   friendVideoRef.current.style.backgroundSize = "cover"
+  //   ctx.clearRect(0, 0, width, height)
+
+  //   html2canvas(friendVideoRef.current, {
+  //     scale: 2,
+  //     scrollX: 0.5,
+  //     scrollY: 0.5,
+  //     // scrollY: -window.scrollY,
+  //     useCORS: true,
+  //   }).then((canvas: HTMLCanvasElement) => {
+  //     const data = canvas.toDataURL("image/png")
+  //     const src = encodeURI(data)
+  //     console.log(src)
+  //     const filename = `og-image-${new Date().getTime()}`
+  //     saveAs(src, filename)
+  //   })
+
+  //   //   const data = canvas.toDataURL("image/png")
+  //   //   console.log(data)
+  // }
 
   // If streaming is not supported
   if (getUserMediaNotSupported) {
@@ -253,6 +286,7 @@ const ChatVideo: React.FC<Props> = ({
             playsInline
             autoPlay
           />
+          <canvas hidden ref={friendVideoCanvasRef} />
           {peerAudioMuted && (
             <FriendAudioMuted animate={{ y: [10, 0], opacity: [0, 1] }}>
               {otherUsername} muted mic{" "}
@@ -274,6 +308,7 @@ const ChatVideo: React.FC<Props> = ({
         >
           <FaLaptop />
         </ShareScreenButton>
+        {/* <button onClick={async () => await downloadOgImage()}>Screen</button> */}
         <ExpandButton
           title="Theatre mode"
           initial={{ opacity: 0.5 }}

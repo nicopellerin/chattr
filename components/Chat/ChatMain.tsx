@@ -176,7 +176,11 @@ const ChatMain = () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({
-          video: { width: { ideal: 4096 }, height: { ideal: 2160 } },
+          video: {
+            width: { ideal: 4096 },
+            height: { ideal: 2160 },
+            facingMode: "environment",
+          },
           audio: true,
         })
         .then((stream: MediaStream) => {
@@ -529,7 +533,10 @@ const ChatMain = () => {
       // @ts-ignore
       .getDisplayMedia({
         cursor: true,
-        // video: true,
+        video: {
+          width: { ideal: 4096 },
+          height: { ideal: 2160 },
+        },
       })
       .then((shareStream: MediaStream) => {
         if (selfPeerRef.current) {
