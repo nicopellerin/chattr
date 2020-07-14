@@ -451,7 +451,7 @@ const RotateIcon = styled(FaRedoAlt)`
 `
 
 const ExpandButton = styled(motion.button)`
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6);
   height: 3rem;
   width: 3rem;
   border-radius: 50%;
