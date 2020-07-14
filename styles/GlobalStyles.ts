@@ -65,7 +65,7 @@ body {
 h1, h2, h3, h4, h5 {
   margin-top: 0;
   color: #333;
-  font-family: 'Lora', cursive;
+  font-family: 'Lora', sans-serif;
 }
 
 h1, h2 {

@@ -55,6 +55,7 @@
     "three": "^0.118.3",
     "tracking": "^1.1.3",
     "typeface-inter": "^3.12.0",
+    "typeface-lora": "^0.0.72",
     "use-force-update": "^1.0.7"
   },
   "devDependencies": {

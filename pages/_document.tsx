@@ -42,10 +42,10 @@ export default class MyDocument extends Document {
           <meta name="theme-color" content="#8352FD" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link rel="preconnect" href="https://www.google-analytics.com" />
-          <link
+          {/* <link
             href="https://fonts.googleapis.com/css2?family=Lora:wght@700&display=swap"
             rel="stylesheet"
-          />
+          /> */}
           <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
