@@ -282,6 +282,7 @@ const ChatMain = () => {
       setCallAccepted(false)
       setReceivingCall(false)
       setCancelCallRequest(true)
+      setStreamOtherPeer(null)
       chatVideoScreensState.forceTransition("noVideoScreen")
       youtubeChatWindowScreensState.reset()
 

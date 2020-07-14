@@ -294,20 +294,23 @@ const ChatVideo: React.FC<Props> = ({
             </FriendAudioMuted>
           )}
         </>
-        <ShareScreenButton
-          title="Share screen"
-          initial={{ opacity: 0.5 }}
-          whileHover={{ opacity: 1, scale: 1.02 }}
-          disabled={
-            !streamOtherPeer ||
-            chatVideoScreensState.isIn("youtubeVideoScreen.visible")
-          }
-          onClick={() => {
-            shareScreen()
-          }}
-        >
-          <FaLaptop />
-        </ShareScreenButton>
+        {streamOtherPeer &&
+          !chatVideoScreensState.isIn("youtubeVideoScreen.visible") && (
+            <ShareScreenButton
+              title="Share screen"
+              initial={{ opacity: 0.5 }}
+              whileHover={{ opacity: 1, scale: 1.02 }}
+              disabled={
+                !streamOtherPeer ||
+                chatVideoScreensState.isIn("youtubeVideoScreen.visible")
+              }
+              onClick={() => {
+                shareScreen()
+              }}
+            >
+              <FaLaptop />
+            </ShareScreenButton>
+          )}
         {shareVideoScreen && supported && (
           <ScreenshotButton
             title="Take screenshot"
