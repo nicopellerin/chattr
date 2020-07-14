@@ -25,6 +25,7 @@ import {
   shareVideoScreenState,
   screenSharingStartedState,
   flipFriendVideoState,
+  sharingScreenState,
 } from "../../store/video"
 import {
   selfIdState,
@@ -134,6 +135,7 @@ const ChatMain = () => {
   const setSharedVideoScreen = useSetRecoilState(shareVideoScreenState)
   const setUserLeftChattrAction = useSetRecoilState(userLeftChattrAction)
   const setFlipFriendVideo = useSetRecoilState(flipFriendVideoState)
+  const setSharingScreen = useSetRecoilState(sharingScreenState)
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
@@ -413,8 +415,10 @@ const ChatMain = () => {
             )
           }
           setScreenSharingStarted(true)
+          setSharingScreen(true)
         } else {
           newStreamRef.current.stop()
+          setSharingScreen(false)
           // newStreamRef.current.dispatchEvent(new Event("ended"))
         }
       }
@@ -569,6 +573,7 @@ const ChatMain = () => {
             )
             setSharedVideoScreen(false)
             setFlipWebcam(false)
+            setSharingScreen(false)
 
             socket.current.emit("sharedScreenRequest", {
               username: "user",
@@ -597,6 +602,7 @@ const ChatMain = () => {
             )
             setSharedVideoScreen(false)
             setFlipWebcam(false)
+            setSharingScreen(false)
 
             socket.current.emit("sharedScreenRequest", {
               username: "user",

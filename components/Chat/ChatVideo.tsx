@@ -58,6 +58,7 @@ import {
   shareVideoScreenState,
   flipSelfVideoState,
   flipFriendVideoState,
+  sharingScreenState,
 } from "../../store/video"
 import {
   listUsersState,
@@ -143,6 +144,7 @@ const ChatVideo: React.FC<Props> = ({
   const screenSharingStarted = useRecoilValue(screenSharingStartedState)
   const shareVideoScreen = useRecoilValue(shareVideoScreenState)
   const flipFriendVideo = useRecoilValue(flipFriendVideoState)
+  const sharingScreen = useRecoilValue(sharingScreenState)
 
   const [
     messageContainsHeartEmoji,
@@ -277,7 +279,7 @@ const ChatVideo: React.FC<Props> = ({
               playsInline
               autoPlay
             />
-            <RotateIcon onClick={flipSelfVideoAction} />
+            {!sharingScreen && <RotateIcon onClick={flipSelfVideoAction} />}
           </SelfVideoWrapper>
           <AnimatePresence>
             {messageContainsHeartEmoji &&
