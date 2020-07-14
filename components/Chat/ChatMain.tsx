@@ -412,6 +412,9 @@ const ChatMain = () => {
             )
           }
           setScreenSharingStarted(true)
+        } else {
+          newStreamRef.current.stop()
+          // newStreamRef.current.dispatchEvent(new Event("ended"))
         }
       }
     )
