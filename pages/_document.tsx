@@ -40,16 +40,16 @@ export default class MyDocument extends Document {
             content="One-on-one hangouts in a fun and secure way"
           />
           <meta name="theme-color" content="#8352FD" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          {/* <link rel="preconnect" href="https://fonts.gstatic.com" /> */}
           <link rel="preconnect" href="https://www.google-analytics.com" />
           {/* <link
             href="https://fonts.googleapis.com/css2?family=Lora:wght@700&display=swap"
             rel="stylesheet"
           /> */}
-          <link
+          {/* <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
-          />
+          /> */}
           <link rel="icon" type="image/png" href="/favicon.png" />
           <meta name="theme-color" content="#8352FD" />
           <link
