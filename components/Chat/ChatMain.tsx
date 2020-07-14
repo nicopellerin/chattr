@@ -82,7 +82,6 @@ enum SquareValue {
 const ChatMain = () => {
   const state = useStateDesigner(gameScreens)
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
-  // const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
   const youtubeChatWindowScreensState = useStateDesigner(
     youtubeChatWindowScreens
   )

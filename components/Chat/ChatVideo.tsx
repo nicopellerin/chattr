@@ -304,9 +304,9 @@ const ChatVideo: React.FC<Props> = ({
               )
                 ? "hidden"
                 : "visible",
-              transform: flipWebcam ? `scaleX(1)` : `scaleX(-1)`,
+              // transform: flipWebcam ? `scaleX(1)` : `scaleX(-1)`,
             }}
-            animate={{ scaleX: flipFriendVideo ? 1 : -1 }}
+            animate={{ scaleX: flipFriendVideo || flipWebcam ? 1 : -1 }}
             theatreMode={displayTheatreMode}
             ref={friendVideoRef}
             playsInline
