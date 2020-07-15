@@ -671,9 +671,9 @@ const ChatMain = () => {
     <>
       {!username && <NoUsername socket={socket} />}
       <OutterWrapper>
-        <Wrapper animate theatreMode={displayTheatreMode}>
+        <Wrapper layout theatreMode={displayTheatreMode}>
           <LeftColumn
-            animate
+            layout
             theatreMode={displayTheatreMode}
             onMouseDown={(e) => {
               e.persist()
@@ -688,7 +688,7 @@ const ChatMain = () => {
               shareScreen={shareScreen}
               flipWebcam={flipWebcam}
             />
-            <motion.div animate>
+            <motion.div layout>
               <ChatTextBar socket={socket} />
             </motion.div>
           </LeftColumn>
@@ -697,10 +697,10 @@ const ChatMain = () => {
               <LogoStyled src="/logo-3d.svg" alt="logo" />
               {!expandChatWindow && (
                 <>
-                  <motion.div animate>
+                  <motion.div layout>
                     <ChatUsername />
                   </motion.div>
-                  <motion.div animate>
+                  <motion.div layout>
                     <ChatCommands
                       callFriend={callFriend}
                       sendFile={sendFile}
@@ -710,7 +710,7 @@ const ChatMain = () => {
                   </motion.div>
                 </>
               )}
-              <motion.div animate>
+              <motion.div layout>
                 <ChatTextWindow socket={socket} />
               </motion.div>
             </>

@@ -231,7 +231,7 @@ const ChatVideo: React.FC<Props> = ({
 
   return (
     <Wrapper
-      animate
+      layout
       ref={contraintsRef}
       isYoutubeVideo={chatVideoScreensState.isIn("youtubeVideoScreen.visible")}
     >
@@ -257,7 +257,7 @@ const ChatVideo: React.FC<Props> = ({
       <>
         <>
           <SelfVideoWrapper
-            animate
+            layout
             drag
             dragMomentum={false}
             // @ts-ignore
@@ -388,8 +388,6 @@ const FriendVideo = styled(motion.video)`
   width: 100%;
   margin: 0;
   padding: 0;
-  /* -webkit-transform: scaleX(-1);
-  transform: scaleX(-1); */
 
   @media (max-width: 500px) {
     height: 300px;
@@ -399,10 +397,10 @@ const FriendVideo = styled(motion.video)`
 const FriendAudioMuted = styled(motion.span)`
   position: absolute;
   right: 6rem;
-  bottom: 1.45rem;
+  bottom: 2rem;
   font-size: 1.7rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(240, 32, 216, 0.7);
   z-index: 20;
   display: flex;
   align-items: center;
@@ -451,7 +449,7 @@ const RotateIcon = styled(FaRedoAlt)`
 `
 
 const ExpandButton = styled(motion.button)`
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(72, 35, 201, 0.6);
   height: 3rem;
   width: 3rem;
   border-radius: 50%;

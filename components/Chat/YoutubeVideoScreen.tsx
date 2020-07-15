@@ -177,7 +177,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <Container animate>
+      <Container layout>
         <YoutubeVideoWrapper
           ref={youtubeVideoRef}
           isPlaying={playYoutubeVideo}
@@ -194,13 +194,13 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
                 exit={{ opacity: 0 }}
               >
                 <ActionButton
-                  animate
+                  layout
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <FaPlayCircle />
                 </ActionButton>
-                <Title animate>
+                <Title layout>
                   Press play to {videoPaused ? "resume" : "start"} video
                 </Title>
               </Overlay>

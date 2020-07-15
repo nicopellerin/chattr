@@ -36,7 +36,7 @@ const Invite = () => {
       exit={{ opacity: 0 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <Container>
+      <Container layout>
         <Text>Invite friend via</Text>
         <a
           href={`http://www.facebook.com/dialog/send?app_id=296141104755109&link=${window.location.href}&redirect_uri=${window.location.href}`}
@@ -76,13 +76,12 @@ export default Invite
 
 // Styles
 const Wrapper = styled(motion.div)`
-  height: calc(100% - 11.5rem);
   box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.15);
   border-bottom: 7px solid #0c0613;
   border-radius: 75px;
   background: #1a0d2b;
   filter: drop-shadow(0 0.7rem 0.2rem rgba(131, 82, 253, 0.05));
-  height: 90%;
+  height: 100%;
 `
 
 const Container = styled(motion.div)`

@@ -70,7 +70,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
   }, [msgs])
 
   useEffect(() => {
-    if (!expandChatWindow && scrollRef.current) {
+    if (scrollRef.current) {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
   }, [expandChatWindow])
@@ -97,6 +97,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
       }}
     >
       <Container
+        layout
         isExpanded={expandChatWindow}
         isIpad={
           typeof window !== "undefined" && window.innerWidth < 1025
@@ -151,7 +152,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
           </NoMessages>
         )}
         {noConnection && !userLeftChattr && (
-          <motion.div animate style={{ height: 400 }}>
+          <motion.div layout style={{ height: 400 }}>
             <Invite />
           </motion.div>
         )}
@@ -216,6 +217,10 @@ const NoMessages = styled(motion.div)`
   justify-content: center;
   flex-direction: column;
   margin-top: 0.2rem;
+  box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.15);
+  border-bottom: 7px solid #0c0613;
+  border-radius: 75px;
+  filter: drop-shadow(0 0.7rem 0.2rem rgba(131, 82, 253, 0.05));
 
   ${(props: { hasConnection: boolean }) =>
     props.hasConnection && `height: 100%;`};

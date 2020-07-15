@@ -210,7 +210,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
 export default ChatTextBar
 
 // Styles
-const Wrapper = styled.form`
+const Wrapper = styled(motion.form)`
   background: #1a0d2b;
   height: 100%;
   padding: 1rem;

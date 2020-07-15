@@ -49,9 +49,9 @@ const ChatUsername = () => {
                   id="status"
                 />
                 <ToggleSwitchLabel>
-                  <ToggleSwitchInner animate isOn={soundOn ? true : false} />
+                  <ToggleSwitchInner layout isOn={soundOn ? true : false} />
                   <ToggleSwitchSwitch
-                    animate
+                    layout
                     isOn={soundOn ? true : false}
                   ></ToggleSwitchSwitch>
                 </ToggleSwitchLabel>

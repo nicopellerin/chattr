@@ -48,7 +48,7 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
       animate={{ y: 0, opacity: 1 }}
       exit={{ scale: 0, opacity: 0 }}
     >
-      <NoMarginContainer animate>
+      <NoMarginContainer layout>
         <WinnerText>
           Welcome to <span style={{ color: "var(--secondaryColor)" }}>Tic</span>
           <span style={{ color: "var(--successColor)" }}>Tac</span>

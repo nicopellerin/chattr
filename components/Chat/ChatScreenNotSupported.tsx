@@ -17,7 +17,7 @@ const ChatScreenNotSupported: React.FC = () => {
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <Container animate>
+      <Container layout>
         <Title>{"Streaming is not supported :("}</Title>
         <Tagline>
           Make sure you allowed video/audio or try using a different browser

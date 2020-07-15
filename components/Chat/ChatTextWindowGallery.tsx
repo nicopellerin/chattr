@@ -7,21 +7,16 @@ import { motion } from "framer-motion"
 
 import ChatTextMessage from "./ChatTextMessage"
 
-import {
-  photoGalleryState,
-  expandChatWindowState,
-  showPhotoGalleryState,
-} from "../../store/chat"
+import { photoGalleryState, expandChatWindowState } from "../../store/chat"
 
 const ChatTextWindowGallery = () => {
   const photoGallery = useRecoilValue(photoGalleryState)
-  const showPhotoGallery = useRecoilValue(showPhotoGalleryState)
   const expandChatWindow = useRecoilValue(expandChatWindowState)
 
   const scrollRef = useRef() as React.MutableRefObject<HTMLElement>
 
   useEffect(() => {
-    if (showPhotoGallery && expandChatWindow && scrollRef.current) {
+    if (scrollRef.current) {
       scrollRef.current.scrollTop = 0
     }
   }, [expandChatWindow])
@@ -42,7 +37,7 @@ const ChatTextWindowGallery = () => {
         transition={{ type: "spring", damping: 80 }}
         style={{ height: expandChatWindow ? 585 : 400 }}
       >
-        <Container animate>
+        <Container layout>
           {photoGallery.length > 0 ? (
             photoGallery.map(({ msg, filename, id, username }) => (
               <ChatTextMessage
@@ -53,7 +48,7 @@ const ChatTextWindowGallery = () => {
               />
             ))
           ) : (
-            <NoImages>
+            <NoImages layout>
               <NoImagesTitle>No images yet</NoImagesTitle>
               <NoImagesTagline>
                 Images sent through the chat will be available here
@@ -87,12 +82,16 @@ const Container = styled(motion.div)`
   position: relative;
 `
 
-const NoImages = styled.div`
+const NoImages = styled(motion.div)`
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.15);
+  border-bottom: 7px solid #0c0613;
+  border-radius: 75px;
+  filter: drop-shadow(0 0.7rem 0.2rem rgba(131, 82, 253, 0.05));
 `
 
 const NoImagesTitle = styled.h2`

@@ -68,7 +68,7 @@ const ChatTextMessage: React.FC<Props> = React.memo(
     }
 
     return (
-      <>
+      <motion.div layout>
         <MsgWrapper
           initial={{ y: 5 }}
           animate={{ y: 0 }}
@@ -125,7 +125,7 @@ const ChatTextMessage: React.FC<Props> = React.memo(
             setToggle={setTogglePhotoExpander}
           />
         )}
-      </>
+      </motion.div>
     )
   }
 )

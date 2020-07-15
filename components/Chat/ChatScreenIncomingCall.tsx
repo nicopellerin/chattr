@@ -42,7 +42,7 @@ const ChatScreenNoVideo: React.FC<Props> = ({ acceptCall, socket }) => {
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ type: "spring", damping: 80 }}
     >
-      <Container animate>
+      <Container layout>
         <Title>Incoming call...</Title>
         <ButtonWrapper>
           <AcceptButton

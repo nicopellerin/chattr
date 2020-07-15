@@ -17,7 +17,7 @@ const PhotoExpander: React.FC<Props> = ({ imageSrc, setToggle }) => {
     <Wrapper>
       <Container>
         <ExpandedImage
-          animate
+          layout
           layoutId="msgPhoto"
           src={imageSrc}
           alt="User sent"
@@ -25,7 +25,7 @@ const PhotoExpander: React.FC<Props> = ({ imageSrc, setToggle }) => {
           onClick={() => setFullWidth((prevState) => !prevState)}
         />
         <Button
-          animate
+          layout
           whileHover={{ rotate: 5 }}
           onClick={() => setToggle(false)}
           isFullWidth={fullWidth}
