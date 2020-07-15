@@ -152,11 +152,13 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
             </NoMessagesText>
           </NoMessages>
         )}
-        {noConnection && !userLeftChattr && (
-          <motion.div layout style={{ height: 400 }}>
-            <Invite />
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {noConnection && !userLeftChattr && (
+            <motion.div layout style={{ height: 400 }}>
+              <Invite />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {hasConnection &&
           userIsTyping?.status &&
@@ -175,6 +177,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         <AnimatePresence>
           {userLeftChattr && (
             <UserDisconnectedWrapper
+              layout
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: -20, opacity: 1 }}
               exit={{ opacity: 0 }}
