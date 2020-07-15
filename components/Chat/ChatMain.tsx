@@ -40,7 +40,7 @@ import PlayBar from "../Games/PlayBar"
 
 import MessageBar from "../MessageBar"
 
-import useSocket from "./useSocket"
+import useSocket from "../../hooks/useSocket"
 
 const ChatMain = () => {
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
@@ -48,12 +48,14 @@ const ChatMain = () => {
   const [screenSharingStarted, setScreenSharingStarted] = useRecoilState(
     screenSharingStartedState
   )
+  const [messageDeleted, setMessageDeleted] = useRecoilState(
+    messageDeletedState
+  )
 
   const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
   const setCallAccepted = useSetRecoilState(callAcceptedState)
   const setUserLeftChattr = useSetRecoilState(userLeftChattrState)
   const setReceivingCall = useSetRecoilState(receivingCallState)
-
   const setSharedVideoScreen = useSetRecoilState(shareVideoScreenState)
   const setSharingScreen = useSetRecoilState(sharingScreenState)
 
@@ -65,9 +67,6 @@ const ChatMain = () => {
   const caller = useRecoilValue(callerState)
   const callerSignal = useRecoilValue(callerSignalState)
   const cancelCallRequest = useRecoilValue(cancelCallRequestState)
-  const [messageDeleted, setMessageDeleted] = useRecoilState(
-    messageDeletedState
-  )
 
   const [msg, setMsg] = useState("")
   const [playBarType, setPlayBarType] = useState("")
@@ -347,11 +346,11 @@ const ChatMain = () => {
               shareScreen={shareScreen}
               flipWebcam={flipWebcam}
             />
-            <motion.div layout>
+            <motion.div>
               <ChatTextBar socket={socket} />
             </motion.div>
           </LeftColumn>
-          <RightColumn animate theatreMode={displayTheatreMode}>
+          <RightColumn layout theatreMode={displayTheatreMode}>
             <>
               <LogoStyled src="/logo-3d.svg" alt="logo" />
               {!expandChatWindow && (

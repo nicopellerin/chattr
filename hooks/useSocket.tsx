@@ -7,8 +7,8 @@ import CryptoJS from "crypto-js"
 import io from "socket.io-client"
 import SimplePeer from "simple-peer"
 
-import { youtubeChatWindowScreens } from "./YoutubeChatWindow"
-import { gameScreens } from "../Games/TicTacToe/Game"
+import { youtubeChatWindowScreens } from "../components/Chat/YoutubeChatWindow"
+import { gameScreens } from "../components/Games/TicTacToe/Game"
 import {
   photoGalleryState,
   fileTransferProgressState,
@@ -19,7 +19,7 @@ import {
   showPlayBarState,
   userLeftChattrAction,
   messageDeletedState,
-} from "../../store/chat"
+} from "../store/chat"
 import {
   pressedCallState,
   getUserMediaNotSupportedState,
@@ -35,28 +35,28 @@ import {
   cancelCallRequestState,
   callerSignalState,
   screenSharingStartedState,
-} from "../../store/video"
+} from "../store/video"
 import {
   playerXGlobalState,
   playerOGlobalState,
   boardState,
   xIsNextState,
   resetGameState,
-} from "../../store/game"
+} from "../store/game"
 import {
   youtubeUrlState,
   playYoutubeVideoState,
   youtubeVideoRewindState,
   youtubeVideoMetaDataState,
-} from "../../store/youtube"
+} from "../store/youtube"
 import {
   usernameState,
   userLeftChattrState,
   listUsersState,
   selfIdState,
-} from "../../store/users"
-import { chatVideoScreens } from "./ChatVideo"
-import { Message, Call, User } from "../../models"
+} from "../store/users"
+import { chatVideoScreens } from "../components/Chat/ChatVideo"
+import { Message, Call, User } from "../models"
 
 enum SquareValue {
   X = "X",

@@ -2,7 +2,7 @@ import * as React from "react"
 import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import dynamic from "next/dynamic"
 import { FaVolumeUp } from "react-icons/fa"
 import CryptoJS from "crypto-js"
@@ -152,6 +152,8 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       })
     }
   }, [msg])
+
+  console.log(togglePicker)
 
   return (
     <>
