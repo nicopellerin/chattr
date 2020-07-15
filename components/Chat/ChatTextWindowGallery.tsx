@@ -49,8 +49,8 @@ const ChatTextWindowGallery = () => {
             ))
           ) : (
             <NoImages layout>
-              <NoImagesTitle>No images yet</NoImagesTitle>
-              <NoImagesTagline>
+              <NoImagesTitle layout>No images yet</NoImagesTitle>
+              <NoImagesTagline layout>
                 Images sent through the chat will be available here
               </NoImagesTagline>
             </NoImages>
@@ -94,12 +94,12 @@ const NoImages = styled(motion.div)`
   filter: drop-shadow(0 0.7rem 0.2rem rgba(131, 82, 253, 0.05));
 `
 
-const NoImagesTitle = styled.h2`
+const NoImagesTitle = styled(motion.h2)`
   color: var(--tertiaryColor);
   font-size: 3rem;
 `
 
-const NoImagesTagline = styled.span`
+const NoImagesTagline = styled(motion.span)`
   color: var(--textColor);
   font-size: 1.7rem;
   font-weight: 600;
