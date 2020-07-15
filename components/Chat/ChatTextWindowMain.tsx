@@ -134,6 +134,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
           <NoMessages hasConnection={hasConnection}>
             <NoMessagesText>
               <IconLogo
+                layout
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", damping: 80 }}
@@ -226,7 +227,7 @@ const NoMessages = styled(motion.div)`
     props.hasConnection && `height: 100%;`};
 `
 
-const NoMessagesText = styled.span`
+const NoMessagesText = styled(motion.span)`
   font-size: 2.4rem;
   font-weight: 600;
   color: var(--primaryColorLight);
