@@ -294,8 +294,8 @@ const YoutubeIcon = styled.img`
   position: absolute;
   top: 2rem;
   width: 14rem;
-  background: rgba(131, 82, 253, 0.1);
-  padding: 1rem;
+  /* background: rgba(131, 82, 253, 0.1);
+  padding: 1rem; */
   border-radius: 5px;
   filter: drop-shadow(0 0.4rem 3rem rgba(131, 82, 253, 0.2));
 `
