@@ -307,6 +307,10 @@ const Input = styled.input`
   max-width: 90%;
   outline: transparent;
   height: 48px;
+
+  &::placeholder {
+    color: rgba(240, 32, 216, 0.57);
+  }
 `
 
 const CommandsWrapper = styled.div`
