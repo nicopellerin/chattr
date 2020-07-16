@@ -312,6 +312,7 @@ const Input = styled.input`
   color: var(--textColor);
   padding: 0.8em 1em;
   font-size: 1.7rem;
+  font-weight: 500;
   border-radius: 5px;
   margin-bottom: 3rem;
   width: 100%;

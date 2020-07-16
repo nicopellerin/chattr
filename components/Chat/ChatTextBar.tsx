@@ -238,6 +238,7 @@ const TextInput = styled.input`
   border: none;
   color: var(--textColor);
   font-size: 1.7rem;
+  font-weight: 500;
   padding: 0 15.8rem 0 1.5rem;
   outline: transparent;
 

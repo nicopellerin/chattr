@@ -18,6 +18,23 @@ const avatars = [
   "/avatars/tophat.png",
 ]
 
+const avatarsContainerVariant = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      // delay: 0.1,
+      // when: "beforeChildren",
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const avatarVariant = {
+  hidden: { y: 15, opacity: 0 },
+  visible: { y: 0, opacity: 1 },
+}
+
 interface Props {
   buttonText?: string
   noUsernameModal?: boolean
@@ -75,7 +92,7 @@ const UsernameModal: React.FC<Props> = ({
           handleSubmit(e)
         }}
       >
-        <Tagline htmlFor="username">Hi, stranger!</Tagline>
+        <Tagline htmlFor="username">Hello, stranger!</Tagline>
         <Input
           id="username"
           required
@@ -84,16 +101,29 @@ const UsernameModal: React.FC<Props> = ({
           placeholder="Pick a username..."
           maxLength={18}
         />
-        <AvatarsContainer>
-          {avatars.map((avatarImg) => (
-            <Avatar
-              src={avatarImg}
-              onClick={() => setAvatar(avatarImg)}
-              alt="avatar"
-              width="45"
-              style={{ opacity: avatar === avatarImg ? 1 : 0.5 }}
-            />
-          ))}
+        <AvatarsContainer
+          variants={avatarsContainerVariant}
+          initial="hidden"
+          animate="visible"
+        >
+          {avatars.map((avatarImg) => {
+            return (
+              <AvatarItem
+                key={avatarImg}
+                variants={avatarVariant}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setAvatar(avatarImg)}
+              >
+                <Avatar
+                  animate={{ opacity: avatar === avatarImg ? 1 : 0.5 }}
+                  src={avatarImg}
+                  alt="avatar"
+                  width="45"
+                />
+              </AvatarItem>
+            )
+          })}
         </AvatarsContainer>
         <Button whileTap={{ y: 1 }} whileHover={{ y: -1 }}>
           {buttonText} <FaRocket style={{ marginLeft: 7 }} />
@@ -131,24 +161,40 @@ const Container = styled(motion.div)`
   }
 `
 
-const AvatarsContainer = styled.div`
+const AvatarsContainer = styled(motion.ul)`
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  margin-bottom: 4rem;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 3.6rem;
 `
 
-const Avatar = styled.img`
+const AvatarItem = styled(motion.li)`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`
+
+const Avatar = styled(motion.img)`
   cursor: pointer;
 `
 
 const Tagline = styled.label`
   font-family: "Lora", sans-serif;
   font-size: 3.6rem;
-  color: var(--tertiaryColor);
+  /* color: var(--tertiaryColor); */
+  background: -webkit-linear-gradient(
+    145deg,
+    var(--primaryColor),
+    var(--tertiaryColor)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 2rem;
   font-weight: 600;
+  letter-spacing: 2.4px;
 `
 
 const Form = styled.form`
@@ -164,9 +210,10 @@ const Input = styled.input`
   color: var(--textColor);
   padding: 0.9em 0.7em;
   font-size: 2rem;
+  font-weight: 500;
   border-radius: 5px;
-  margin-bottom: 3rem;
-  width: 100%;
+  margin-bottom: 2.6rem;
+  width: 85%;
   outline: transparent;
 
   &::placeholder {
@@ -177,7 +224,12 @@ const Input = styled.input`
 const Button = styled(motion.button)`
   padding: 1em 1.5em;
   border: none;
-  background: var(--tertiaryColor);
+  /* background: var(--tertiaryColor); */
+  background: -webkit-linear-gradient(
+    125deg,
+    var(--primaryColor),
+    var(--tertiaryColor)
+  );
   color: #0c0613;
   font-size: 2rem;
   font-weight: 600;
