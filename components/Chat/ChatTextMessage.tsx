@@ -1,17 +1,19 @@
 import * as React from "react"
-import { useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import dompurify from "dompurify"
 import { saveAs } from "file-saver"
 import { FaExpand, FaFileDownload, FaTimes } from "react-icons/fa"
-import { useRecoilValue, useRecoilCallback } from "recoil"
+import { useRecoilValue, useRecoilCallback, useSetRecoilState } from "recoil"
 import CryptoJS from "crypto-js"
 
-import PhotoExpander from "./PhotoExpander"
-
 import { usernameState } from "../../store/users"
-import { chatWindowState, photoGalleryState } from "../../store/chat"
+import {
+  chatWindowState,
+  photoGalleryState,
+  togglePhotoExpanderState,
+  selectedPhotoState,
+} from "../../store/chat"
 
 import { Message, PhotoGallery, OgData } from "../../models"
 
@@ -20,16 +22,29 @@ interface Props {
   decryptedData?: string
   filename: string | undefined
   usernameMsg: string
+  avatar: string
   id: string
   socket?: React.MutableRefObject<SocketIOClient.Socket>
   ogData?: OgData
 }
 
 const ChatTextMessage: React.FC<Props> = React.memo(
-  ({ msg, decryptedData, filename, usernameMsg, id, socket, ogData }) => {
+  ({
+    msg,
+    decryptedData,
+    filename,
+    usernameMsg,
+    id,
+    socket,
+    ogData,
+    avatar,
+  }) => {
     const username = useRecoilValue(usernameState)
     const messages = useRecoilValue(chatWindowState)
     const photoGallery = useRecoilValue(photoGalleryState)
+
+    const setTogglePhotoExpander = useSetRecoilState(togglePhotoExpanderState)
+    const setSelectedPhoto = useSetRecoilState(selectedPhotoState)
 
     const removeChatTextMessage = useRecoilCallback(({ set }) => {
       return (id: string) => {
@@ -54,9 +69,6 @@ const ChatTextMessage: React.FC<Props> = React.memo(
       }
     })
 
-    const [togglePhotoExpander, setTogglePhotoExpander] = useState(false)
-    const [selectedPhoto, setSelectedPhoto] = useState("")
-
     const sanitizer = dompurify.sanitize
 
     const convertLinkToHTML = (text: string) => {
@@ -68,64 +80,60 @@ const ChatTextMessage: React.FC<Props> = React.memo(
     }
 
     return (
-      <motion.div layout>
-        <MsgWrapper
-          initial={{ y: 5 }}
-          animate={{ y: 0 }}
-          exit={{ opacity: 0, transition: { duration: 0 } }}
-          transition={{ type: "spring", damping: 80 }}
-        >
-          <Username me={username === usernameMsg}>{usernameMsg}</Username>
-          {msg.startsWith("data:image") ? (
-            <>
-              <DownloadIcon
-                title="Download"
-                onClick={() => saveAs(msg, filename)}
-              />
-              <ExpandIcon
-                title="Expand"
-                onClick={() => {
-                  setTogglePhotoExpander((prevState) => !prevState)
-                  setSelectedPhoto(msg)
-                }}
-              />
+      <MsgWrapper
+        // layout
+        initial={{ y: 5 }}
+        animate={{ y: 0 }}
+        exit={{ opacity: 0, transition: { duration: 0 } }}
+        transition={{ type: "spring", damping: 80 }}
+      >
+        <Username me={username === usernameMsg}>
+          <Avatar src={avatar} alt="avatar" />
+          {usernameMsg}
+        </Username>
+        {msg.startsWith("data:image") ? (
+          <>
+            <DownloadIcon
+              title="Download"
+              onClick={() => saveAs(msg, filename)}
+            />
+            <ExpandIcon
+              title="Expand"
+              onClick={() => {
+                setTogglePhotoExpander((prevState) => !prevState)
+                setSelectedPhoto(msg)
+              }}
+            />
 
-              <MessageImage src={msg} alt="Sent photo" />
-            </>
-          ) : ogData ? (
-            <MessageOutput
-              dangerouslySetInnerHTML={{
-                __html: `<a href="${decryptedData}" style="text-decoration: none;" target="_blank" rel="noopener" ><img src="${ogData?.image}" width="100%" /><div style="background: #112; padding: 1rem; margin-bottom: 1rem;"><h4 style="color: var(--secondaryColor); margin-bottom: 0.5rem; font-family: var(--systemFont);">${ogData?.title}</h4><p style="font-size: 1.4rem; font-weight: 600; margin: 0;">${ogData?.desc}</p></div></a>`,
-              }}
-            />
-          ) : (
-            <MessageOutput
-              dangerouslySetInnerHTML={{
-                __html: convertLinkToHTML(sanitizer(decryptedData!)) || msg,
-              }}
-            />
-          )}
-          {usernameMsg === username && (
-            <>
-              <DeleteButton
-                title="Delete message"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => removeChatTextMessage(id)}
-                isImage={!decryptedData}
-              >
-                <FaTimes />
-              </DeleteButton>
-            </>
-          )}
-        </MsgWrapper>
-        {togglePhotoExpander && (
-          <PhotoExpander
-            imageSrc={selectedPhoto}
-            setToggle={setTogglePhotoExpander}
+            <MessageImage src={msg} alt="Sent photo" />
+          </>
+        ) : ogData ? (
+          <MessageOutput
+            dangerouslySetInnerHTML={{
+              __html: `<a href="${decryptedData}" style="text-decoration: none;" target="_blank" rel="noopener" ><img src="${ogData?.image}" width="100%" /><div style="background: #112; padding: 1rem; margin-bottom: 1rem;"><h4 style="color: var(--secondaryColor); margin-bottom: 0.5rem; font-family: var(--systemFont);">${ogData?.title}</h4><p style="font-size: 1.4rem; font-weight: 600; margin: 0;">${ogData?.desc}</p></div></a>`,
+            }}
+          />
+        ) : (
+          <MessageOutput
+            dangerouslySetInnerHTML={{
+              __html: convertLinkToHTML(sanitizer(decryptedData!)) || msg,
+            }}
           />
         )}
-      </motion.div>
+        {usernameMsg === username && (
+          <>
+            <DeleteButton
+              title="Delete message"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => removeChatTextMessage(id)}
+              isImage={!decryptedData}
+            >
+              <FaTimes />
+            </DeleteButton>
+          </>
+        )}
+      </MsgWrapper>
     )
   }
 )
@@ -151,6 +159,14 @@ const Username = styled.span`
   color: ${(props: { me: boolean }) =>
     props.me ? "var(--tertiaryColor)" : "var(--secondaryColor)"};
   font-weight: 600;
+  display: flex;
+  margin-bottom: 0.5rem;
+`
+
+const Avatar = styled.img`
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-right: 1rem;
 `
 
 const MessageOutput = styled.div`

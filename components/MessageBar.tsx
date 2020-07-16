@@ -1,10 +1,11 @@
 import * as React from "react"
 import { useEffect } from "react"
 import styled from "styled-components"
-import Portal from "./Chat/Portal"
 import { motion } from "framer-motion"
 import { FaTimesCircle } from "react-icons/fa"
 import { useRecoilValue } from "recoil"
+
+import Portal from "./Chat/Portal"
 
 import { userSoundOnState } from "../store/users"
 

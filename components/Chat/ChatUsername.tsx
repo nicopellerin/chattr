@@ -3,12 +3,13 @@ import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 
-import { usernameState, userSoundOnState } from "../../store/users"
+import { usernameState, userSoundOnState, avatarState } from "../../store/users"
 import { FaCog } from "react-icons/fa"
 import { motion, AnimatePresence } from "framer-motion"
 
 const ChatUsername = () => {
   const username = useRecoilValue(usernameState)
+  const avatar = useRecoilValue(avatarState)
 
   const [soundOn, setSoundOn] = useRecoilState(userSoundOnState)
 
@@ -94,7 +95,7 @@ const ChatUsername = () => {
             exit={{ y: 30 }}
             transition={{ type: "spring", damping: 17 }}
           >
-            <Text>Username</Text>
+            <Avatar src={avatar} alt="avatar" />
             <Username>{username}</Username>
           </UsernameWrapper>
         )}
@@ -118,7 +119,7 @@ const Wrapper = styled.form`
   background: #1a0d2b;
   height: 100%;
   min-height: 54px;
-  padding: 1.5rem 1.7rem;
+  padding: 1.2rem 1.7rem;
   border-radius: 5px;
   display: grid;
   grid-template-columns: 1fr auto;
@@ -126,6 +127,7 @@ const Wrapper = styled.form`
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
+  min-height: 60px;
 
   @media (max-width: 500px) {
     display: none;
@@ -137,6 +139,11 @@ const Text = styled.span`
   font-weight: 600;
   margin-right: 1rem;
   color: var(--textColor);
+`
+
+const Avatar = styled.img`
+  width: 4rem;
+  margin-right: 1.4rem;
 `
 
 const Username = styled.span`
@@ -157,7 +164,10 @@ const IconCog = styled(FaCog)`
   }
 `
 
-const UsernameWrapper = styled(motion.div)``
+const UsernameWrapper = styled(motion.div)`
+  display: flex;
+  align-items: center;
+`
 
 const ToggleWrapper = styled(motion.div)`
   display: flex;

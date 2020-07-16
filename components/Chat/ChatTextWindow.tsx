@@ -17,7 +17,7 @@ import ChatTextWindowChatBtn from "./ChatTextWindowChatBtn"
 import { otherUsernameQuery, userSoundOnState } from "../../store/users"
 import YoutubeChatWindow from "./YoutubeChatWindow"
 import YoutubeChatWindowBtn from "./YoutubeChatWindowBtn"
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -91,7 +91,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
 export default ChatTextWindow
 
 // Styles
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   background: #1a0d2b;
   height: 100%;
   padding: 1.7rem;

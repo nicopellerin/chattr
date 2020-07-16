@@ -4,22 +4,31 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import Portal from "./Portal"
 import { FaTimesCircle } from "react-icons/fa"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 
-interface Props {
-  imageSrc: string
-  setToggle: React.Dispatch<React.SetStateAction<boolean>>
-}
+import { selectedPhotoState, togglePhotoExpanderState } from "../../store/chat"
 
-const PhotoExpander: React.FC<Props> = ({ imageSrc, setToggle }) => {
+const PhotoExpander = () => {
+  const selectedPhoto = useRecoilValue(selectedPhotoState)
+
+  const setTogglePhotoExpander = useSetRecoilState(togglePhotoExpanderState)
+
   const [fullWidth, setFullWidth] = useState(false)
 
   return (
-    <Wrapper>
+    <Wrapper
+      layout
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <Container>
         <ExpandedImage
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, scale: 0 }}
           layout
-          layoutId="msgPhoto"
-          src={imageSrc}
+          src={selectedPhoto}
           alt="User sent"
           isFullWidth={fullWidth}
           onClick={() => setFullWidth((prevState) => !prevState)}
@@ -27,7 +36,7 @@ const PhotoExpander: React.FC<Props> = ({ imageSrc, setToggle }) => {
         <Button
           layout
           whileHover={{ rotate: 5 }}
-          onClick={() => setToggle(false)}
+          onClick={() => setTogglePhotoExpander(false)}
           isFullWidth={fullWidth}
         >
           <CloseIcon title="Close" color="var(--textColor)" />

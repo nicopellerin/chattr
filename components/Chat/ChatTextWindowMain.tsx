@@ -97,7 +97,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
       }}
     >
       <Container
-        layout
+        // layout
         isExpanded={expandChatWindow}
         isIpad={
           typeof window !== "undefined" && window.innerWidth < 1025
@@ -106,37 +106,40 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         }
       >
         {msgs.length > 0 &&
-          msgs.map(({ msg, username: usernameMsg, filename, id, ogData }) => {
-            let decryptedData
-            // If message is not an image, encrypt it. TODO: Need to fix this
-            if (!msg.startsWith("data:image")) {
-              const bytes = CryptoJS.AES.decrypt(
-                msg,
-                String(process.env.NEXT_PUBLIC_KEY)
-              )
-              decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
-            }
+          msgs.map(
+            ({ msg, username: usernameMsg, filename, id, ogData, avatar }) => {
+              let decryptedData
+              // If message is not an image, encrypt it. TODO: Need to fix this
+              if (!msg.startsWith("data:image")) {
+                const bytes = CryptoJS.AES.decrypt(
+                  msg,
+                  String(process.env.NEXT_PUBLIC_KEY)
+                )
+                decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+              }
 
-            return (
-              <ChatTextMessage
-                key={id}
-                id={id}
-                msg={msg}
-                decryptedData={decryptedData}
-                filename={filename}
-                usernameMsg={usernameMsg}
-                socket={socket}
-                ogData={ogData}
-              />
-            )
-          })}
+              return (
+                <ChatTextMessage
+                  key={id}
+                  id={id}
+                  msg={msg}
+                  decryptedData={decryptedData}
+                  filename={filename}
+                  usernameMsg={usernameMsg}
+                  socket={socket}
+                  ogData={ogData}
+                  avatar={avatar}
+                />
+              )
+            }
+          )}
         {msgs.length === 0 && hasConnection && (
-          <NoMessages hasConnection={hasConnection}>
-            <NoMessagesText>
+          <NoMessages layout hasConnection={hasConnection}>
+            <NoMessagesText layout>
               <IconLogo
-                layout
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
                 transition={{ type: "spring", damping: 80 }}
                 src="/favicon.png"
                 alt="Icon"
@@ -186,6 +189,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
               <IconLogo
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
                 transition={{ type: "spring", damping: 80 }}
                 src="/favicon.png"
                 alt="Icon"
@@ -207,7 +211,7 @@ export default ChatTextWindowMain
 const Container = styled(motion.div)`
   width: 100%;
   height: ${(props: { isExpanded?: boolean; isIpad: boolean }) =>
-    props.isExpanded && !props.isIpad ? "585px" : "400px"};
+    props.isExpanded && !props.isIpad ? "570px" : "400px"};
   ${(props: { isIpad: boolean }) => props.isIpad && "height: 350px"};
   color: var(--textColor);
   font-size: 1.7rem;

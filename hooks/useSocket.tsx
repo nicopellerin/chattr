@@ -54,6 +54,7 @@ import {
   userLeftChattrState,
   listUsersState,
   selfIdState,
+  avatarState,
 } from "../store/users"
 import { chatVideoScreens } from "../components/Chat/ChatVideo"
 import { Message, Call, User } from "../models"
@@ -126,6 +127,7 @@ const useSocket = ({
   const setMessageDeleted = useSetRecoilState(messageDeletedState)
 
   const username = useRecoilValue(usernameState)
+  const avatar = useRecoilValue(avatarState)
 
   const socket = useRef() as React.MutableRefObject<SocketIOClient.Socket>
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
@@ -151,6 +153,7 @@ const useSocket = ({
         polling: {
           extraHeaders: {
             "x-username": JSON.stringify(username || tempUsername),
+            "x-avatar": JSON.stringify(avatar),
           },
         },
       },

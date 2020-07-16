@@ -75,6 +75,16 @@ export const showPhotoGalleryState = atom<boolean>({
   default: false,
 })
 
+export const togglePhotoExpanderState = atom<boolean>({
+  key: "togglePhotoExpanderState",
+  default: false,
+})
+
+export const selectedPhotoState = atom<string>({
+  key: "selectedPhotoState",
+  default: "",
+})
+
 export const chatHomeState = atom<boolean>({
   key: "chatHomeState",
   default: true,

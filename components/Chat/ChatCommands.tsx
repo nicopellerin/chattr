@@ -249,7 +249,7 @@ export default ChatCommands
 const Wrapper = styled(motion.div)`
   background: #1a0d2b;
   height: 100%;
-  padding: 1.7rem;
+  padding: 1.2rem 1.7rem;
   border-radius: 5px;
 
   @media (max-width: 500px) {
@@ -265,7 +265,7 @@ const Container = styled.div`
   justify-items: center;
   height: 100%;
   background: rgba(255, 255, 255, 0.01);
-  padding: 1rem;
+  padding: 0.8rem;
   box-shadow: "4px 0 15px rgba(0, 0, 0, 0.1)";
   grid-gap: 0.5rem;
 `

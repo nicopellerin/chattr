@@ -11,7 +11,7 @@ import axios from "axios"
 
 const EmojiPicker = dynamic(() => import("./EmojiPicker"), { ssr: false })
 
-import { usernameState, listUsersState } from "../../store/users"
+import { usernameState, listUsersState, avatarState } from "../../store/users"
 import { displayTheatreModeState } from "../../store/video"
 
 const lolSounds = [
@@ -43,6 +43,7 @@ interface Props {
 
 const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const username = useRecoilValue(usernameState)
+  const avatar = useRecoilValue(avatarState)
   const listUsers = useRecoilValue(listUsersState)
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
 
@@ -67,7 +68,11 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       String(process.env.NEXT_PUBLIC_KEY)
     ).toString()
 
-    socket.current.emit("chatMessage", { username, msg: encryptedMessage })
+    socket.current.emit("chatMessage", {
+      username,
+      msg: encryptedMessage,
+      avatar,
+    })
     socket.current.emit("playLolSound", {
       sound: lolSounds[randomIdx],
     })
@@ -122,7 +127,6 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         ogData = JSON.parse(res)
       } catch (err) {
         ogData = null
-        console.log("ERRORORORO", err)
       }
     }
 
@@ -136,6 +140,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       username,
       msg: itiswhatitis || encryptedText,
       ogData,
+      avatar,
     })
 
     setMsg("")
@@ -152,8 +157,6 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
       })
     }
   }, [msg])
-
-  console.log(togglePicker)
 
   return (
     <>

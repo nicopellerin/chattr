@@ -3,6 +3,7 @@ import { atom, selector } from "recoil"
 interface User {
   id: string
   username: string
+  avatar: string
 }
 
 export const selfIdState = atom<string>({
@@ -21,6 +22,14 @@ export const usernameState = atom<string>({
     (typeof window !== "undefined" &&
       JSON.parse(window.sessionStorage.getItem("chattr-username")!)) ||
     "",
+})
+
+export const avatarState = atom<string>({
+  key: "avatarState",
+  default:
+    (typeof window !== "undefined" &&
+      JSON.parse(window.sessionStorage.getItem("chattr-avatar")!)) ||
+    "/avatars/devil.png",
 })
 
 export const userLeftChattrState = atom<boolean>({

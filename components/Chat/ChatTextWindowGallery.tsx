@@ -35,16 +35,17 @@ const ChatTextWindowGallery = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", damping: 80 }}
-        style={{ height: expandChatWindow ? 585 : 400 }}
+        style={{ height: expandChatWindow ? 570 : 400 }}
       >
         <Container layout>
           {photoGallery.length > 0 ? (
-            photoGallery.map(({ msg, filename, id, username }) => (
+            photoGallery.map(({ msg, filename, id, username, avatar }) => (
               <ChatTextMessage
                 msg={msg}
                 usernameMsg={username}
                 id={id}
                 filename={filename}
+                avatar={avatar}
               />
             ))
           ) : (

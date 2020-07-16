@@ -1,6 +1,7 @@
 export interface User {
   id: string
   username: string
+  avatar: string
 }
 
 export interface OgData {
@@ -12,6 +13,7 @@ export interface OgData {
 export interface Message {
   id: string
   username: string
+  avatar: string
   status: boolean
   msg: string
   filename?: string
@@ -21,6 +23,7 @@ export interface Message {
 export interface PhotoGallery {
   id: string
   username: string
+  avatar: string
   msg: string
   filename?: string
 }

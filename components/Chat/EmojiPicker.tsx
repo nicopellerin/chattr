@@ -56,7 +56,7 @@ const Wrapper = styled(motion.div)`
   position: absolute;
   bottom: 10rem;
   right: 1rem;
-  z-index: 1000;
+  z-index: 10000000;
 `
 
 const CloseButton = styled(motion.button)`

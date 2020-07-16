@@ -37,7 +37,11 @@ const rooms: Rooms = {}
 
 io.on("connection", (socket) => {
   const room: string = socket.handshake.query.room
+
   const username = socket.handshake.headers["x-username"]
+    .replace('"', "")
+    .replace('"', "")
+  const avatar = socket.handshake.headers["x-avatar"]
     .replace('"', "")
     .replace('"', "")
 
@@ -61,7 +65,7 @@ io.on("connection", (socket) => {
   }
 
   const oldUsers: User[] = (rooms[room] && rooms[room].users) || []
-  rooms[room] = { users: [...oldUsers, { id: socket.id, username }] }
+  rooms[room] = { users: [...oldUsers, { id: socket.id, username, avatar }] }
 
   socket.join(room)
 

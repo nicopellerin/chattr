@@ -23,11 +23,13 @@ import {
   selfIdState,
   usernameState,
   userLeftChattrState,
+  avatarState,
 } from "../../store/users"
 import {
   expandChatWindowState,
   messageDeletedState,
   showPlayBarState,
+  togglePhotoExpanderState,
 } from "../../store/chat"
 
 import ChatVideo, { chatVideoScreens } from "./ChatVideo"
@@ -41,6 +43,7 @@ import PlayBar from "../Games/PlayBar"
 import MessageBar from "../MessageBar"
 
 import useSocket from "../../hooks/useSocket"
+import PhotoExpander from "./PhotoExpander"
 
 const ChatMain = () => {
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
@@ -61,12 +64,14 @@ const ChatMain = () => {
 
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
+  const avatar = useRecoilValue(avatarState)
   const expandChatWindow = useRecoilValue(expandChatWindowState)
   const showPlayBar = useRecoilValue(showPlayBarState)
   const selfId = useRecoilValue(selfIdState)
   const caller = useRecoilValue(callerState)
   const callerSignal = useRecoilValue(callerSignalState)
   const cancelCallRequest = useRecoilValue(cancelCallRequestState)
+  const togglePhotoExpander = useRecoilValue(togglePhotoExpanderState)
 
   const [msg, setMsg] = useState("")
   const [playBarType, setPlayBarType] = useState("")
@@ -298,6 +303,7 @@ const ChatMain = () => {
       msg: b64,
       filename,
       id,
+      avatar,
     })
 
     socket.current.emit("addImageToPhotoGallery", {
@@ -305,6 +311,7 @@ const ChatMain = () => {
       msg: b64,
       filename,
       id,
+      avatar,
     })
 
     socket.current.emit("fileTransferProgress", "Done!")
@@ -329,7 +336,7 @@ const ChatMain = () => {
     <>
       {!username && <NoUsername socket={socket} />}
       <OutterWrapper>
-        <Wrapper layout theatreMode={displayTheatreMode}>
+        <Wrapper theatreMode={displayTheatreMode}>
           <LeftColumn
             layout
             theatreMode={displayTheatreMode}
@@ -337,15 +344,17 @@ const ChatMain = () => {
               e.persist()
             }}
           >
-            <ChatVideo
-              streamRef={streamRef}
-              socket={socket}
-              selfVideoRef={selfVideoRef}
-              friendVideoRef={friendVideoRef}
-              acceptCall={acceptCall}
-              shareScreen={shareScreen}
-              flipWebcam={flipWebcam}
-            />
+            <motion.div layout>
+              <ChatVideo
+                streamRef={streamRef}
+                socket={socket}
+                selfVideoRef={selfVideoRef}
+                friendVideoRef={friendVideoRef}
+                acceptCall={acceptCall}
+                shareScreen={shareScreen}
+                flipWebcam={flipWebcam}
+              />
+            </motion.div>
             <motion.div>
               <ChatTextBar socket={socket} />
             </motion.div>
@@ -391,9 +400,12 @@ const ChatMain = () => {
           <MessageBar
             errorMsg={errorMsg}
             setErrorMsg={setErrorMsg}
-            delay={5000}
+            delay={3000}
           />
         )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {togglePhotoExpander && <PhotoExpander />}
       </AnimatePresence>
     </>
   )
