@@ -292,7 +292,7 @@ const Form = styled.form`
 
 const YoutubeIcon = styled.img`
   position: absolute;
-  top: 2rem;
+  top: 4rem;
   width: 14rem;
   /* background: rgba(131, 82, 253, 0.1);
   padding: 1rem; */
