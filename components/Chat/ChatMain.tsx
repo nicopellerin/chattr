@@ -293,27 +293,7 @@ const ChatMain = () => {
       })
     }
 
-    // const bufferToBase64 = (blob: Blob) => {
-    //   const reader = new FileReader()
-
-    //   reader.readAsArrayBuffer(blob)
-    //   return new Promise((resolve) => {
-    //     reader.onloadend = () => {
-    //       resolve(reader.result)
-    //     }
-    //   })
-    // }
-
     const b64 = (await blobToBase64(file)) as string
-    // const b264 = (await bufferToBase64(file)) as string
-
-    // const compressed_data = flate.gzip_encode(b64)
-
-    // console.log(arrayBufferToBase64(b264))
-
-    console.log(b64)
-
-    socket.current.emit("fileTransferProgress", "Done!")
 
     const id = shortid.generate()
 
