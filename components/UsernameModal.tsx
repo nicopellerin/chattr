@@ -183,7 +183,7 @@ const Avatar = styled(motion.img)`
 
 const Tagline = styled.label`
   font-family: "Lora", sans-serif;
-  font-size: 3.6rem;
+  font-size: 3.4rem;
   /* color: var(--tertiaryColor); */
   background: -webkit-linear-gradient(
     145deg,
@@ -194,7 +194,7 @@ const Tagline = styled.label`
   -webkit-text-fill-color: transparent;
   margin-bottom: 2rem;
   font-weight: 600;
-  letter-spacing: 1.4px;
+  /* letter-spacing: 1.4px; */
 `
 
 const Form = styled.form`

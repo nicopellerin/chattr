@@ -9354,6 +9354,11 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
+wasm-flate@^1.0.2-browser:
+  version "1.0.2-browser"
+  resolved "https://registry.yarnpkg.com/wasm-flate/-/wasm-flate-1.0.2-browser.tgz#e10e758b37c3d38829b54809fa2fef853b48131c"
+  integrity sha512-qpqOzvbKtgG/2Mb0DYXVPQ2nOrkKYoAQtpr4QZzgO8SMfKieeODUy2vomMnimQjH/K2RGWnw+kZmO8yf+Yh9qA==
+
 watchpack-chokidar2@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/watchpack-chokidar2/-/watchpack-chokidar2-2.0.0.tgz#9948a1866cbbd6cb824dea13a7ed691f6c8ddff0"

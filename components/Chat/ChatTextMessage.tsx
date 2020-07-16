@@ -26,6 +26,7 @@ interface Props {
   id: string
   socket?: React.MutableRefObject<SocketIOClient.Socket>
   ogData?: OgData
+  type?: string
 }
 
 const ChatTextMessage: React.FC<Props> = React.memo(
@@ -38,6 +39,7 @@ const ChatTextMessage: React.FC<Props> = React.memo(
     socket,
     ogData,
     avatar,
+    type,
   }) => {
     const username = useRecoilValue(usernameState)
     const messages = useRecoilValue(chatWindowState)
@@ -79,6 +81,22 @@ const ChatTextMessage: React.FC<Props> = React.memo(
       )
     }
 
+    // async function arrayBufferToBase64(buffer) {
+    //   var binary = ""
+    //   var bytes = new Uint8Array(buffer)
+    //   var len = bytes.byteLength
+    //   for (var i = 0; i < len; i++) {
+    //     binary += String.fromCharCode(bytes[i])
+    //   }
+    //   return window.btoa(binary)
+    // }
+
+    // if (type === "image") {
+    //   arrayBufferToBase64(msg).then((res) =>
+    //     setImageBuf(`data:image/png;base64,${res}`)
+    //   )
+    // }
+
     return (
       <MsgWrapper
         // layout
@@ -91,7 +109,7 @@ const ChatTextMessage: React.FC<Props> = React.memo(
           <Avatar src={avatar} alt="avatar" />
           {usernameMsg}
         </Username>
-        {msg.startsWith("data:image") ? (
+        {type === "image" ? (
           <>
             <DownloadIcon
               title="Download"

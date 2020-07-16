@@ -107,10 +107,18 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
       >
         {msgs.length > 0 &&
           msgs.map(
-            ({ msg, username: usernameMsg, filename, id, ogData, avatar }) => {
+            ({
+              msg,
+              username: usernameMsg,
+              filename,
+              id,
+              ogData,
+              avatar,
+              type,
+            }) => {
               let decryptedData
               // If message is not an image, encrypt it. TODO: Need to fix this
-              if (!msg.startsWith("data:image")) {
+              if (type !== "image") {
                 const bytes = CryptoJS.AES.decrypt(
                   msg,
                   String(process.env.NEXT_PUBLIC_KEY)
@@ -129,6 +137,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
                   socket={socket}
                   ogData={ogData}
                   avatar={avatar}
+                  type={type}
                 />
               )
             }
@@ -157,7 +166,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         )}
         <AnimatePresence>
           {noConnection && !userLeftChattr && (
-            <motion.div layout exit={{ opacity: 0 }} style={{ height: 400 }}>
+            <motion.div exit={{ opacity: 0, scale: 0 }} style={{ height: 400 }}>
               <Invite />
             </motion.div>
           )}
@@ -180,7 +189,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         <AnimatePresence>
           {userLeftChattr && (
             <UserDisconnectedWrapper
-              layout
+              // layout
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: -20, opacity: 1 }}
               exit={{ opacity: 0 }}

@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
 import shortid from "shortid"
 import { useStateDesigner } from "@state-designer/react"
+// import flate from "wasm-flate"
 
 import {
   receivingCallState,
@@ -282,12 +283,6 @@ const ChatMain = () => {
       username,
     })
 
-    // const wasm = await import("../../pkg2/blob_to_base64")
-
-    // const res = wasm.blob_to_base64(file)
-
-    // console.log("WASM", res.toString())
-
     const blobToBase64 = (blob: Blob) => {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
@@ -298,7 +293,23 @@ const ChatMain = () => {
       })
     }
 
-    const b64 = await blobToBase64(file)
+    // const bufferToBase64 = (blob: Blob) => {
+    //   const reader = new FileReader()
+
+    //   reader.readAsArrayBuffer(blob)
+    //   return new Promise((resolve) => {
+    //     reader.onloadend = () => {
+    //       resolve(reader.result)
+    //     }
+    //   })
+    // }
+
+    const b64 = (await blobToBase64(file)) as string
+    // const b264 = (await bufferToBase64(file)) as string
+
+    // const compressed_data = flate.gzip_encode(b64)
+
+    // console.log(arrayBufferToBase64(b264))
 
     console.log(b64)
 
@@ -312,6 +323,7 @@ const ChatMain = () => {
       filename,
       id,
       avatar,
+      type: "image",
     })
 
     socket.current.emit("addImageToPhotoGallery", {

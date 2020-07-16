@@ -18,6 +18,7 @@ export interface Message {
   msg: string
   filename?: string
   ogData: OgData
+  type: string
 }
 
 export interface PhotoGallery {
