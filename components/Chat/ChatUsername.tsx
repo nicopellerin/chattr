@@ -142,7 +142,7 @@ const Text = styled.span`
 `
 
 const Avatar = styled.img`
-  width: 4rem;
+  width: 2.6rem;
   margin-right: 1.4rem;
 `
 

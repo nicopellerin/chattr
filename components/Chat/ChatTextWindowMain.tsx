@@ -157,7 +157,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         )}
         <AnimatePresence>
           {noConnection && !userLeftChattr && (
-            <motion.div layout style={{ height: 400 }}>
+            <motion.div layout exit={{ opacity: 0 }} style={{ height: 400 }}>
               <Invite />
             </motion.div>
           )}

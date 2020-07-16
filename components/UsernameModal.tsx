@@ -11,11 +11,11 @@ import { usernameState, avatarState } from "../store/users"
 import MessageBar from "./MessageBar"
 
 const avatars = [
-  "/avatars/devil.png",
-  "/avatars/gurl.png",
-  "/avatars/jedi.png",
-  "/avatars/girl-glasses.png",
-  "/avatars/tophat.png",
+  "/avatars/cat.png",
+  "/avatars/dead.png",
+  "/avatars/black-unicorn.png",
+  "/avatars/white-robot.png",
+  "/avatars/test.png",
 ]
 
 const avatarsContainerVariant = {
@@ -116,10 +116,10 @@ const UsernameModal: React.FC<Props> = ({
                 onClick={() => setAvatar(avatarImg)}
               >
                 <Avatar
-                  animate={{ opacity: avatar === avatarImg ? 1 : 0.5 }}
+                  animate={{ opacity: avatar === avatarImg ? 1 : 0.3 }}
                   src={avatarImg}
                   alt="avatar"
-                  width="45"
+                  width="32"
                 />
               </AvatarItem>
             )
@@ -147,10 +147,10 @@ const Container = styled(motion.div)`
   align-items: center;
   justify-content: center;
   background: linear-gradient(-45deg, #1a0d2b 50%, #4d2f72);
-  padding: 4rem 4rem;
+  padding: 4rem 2rem;
   border-radius: 10%;
   border-bottom: 7px solid var(--primaryColor);
-  min-width: 40rem;
+  min-width: 42rem;
   filter: drop-shadow(0 0.7rem 2rem rgba(131, 82, 253, 0.3));
 
   @media (max-width: 500px) {
@@ -168,7 +168,7 @@ const AvatarsContainer = styled(motion.ul)`
   width: 100%;
   margin: 0;
   padding: 0;
-  margin-bottom: 3.6rem;
+  margin-bottom: 3rem;
 `
 
 const AvatarItem = styled(motion.li)`
@@ -194,7 +194,7 @@ const Tagline = styled.label`
   -webkit-text-fill-color: transparent;
   margin-bottom: 2rem;
   font-weight: 600;
-  letter-spacing: 2.4px;
+  /* letter-spacing: 2.4px; */
 `
 
 const Form = styled.form`
@@ -206,18 +206,20 @@ const Form = styled.form`
 
 const Input = styled.input`
   border: none;
-  background: #0c0613;
-  color: var(--textColor);
+  /* background: #0c0613; */
+  background: rgba(12, 6, 19, 0.87);
+  color: var(--secondaryColor);
   padding: 0.9em 0.7em;
   font-size: 2rem;
   font-weight: 500;
   border-radius: 5px;
   margin-bottom: 2.6rem;
-  width: 85%;
+  /* width: 85%; */
   outline: transparent;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
   &::placeholder {
-    color: rgba(240, 32, 216, 0.57);
+    color: rgba(240, 32, 216, 0.5);
   }
 `
 

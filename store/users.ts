@@ -29,7 +29,7 @@ export const avatarState = atom<string>({
   default:
     (typeof window !== "undefined" &&
       JSON.parse(window.sessionStorage.getItem("chattr-avatar")!)) ||
-    "/avatars/devil.png",
+    "/avatars/cat.png",
 })
 
 export const userLeftChattrState = atom<boolean>({

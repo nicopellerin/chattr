@@ -160,13 +160,14 @@ const Username = styled.span`
     props.me ? "var(--tertiaryColor)" : "var(--secondaryColor)"};
   font-weight: 600;
   display: flex;
-  margin-bottom: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.2rem;
 `
 
 const Avatar = styled.img`
-  width: 2.4rem;
-  height: 2.4rem;
-  margin-right: 1rem;
+  width: 2rem;
+  /* height: 2.4rem; */
+  margin-right: 1.2rem;
 `
 
 const MessageOutput = styled.div`
