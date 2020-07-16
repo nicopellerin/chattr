@@ -138,9 +138,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
               <Container layout>
                 <Form onSubmit={handleSubmit}>
                   <YoutubeIcon src="/yt.png" alt="Youtube logo" />
-                  <Title style={{ marginTop: "1rem" }}>
-                    Watch video with friend
-                  </Title>
+                  <Title>Watch video with friend</Title>
                   <Input
                     name="youtubeURL"
                     placeholder="Enter Youtube URL..."
@@ -295,11 +293,21 @@ const Form = styled.form`
 const YoutubeIcon = styled.img`
   position: absolute;
   top: 4rem;
-  width: 18rem;
+  width: 15rem;
+  background: rgba(131, 82, 253, 0.1);
+  padding: 1rem;
+  border-radius: 5px;
+  filter: drop-shadow(0 0.4rem 3rem rgba(131, 82, 253, 0.2));
 `
 
 const Title = styled.h3`
-  color: var(--tertiaryColor);
+  background: -webkit-linear-gradient(
+    145deg,
+    var(--primaryColor),
+    var(--tertiaryColor)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: 2.6rem;
   text-align: center;
   max-width: 100%;
