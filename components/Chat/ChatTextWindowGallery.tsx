@@ -39,15 +39,18 @@ const ChatTextWindowGallery = () => {
       >
         <Container layout>
           {photoGallery.length > 0 ? (
-            photoGallery.map(({ msg, filename, id, username, avatar }) => (
-              <ChatTextMessage
-                msg={msg}
-                usernameMsg={username}
-                id={id}
-                filename={filename}
-                avatar={avatar}
-              />
-            ))
+            photoGallery.map(
+              ({ msg, filename, id, username, avatar, type }) => (
+                <ChatTextMessage
+                  msg={msg}
+                  usernameMsg={username}
+                  id={id}
+                  filename={filename}
+                  avatar={avatar}
+                  type={type}
+                />
+              )
+            )
           ) : (
             <NoImages layout>
               <NoImagesTitle layout>No images yet</NoImagesTitle>

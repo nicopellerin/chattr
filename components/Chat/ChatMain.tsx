@@ -332,6 +332,7 @@ const ChatMain = () => {
       filename,
       id,
       avatar,
+      type: "image",
     })
 
     socket.current.emit("fileTransferProgress", "Done!")
