@@ -147,10 +147,10 @@ const Container = styled(motion.div)`
   align-items: center;
   justify-content: center;
   background: linear-gradient(-45deg, #1a0d2b 50%, #4d2f72);
-  padding: 4rem 2rem;
+  padding: 4rem 3rem;
   border-radius: 10%;
   border-bottom: 7px solid var(--primaryColor);
-  min-width: 42rem;
+  min-width: 40rem;
   filter: drop-shadow(0 0.7rem 2rem rgba(131, 82, 253, 0.3));
 
   @media (max-width: 500px) {
@@ -168,7 +168,7 @@ const AvatarsContainer = styled(motion.ul)`
   width: 100%;
   margin: 0;
   padding: 0;
-  margin-bottom: 3rem;
+  margin-bottom: 2.4rem;
 `
 
 const AvatarItem = styled(motion.li)`
@@ -194,7 +194,7 @@ const Tagline = styled.label`
   -webkit-text-fill-color: transparent;
   margin-bottom: 2rem;
   font-weight: 600;
-  /* letter-spacing: 2.4px; */
+  letter-spacing: 2.4px;
 `
 
 const Form = styled.form`
@@ -213,8 +213,8 @@ const Input = styled.input`
   font-size: 2rem;
   font-weight: 500;
   border-radius: 5px;
-  margin-bottom: 2.6rem;
-  /* width: 85%; */
+  margin-bottom: 2rem;
+  width: 80%;
   outline: transparent;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
