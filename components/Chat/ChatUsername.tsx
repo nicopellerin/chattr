@@ -6,6 +6,7 @@ import { useRecoilValue, useRecoilState } from "recoil"
 import { usernameState, userSoundOnState, avatarState } from "../../store/users"
 import { FaCog } from "react-icons/fa"
 import { motion, AnimatePresence } from "framer-motion"
+import AvatarBar from "../AvatarBar"
 
 const ChatUsername = () => {
   const username = useRecoilValue(usernameState)
@@ -14,6 +15,7 @@ const ChatUsername = () => {
   const [soundOn, setSoundOn] = useRecoilState(userSoundOnState)
 
   const [toggleDrawer, setToggleDrawer] = useState(false)
+  const [toggleAvatar, setToggleAvatar] = useState(false)
 
   const beepOn = new Audio("/sounds/slide_drop.mp3")
   const swoosh = new Audio("/sounds/paper_slide.mp3")
@@ -95,7 +97,16 @@ const ChatUsername = () => {
             exit={{ y: 30 }}
             transition={{ type: "spring", damping: 17 }}
           >
-            <Avatar src={avatar} alt="avatar" />
+            <AnimatePresence>
+              {toggleAvatar && <AvatarBar setToggleAvatar={setToggleAvatar} />}
+            </AnimatePresence>
+            <Avatar
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              src={avatar}
+              alt="avatar"
+              onClick={() => setToggleAvatar((prevState) => !prevState)}
+            />
             <Username>{username}</Username>
           </UsernameWrapper>
         )}
@@ -127,7 +138,7 @@ const Wrapper = styled.form`
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  min-height: 60px;
+  min-height: 68px;
 
   @media (max-width: 500px) {
     display: none;
@@ -141,9 +152,10 @@ const Text = styled.span`
   color: var(--textColor);
 `
 
-const Avatar = styled.img`
+const Avatar = styled(motion.img)`
   width: 2.6rem;
   margin-right: 1.4rem;
+  cursor: pointer;
 `
 
 const Username = styled.span`
