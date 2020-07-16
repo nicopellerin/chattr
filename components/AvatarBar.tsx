@@ -5,6 +5,8 @@ import { useRecoilState } from "recoil"
 
 import { avatarState } from "../store/users"
 
+import { useClickOutside } from "../hooks/useClickOutside"
+
 const avatars = [
   "/avatars/cat.png",
   "/avatars/dead.png",
@@ -37,12 +39,15 @@ interface Props {
 const AvatarBar: React.FC<Props> = ({ setToggleAvatar }) => {
   const [avatar, setAvatar] = useRecoilState(avatarState)
 
+  const node = useClickOutside(setToggleAvatar)
+
   return (
     <AvatarsContainer
       variants={avatarsContainerVariant}
       initial="hidden"
       animate="visible"
       exit="hidden"
+      ref={node}
     >
       {avatars.map((avatarImg) => {
         return (
