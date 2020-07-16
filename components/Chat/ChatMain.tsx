@@ -453,7 +453,8 @@ const Wrapper = styled(motion.div)`
     props.theatreMode ? "100%" : "85%"};
 
   @media (max-width: 1440px) {
-    width: 90vw;
+    width: ${(props: { theatreMode: boolean }) =>
+      props.theatreMode ? "100vw" : "90vw"};
   }
 
   @media (max-width: 1024px) {
