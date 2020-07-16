@@ -145,7 +145,7 @@ const MsgWrapper = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   border-bottom: 1px solid #222;
   background: linear-gradient(45deg, #0c0613, #0f0818);
   border-radius: 5px;

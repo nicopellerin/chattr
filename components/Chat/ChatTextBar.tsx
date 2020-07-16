@@ -236,14 +236,14 @@ const TextInput = styled.input`
   height: 100%;
   background: #0c0613;
   border: none;
-  color: var(--textColor);
+  color: var(--secondaryColor);
   font-size: 1.7rem;
   font-weight: 500;
   padding: 0 15.8rem 0 1.5rem;
   outline: transparent;
 
   &::placeholder {
-    color: var(--textColor);
+    color: rgba(240, 32, 216, 0.77);
   }
 
   &:disabled {

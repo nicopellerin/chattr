@@ -17,7 +17,7 @@ const Navbar = () => {
       <Link href="/">
         <LogoStyled src="/logo-3d.svg" alt="logo" />
       </Link>
-      <Text>Free P2P audio/video + chat platform</Text>
+      <Text>One-on-one hangouts in a fun and secure way</Text>
       <ButtonsWrapper>
         <Link href="/about">
           <ButtonAbout

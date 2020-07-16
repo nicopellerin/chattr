@@ -282,6 +282,12 @@ const ChatMain = () => {
       username,
     })
 
+    // const wasm = await import("../../pkg2/blob_to_base64")
+
+    // const res = wasm.blob_to_base64(file)
+
+    // console.log("WASM", res.toString())
+
     const blobToBase64 = (blob: Blob) => {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
@@ -293,6 +299,8 @@ const ChatMain = () => {
     }
 
     const b64 = await blobToBase64(file)
+
+    console.log(b64)
 
     socket.current.emit("fileTransferProgress", "Done!")
 

@@ -151,7 +151,7 @@ const Container = styled(motion.div)`
   border-radius: 10%;
   border-bottom: 7px solid var(--primaryColor);
   min-width: 40rem;
-  filter: drop-shadow(0 0.4rem 2rem rgba(131, 82, 253, 0.35));
+  filter: drop-shadow(0 0.4rem 5rem rgba(131, 82, 253, 0.15));
 
   @media (max-width: 500px) {
     width: 90vw;
@@ -194,7 +194,7 @@ const Tagline = styled.label`
   -webkit-text-fill-color: transparent;
   margin-bottom: 2rem;
   font-weight: 600;
-  letter-spacing: 2.4px;
+  letter-spacing: 1.4px;
 `
 
 const Form = styled.form`
