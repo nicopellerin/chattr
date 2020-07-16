@@ -7,8 +7,9 @@ import { useSetRecoilState, useRecoilState } from "recoil"
 import { useRouter } from "next/router"
 import shortid from "shortid"
 
-import { usernameState, avatarState } from "../store/users"
 import MessageBar from "./MessageBar"
+
+import { usernameState, avatarState } from "../store/users"
 
 const avatars = [
   "/avatars/cat.png",
@@ -113,7 +114,12 @@ const UsernameModal: React.FC<Props> = ({
                 variants={avatarVariant}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setAvatar(avatarImg)}
+                onClick={() => {
+                  const selectSound = new Audio("/sounds/select-char4.mp3")
+                  selectSound.volume = 0.3
+                  setAvatar(avatarImg)
+                  selectSound.play()
+                }}
               >
                 <Avatar
                   animate={{ opacity: avatar === avatarImg ? 1 : 0.3 }}
