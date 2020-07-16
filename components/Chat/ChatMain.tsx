@@ -282,8 +282,6 @@ const ChatMain = () => {
       username,
     })
 
-    socket.current.emit("fileTransferProgress", "Done!")
-
     const blobToBase64 = (blob: Blob) => {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
@@ -295,6 +293,8 @@ const ChatMain = () => {
     }
 
     const b64 = await blobToBase64(file)
+
+    socket.current.emit("fileTransferProgress", "Done!")
 
     const id = shortid.generate()
 
