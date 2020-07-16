@@ -123,6 +123,7 @@ const UsernameModal: React.FC<Props> = ({
               >
                 <Avatar
                   animate={{ opacity: avatar === avatarImg ? 1 : 0.3 }}
+                  whileHover={{ opacity: 1 }}
                   src={avatarImg}
                   alt="avatar"
                   width="32"

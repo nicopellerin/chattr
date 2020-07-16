@@ -66,6 +66,7 @@ const AvatarBar: React.FC<Props> = ({ setToggleAvatar }) => {
           >
             <Avatar
               animate={{ opacity: avatar === avatarImg ? 1 : 0.3 }}
+              whileHover={{ opacity: 1 }}
               src={avatarImg}
               alt="avatar"
               width="24"
