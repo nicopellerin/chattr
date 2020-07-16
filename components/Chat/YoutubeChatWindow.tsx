@@ -137,7 +137,10 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
             initialScreen: (
               <Container layout>
                 <Form onSubmit={handleSubmit}>
-                  <Title>Watch Youtube video with friend</Title>
+                  <YoutubeIcon src="/yt.png" alt="Youtube logo" />
+                  <Title style={{ marginTop: "1rem" }}>
+                    Watch video with friend
+                  </Title>
                   <Input
                     name="youtubeURL"
                     placeholder="Enter Youtube URL..."
@@ -162,6 +165,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
             ),
             waitingScreen: (
               <Container layout>
+                <YoutubeIcon src="/yt.png" alt="Youtube logo" />
                 <Title>Waiting for your friend to accept...</Title>
                 <WaitingButton
                   type="button"
@@ -288,11 +292,18 @@ const Form = styled.form`
   justify-content: center;
 `
 
+const YoutubeIcon = styled.img`
+  position: absolute;
+  top: 4rem;
+  width: 18rem;
+`
+
 const Title = styled.h3`
   color: var(--tertiaryColor);
-  font-size: 3rem;
+  font-size: 2.6rem;
   text-align: center;
-  max-width: 90%;
+  max-width: 100%;
+  margin-bottom: 2rem;
 `
 
 const Input = styled.input`
