@@ -142,7 +142,7 @@ const Note = styled(motion.span)`
 `
 
 const AppButton = styled(motion.button)`
-  margin-top: 4rem;
+  margin-top: 3rem;
   background: linear-gradient(
     140deg,
     var(--primaryColor),
