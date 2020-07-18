@@ -4661,10 +4661,10 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-framer-motion@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-2.0.0.tgz#c274c437fb690792a802b066084f6ec20e5fb1f3"
-  integrity sha512-UyqXAWezOKzUqHCPrjrGuis6erhhoYb5iDT82GHgyEN2KYlXXCiP8WC6SfqbrK9SWL7FZoLf37LCpyQGapHH3A==
+framer-motion@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-2.1.0.tgz#46d9d3de42dd5bee4ca85b911ec41720677a71f5"
+  integrity sha512-vjwUBHhmeDJ7N6PfblcWDVYi4Izq61Tg9r8OFtEhXI4iIdwhASzfZbURFuBs+9gxITd3pHKs41JkjzeqWNk6xw==
   dependencies:
     "@popmotion/easing" "^1.0.2"
     "@popmotion/popcorn" "^0.4.2"
@@ -4804,6 +4804,13 @@ get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
   integrity sha1-3BXKHGcjh8p2vTesCjlbogQqLCg=
+
+getusermedia@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/getusermedia/-/getusermedia-2.0.1.tgz#f81af9795bc5934649813f7d092dd65030b34655"
+  integrity sha1-+Br5eVvFk0ZJgT99CS3WUDCzRlU=
+  dependencies:
+    webrtc-adapter "^2.0.2"
 
 glob-parent@^3.1.0:
   version "3.1.0"
@@ -8136,6 +8143,11 @@ schema-utils@^2.6.1, schema-utils@^2.6.6:
     ajv "^6.12.2"
     ajv-keywords "^3.4.1"
 
+sdp@^1.0.0:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/sdp/-/sdp-1.5.4.tgz#8e038f6ddb14bd765ae1f4b5216e12094511e0d0"
+  integrity sha1-jgOPbdsUvXZa4fS1IW4SCUUR4NA=
+
 sdp@^2.12.0, sdp@^2.6.0:
   version "2.12.0"
   resolved "https://registry.yarnpkg.com/sdp/-/sdp-2.12.0.tgz#338a106af7560c86e4523f858349680350d53b22"
@@ -9431,6 +9443,13 @@ webpack@4.43.0:
     terser-webpack-plugin "^1.4.3"
     watchpack "^1.6.1"
     webpack-sources "^1.4.1"
+
+webrtc-adapter@^2.0.2:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-2.1.0.tgz#612b5bc6ce8e73c9d0660038a21f9255a867bf3e"
+  integrity sha1-YStbxs6Oc8nQZgA4oh+SVahnvz4=
+  dependencies:
+    sdp "^1.0.0"
 
 webrtc-adapter@^7.3.0:
   version "7.6.3"

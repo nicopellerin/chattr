@@ -35,9 +35,9 @@ const ChatTextWindowGallery = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", damping: 80 }}
-        style={{ height: expandChatWindow ? 570 : 400 }}
+        style={{ height: expandChatWindow ? 580 : 400 }}
       >
-        <Container layout>
+        <Container layout="position">
           {photoGallery.length > 0 ? (
             photoGallery.map(
               ({ msg, filename, id, username, avatar, type }) => (

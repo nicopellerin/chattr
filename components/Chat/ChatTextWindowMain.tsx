@@ -97,7 +97,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
       }}
     >
       <Container
-        // layout
+        // layout="position"
         isExpanded={expandChatWindow}
         isIpad={
           typeof window !== "undefined" && window.innerWidth < 1025
@@ -165,11 +165,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
           </NoMessages>
         )}
         <AnimatePresence>
-          {noConnection && !userLeftChattr && (
-            <motion.div exit={{ opacity: 0, scale: 0 }} style={{ height: 400 }}>
-              <Invite />
-            </motion.div>
-          )}
+          {noConnection && !userLeftChattr && <Invite />}
         </AnimatePresence>
 
         {hasConnection &&
@@ -220,7 +216,7 @@ export default ChatTextWindowMain
 const Container = styled(motion.div)`
   width: 100%;
   height: ${(props: { isExpanded?: boolean; isIpad: boolean }) =>
-    props.isExpanded && !props.isIpad ? "570px" : "400px"};
+    props.isExpanded && !props.isIpad ? "580px" : "400px"};
   ${(props: { isIpad: boolean }) => props.isIpad && "height: 350px"};
   color: var(--textColor);
   font-size: 1.7rem;

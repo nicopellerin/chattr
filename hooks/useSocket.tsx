@@ -6,6 +6,7 @@ import { useSetRecoilState, useRecoilValue } from "recoil"
 import CryptoJS from "crypto-js"
 import io from "socket.io-client"
 import SimplePeer from "simple-peer"
+import getUserMedia from "get-user-media-promise"
 
 import { youtubeChatWindowScreens } from "../components/Chat/YoutubeChatWindow"
 import { gameScreens } from "../components/Games/TicTacToe/Game"
@@ -160,15 +161,13 @@ const useSocket = ({
     })
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            width: { ideal: 4096 },
-            height: { ideal: 2160 },
-            facingMode: "environment",
-          },
-          audio: true,
-        })
+      getUserMedia({
+        video: {
+          width: { ideal: 4096 },
+          height: { ideal: 2160 },
+        },
+        audio: true,
+      })
         .then((stream: MediaStream) => {
           // setStream(stream)
           streamRef.current = stream

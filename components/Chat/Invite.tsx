@@ -31,13 +31,12 @@ const Invite = () => {
 
   return (
     <Wrapper
-      // layout
-      initial={{ opacity: 0, y: 10 }}
+      layout
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
-      transition={{ type: "spring", damping: 80 }}
     >
-      <Container>
+      <Container layout="position">
         <Text>Invite friend via</Text>
         <a
           href={`http://www.facebook.com/dialog/send?app_id=296141104755109&link=${window.location.href}&redirect_uri=${window.location.href}`}
@@ -94,7 +93,7 @@ const Container = styled(motion.div)`
   /* cursor: pointer; */
 `
 
-const Text = styled.h2`
+const Text = styled(motion.h2)`
   font-size: 2.4rem;
   color: var(--textColor);
   font-weight: 600;
