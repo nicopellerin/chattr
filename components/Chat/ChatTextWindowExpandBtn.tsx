@@ -68,18 +68,19 @@ const ExpandButton = styled(motion.button)`
   background: linear-gradient(45deg, #d852fd, #d852fd);
   border-radius: 50%;
   position: absolute;
-  top: 1.5rem;
+  top: 0rem;
   z-index: 0;
   opacity: 0.6;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  right: -3rem;
+  right: 0rem;
   width: 3rem;
   height: 3rem;
   font-size: 3rem;
   outline: none;
+  z-index: 2000;
 
   &::after {
     content: "";

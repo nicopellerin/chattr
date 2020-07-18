@@ -9,7 +9,7 @@ import { useStateDesigner } from "@state-designer/react"
 import TicTacToe from "../Games/TicTacToe"
 import ChatTextWindowGalleryBtn from "./ChatTextWindowGalleryBtn"
 import ChatTextWindowGameBtn from "./ChatTextWindowGameBtn"
-import ChatTextWindowExpandBtn from "./ChatTextWindowExpandBtn"
+// import ChatTextWindowExpandBtn from "./ChatTextWindowExpandBtn"
 import ChatTextWindowGallery from "./ChatTextWindowGallery"
 import ChatTextWindowMain from "./ChatTextWindowMain"
 import ChatTextWindowChatBtn from "./ChatTextWindowChatBtn"
@@ -69,7 +69,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
 
   return (
     <Wrapper>
-      <ChatTextWindowExpandBtn />
+      {/* <ChatTextWindowExpandBtn /> */}
       <ChatTextWindowChatBtn />
       <ChatTextWindowGameBtn />
       <ChatTextWindowGalleryBtn />

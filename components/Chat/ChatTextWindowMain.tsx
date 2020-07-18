@@ -25,6 +25,7 @@ import {
   userLeftChattrState,
   otherUsernameQuery,
 } from "../../store/users"
+// import ChatTextWindowExpandBtn from "./ChatTextWindowExpandBtn"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -96,6 +97,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         borderRadius: "5px",
       }}
     >
+      {/* <ChatTextWindowExpandBtn /> */}
       <Container
         // layout="position"
         isExpanded={expandChatWindow}

@@ -75,7 +75,7 @@ const ExpandButton = styled(motion.button)`
   background: linear-gradient(45deg, #d852fd, #9c74fe);
   border-radius: 50%;
   position: absolute;
-  top: 6.5rem;
+  top: 2.5rem;
   z-index: 0;
   cursor: pointer;
   display: flex;
