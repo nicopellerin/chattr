@@ -75,6 +75,7 @@ const Slider = () => {
 
   return (
     <motion.div
+      layout
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -87,10 +88,11 @@ const Slider = () => {
         zIndex: 20,
       }}
     >
-      <Container>
+      <Container layout>
         <CloseIcon onClick={() => catSliderScreenState.send("SHOW")} />
         <AnimatePresence initial={false} custom={direction}>
           <ImageStyled
+            layout="position"
             alt="Slider"
             key={page}
             loading="lazy"
@@ -131,7 +133,7 @@ const swipePower = (offset: number, velocity: number) => {
 export default Slider
 
 // Styles
-const Container = styled.div`
+const Container = styled(motion.div)`
   background: #000;
   width: 100%;
   height: 67rem;

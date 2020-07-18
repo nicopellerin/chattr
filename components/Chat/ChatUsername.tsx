@@ -2,10 +2,11 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
+import { motion, AnimatePresence } from "framer-motion"
+import { FaCog } from "react-icons/fa"
+import { detect } from "detect-browser"
 
 import { usernameState, userSoundOnState, avatarState } from "../../store/users"
-import { FaCog } from "react-icons/fa"
-import { motion, AnimatePresence } from "framer-motion"
 import AvatarBar from "../AvatarBar"
 
 const ChatUsername = () => {
@@ -26,8 +27,11 @@ const ChatUsername = () => {
     window.localStorage.setItem("chattr-sounds-on", JSON.stringify(soundOn))
   }, [soundOn])
 
+  const browser = detect()
+  const supported = browser?.name !== "firefox"
+
   return (
-    <Wrapper>
+    <Wrapper supported={supported}>
       <AnimatePresence initial={false}>
         {toggleDrawer ? (
           <>
@@ -139,6 +143,10 @@ const Wrapper = styled.form`
   justify-content: space-between;
   overflow: hidden;
   min-height: 68px;
+  /* filter: ${(props: { supported: boolean }) =>
+    props.supported
+      ? "drop-shadow(0 0.7rem 5rem rgba(131, 82, 253, 0.1))"
+      : null}; */
 
   @media (max-width: 500px) {
     display: none;

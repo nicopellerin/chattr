@@ -8,6 +8,7 @@ import { FaVolumeUp } from "react-icons/fa"
 import CryptoJS from "crypto-js"
 import shortid from "shortid"
 import axios from "axios"
+import { detect } from "detect-browser"
 
 const EmojiPicker = dynamic(() => import("./EmojiPicker"), { ssr: false })
 
@@ -39,6 +40,11 @@ const lolSounds = [
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
+}
+
+interface StyledProps {
+  supported?: boolean
+  theatreMode: boolean
 }
 
 const ChatTextBar: React.FC<Props> = ({ socket }) => {
@@ -158,9 +164,16 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     }
   }, [msg])
 
+  const browser = detect()
+  const supported = browser?.name !== "firefox"
+
   return (
     <>
-      <Wrapper theatreMode={displayTheatreMode} onSubmit={handleSubmit}>
+      <Wrapper
+        supported={supported}
+        theatreMode={displayTheatreMode}
+        onSubmit={handleSubmit}
+      >
         <Label htmlFor="message">Message</Label>
         <TextInput
           autoComplete="off"
@@ -220,10 +233,13 @@ const Wrapper = styled(motion.form)`
   height: 100%;
   padding: 1rem;
   border-radius: 5px;
-  display: ${(props: { theatreMode: boolean }) =>
-    props.theatreMode ? "none" : "grid"};
+  display: ${(props: StyledProps) => (props.theatreMode ? "none" : "grid")};
   grid-template-columns: 1fr auto;
   position: relative;
+  filter: ${(props: StyledProps) =>
+    props.supported
+      ? "drop-shadow(0 0.7rem 5rem rgba(131, 82, 253, 0.1))"
+      : null};
 `
 
 const Label = styled.label`

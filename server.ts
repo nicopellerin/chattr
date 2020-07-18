@@ -33,8 +33,6 @@ const PORT = 3000
 
 const rooms: Rooms = {}
 
-// io.adapter(redisAdapter({ host: "db", port: 6379 }))
-
 io.on("connection", (socket) => {
   const room: string = socket.handshake.query.room
 
@@ -65,7 +63,9 @@ io.on("connection", (socket) => {
   }
 
   const oldUsers: User[] = (rooms[room] && rooms[room].users) || []
-  rooms[room] = { users: [...oldUsers, { id: socket.id, username, avatar }] }
+  rooms[room] = {
+    users: [...oldUsers, { id: socket.id, username, avatar }],
+  }
 
   socket.join(room)
 
@@ -224,6 +224,8 @@ io.on("connection", (socket) => {
     socket.broadcast.to(room).emit("flipFriendVideo", status)
   })
 })
+
+// io.adapter(redisAdapter({ host: "db", port: 6379 }))
 
 nextApp.prepare().then(() => {
   app.get("*", (req: Request, res: Response) => {

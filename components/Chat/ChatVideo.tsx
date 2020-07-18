@@ -121,6 +121,13 @@ interface Props {
   flipWebcam: boolean
 }
 
+interface StyledProps {
+  supported?: boolean
+  isYoutubeVideo?: boolean
+  theatreMode?: boolean
+  showWebcam?: boolean
+}
+
 const ChatVideo: React.FC<Props> = ({
   acceptCall,
   selfVideoRef,
@@ -181,7 +188,6 @@ const ChatVideo: React.FC<Props> = ({
   }, [messageContainsHeartEmoji])
 
   const browser = detect()
-
   const supported = browser?.name !== "firefox"
 
   // Capture screenshot when in screen-sharing mode
@@ -231,6 +237,7 @@ const ChatVideo: React.FC<Props> = ({
 
   return (
     <Wrapper
+      supported={supported}
       layout
       ref={contraintsRef}
       isYoutubeVideo={chatVideoScreensState.isIn("youtubeVideoScreen.visible")}
@@ -372,18 +379,21 @@ const Wrapper = styled(motion.div)`
   height: 100%;
   width: 100%;
   position: relative;
-  background: ${(props: { isYoutubeVideo: boolean }) =>
+  background: ${(props: StyledProps) =>
     props.isYoutubeVideo ? "none" : "#050306"};
   margin: 0;
   padding: 0;
   border-radius: 5px;
   z-index: 100;
+  filter: ${(props: StyledProps) =>
+    props.supported
+      ? "drop-shadow(0 0.7rem 5rem rgba(131, 82, 253, 0.1))"
+      : null};
 `
 
 const FriendVideo = styled(motion.video)`
   height: 100%;
-  max-height: ${(props: { theatreMode: boolean }) =>
-    props.theatreMode ? "85vh" : "670px"};
+  max-height: ${(props: StyledProps) => (props.theatreMode ? "85vh" : "670px")};
   width: 100%;
   margin: 0;
   padding: 0;
@@ -409,9 +419,8 @@ const FriendAudioMuted = styled(motion.span)`
 const SelfVideoWrapper = styled(motion.div)`
   height: 130px;
   width: 200px;
-  opacity: ${(props: { showWebcam: boolean }) => (props.showWebcam ? 1 : 0)};
-  display: ${(props: { theatreMode: boolean; showWebcam: boolean }) =>
-    props.theatreMode ? "none" : "block"};
+  opacity: ${(props: StyledProps) => (props.showWebcam ? 1 : 0)};
+  display: ${(props: StyledProps) => (props.theatreMode ? "none" : "block")};
   position: absolute;
   bottom: 3vh;
   left: 3vh;

@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { detect } from "detect-browser"
 
 import MessageBar from "../MessageBar"
 
@@ -135,9 +136,12 @@ const ChatCommands: React.FC<Props> = ({
     }
   }, [showSelfWebcam, streamRef?.current])
 
+  const browser = detect()
+  const supported = browser?.name !== "firefox"
+
   return (
     <>
-      <Wrapper>
+      <Wrapper supported={supported}>
         <Container>
           <IconWrapper
             onClick={() => {
@@ -160,7 +164,7 @@ const ChatCommands: React.FC<Props> = ({
             />
             {!sendingFile && fileTransferProgress === "0" ? (
               <>
-                <FaCloudUploadAlt size={22} />
+                <FaCloudUploadAlt size={22} title="Send image" />
               </>
             ) : (
               <motion.div
@@ -251,6 +255,10 @@ const Wrapper = styled(motion.div)`
   height: 100%;
   padding: 1.2rem 1.7rem;
   border-radius: 5px;
+  filter: ${(props: { supported: boolean }) =>
+    props.supported
+      ? "drop-shadow(0 0.7rem 5rem rgba(131, 82, 253, 0.1))"
+      : null};
 
   @media (max-width: 500px) {
     display: none;
