@@ -97,117 +97,127 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         borderRadius: "5px",
       }}
     >
-      {/* <ChatTextWindowExpandBtn /> */}
-      <Container
-        // layout="position"
-        isExpanded={expandChatWindow}
-        isIpad={
-          typeof window !== "undefined" && window.innerWidth < 1025
-            ? true
-            : false
-        }
+      <Wrapper
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", damping: 80 }}
+        style={{ height: expandChatWindow ? 580 : 400 }}
       >
-        {msgs.length > 0 &&
-          msgs.map(
-            ({
-              msg,
-              username: usernameMsg,
-              filename,
-              id,
-              ogData,
-              avatar,
-              type,
-            }) => {
-              let decryptedData
-              // If message is not an image, encrypt it. TODO: Need to fix this
-              if (type !== "image") {
-                const bytes = CryptoJS.AES.decrypt(
-                  msg,
-                  String(process.env.NEXT_PUBLIC_KEY)
+        {/* <ChatTextWindowExpandBtn /> */}
+        <Container
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", damping: 80 }}
+          // layout="position"
+          isExpanded={expandChatWindow}
+          isIpad={
+            typeof window !== "undefined" && window.innerWidth < 1025
+              ? true
+              : false
+          }
+        >
+          {msgs.length > 0 &&
+            msgs.map(
+              ({
+                msg,
+                username: usernameMsg,
+                filename,
+                id,
+                ogData,
+                avatar,
+                type,
+              }) => {
+                let decryptedData
+                // If message is not an image, encrypt it. TODO: Need to fix this
+                if (type !== "image") {
+                  const bytes = CryptoJS.AES.decrypt(
+                    msg,
+                    String(process.env.NEXT_PUBLIC_KEY)
+                  )
+                  decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+                }
+
+                return (
+                  <ChatTextMessage
+                    key={id}
+                    id={id}
+                    msg={msg}
+                    decryptedData={decryptedData}
+                    filename={filename}
+                    usernameMsg={usernameMsg}
+                    socket={socket}
+                    ogData={ogData}
+                    avatar={avatar}
+                    type={type}
+                  />
                 )
-                decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
               }
-
-              return (
-                <ChatTextMessage
-                  key={id}
-                  id={id}
-                  msg={msg}
-                  decryptedData={decryptedData}
-                  filename={filename}
-                  usernameMsg={usernameMsg}
-                  socket={socket}
-                  ogData={ogData}
-                  avatar={avatar}
-                  type={type}
+            )}
+          {msgs.length === 0 && hasConnection && (
+            <NoMessages layout hasConnection={hasConnection}>
+              <NoMessagesText layout>
+                <IconLogo
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ type: "spring", damping: 80 }}
+                  src="/favicon.png"
+                  alt="Icon"
                 />
-              )
-            }
+                {showJoinMsg ? (
+                  <UserJoinedText>
+                    {otherUsername}
+                    <br /> joined the room
+                  </UserJoinedText>
+                ) : (
+                  <WelcomeText>{welcomeMsg}</WelcomeText>
+                )}
+              </NoMessagesText>
+            </NoMessages>
           )}
-        {msgs.length === 0 && hasConnection && (
-          <NoMessages layout hasConnection={hasConnection}>
-            <NoMessagesText layout>
-              <IconLogo
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
+          <AnimatePresence>
+            {noConnection && !userLeftChattr && <Invite />}
+          </AnimatePresence>
+
+          {hasConnection &&
+            userIsTyping?.status &&
+            username !== userIsTyping?.username && (
+              <UserIsTypingWrapper
+                initial={{ y: 5 }}
+                animate={{ y: 0 }}
+                transition={{ type: "spring", damping: 80 }}
+              >
+                <UserIsTypingText>
+                  <ThreeBounce color="var(--textColor)" size={7} />
+                </UserIsTypingText>
+              </UserIsTypingWrapper>
+            )}
+
+          <AnimatePresence>
+            {userLeftChattr && (
+              <UserDisconnectedWrapper
+                // layout
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: -20, opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ type: "spring", damping: 80 }}
-                src="/favicon.png"
-                alt="Icon"
-              />
-              {showJoinMsg ? (
-                <UserJoinedText>
-                  {otherUsername}
-                  <br /> joined the room
-                </UserJoinedText>
-              ) : (
-                <WelcomeText>{welcomeMsg}</WelcomeText>
-              )}
-            </NoMessagesText>
-          </NoMessages>
-        )}
-        <AnimatePresence>
-          {noConnection && !userLeftChattr && <Invite />}
-        </AnimatePresence>
-
-        {hasConnection &&
-          userIsTyping?.status &&
-          username !== userIsTyping?.username && (
-            <UserIsTypingWrapper
-              initial={{ y: 5 }}
-              animate={{ y: 0 }}
-              transition={{ type: "spring", damping: 80 }}
-            >
-              <UserIsTypingText>
-                <ThreeBounce color="var(--textColor)" size={7} />
-              </UserIsTypingText>
-            </UserIsTypingWrapper>
-          )}
-
-        <AnimatePresence>
-          {userLeftChattr && (
-            <UserDisconnectedWrapper
-              // layout
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: -20, opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ type: "spring", damping: 80 }}
-            >
-              <IconLogo
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ type: "spring", damping: 80 }}
-                src="/favicon.png"
-                alt="Icon"
-              />
-              <UserDisconnectedText>
-                {otherUsernameRef.current} has left Chattr
-              </UserDisconnectedText>
-            </UserDisconnectedWrapper>
-          )}
-        </AnimatePresence>
-      </Container>
+              >
+                <IconLogo
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ type: "spring", damping: 80 }}
+                  src="/favicon.png"
+                  alt="Icon"
+                />
+                <UserDisconnectedText>
+                  {otherUsernameRef.current} has left Chattr
+                </UserDisconnectedText>
+              </UserDisconnectedWrapper>
+            )}
+          </AnimatePresence>
+        </Container>
+      </Wrapper>
     </PerfectScrollbar>
   )
 }
@@ -215,6 +225,15 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
 export default ChatTextWindowMain
 
 // Styles
+const Wrapper = styled(motion.div)`
+  /* width: 100%;
+  height: 100%;
+  color: var(--textColor);
+  font-size: 1.7rem;
+  line-height: 1.4;
+  position: relative; */
+`
+
 const Container = styled(motion.div)`
   width: 100%;
   height: ${(props: { isExpanded?: boolean; isIpad: boolean }) =>
