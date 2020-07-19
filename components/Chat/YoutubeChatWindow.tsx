@@ -15,7 +15,6 @@ import {
 import { chatVideoScreens } from "./ChatVideo"
 import MessageBar from "../MessageBar"
 
-import { expandChatWindowState } from "../../store/chat"
 import {
   playYoutubeVideoState,
   youtubeUrlState,
@@ -48,7 +47,6 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
   )
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
 
-  const expandChatWindow = useRecoilValue(expandChatWindowState)
   const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
   const listUsers = useRecoilValue(listUsersState)
   const streamOtherPeer = useRecoilValue(streamOtherPeerState)
@@ -127,16 +125,15 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
   return (
     <>
       <Wrapper
-        layout
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", damping: 80 }}
-        style={{ height: expandChatWindow ? 570 : 400 }}
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ scale: 0, opacity: 0 }}
+        style={{ height: 400 }}
       >
         <AnimatePresence>
           {youtubeChatWindowScreensState.whenIn({
             initialScreen: (
-              <Container layout>
+              <Container layout="position">
                 <Form onSubmit={handleSubmit}>
                   <YoutubeIcon src="/yt.png" alt="Youtube logo" />
                   <Title>Watch video with friend</Title>
@@ -163,7 +160,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
               </Container>
             ),
             waitingScreen: (
-              <Container layout>
+              <Container layout="position">
                 <YoutubeIcon src="/yt.png" alt="Youtube logo" />
                 <Title>Waiting for your friend to accept...</Title>
                 <WaitingButton
@@ -180,7 +177,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
               </Container>
             ),
             commandScreen: (
-              <Container layout>
+              <Container layout="position">
                 <WatchingWrapper>
                   <WatchingTitle>Watching</WatchingTitle>
                   <WatchingText>

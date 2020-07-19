@@ -56,8 +56,8 @@ const PlayGameButton = styled(motion.button)`
   justify-content: center;
   align-items: center;
   right: -3rem;
-  width: 3rem;
-  height: 3rem;
+  width: 30px;
+  height: 30px;
   font-size: 3rem;
   outline: none;
 

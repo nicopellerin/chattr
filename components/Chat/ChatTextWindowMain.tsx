@@ -98,17 +98,13 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
       }}
     >
       <Wrapper
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", damping: 80 }}
-        style={{ height: expandChatWindow ? 580 : 400 }}
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ scale: 0, opacity: 0 }}
+        style={{ height: 400 }}
       >
-        {/* <ChatTextWindowExpandBtn /> */}
         <Container
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", damping: 80 }}
-          // layout="position"
+          layout="position"
           isExpanded={expandChatWindow}
           isIpad={
             typeof window !== "undefined" && window.innerWidth < 1025
@@ -154,8 +150,8 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
               }
             )}
           {msgs.length === 0 && hasConnection && (
-            <NoMessages layout hasConnection={hasConnection}>
-              <NoMessagesText layout>
+            <NoMessages layout="position" hasConnection={hasConnection}>
+              <NoMessagesText>
                 <IconLogo
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -196,7 +192,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
           <AnimatePresence>
             {userLeftChattr && (
               <UserDisconnectedWrapper
-                // layout
+                layout="position"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: -20, opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -225,14 +221,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
 export default ChatTextWindowMain
 
 // Styles
-const Wrapper = styled(motion.div)`
-  /* width: 100%;
-  height: 100%;
-  color: var(--textColor);
-  font-size: 1.7rem;
-  line-height: 1.4;
-  position: relative; */
-`
+const Wrapper = styled(motion.div)``
 
 const Container = styled(motion.div)`
   width: 100%;

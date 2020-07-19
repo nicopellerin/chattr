@@ -67,12 +67,11 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
 
   return (
     <Wrapper>
-      {/* <ChatTextWindowExpandBtn /> */}
       <ChatTextWindowChatBtn />
       <ChatTextWindowGameBtn />
       <ChatTextWindowGalleryBtn />
       <YoutubeChatWindowBtn />
-      <AnimatePresence initial={false} exitBeforeEnter>
+      <AnimatePresence>
         {chatTextWindowScreensState.whenIn({
           chatScreen: (
             <ChatTextWindowMain showJoinMsg={showJoinMsg} socket={socket} />

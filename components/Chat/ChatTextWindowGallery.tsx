@@ -32,10 +32,10 @@ const ChatTextWindowGallery = () => {
       }}
     >
       <Wrapper
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", damping: 80 }}
-        style={{ height: expandChatWindow ? 580 : 400 }}
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ scale: 0, opacity: 0 }}
+        style={{ height: 400 }}
       >
         <Container layout="position">
           {photoGallery.length > 0 ? (
@@ -52,9 +52,9 @@ const ChatTextWindowGallery = () => {
               )
             )
           ) : (
-            <NoImages layout>
-              <NoImagesTitle layout>No images yet</NoImagesTitle>
-              <NoImagesTagline layout>
+            <NoImages layout="position">
+              <NoImagesTitle>No images yet</NoImagesTitle>
+              <NoImagesTagline>
                 Images sent through the chat will be available here
               </NoImagesTagline>
             </NoImages>
@@ -68,18 +68,11 @@ const ChatTextWindowGallery = () => {
 export default ChatTextWindowGallery
 
 // Styles
-const Wrapper = styled(motion.div)`
-  /* width: 100%;
-  height: 100%;
-  color: var(--textColor);
-  font-size: 1.7rem;
-  line-height: 1.4;
-  position: relative; */
-`
+const Wrapper = styled(motion.div)``
 
 const Container = styled(motion.div)`
   width: 100%;
-  height: 100%;
+  height: 400px;
   color: var(--textColor);
   font-size: 1.7rem;
   line-height: 1.4;
@@ -98,12 +91,12 @@ const NoImages = styled(motion.div)`
   filter: drop-shadow(0 0.7rem 0.2rem rgba(131, 82, 253, 0.05));
 `
 
-const NoImagesTitle = styled(motion.h2)`
+const NoImagesTitle = styled.h2`
   color: var(--tertiaryColor);
   font-size: 3rem;
 `
 
-const NoImagesTagline = styled(motion.span)`
+const NoImagesTagline = styled.span`
   color: var(--textColor);
   font-size: 1.7rem;
   font-weight: 600;
