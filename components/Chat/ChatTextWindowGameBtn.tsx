@@ -52,7 +52,7 @@ const PlayGameButton = styled(motion.button)`
   background: linear-gradient(45deg, #d852fd, #9c74fe);
   border-radius: 50%;
   position: absolute;
-  top: 7.5rem;
+  top: 17.5rem;
   z-index: 0;
   cursor: pointer;
   display: flex;

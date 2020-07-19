@@ -5,12 +5,13 @@ import { motion } from "framer-motion"
 import { FaLink } from "react-icons/fa"
 import { useRecoilValue } from "recoil"
 
-import { userSoundOnState } from "../../store/users"
+import { userSoundOnState, usernameState } from "../../store/users"
 
 import { copyToClipboard } from "../../utils/copyToClipboard"
 
 const Invite = () => {
   const soundOn = useRecoilValue(userSoundOnState)
+  const username = useRecoilValue(usernameState)
 
   const [copied, setCopied] = useState(false)
 
@@ -38,20 +39,34 @@ const Invite = () => {
     >
       <Container layout="position">
         <Text>Invite friend via</Text>
-        <a
-          href={`http://www.facebook.com/dialog/send?app_id=296141104755109&link=${window.location.href}&redirect_uri=${window.location.href}`}
-          target="_blank"
-          rel="noopener"
-        >
-          <FbookMessengerIcon
-            height="80"
-            width="80"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            src="/messenger.svg"
-            alt="Messenger"
-          />
-        </a>
+        <IconsContainer>
+          <a
+            href={`http://www.facebook.com/dialog/send?app_id=296141104755109&link=${window.location.href}&redirect_uri=${window.location.href}`}
+            target="_blank"
+            rel="noopener"
+          >
+            <FbookMessengerIcon
+              height="60"
+              width="60"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              src="/messenger.svg"
+              alt="Messenger"
+              style={{ marginRight: 25 }}
+            />
+          </a>
+          <a
+            href={`mailto:?subject=Chattr - Join room with ${username}&amp;body=Hey! I'm inviting you to join me on Chattr at ${window.location.href}. Talk soon, ${username}`}
+          >
+            <motion.img
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              src="/email.png"
+              alt="email"
+              width="60"
+            />
+          </a>
+        </IconsContainer>
         <CopyButton
           onClick={() => {
             copyToClipboard(window.location.href)
@@ -98,6 +113,11 @@ const Text = styled(motion.h2)`
   color: var(--textColor);
   font-weight: 600;
   margin-bottom: 2rem;
+`
+
+const IconsContainer = styled.div`
+  display: flex;
+  align-items: center;
 `
 
 const CopyButton = styled(motion.button)`
