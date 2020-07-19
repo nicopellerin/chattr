@@ -74,6 +74,21 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
     youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1])
   }
 
+  const handleSeekTo = (e: any) => {
+    const rect = e.target.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const time = youtubePlayerRef?.current?.getDuration() * (x / 800)
+    youtubePlayerRef?.current?.seekTo(time)
+    socket?.current?.emit("youtubeVideoSeekTo", time)
+  }
+
+  useEffect(() => {
+    socket?.current?.on("youtubeVideoSeekToGlobal", (time: number) => {
+      console.log("IN")
+      youtubePlayerRef?.current?.seekTo(time)
+    })
+  }, [socket?.current])
+
   useEffect(() => {
     if (youtubeVideoMuteSound) {
       youtubePlayerRef?.current?.mute()
@@ -206,8 +221,11 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
               </Overlay>
             )}
           </AnimatePresence>
-          <YoutubeProgressBar youtubePlayerRef={youtubePlayerRef} />
         </YoutubeVideoWrapper>
+        <YoutubeProgressBar
+          youtubePlayerRef={youtubePlayerRef}
+          handleSeekTo={handleSeekTo}
+        />
         <React.Suspense fallback={null}>
           <VideoContainer>
             <WebcamVideoWrapper>
@@ -267,7 +285,7 @@ const Container = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 3rem;
+  padding: 1rem;
   border-radius: 5px;
   z-index: 2;
   height: 100%;
@@ -280,9 +298,10 @@ const VideoContainer = styled.div`
   grid-template-columns: auto auto;
   justify-content: center;
   justify-items: center;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 5px;
   box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);
+  margin-top: 4rem;
   /* background: linear-gradient(
     45deg,
     rgba(255, 255, 255, 0.01),
@@ -294,10 +313,10 @@ const YoutubeVideoWrapper = styled.div`
   height: 390px;
   width: 800px;
   position: relative;
-  margin-bottom: 3rem;
   /* pointer-events: none; */
   ${(props: { isPlaying: boolean }) =>
     props.isPlaying && `box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);`}
+  margin-bottom: 5px;
 `
 
 const YoutubeVideo = styled(motion.div)`
@@ -306,7 +325,7 @@ const YoutubeVideo = styled(motion.div)`
     rgba(255, 255, 255, 0.01),
     rgba(156, 116, 254, 0.05)
   );
-  padding: 2rem;
+  /* padding: 2rem; */
   border-radius: 5px;
   height: 390px;
   width: 800px;

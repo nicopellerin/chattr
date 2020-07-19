@@ -212,6 +212,10 @@ io.on("connection", (socket) => {
     io.to(room).emit("rewindYoutubeVideoGlobal")
   })
 
+  socket.on("youtubeVideoSeekTo", (time: number) => {
+    io.to(room).emit("youtubeVideoSeekToGlobal", time)
+  })
+
   socket.on("sharedScreenRequest", (data) => {
     socket.broadcast.to(room).emit("sharedScreenRequestGlobal", data)
   })
