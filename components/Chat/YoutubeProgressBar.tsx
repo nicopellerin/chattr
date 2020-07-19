@@ -37,6 +37,16 @@ const YoutubeProgressBar: React.FC<Props> = ({ youtubePlayerRef }) => {
     requestRef.current = requestAnimationFrame(barProgress)
   }
 
+  // const handleSeekTo = (e) => {
+  //   console.log(e.clientX / 800)
+  //   console.log(youtubePlayerRef?.current?.getDuration() * (e.clientX / 800))
+  //   // console.log(youtubePlayerRef?.current?.getDuration() / 800)
+
+  //   youtubePlayerRef?.current?.seekTo(
+  //     youtubePlayerRef?.current?.getDuration() * (e.clientX / 800)
+  //   )
+  // }
+
   useEffect(() => {
     if (playYoutubeVideo) {
       requestRef.current = requestAnimationFrame(barProgress)
@@ -45,7 +55,12 @@ const YoutubeProgressBar: React.FC<Props> = ({ youtubePlayerRef }) => {
     return () => cancelAnimationFrame(requestRef.current)
   }, [playYoutubeVideo])
 
-  return <Bar style={{ width: width }} />
+  return (
+    <Bar
+      style={{ width: width }}
+      // onClick={handleSeekTo}
+    />
+  )
 }
 
 export default YoutubeProgressBar
@@ -57,6 +72,6 @@ const Bar = styled.div`
     var(--primaryColor),
     var(--tertiaryColor)
   );
-  height: 5px;
+  height: 10px;
   opacity: 0.2;
 `
