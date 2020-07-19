@@ -8,14 +8,14 @@ import { FaCog } from "react-icons/fa"
 import AvatarBar from "../AvatarBar"
 
 import { usernameState, userSoundOnState, avatarState } from "../../store/users"
-import { micVolumeState } from "../../store/video"
+// import { micVolumeState } from "../../store/video"
 
 const ChatUsername = () => {
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
 
   const [soundOn, setSoundOn] = useRecoilState(userSoundOnState)
-  const [micVolume, setMicVolume] = useRecoilState(micVolumeState)
+  // const [micVolume, setMicVolume] = useRecoilState(micVolumeState)
 
   const [toggleDrawer, setToggleDrawer] = useState(false)
   const [toggleAvatar, setToggleAvatar] = useState(false)
@@ -63,7 +63,7 @@ const ChatUsername = () => {
                 </ToggleSwitchLabel>
               </ToggleSwitch>
             </ToggleWrapper>
-            <Text style={{ marginRight: 20 }}>Mic volume</Text>
+            {/* <Text style={{ marginRight: 20 }}>Mic volume</Text>
             <input
               type="range"
               value={micVolume}
@@ -72,7 +72,7 @@ const ChatUsername = () => {
               min="0"
               max="1"
               step="0.01"
-            />
+            /> */}
           </>
         ) : (
           <UsernameWrapper
