@@ -13,6 +13,7 @@ const avatars = [
   "/avatars/black-unicorn.png",
   "/avatars/white-robot.png",
   "/avatars/test.png",
+  "/avatars/square-top.png",
 ]
 
 const avatarsContainerVariant = {
@@ -96,7 +97,7 @@ const AvatarsContainer = styled(motion.ul)`
   padding: 0 1rem;
   border-radius: 5px;
   top: -65px;
-  left: -0.8rem;
+  left: -0.5rem;
   min-height: 64px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   /* filter: drop-shadow(0 0.4rem 5rem rgba(131, 82, 253, 0.15)); */

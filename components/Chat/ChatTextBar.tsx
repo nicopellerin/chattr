@@ -252,7 +252,7 @@ const TextInput = styled.input`
 
   &:disabled {
     &::placeholder {
-      color: #aaa;
+      color: rgba(240, 32, 216, 0.37);
     }
   }
 `

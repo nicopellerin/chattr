@@ -17,6 +17,7 @@ const avatars = [
   "/avatars/black-unicorn.png",
   "/avatars/white-robot.png",
   "/avatars/test.png",
+  "/avatars/square-top.png",
 ]
 
 const avatarsContainerVariant = {
@@ -157,7 +158,7 @@ const Container = styled(motion.div)`
   padding: 4rem 3rem;
   border-radius: 10%;
   border-bottom: 7px solid var(--primaryColor);
-  min-width: 40rem;
+  min-width: 42rem;
   box-shadow: 0 0.4rem 5rem rgba(131, 82, 253, 0.3);
 
   @media (max-width: 500px) {

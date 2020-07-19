@@ -121,3 +121,8 @@ export const flipFriendVideoState = atom<boolean>({
   key: "flipFriendVideoState",
   default: false,
 })
+
+export const micVolumeState = atom<number>({
+  key: "micVolumeState",
+  default: 1,
+})

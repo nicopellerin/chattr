@@ -5,14 +5,17 @@ import { useRecoilValue, useRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
 import { FaCog } from "react-icons/fa"
 
-import { usernameState, userSoundOnState, avatarState } from "../../store/users"
 import AvatarBar from "../AvatarBar"
+
+import { usernameState, userSoundOnState, avatarState } from "../../store/users"
+import { micVolumeState } from "../../store/video"
 
 const ChatUsername = () => {
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
 
   const [soundOn, setSoundOn] = useRecoilState(userSoundOnState)
+  const [micVolume, setMicVolume] = useRecoilState(micVolumeState)
 
   const [toggleDrawer, setToggleDrawer] = useState(false)
   const [toggleAvatar, setToggleAvatar] = useState(false)
@@ -60,35 +63,16 @@ const ChatUsername = () => {
                 </ToggleSwitchLabel>
               </ToggleSwitch>
             </ToggleWrapper>
-            {/* <ToggleWrapper
-              initial={{ y: -30 }}
-              animate={{ y: 0 }}
-              exit={{ y: 30 }}
-              transition={{ type: "spring", damping: 15 }}
-            >
-              <Text style={{ marginRight: 20 }}>Menu sounds</Text>
-              <ToggleSwitch
-                onClick={() => {
-                  setSoundOn((prevState) => !prevState)
-                  if (!soundOn) {
-                    swoosh.play()
-                  }
-                }}
-              >
-                <ToggleSwitchCheckbox
-                  type="checkbox"
-                  name="status"
-                  id="status"
-                />
-                <ToggleSwitchLabel>
-                  <ToggleSwitchInner animate isOn={soundOn ? true : false} />
-                  <ToggleSwitchSwitch
-                    animate
-                    isOn={soundOn ? true : false}
-                  ></ToggleSwitchSwitch>
-                </ToggleSwitchLabel>
-              </ToggleSwitch>
-            </ToggleWrapper> */}
+            <Text style={{ marginRight: 20 }}>Mic volume</Text>
+            <input
+              type="range"
+              value={micVolume}
+              onChange={(e) => setMicVolume(Number(e.target.value))}
+              name="points"
+              min="0"
+              max="1"
+              step="0.01"
+            />
           </>
         ) : (
           <UsernameWrapper

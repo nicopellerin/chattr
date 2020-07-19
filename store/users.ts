@@ -68,3 +68,14 @@ export const otherUserIdQuery = selector({
     return newList[0]?.id
   },
 })
+
+export const otherUserAvatarQuery = selector({
+  key: "otherUserAvatarQuery",
+  get: ({ get }) => {
+    const me = get(usernameState)
+    const list = get(listUsersState)
+    const newList = list.filter((user) => user.username !== me)
+
+    return newList[0]?.avatar
+  },
+})

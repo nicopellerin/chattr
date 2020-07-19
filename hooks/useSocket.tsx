@@ -36,6 +36,7 @@ import {
   cancelCallRequestState,
   callerSignalState,
   screenSharingStartedState,
+  // micVolumeState,
 } from "../store/video"
 import {
   playerXGlobalState,
@@ -129,6 +130,7 @@ const useSocket = ({
 
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
+  // const micVolume = useRecoilValue(micVolumeState)
 
   const socket = useRef() as React.MutableRefObject<SocketIOClient.Socket>
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
@@ -166,14 +168,38 @@ const useSocket = ({
           width: { ideal: 4096 },
           height: { ideal: 2160 },
         },
-        audio: true,
+        audio: {
+          optional: [
+            { echoCancellation: true },
+            { noiseSuppression: true },
+            { autoGainControl: true },
+            { googEchoCancellation: true },
+            { googEchoCancellation2: true },
+            { googNoiseSuppression: true },
+            { googNoiseSuppression2: true },
+            { googAutoGainControl: true },
+            { googAutoGainControl2: true },
+            { googHighpassFilter: true },
+            { googAudioMirroring: false },
+            { sourceId: "default" },
+          ],
+        },
       })
         .then((stream: MediaStream) => {
-          // setStream(stream)
           streamRef.current = stream
           if (selfVideoRef.current) {
             selfVideoRef.current.srcObject = stream
           }
+          // console.log(gainNodeRef.current)
+          // const audioTrack = streamRef?.current?.getAudioTracks()[0]
+          // const ctx = new AudioContext()
+          // const src = ctx.createMediaStreamSource(new MediaStream([audioTrack]))
+          // const dst = ctx.createMediaStreamDestination()
+          // const gainNode = ctx.createGain()
+          // gainNode.gain.setValueAtTime(gainNodeRef.current, ctx.currentTime)
+          // ;[src, gainNode, dst].reduce((a, b) => a && a.connect(b))
+          // streamRef?.current?.removeTrack(audioTrack)
+          // streamRef?.current?.addTrack(dst.stream.getAudioTracks()[0])
         })
         .catch(() => {
           setGetUserMediaNotSupported(true)

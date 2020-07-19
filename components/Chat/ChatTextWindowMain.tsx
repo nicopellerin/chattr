@@ -24,6 +24,7 @@ import {
   listUsersState,
   userLeftChattrState,
   otherUsernameQuery,
+  otherUserAvatarQuery,
 } from "../../store/users"
 // import ChatTextWindowExpandBtn from "./ChatTextWindowExpandBtn"
 
@@ -43,6 +44,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
   const otherUsername = useRecoilValue(otherUsernameQuery)
   const messagedDeleted = useRecoilValue(messageDeletedState)
   const expandChatWindow = useRecoilValue(expandChatWindowState)
+  const otherAvatar = useRecoilValue(otherUserAvatarQuery)
 
   const [fileTransferProgress, setFileTransferProgress] = useRecoilState(
     fileTransferProgressState
@@ -104,7 +106,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         style={{ height: 400 }}
       >
         <Container
-          layout="position"
+          // layout="position"
           isExpanded={expandChatWindow}
           isIpad={
             typeof window !== "undefined" && window.innerWidth < 1025
@@ -152,12 +154,12 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
           {msgs.length === 0 && hasConnection && (
             <NoMessages layout="position" hasConnection={hasConnection}>
               <NoMessagesText>
-                <IconLogo
+                <IconAvatar
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ type: "spring", damping: 80 }}
-                  src="/favicon.png"
+                  src={otherAvatar}
                   alt="Icon"
                 />
                 {showJoinMsg ? (
@@ -304,6 +306,15 @@ const UserJoinedText = styled.span`
 const IconLogo = styled(motion.img)`
   margin-bottom: 2.4rem;
   width: 12rem;
+
+  @media (max-width: 500px) {
+    margin-bottom: 1.7rem;
+  }
+`
+
+const IconAvatar = styled(IconLogo)`
+  margin-bottom: 2.4rem;
+  width: 10rem;
 
   @media (max-width: 500px) {
     margin-bottom: 1.7rem;

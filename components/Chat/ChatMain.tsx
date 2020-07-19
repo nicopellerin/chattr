@@ -25,6 +25,7 @@ import {
   usernameState,
   userLeftChattrState,
   avatarState,
+  userSoundOnState,
 } from "../../store/users"
 import {
   expandChatWindowState,
@@ -79,6 +80,7 @@ const ChatMain = () => {
   const callerSignal = useRecoilValue(callerSignalState)
   const cancelCallRequest = useRecoilValue(cancelCallRequestState)
   const togglePhotoExpander = useRecoilValue(togglePhotoExpanderState)
+  const soundOn = useRecoilValue(userSoundOnState)
 
   const [msg, setMsg] = useState("")
   const [playBarType, setPlayBarType] = useState("")
@@ -86,6 +88,9 @@ const ChatMain = () => {
   const [flipWebcam, setFlipWebcam] = useState(false)
 
   const sendersRef = useRef<Array<MediaStreamTrack>>([])
+
+  const expand = new Audio("/sounds/expand.mp3")
+  expand.volume = 0.3
 
   const {
     socket,
@@ -375,7 +380,12 @@ const ChatMain = () => {
                   initial={{ y: "-50%" }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => setFlipLayout((prevState) => !prevState)}
+                  onClick={() => {
+                    setFlipLayout((prevState) => !prevState)
+                    if (soundOn) {
+                      expand.play()
+                    }
+                  }}
                 >
                   <ExchangeIcon />
                 </ExchangeIconButton>
