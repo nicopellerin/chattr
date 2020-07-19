@@ -282,12 +282,12 @@ const VideoContainer = styled.div`
   justify-items: center;
   padding: 2rem;
   border-radius: 5px;
-  /* filter: drop-shadow(0 0.75rem 10rem rgba(131, 82, 253, 0.15)); */
-  background: linear-gradient(
+  box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);
+  /* background: linear-gradient(
     45deg,
     rgba(255, 255, 255, 0.01),
     rgba(156, 116, 254, 0.05)
-  );
+  ); */
 `
 
 const YoutubeVideoWrapper = styled.div`
@@ -296,9 +296,8 @@ const YoutubeVideoWrapper = styled.div`
   position: relative;
   margin-bottom: 3rem;
   /* pointer-events: none; */
-  /* ${(props: { isPlaying: boolean }) =>
-    props.isPlaying &&
-    `filter: drop-shadow(0 0.75rem 10rem rgba(131, 82, 253, 0.35))`} */
+  ${(props: { isPlaying: boolean }) =>
+    props.isPlaying && `box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);`}
 `
 
 const YoutubeVideo = styled(motion.div)`

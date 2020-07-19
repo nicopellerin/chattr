@@ -385,7 +385,8 @@ const Wrapper = styled(motion.div)`
   padding: 0;
   border-radius: 5px;
   z-index: 100;
-  box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);
+  box-shadow: ${(props: StyledProps) =>
+    props.isYoutubeVideo ? "none" : "0 0.7rem 5rem rgba(131, 82, 253, 0.1)"};
 `
 
 const FriendVideo = styled(motion.video)`
