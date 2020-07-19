@@ -57,11 +57,7 @@ const Wrapper = styled.div`
   justify-content: center;
   min-height: 100%;
   width: 100%;
-  background: linear-gradient(
-      45deg,
-      rgba(12, 6, 19, 0.85),
-      rgba(12, 6, 19, 0.97)
-    ),
+  background: linear-gradient(45deg, rgba(12, 6, 19, 0.8), rgba(12, 6, 19, 0.9)),
     url("/bg-2.webp");
   background-size: cover;
   background-position: center left;

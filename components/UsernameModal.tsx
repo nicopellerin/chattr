@@ -158,7 +158,7 @@ const Container = styled(motion.div)`
   padding: 4rem 3rem;
   border-radius: 10%;
   border-bottom: 7px solid var(--primaryColor);
-  min-width: 42rem;
+  min-width: 44rem;
   box-shadow: 0 0.4rem 5rem rgba(131, 82, 253, 0.3);
 
   @media (max-width: 500px) {
