@@ -1,11 +1,12 @@
 import * as React from "react"
 import { useRef, useEffect, useState } from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import Peer from "simple-peer"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
 import shortid from "shortid"
 import { useStateDesigner } from "@state-designer/react"
+import { FaExchangeAlt } from "react-icons/fa"
 
 import {
   receivingCallState,
@@ -30,6 +31,7 @@ import {
   messageDeletedState,
   showPlayBarState,
   togglePhotoExpanderState,
+  flipLayoutState,
 } from "../../store/chat"
 
 import ChatVideo, { chatVideoScreens } from "./ChatVideo"
@@ -39,11 +41,15 @@ import ChatTextWindow from "./ChatTextWindow"
 import ChatUsername from "./ChatUsername"
 import NoUsername from "./NoUsernameModal"
 import PlayBar from "../Games/PlayBar"
-
 import MessageBar from "../MessageBar"
+import PhotoExpander from "./PhotoExpander"
 
 import useSocket from "../../hooks/useSocket"
-import PhotoExpander from "./PhotoExpander"
+
+interface StyledProps {
+  theatreMode?: boolean
+  flipLayout?: boolean
+}
 
 const ChatMain = () => {
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
@@ -54,6 +60,7 @@ const ChatMain = () => {
   const [messageDeleted, setMessageDeleted] = useRecoilState(
     messageDeletedState
   )
+  const [flipLayout, setFlipLayout] = useRecoilState(flipLayoutState)
 
   const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
   const setCallAccepted = useSetRecoilState(callAcceptedState)
@@ -293,7 +300,6 @@ const ChatMain = () => {
     }
 
     const b64 = (await blobToBase64(file)) as string
-
     const id = shortid.generate()
 
     socket.current.emit("chatMessage", {
@@ -335,9 +341,10 @@ const ChatMain = () => {
   return (
     <>
       {!username && <NoUsername socket={socket} />}
-      <OutterWrapper>
+      <OutterWrapper flipLayout={flipLayout}>
         <Wrapper theatreMode={displayTheatreMode}>
           <LeftColumn
+            flipLayout={flipLayout}
             layout
             theatreMode={displayTheatreMode}
             onMouseDown={(e) => {
@@ -361,7 +368,18 @@ const ChatMain = () => {
           </LeftColumn>
           <RightColumn layout theatreMode={displayTheatreMode}>
             <>
-              <LogoStyled src="/logo-3d.svg" alt="logo" />
+              <LogoContainer>
+                <LogoStyled src="/logo-3d.svg" alt="logo" />
+                <ExchangeIconButton
+                  layout
+                  initial={{ y: "-50%" }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setFlipLayout((prevState) => !prevState)}
+                >
+                  <ExchangeIcon />
+                </ExchangeIconButton>
+              </LogoContainer>
               {!expandChatWindow && (
                 <>
                   <motion.div layout>
@@ -419,21 +437,25 @@ const OutterWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   align-items: center;
+  ${(props: StyledProps) =>
+    props.flipLayout &&
+    css`
+      --mainLayoutLeftColumn: 1.1fr;
+      --mainLayoutRightColumn: 3fr;
+    `}
 `
 
 const Wrapper = styled(motion.div)`
   display: grid;
-  grid-template-columns: ${(props: { theatreMode: boolean }) =>
+  grid-template-columns: ${(props: StyledProps) =>
     props.theatreMode
       ? "1fr"
       : "var(--mainLayoutLeftColumn) var(--mainLayoutRightColumn)"};
   grid-gap: 3rem;
-  width: ${(props: { theatreMode: boolean }) =>
-    props.theatreMode ? "100%" : "85%"};
+  width: ${(props: StyledProps) => (props.theatreMode ? "100%" : "85%")};
 
   @media (max-width: 1440px) {
-    width: ${(props: { theatreMode: boolean }) =>
-      props.theatreMode ? "100vw" : "90vw"};
+    width: ${(props: StyledProps) => (props.theatreMode ? "100vw" : "90vw")};
   }
 
   @media (max-width: 1024px) {
@@ -450,11 +472,11 @@ const Wrapper = styled(motion.div)`
 const LeftColumn = styled(motion.div)`
   position: relative;
   display: grid;
-  grid-template-rows: ${(props: { theatreMode: boolean }) =>
+  grid-template-rows: ${(props: StyledProps) =>
     props.theatreMode ? "1fr" : "9fr 1fr"};
-  grid-gap: ${(props: { theatreMode: boolean }) =>
-    props.theatreMode ? 0 : "2rem"};
+  grid-gap: ${(props: StyledProps) => (props.theatreMode ? 0 : "2rem")};
   z-index: 19;
+  order: ${(props: StyledProps) => (props.flipLayout ? 1 : 0)};
 
   @media (max-width: 500px) {
     grid-template-rows: 1fr;
@@ -467,6 +489,13 @@ const RightColumn = styled(motion.div)`
     props.theatreMode ? "none" : "grid"};
 `
 
+const LogoContainer = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+`
+
 const LogoStyled = styled.img`
   width: 200px;
   justify-self: center;
@@ -475,4 +504,24 @@ const LogoStyled = styled.img`
   @media (max-width: 500px) {
     display: none;
   }
+`
+
+const ExchangeIconButton = styled(motion.button)`
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  opacity: 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+
+  ${LogoContainer}:hover & {
+    opacity: 1;
+  }
+`
+
+const ExchangeIcon = styled(FaExchangeAlt)`
+  font-size: 2rem;
+  color: var(--secondaryColor);
 `

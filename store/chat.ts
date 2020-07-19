@@ -114,3 +114,8 @@ export const userLeftChattrAction = selector({
     set(streamOtherPeerState, null)
   },
 })
+
+export const flipLayoutState = atom<boolean>({
+  key: "flipLayoutState",
+  default: false,
+})

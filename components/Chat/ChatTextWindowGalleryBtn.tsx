@@ -6,6 +6,7 @@ import { FaPhotoVideo } from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
 
 import { userSoundOnState } from "../../store/users"
+import { flipLayoutState } from "../../store/chat"
 
 import { chatTextWindowScreens } from "./ChatTextWindow"
 
@@ -13,12 +14,14 @@ const ChatTextWindowGalleryBtn = () => {
   const state = useStateDesigner(chatTextWindowScreens)
 
   const soundOn = useRecoilValue(userSoundOnState)
+  const flipLayout = useRecoilValue(flipLayoutState)
 
   const photoGallerySound = new Audio("/sounds/click_marker_cap.mp3")
   photoGallerySound.volume = 0.3
 
   return (
     <PhotoGalleryButton
+      flipLayout={flipLayout}
       whileHover={{ opacity: 1, scale: 1 }}
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", damping: 15 }}
@@ -56,6 +59,7 @@ const PhotoGalleryButton = styled(motion.button)`
   justify-content: center;
   align-items: center;
   right: -3rem;
+  ${(props: { flipLayout: boolean }) => props.flipLayout && `left: -3rem`};
   width: 30px;
   height: 30px;
   font-size: 3rem;

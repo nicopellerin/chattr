@@ -6,7 +6,7 @@ import { useRecoilValue } from "recoil"
 import { FaComment } from "react-icons/fa"
 
 import { usernameState } from "../../store/users"
-import { chatWindowState } from "../../store/chat"
+import { chatWindowState, flipLayoutState } from "../../store/chat"
 import { useStateDesigner } from "@state-designer/react"
 import { chatTextWindowScreens } from "./ChatTextWindow"
 
@@ -16,6 +16,7 @@ const ChatTextWindowChatBtn = () => {
   // const soundOn = useRecoilValue(userSoundOnState)
   const msgs = useRecoilValue(chatWindowState)
   const username = useRecoilValue(usernameState)
+  const flipLayout = useRecoilValue(flipLayoutState)
 
   const [newMsgsAlert, setNewMsgsAlert] = useState(false)
 
@@ -43,6 +44,7 @@ const ChatTextWindowChatBtn = () => {
 
   return (
     <ExpandButton
+      flipLayout={flipLayout}
       whileHover={{ opacity: 1, scale: 1 }}
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", damping: 15 }}
@@ -82,6 +84,7 @@ const ExpandButton = styled(motion.button)`
   justify-content: center;
   align-items: center;
   right: -3rem;
+  ${(props: { flipLayout: boolean }) => props.flipLayout && `left: -3rem`};
   width: 30px;
   height: 30px;
   font-size: 3rem;
