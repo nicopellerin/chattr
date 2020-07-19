@@ -4,7 +4,6 @@ import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
-import { detect } from "detect-browser"
 
 import TicTacToe from "../Games/TicTacToe"
 import ChatTextWindowGalleryBtn from "./ChatTextWindowGalleryBtn"
@@ -66,11 +65,8 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
     })
   }, [socket?.current])
 
-  const browser = detect()
-  const supported = browser?.name !== "firefox"
-
   return (
-    <Wrapper supported={supported}>
+    <Wrapper>
       {/* <ChatTextWindowExpandBtn /> */}
       <ChatTextWindowChatBtn />
       <ChatTextWindowGameBtn />
@@ -99,8 +95,5 @@ const Wrapper = styled(motion.div)`
   padding: 1.7rem;
   border-radius: 5px;
   position: relative;
-  filter: ${(props: { supported: boolean }) =>
-    props.supported
-      ? "drop-shadow(0 0.7rem 5rem rgba(131, 82, 253, 0.1))"
-      : null};
+  box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);
 `

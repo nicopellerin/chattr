@@ -8,7 +8,6 @@ import { FaVolumeUp } from "react-icons/fa"
 import CryptoJS from "crypto-js"
 import shortid from "shortid"
 import axios from "axios"
-import { detect } from "detect-browser"
 
 const EmojiPicker = dynamic(() => import("./EmojiPicker"), { ssr: false })
 
@@ -43,7 +42,6 @@ interface Props {
 }
 
 interface StyledProps {
-  supported?: boolean
   theatreMode: boolean
 }
 
@@ -164,16 +162,9 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
     }
   }, [msg])
 
-  const browser = detect()
-  const supported = browser?.name !== "firefox"
-
   return (
     <>
-      <Wrapper
-        supported={supported}
-        theatreMode={displayTheatreMode}
-        onSubmit={handleSubmit}
-      >
+      <Wrapper theatreMode={displayTheatreMode} onSubmit={handleSubmit}>
         <Label htmlFor="message">Message</Label>
         <TextInput
           autoComplete="off"
@@ -236,10 +227,7 @@ const Wrapper = styled(motion.form)`
   display: ${(props: StyledProps) => (props.theatreMode ? "none" : "grid")};
   grid-template-columns: 1fr auto;
   position: relative;
-  filter: ${(props: StyledProps) =>
-    props.supported
-      ? "drop-shadow(0 0.7rem 5rem rgba(131, 82, 253, 0.1))"
-      : null};
+  box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);
 `
 
 const Label = styled.label`
