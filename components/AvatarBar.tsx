@@ -13,7 +13,7 @@ const avatars = [
   "/avatars/black-unicorn.png",
   "/avatars/white-robot.png",
   "/avatars/test.png",
-  "/avatars/square-top.png",
+  // "/avatars/square-top.png",
 ]
 
 const avatarsContainerVariant = {
