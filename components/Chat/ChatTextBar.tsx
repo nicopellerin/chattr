@@ -163,8 +163,12 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   }, [msg])
 
   return (
-    <>
-      <Wrapper theatreMode={displayTheatreMode} onSubmit={handleSubmit}>
+    <Wrapper>
+      <Form
+        layout="position"
+        theatreMode={displayTheatreMode}
+        onSubmit={handleSubmit}
+      >
         <Label htmlFor="message">Message</Label>
         <TextInput
           autoComplete="off"
@@ -204,22 +208,27 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         <SendButton disabled={noConnection} whileTap={{ scale: 0.98 }}>
           Send
         </SendButton>
-        {togglePicker && (
-          <EmojiPicker
-            setMsg={setMsg}
-            setTogglePicker={setTogglePicker}
-            inputTextRef={inputTextRef}
-          />
-        )}
-      </Wrapper>
-    </>
+      </Form>
+      {togglePicker && (
+        <EmojiPicker
+          setMsg={setMsg}
+          setTogglePicker={setTogglePicker}
+          inputTextRef={inputTextRef}
+        />
+      )}
+    </Wrapper>
   )
 }
 
 export default ChatTextBar
 
 // Styles
-const Wrapper = styled(motion.form)`
+const Wrapper = styled(motion.div)`
+  position: relative;
+  width: 100%;
+`
+
+const Form = styled(motion.form)`
   background: #1a0d2b;
   height: 100%;
   padding: 1rem;

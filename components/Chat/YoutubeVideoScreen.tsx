@@ -187,10 +187,11 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
 
   return (
     <Wrapper
+      layout
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
-      transition={{ type: "spring", damping: 80 }}
+      // transition={{ type: "spring", damping: 80 }}
     >
       <Container layout>
         <YoutubeVideoWrapper
@@ -276,7 +277,7 @@ const Wrapper = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  z-index: 10000;
+  z-index: 9000;
   background: none;
 `
 

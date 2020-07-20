@@ -54,9 +54,9 @@ export default EmojiPicker
 // Styles
 const Wrapper = styled(motion.div)`
   position: absolute;
-  bottom: 10rem;
+  bottom: 9rem;
   right: 1rem;
-  z-index: 10000000;
+  z-index: 10002;
 `
 
 const CloseButton = styled(motion.button)`

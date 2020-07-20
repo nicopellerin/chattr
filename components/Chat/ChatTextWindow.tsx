@@ -66,7 +66,7 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   }, [socket?.current])
 
   return (
-    <Wrapper>
+    <Wrapper layout="position">
       <ChatTextWindowChatBtn />
       <ChatTextWindowGameBtn />
       <ChatTextWindowGalleryBtn />

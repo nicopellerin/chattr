@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react"
 import styled, { css } from "styled-components"
 import Peer from "simple-peer"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion"
 import shortid from "shortid"
 import { useStateDesigner } from "@state-designer/react"
 import { FaExchangeAlt } from "react-icons/fa"
@@ -348,15 +348,16 @@ const ChatMain = () => {
       {!username && <NoUsername socket={socket} />}
       <OutterWrapper flipLayout={flipLayout}>
         <Wrapper theatreMode={displayTheatreMode}>
-          <LeftColumn
-            flipLayout={flipLayout}
-            layout
-            theatreMode={displayTheatreMode}
-            onMouseDown={(e) => {
-              e.persist()
-            }}
-          >
-            <motion.div layout>
+          <AnimateSharedLayout type="crossfade">
+            <LeftColumn
+              flipLayout={flipLayout}
+              layout="position"
+              layoutId="col"
+              theatreMode={displayTheatreMode}
+              onMouseDown={(e) => {
+                e.persist()
+              }}
+            >
               <ChatVideo
                 streamRef={streamRef}
                 socket={socket}
@@ -366,50 +367,51 @@ const ChatMain = () => {
                 shareScreen={shareScreen}
                 flipWebcam={flipWebcam}
               />
-            </motion.div>
-            <motion.div>
+
               <ChatTextBar socket={socket} />
-            </motion.div>
-          </LeftColumn>
-          <RightColumn layout theatreMode={displayTheatreMode}>
-            <>
-              <LogoContainer>
-                <LogoStyled src="/logo-3d.svg" alt="logo" />
-                <ExchangeIconButton
-                  layout
-                  initial={{ y: "-50%" }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    setFlipLayout((prevState) => !prevState)
-                    if (soundOn) {
-                      expand.play()
-                    }
-                  }}
-                >
-                  <ExchangeIcon />
-                </ExchangeIconButton>
-              </LogoContainer>
-              {!expandChatWindow && (
-                <>
-                  <motion.div layout>
-                    <ChatUsername />
-                  </motion.div>
-                  <motion.div layout>
-                    <ChatCommands
-                      callFriend={callFriend}
-                      sendFile={sendFile}
-                      socket={socket}
-                      streamRef={streamRef}
-                    />
-                  </motion.div>
-                </>
-              )}
-              <motion.div layout>
+            </LeftColumn>
+            <RightColumn
+              layout="position"
+              layoutId="col"
+              theatreMode={displayTheatreMode}
+            >
+              <>
+                <LogoContainer>
+                  <LogoStyled src="/logo-3d.svg" alt="logo" />
+                  <ExchangeIconButton
+                    layout
+                    initial={{ y: "-50%" }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setFlipLayout((prevState) => !prevState)
+                      if (soundOn) {
+                        expand.play()
+                      }
+                    }}
+                  >
+                    <ExchangeIcon />
+                  </ExchangeIconButton>
+                </LogoContainer>
+                {!expandChatWindow && (
+                  <>
+                    <motion.div layout>
+                      <ChatUsername />
+                    </motion.div>
+                    <motion.div layout>
+                      <ChatCommands
+                        callFriend={callFriend}
+                        sendFile={sendFile}
+                        socket={socket}
+                        streamRef={streamRef}
+                      />
+                    </motion.div>
+                  </>
+                )}
                 <ChatTextWindow socket={socket} />
-              </motion.div>
-            </>
-          </RightColumn>
+              </>
+            </RightColumn>
+          </AnimateSharedLayout>
         </Wrapper>
       </OutterWrapper>
       <AnimatePresence>
