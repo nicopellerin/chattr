@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { FaRocket } from "react-icons/fa"
@@ -54,6 +54,8 @@ const UsernameModal: React.FC<Props> = ({
   const [user, setUser] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
 
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>
+
   const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -82,6 +84,10 @@ const UsernameModal: React.FC<Props> = ({
     router.push(`/room/[room]`, `/room/${room}`)
   }
 
+  useEffect(() => {
+    inputRef.current.focus()
+  }, [])
+
   return (
     <Container
       initial={{ opacity: 0, y: 30 }}
@@ -96,6 +102,7 @@ const UsernameModal: React.FC<Props> = ({
       >
         <Tagline htmlFor="username">Hello, stranger!</Tagline>
         <Input
+          ref={inputRef}
           id="username"
           required
           value={user}

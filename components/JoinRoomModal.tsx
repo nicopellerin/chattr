@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { FaRocket } from "react-icons/fa"
@@ -22,6 +22,12 @@ const JoinRoomModal = () => {
     window.location.href = url
   }
 
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>
+
+  useEffect(() => {
+    inputRef.current.focus()
+  }, [])
+
   return (
     <PasteUrlWrapper>
       <PasteUrlText
@@ -38,6 +44,7 @@ const JoinRoomModal = () => {
         onSubmit={handlePasteUrl}
       >
         <Input
+          ref={inputRef}
           value={roomId}
           onChange={(e) => setRoomId(e.target.value)}
           placeholder="Room ID or full URL"
