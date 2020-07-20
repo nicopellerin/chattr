@@ -1,8 +1,10 @@
 import * as React from "react"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useSetRecoilState } from "recoil"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
+import moment from "moment"
+import momentDurationFormatSetup from "moment-duration-format"
 
 import {
   youtubeProgressBarWidthState,
@@ -18,6 +20,9 @@ const YoutubeProgressBar: React.FC<Props> = ({
   youtubePlayerRef,
   handleSeekTo,
 }) => {
+  // @ts-ignore
+  momentDurationFormatSetup(moment)
+
   const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
   const setYoutubeProgressBarWidth = useSetRecoilState(
     youtubeProgressBarWidthState
@@ -30,6 +35,9 @@ const YoutubeProgressBar: React.FC<Props> = ({
 
   const width = useRecoilValue(youtubeProgressBarWidthState)
 
+  const [barHovered, setBarHovered] = useState(0)
+
+  const barOverlayRef = useRef() as React.MutableRefObject<HTMLDivElement>
   const requestRef = useRef() as React.MutableRefObject<
     ReturnType<typeof requestAnimationFrame>
   >
@@ -51,8 +59,35 @@ const YoutubeProgressBar: React.FC<Props> = ({
 
   return (
     <Wrapper>
-      <BarOverlay onClick={handleSeekTo} />
+      <BarOverlay
+        ref={barOverlayRef}
+        onClick={(e) => {
+          handleSeekTo(e)
+          setBarHovered(
+            e.clientX - barOverlayRef.current.getBoundingClientRect().left
+          )
+        }}
+        onMouseOut={() => setBarHovered(0)}
+      />
       <Bar style={{ width }} />
+      <AnimatePresence>
+        {barHovered ? (
+          <Tooltip
+            layout
+            initial={{ position: "absolute", top: -55, opacity: 0 }}
+            animate={{
+              left: barHovered - 21,
+              opacity: 1,
+            }}
+            exit={{ scaleY: 0, opacity: 0 }}
+          >
+            {moment
+              .duration(youtubePlayerRef?.current?.getCurrentTime(), "seconds")
+              .format("h:mm:ss")
+              .padStart(4, "0:0")}
+          </Tooltip>
+        ) : null}
+      </AnimatePresence>
     </Wrapper>
   )
 }
@@ -65,8 +100,6 @@ const Wrapper = styled.div`
   height: 10px;
   position: relative;
   background: #112;
-  /* margin-top: 5px; */
-  /* margin-bottom: 3rem; */
 `
 
 const BarOverlay = styled.div`
@@ -78,6 +111,32 @@ const BarOverlay = styled.div`
   background: transparent;
   z-index: 10;
   cursor: pointer;
+`
+
+const Tooltip = styled(motion.div)`
+  background: #112;
+  padding: 1rem;
+  color: var(--secondaryColor);
+  font-size: 1.5rem;
+  font-weight: 600;
+  z-index: 11000;
+  border-radius: 5px;
+  box-shadow: 0 0rem 5px rgba(0, 0, 0, 1);
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -1rem;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #1a0d2b;
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); */
+    /* filter: drop-shadow(0 0.4rem 5rem rgba(131, 82, 253, 0.15)); */
+  }
 `
 
 const Bar = styled(motion.div)`
@@ -101,7 +160,7 @@ const Bar = styled(motion.div)`
     height: 2rem;
     border-radius: 50%;
     position: absolute;
-    right: -10px;
+    right: -12px;
     top: 50%;
     transform: translateY(-50%);
     /* box-shadow: -3px 0 5px rgba(0, 0, 0, 0.5); */
