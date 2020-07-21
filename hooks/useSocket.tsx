@@ -207,6 +207,7 @@ const useSocket = ({
     })
 
     socket.current.on("chatMessages", (msg: Message) => {
+      console.log("MESGGAE", msg)
       setChatMsgs((prevState) => [...prevState, msg])
     })
 

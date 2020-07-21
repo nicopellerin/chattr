@@ -103,8 +103,8 @@ const ChatMain = () => {
     streamRef,
   } = useSocket({ setMsg, setPlayBarType, setErrorMsg, setFlipWebcam })
 
-  console.log("SELF", selfPeerRef.current)
-  console.log("OTHER", otherPeerRef.current)
+  // console.log("SELF", selfPeerRef.current)
+  // console.log("OTHER", otherPeerRef.current)
 
   // Remove "Screen sharing started text" after 3000ms
   useEffect(() => {

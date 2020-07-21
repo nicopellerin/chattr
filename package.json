@@ -82,6 +82,7 @@
     "@types/socket.io": "^2.1.8",
     "@types/socket.io-client": "^1.4.33",
     "@types/socket.io-redis": "^1.0.26",
+    "@types/sticky-session": "^1.1.0",
     "@types/styled-components": "^5.1.0",
     "babel-plugin-styled-components": "^1.10.7",
     "nodemon": "^2.0.4",
