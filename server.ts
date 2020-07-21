@@ -29,7 +29,7 @@ const nextHandler = nextApp.getRequestHandler()
 
 const PORT = 3000
 
-const redisHost = dev ? "db" : "redis"
+const redisHost = dev ? "db" : "redis-0lvp"
 const redisPort = dev ? 6379 : 10000
 
 io.adapter(redis({ host: redisHost, port: redisPort }))
