@@ -2,7 +2,7 @@ import * as React from "react"
 import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useSetRecoilState } from "recoil"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import moment from "moment"
 import momentDurationFormatSetup from "moment-duration-format"
 
@@ -70,7 +70,7 @@ const YoutubeProgressBar: React.FC<Props> = ({
         onMouseOut={() => setBarHovered(0)}
       />
       <Bar style={{ width }} />
-      <AnimatePresence>
+      <>
         {barHovered ? (
           <Tooltip
             layout
@@ -87,7 +87,7 @@ const YoutubeProgressBar: React.FC<Props> = ({
               .padStart(4, "0:0")}
           </Tooltip>
         ) : null}
-      </AnimatePresence>
+      </>
     </Wrapper>
   )
 }
