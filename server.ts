@@ -38,10 +38,6 @@ if (!sticky.listen(server, PORT)) {
   cluster.on("online", () => {
     console.log("Worker spawned")
   })
-
-  cluster.on("exit", function (worker) {
-    console.log("worker " + worker.process.pid + " died")
-  })
 } else {
   const rooms: Rooms = {}
 
