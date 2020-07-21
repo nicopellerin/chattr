@@ -145,6 +145,7 @@ const useSocket = ({
     const tempUsername = "Anonymous"
 
     socket.current = io.connect(`/?room=${room}`, {
+      transports: ["websocket"],
       transportOptions: {
         polling: {
           extraHeaders: {
