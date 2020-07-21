@@ -3,7 +3,6 @@ import http from "http"
 import socket from "socket.io"
 import next from "next"
 import redis from "socket.io-redis"
-import cluster from "cluster"
 import sticky from "sticky-session"
 
 import {
@@ -29,27 +28,19 @@ const nextHandler = nextApp.getRequestHandler()
 
 const PORT = 3000
 
-const redisHost = dev ? "localhost" : "redis-0lvp"
+const redisHost = dev ? "localhost" : "redis://redis-0lvp"
 const redisPort = dev ? 6379 : 10000
 
 io.adapter(redis({ host: redisHost, port: redisPort }))
 
 if (!sticky.listen(server, PORT)) {
-  cluster.on("online", () => {
-    console.log("Worker spawned")
-  })
 } else {
   const rooms: Rooms = {}
 
   io.on("connection", (socket) => {
     const room: string = socket.handshake.query.room
-
-    const username = socket.handshake.headers["x-username"]
-      .replace('"', "")
-      .replace('"', "")
-    const avatar = socket.handshake.headers["x-avatar"]
-      .replace('"', "")
-      .replace('"', "")
+    const username: string = socket.handshake.query.username
+    const avatar: string = socket.handshake.query.avatar
 
     if (rooms[room] && rooms[room].users.length === 2) {
       socket.emit("notAllowed")

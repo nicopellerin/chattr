@@ -144,15 +144,11 @@ const useSocket = ({
   useEffect(() => {
     const tempUsername = "Anonymous"
 
-    socket.current = io.connect(`/?room=${room}`, {
-      transports: ["websocket"],
-      transportOptions: {
-        polling: {
-          extraHeaders: {
-            "x-username": JSON.stringify(username || tempUsername),
-            "x-avatar": JSON.stringify(avatar),
-          },
-        },
+    socket.current = io.connect(`/`, {
+      query: {
+        room,
+        username: username || tempUsername,
+        avatar: avatar,
       },
     })
 
