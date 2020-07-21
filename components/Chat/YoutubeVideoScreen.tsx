@@ -74,17 +74,8 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
     youtubePlayerRef?.current?.loadVideoById(youtubeUrl.split("=")[1])
   }
 
-  const handleSeekTo = (e: any) => {
-    const rect = e.target.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const time = youtubePlayerRef?.current?.getDuration() * (x / 800)
-    youtubePlayerRef?.current?.seekTo(time)
-    socket?.current?.emit("youtubeVideoSeekTo", time)
-  }
-
   useEffect(() => {
     socket?.current?.on("youtubeVideoSeekToGlobal", (time: number) => {
-      console.log("IN")
       youtubePlayerRef?.current?.seekTo(time)
     })
   }, [socket?.current])
@@ -224,7 +215,7 @@ const YoutubeVideoScreen: React.FC<Props> = ({ socket, streamRef }) => {
         </YoutubeVideoWrapper>
         <YoutubeProgressBar
           youtubePlayerRef={youtubePlayerRef}
-          handleSeekTo={handleSeekTo}
+          socket={socket}
         />
         <React.Suspense fallback={null}>
           <VideoContainer>

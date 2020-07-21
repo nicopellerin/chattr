@@ -3,6 +3,7 @@ import http from "http"
 import socket from "socket.io"
 import next from "next"
 import redis from "socket.io-redis"
+import cluster from "cluster"
 import sticky from "sticky-session"
 
 import {
@@ -34,6 +35,13 @@ const redisPort = dev ? 6379 : 10000
 io.adapter(redis({ host: redisHost, port: redisPort }))
 
 if (!sticky.listen(server, PORT)) {
+  server.once("listening", () => {
+    console.log("server started on 3000 port")
+  })
+
+  cluster.on("online", () => {
+    console.log("Worker spawned")
+  })
 } else {
   const rooms: Rooms = {}
 

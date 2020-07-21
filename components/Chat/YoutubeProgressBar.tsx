@@ -13,13 +13,11 @@ import {
 
 interface Props {
   youtubePlayerRef: React.MutableRefObject<any>
-  handleSeekTo: (e: any) => void
+  // handleSeekTo: (e: any) => string
+  socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
-const YoutubeProgressBar: React.FC<Props> = ({
-  youtubePlayerRef,
-  handleSeekTo,
-}) => {
+const YoutubeProgressBar: React.FC<Props> = ({ youtubePlayerRef, socket }) => {
   // @ts-ignore
   momentDurationFormatSetup(moment)
 
@@ -41,6 +39,7 @@ const YoutubeProgressBar: React.FC<Props> = ({
   const requestRef = useRef() as React.MutableRefObject<
     ReturnType<typeof requestAnimationFrame>
   >
+  const timeRef = useRef("")
 
   const barProgress = () => {
     const playerCurrentTime = youtubePlayerRef?.current?.getCurrentTime()
@@ -48,6 +47,18 @@ const YoutubeProgressBar: React.FC<Props> = ({
     const playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100
     progress(playerTimeDifference)
     requestRef.current = requestAnimationFrame(barProgress)
+  }
+
+  const handleSeekTo = (e: any) => {
+    const rect = e.target.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const time = youtubePlayerRef?.current?.getDuration() * (x / 800)
+    youtubePlayerRef?.current?.seekTo(time)
+    socket?.current?.emit("youtubeVideoSeekTo", time)
+    timeRef.current = moment
+      .duration(time, "seconds")
+      .format("h:mm:ss")
+      .padStart(4, "0:0")
   }
 
   useEffect(() => {
@@ -66,6 +77,9 @@ const YoutubeProgressBar: React.FC<Props> = ({
           setBarHovered(
             e.clientX - barOverlayRef.current.getBoundingClientRect().left
           )
+          setYoutubeProgressBarWidth(
+            e.clientX - barOverlayRef.current.getBoundingClientRect().left
+          )
         }}
         onMouseOut={() => setBarHovered(0)}
       />
@@ -76,15 +90,12 @@ const YoutubeProgressBar: React.FC<Props> = ({
             layout
             initial={{ position: "absolute", top: -55, opacity: 0 }}
             animate={{
-              left: barHovered - 21,
+              left: barHovered - 20,
               opacity: 1,
             }}
             exit={{ scaleY: 0, opacity: 0 }}
           >
-            {moment
-              .duration(youtubePlayerRef?.current?.getCurrentTime(), "seconds")
-              .format("h:mm:ss")
-              .padStart(4, "0:0")}
+            {timeRef.current}
           </Tooltip>
         ) : null}
       </>
