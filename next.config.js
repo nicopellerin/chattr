@@ -3,7 +3,8 @@ const withPWA = require("next-pwa")
 module.exports = withPWA({
   pwa: {
     dest: "public",
-    disable: process.env.NODE_ENV === "production" ? false : true,
+    // disable: process.env.NODE_ENV === "production" ? false : true,
+    disable: true,
     runtimeCaching: [
       {
         urlPattern: new RegExp("https://fonts.(?:googleapis|gstatic).com/(.*)"),
