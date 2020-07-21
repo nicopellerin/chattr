@@ -124,7 +124,6 @@ const useSocket = ({
 
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
-  // const micVolume = useRecoilValue(micVolumeState)
 
   const socket = useRef() as React.MutableRefObject<SocketIOClient.Socket>
   const selfVideoRef = useRef() as React.MutableRefObject<HTMLVideoElement>
