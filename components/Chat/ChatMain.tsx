@@ -166,7 +166,7 @@ const ChatMain = () => {
     })
 
     peer.on("close", () => {
-      peer.removeAllListeners()
+      peer.removeListener("signal", callerSignal)
     })
 
     peer.on("error", (err) => {
@@ -217,7 +217,7 @@ const ChatMain = () => {
     peer2.signal(callerSignal)
 
     peer2.on("close", () => {
-      peer2.removeAllListeners()
+      peer2.removeListener("signal", callerSignal)
     })
   }
 
