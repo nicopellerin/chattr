@@ -32,6 +32,18 @@ export const cancelCallRequestState = atom<boolean>({
   default: false,
 })
 
+export const cancelCallAction = selector({
+  key: "cancelCallAction",
+  get: () => {},
+  set: ({ set }) => {
+    set(pressedCallState, false)
+    set(callAcceptedState, false)
+    set(receivingCallState, false)
+    set(cancelCallRequestState, true)
+    set(streamOtherPeerState, null)
+  },
+})
+
 export const showSelfWebcamState = atom<boolean>({
   key: "showSelfWebcamState",
   default: true,

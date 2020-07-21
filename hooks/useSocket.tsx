@@ -22,20 +22,17 @@ import {
   messageDeletedState,
 } from "../store/chat"
 import {
-  pressedCallState,
   getUserMediaNotSupportedState,
   getUserMediaPeerNotSupportedState,
   peerAudioMutedState,
   flipFriendVideoState,
-  streamOtherPeerState,
-  callAcceptedState,
   receivingCallState,
   shareVideoScreenState,
   sharingScreenState,
   callerState,
-  cancelCallRequestState,
   callerSignalState,
   screenSharingStartedState,
+  cancelCallAction,
   // micVolumeState,
 } from "../store/video"
 import {
@@ -91,7 +88,6 @@ const useSocket = ({
   const setChatWelcomeMessage = useSetRecoilState(chatWelcomeMessageState)
   const setChatUserIsTyping = useSetRecoilState(chatUserIsTypingState)
   const setChatMsgs = useSetRecoilState(chatWindowState)
-  const setPressedCall = useSetRecoilState(pressedCallState)
   const setGetUserMediaNotSupported = useSetRecoilState(
     getUserMediaNotSupportedState
   )
@@ -115,8 +111,6 @@ const useSocket = ({
   const setUsername = useSetRecoilState(usernameState)
   const setUserLeftChattrAction = useSetRecoilState(userLeftChattrAction)
   const setFlipFriendVideo = useSetRecoilState(flipFriendVideoState)
-  const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
-  const setCallAccepted = useSetRecoilState(callAcceptedState)
   const setUserLeftChattr = useSetRecoilState(userLeftChattrState)
   const setReceivingCall = useSetRecoilState(receivingCallState)
   const setSharedVideoScreen = useSetRecoilState(shareVideoScreenState)
@@ -124,9 +118,9 @@ const useSocket = ({
   const setSelfId = useSetRecoilState(selfIdState)
   const setCaller = useSetRecoilState(callerState)
   const setCallerSignal = useSetRecoilState(callerSignalState)
-  const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
   const setScreenSharingStarted = useSetRecoilState(screenSharingStartedState)
   const setMessageDeleted = useSetRecoilState(messageDeletedState)
+  const setCancelCallAction = useSetRecoilState(cancelCallAction)
 
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
@@ -172,13 +166,10 @@ const useSocket = ({
           optional: [
             { echoCancellation: true },
             { noiseSuppression: true },
-            // { autoGainControl: true },
             { googEchoCancellation: true },
             { googEchoCancellation2: true },
             { googNoiseSuppression: true },
             { googNoiseSuppression2: true },
-            // { googAutoGainControl: true },
-            // { googAutoGainControl2: true },
             { googHighpassFilter: true },
             { googAudioMirroring: false },
             { sourceId: "default" },
@@ -190,16 +181,6 @@ const useSocket = ({
           if (selfVideoRef.current) {
             selfVideoRef.current.srcObject = stream
           }
-          // console.log(gainNodeRef.current)
-          // const audioTrack = streamRef?.current?.getAudioTracks()[0]
-          // const ctx = new AudioContext()
-          // const src = ctx.createMediaStreamSource(new MediaStream([audioTrack]))
-          // const dst = ctx.createMediaStreamDestination()
-          // const gainNode = ctx.createGain()
-          // gainNode.gain.setValueAtTime(gainNodeRef.current, ctx.currentTime)
-          // ;[src, gainNode, dst].reduce((a, b) => a && a.connect(b))
-          // streamRef?.current?.removeTrack(audioTrack)
-          // streamRef?.current?.addTrack(dst.stream.getAudioTracks()[0])
         })
         .catch(() => {
           setGetUserMediaNotSupported(true)
@@ -289,11 +270,7 @@ const useSocket = ({
     })
 
     socket.current.on("callCancelled", () => {
-      setPressedCall(false)
-      setCallAccepted(false)
-      setReceivingCall(false)
-      setCancelCallRequest(true)
-      setStreamOtherPeer(null)
+      setCancelCallAction()
       chatVideoScreensState.forceTransition("noVideoScreen")
       youtubeChatWindowScreensState.reset()
 
@@ -426,7 +403,6 @@ const useSocket = ({
         } else {
           newStreamRef.current.stop()
           setSharingScreen(false)
-          // newStreamRef.current.dispatchEvent(new Event("ended"))
         }
       }
     )
