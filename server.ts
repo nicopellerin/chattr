@@ -29,10 +29,10 @@ const nextHandler = nextApp.getRequestHandler()
 
 const PORT = 3000
 
-// const redisHost = dev ? "localhost" : "redis-0lvp"
-// const redisPort = dev ? 6379 : 10000
+const redisHost = dev ? "localhost" : "redis-0lvp"
+const redisPort = dev ? 6379 : 10000
 
-io.adapter(redis({ host: "localhost", port: 6379 }))
+io.adapter(redis({ host: redisHost, port: redisPort }))
 
 if (!sticky.listen(server, PORT)) {
   cluster.on("online", () => {
