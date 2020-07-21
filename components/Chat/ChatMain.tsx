@@ -103,6 +103,9 @@ const ChatMain = () => {
     streamRef,
   } = useSocket({ setMsg, setPlayBarType, setErrorMsg, setFlipWebcam })
 
+  console.log("SELF", selfPeerRef.current)
+  console.log("OTHER", otherPeerRef.current)
+
   // Remove "Screen sharing started text" after 3000ms
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
@@ -115,7 +118,7 @@ const ChatMain = () => {
 
   // Call other connection
   const callFriend = (id: string) => {
-    selfPeerRef.current = new Peer({
+    const peer = new Peer({
       initiator: true,
       trickle: false,
       config: {
@@ -135,13 +138,15 @@ const ChatMain = () => {
       stream: streamRef.current,
     })
 
+    selfPeerRef.current = peer
+
     streamRef.current
       .getTracks()
       .forEach((track: MediaStreamTrack) => sendersRef.current.push(track))
 
     chatVideoScreensState.forceTransition("callingScreen.visible")
 
-    selfPeerRef.current.on("signal", (data) => {
+    peer.on("signal", (data) => {
       socket.current.emit("callUser", {
         userToCall: id,
         signalData: data,
@@ -153,18 +158,18 @@ const ChatMain = () => {
       userToCall: id,
     })
 
-    selfPeerRef.current.on("stream", (stream) => {
+    peer.on("stream", (stream) => {
       if (friendVideoRef.current) {
         friendVideoRef.current.srcObject = stream
         setStreamOtherPeer(stream)
       }
     })
 
-    selfPeerRef.current.on("close", () => {
-      selfPeerRef.current.removeAllListeners()
+    peer.on("close", () => {
+      peer.removeAllListeners()
     })
 
-    selfPeerRef.current.on("error", (err) => {
+    peer.on("error", (err) => {
       console.log("WEBRTC ERROR", err)
     })
 
@@ -177,7 +182,7 @@ const ChatMain = () => {
       setReceivingCall(false)
       setCallAccepted(true)
       chatVideoScreensState.forceTransition("callingScreen.hidden")
-      selfPeerRef.current.signal(signal)
+      peer.signal(signal)
     })
   }
 
@@ -188,13 +193,15 @@ const ChatMain = () => {
 
     chatVideoScreensState.forceTransition("incomingCallScreen.hidden")
 
-    otherPeerRef.current = new Peer({
+    const peer2 = new Peer({
       initiator: false,
       trickle: false,
       stream: streamRef.current,
     })
 
-    otherPeerRef.current.on("signal", (data) => {
+    otherPeerRef.current = peer2
+
+    peer2.on("signal", (data) => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
     })
 
@@ -202,15 +209,15 @@ const ChatMain = () => {
       .getTracks()
       .forEach((track: MediaStreamTrack) => sendersRef.current.push(track))
 
-    otherPeerRef.current.on("stream", (stream: MediaStream) => {
+    peer2.on("stream", (stream: MediaStream) => {
       friendVideoRef.current.srcObject = stream
       setStreamOtherPeer(stream)
     })
 
-    otherPeerRef.current.signal(callerSignal)
+    peer2.signal(callerSignal)
 
-    otherPeerRef.current.on("close", () => {
-      otherPeerRef.current.removeAllListeners()
+    peer2.on("close", () => {
+      peer2.removeAllListeners()
     })
   }
 
