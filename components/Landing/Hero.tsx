@@ -59,7 +59,8 @@ export default Hero
 
 // Styles
 const Wrapper = styled.div`
-  background: url("/bg-2.jpg");
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
+    url("/bg-2.jpg");
   background-size: cover;
   height: 98vh;
   overflow: hidden;
