@@ -11,20 +11,48 @@ const HowItWorks = () => {
         </Tagline>
         <StepsList>
           <StepsItem>
-            <StepsItemOrder>1.</StepsItemOrder>
-            <StepsItemTitle>Create room</StepsItemTitle>
+            {/* <StepsItemImg src="/create.png" /> */}
+            <StepsItemHeading>
+              <StepsItemOrder>1.</StepsItemOrder>
+              <StepsItemTitle>Create room</StepsItemTitle>
+            </StepsItemHeading>
+            <StepsItemDesc>Just choose a username and an avatar</StepsItemDesc>
           </StepsItem>
           <StepsItem>
-            <StepsItemOrder>2.</StepsItemOrder>
-            <StepsItemTitle>Invite friend</StepsItemTitle>
+            {/* <StepsItemImg src="/invite.png" /> */}
+            <StepsItemHeading>
+              <StepsItemOrder>2.</StepsItemOrder>
+              <StepsItemTitle>Invite friend</StepsItemTitle>
+            </StepsItemHeading>
+            <StepsItemDesc>
+              Invite via Messenger, email or by copying link
+            </StepsItemDesc>
           </StepsItem>
           <StepsItem>
-            <StepsItemOrder>3.</StepsItemOrder>
-            <StepsItemTitle>Start call</StepsItemTitle>
+            {/* <StepsItemImg src="/call.png" /> */}
+            <StepsItemHeading>
+              <StepsItemOrder>3.</StepsItemOrder>
+              <StepsItemTitle>Start call</StepsItemTitle>
+            </StepsItemHeading>
+            <StepsItemDesc>
+              Press phone button on the right to initiate call
+            </StepsItemDesc>
           </StepsItem>
           <StepsItem>
-            <StepsItemOrder>4.</StepsItemOrder>
-            <StepsItemTitle>Enjoy watching video</StepsItemTitle>
+            {/* <StepsItemImg src="/demo-yt.png" /> */}
+            <StepsItemHeading>
+              <StepsItemOrder>4.</StepsItemOrder>
+              <StepsItemTitle>Pick a Youtube video</StepsItemTitle>
+            </StepsItemHeading>
+            <StepsItemDesc>Copy and paste any Youtube video url</StepsItemDesc>
+          </StepsItem>
+          <StepsItem>
+            {/* <StepsItemImg src="/demo-yt.png" /> */}
+            <StepsItemHeading>
+              <StepsItemOrder>5.</StepsItemOrder>
+              <StepsItemTitle>Enjoy watching {":)"}</StepsItemTitle>
+            </StepsItemHeading>
+            <StepsItemDesc>Press play and enjoy!</StepsItemDesc>
           </StepsItem>
         </StepsList>
       </Container>
@@ -36,7 +64,7 @@ export default HowItWorks
 
 // Styles
 const Wrapper = styled.div`
-  background: #0c0614;
+  background: #0e0718;
   min-height: 60rem;
   position: relative;
   z-index: 2;
@@ -67,23 +95,43 @@ const Tagline = styled.span`
   font-size: 2.4rem;
   font-weight: 600;
   color: var(--textColor);
-  margin-bottom: 7rem;
+  margin-bottom: 8rem;
 `
 
 const StepsList = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 5rem;
 `
 
 const StepsItem = styled.div``
 
+const StepsItemImg = styled.img`
+  max-width: 100%;
+  margin-bottom: 1rem;
+`
+
+const StepsItemHeading = styled.div`
+  display: flex;
+  align-items: baseline;
+`
+
 const StepsItemOrder = styled.h5`
-  font-size: 6rem;
+  font-size: 4rem;
   margin: 0;
+  margin-right: 1.5rem;
   color: var(--tertiaryColor);
 `
 
 const StepsItemTitle = styled.h4`
   font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--primaryColorLight);
+`
+
+const StepsItemDesc = styled.span`
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
   color: var(--textColor);
 `

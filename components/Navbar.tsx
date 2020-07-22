@@ -9,10 +9,6 @@ import { joinRoomState } from "../store/app"
 import { FaRocket } from "react-icons/fa"
 
 const Navbar = () => {
-  const [joinRoom, setJoinRoom] = useRecoilState(joinRoomState)
-
-  const { pathname } = useRouter()
-
   return (
     <Wrapper>
       <Link href="/">
@@ -20,32 +16,13 @@ const Navbar = () => {
       </Link>
       {/* <Text>One-on-one hangouts in a fun and secure way</Text> */}
       <ButtonsWrapper>
-        {/* <Link href="/about">
-          <ButtonAbout
-            style={{
-              textDecoration: pathname === "/about" ? "underline" : "none",
-            }}
-            whileTap={{ scale: 0.98 }}
-            whileHover={{ scale: 1.02 }}
-          >
-            About
-          </ButtonAbout>
-        </Link> */}
         <Link href="/join">
-          <ButtonJoin
-            whileTap={{ scale: 0.98 }}
-            whileHover={{ scale: 1.02 }}
-            // onClick={() => setJoinRoom((prevState) => !prevState)}
-          >
+          <ButtonJoin whileTap={{ scale: 0.98 }} whileHover={{ scale: 1.02 }}>
             Join room
           </ButtonJoin>
         </Link>
         <Link href="/create">
-          <ButtonCreate
-            whileTap={{ scale: 0.98 }}
-            whileHover={{ scale: 1.02 }}
-            // onClick={() => setJoinRoom((prevState) => !prevState)}
-          >
+          <ButtonCreate whileTap={{ scale: 0.98 }} whileHover={{ scale: 1.02 }}>
             <FaRocket style={{ marginRight: 5 }} /> Create room
           </ButtonCreate>
         </Link>

@@ -14,46 +14,54 @@ const Hero = () => {
       <Wrapper>
         <Navbar />
         <Container>
-          <LeftColumn>
+          <LeftColumn animate={{ opacity: [0, 1], y: [20, 0] }}>
             <Title>Enjoy watching videos with friends</Title>
             <Tagline>Watch Youtube videos in-sync while you chat</Tagline>
           </LeftColumn>
           <RightColumn>
-            <DemoImage src="/demo-yt.png" alt="demo" />
+            <DemoImage
+              animate={{ opacity: [0, 1], y: [20, 0] }}
+              transition={{ delay: 0.2 }}
+              src="/demo-yt.png"
+              alt="demo"
+            />
           </RightColumn>
         </Container>
         <motion.div
-          style={{
-            opacity,
-            zIndex: 200,
-            position: "fixed",
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          animate={{ opacity: [0, 1] }}
+          transition={{ delay: 2.5 }}
+          style={{ zIndex: 200, position: "fixed" }}
         >
-          <Bar opacity={{ opacity }} />
+          <motion.div
+            style={{
+              opacity,
+            }}
+          >
+            <Bar opacity={{ opacity }} />
+          </motion.div>
         </motion.div>
       </Wrapper>
 
-      <svg
+      <motion.svg
         xmlns="http://www.w3.org/2000/svg"
         width="1400"
         height="224"
+        animate={{ y: [-50, -110] }}
         viewBox="0 0 1440 224"
         style={{
           position: "fixed",
-          bottom: -90,
+          // bottom: -90,
           // boxShadow: `-5px 0.7rem 10rem rgba(131, 82, 253, 0.6)`,
         }}
       >
         <path
-          fill="#0c0614"
+          fill="#0E0718"
           id="wave_3_"
           data-name="wave (3)"
           d="M0,192l60-21.3c60-21.7,180-63.7,300-64,120,.3,240,42.3,360,48C840,160,960,128,1080,112s240-16,300-16h60V320H0Z"
           transform="translate(0 -96)"
         />
-      </svg>
+      </motion.svg>
     </div>
   )
 }
@@ -64,7 +72,7 @@ export default Hero
 const Wrapper = styled.div`
   background: url("/bg-2.jpg");
   background-size: cover;
-  height: 95vh;
+  height: 98vh;
   overflow: hidden;
 `
 
@@ -77,7 +85,7 @@ const Container = styled.div`
   grid-gap: 0rem;
 `
 
-const LeftColumn = styled.div`
+const LeftColumn = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -113,7 +121,7 @@ const Tagline = styled.h2`
   font-family: "Inter", sans-serif;
 `
 
-const DemoImage = styled.img`
+const DemoImage = styled(motion.img)`
   max-width: 100%;
   box-shadow: 0 0.7rem 10rem rgba(131, 82, 253, 0.1);
   border-radius: 5px;
