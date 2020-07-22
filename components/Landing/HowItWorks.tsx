@@ -126,7 +126,7 @@ const StepsList = styled.div`
   }
 
   @media (min-width: 1800px) {
-    grid-gap: 12rem 6rem;
+    grid-gap: 8rem 6rem;
   }
 `
 
@@ -136,7 +136,6 @@ const StepsItemImgWrapper = styled.div`
   height: 35rem;
   display: flex;
   align-items: center;
-  /* margin-bottom: 0.5rem; */
 
   @media (min-width: 1800px) {
     margin-bottom: 3rem;
