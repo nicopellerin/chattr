@@ -99,6 +99,7 @@ const Title = styled.h1`
   -webkit-text-fill-color: transparent;
   max-width: 56rem;
   margin-bottom: 2.4rem;
+  line-height: 1.2;
 `
 
 const Tagline = styled.h2`
