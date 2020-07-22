@@ -6,6 +6,7 @@ import { useRouter } from "next/router"
 import { useRecoilState } from "recoil"
 
 import { joinRoomState } from "../store/app"
+import { FaRocket } from "react-icons/fa"
 
 const Navbar = () => {
   const [joinRoom, setJoinRoom] = useRecoilState(joinRoomState)
@@ -17,9 +18,9 @@ const Navbar = () => {
       <Link href="/">
         <LogoStyled src="/logo-3d.svg" alt="logo" />
       </Link>
-      <Text>One-on-one hangouts in a fun and secure way</Text>
+      {/* <Text>One-on-one hangouts in a fun and secure way</Text> */}
       <ButtonsWrapper>
-        <Link href="/about">
+        {/* <Link href="/about">
           <ButtonAbout
             style={{
               textDecoration: pathname === "/about" ? "underline" : "none",
@@ -29,15 +30,24 @@ const Navbar = () => {
           >
             About
           </ButtonAbout>
-        </Link>
-        <Link href="/">
+        </Link> */}
+        <Link href="/join">
           <ButtonJoin
             whileTap={{ scale: 0.98 }}
             whileHover={{ scale: 1.02 }}
-            onClick={() => setJoinRoom((prevState) => !prevState)}
+            // onClick={() => setJoinRoom((prevState) => !prevState)}
           >
-            {joinRoom ? `Start room` : `Join room`}
+            Join room
           </ButtonJoin>
+        </Link>
+        <Link href="/create">
+          <ButtonCreate
+            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.02 }}
+            // onClick={() => setJoinRoom((prevState) => !prevState)}
+          >
+            <FaRocket style={{ marginRight: 5 }} /> Create room
+          </ButtonCreate>
         </Link>
       </ButtonsWrapper>
     </Wrapper>
@@ -49,13 +59,15 @@ export default Navbar
 // Styles
 const Wrapper = styled.nav`
   padding-top: 2rem;
+  max-width: 85vw;
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  justify-items: center;
-  height: 87px;
+  justify-content: space-between;
+  /* height: 87px; */
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
 
   @media (max-width: 600px) {
     display: flex;
@@ -75,26 +87,6 @@ const ButtonsWrapper = styled.div`
   align-items: center;
 `
 
-const ButtonAbout = styled(motion.button)`
-  border: none;
-  background: transparent;
-  color: var(--primaryColor);
-  font-size: 2rem;
-  font-weight: 600;
-  padding: 0.8em 1em;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  outline: transparent;
-  margin-top: 1.5rem;
-
-  @media (max-width: 500px) {
-    margin-top: 2.5rem;
-  }
-`
-
 const ButtonJoin = styled(motion.button)`
   padding: 0.8em 1em;
   border: none;
@@ -103,7 +95,7 @@ const ButtonJoin = styled(motion.button)`
     var(--primaryColor),
     var(--primaryColorDark)
   );
-  color: var(--secondaryColor);
+  color: var(--textColor);
   font-size: 2rem;
   font-weight: 600;
   border-radius: 5px;
@@ -118,15 +110,25 @@ const ButtonJoin = styled(motion.button)`
   height: 5.1rem;
 `
 
-const Text = styled.span`
-  font-family: "Lora", sans-serif;
+const ButtonCreate = styled(motion.button)`
+  padding: 0.8em 1em;
+  border: none;
+  background: linear-gradient(
+    145deg,
+    var(--tertiaryColor),
+    var(--secondaryColor)
+  );
+  color: var(--primaryColorDark);
   font-size: 2rem;
-  font-weight: 700;
-  color: var(--textColor);
-  margin-top: 1.4rem;
-  text-align: center;
-
-  @media (max-width: 600px) {
-    display: none;
-  }
+  font-weight: 600;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: transparent;
+  white-space: nowrap;
+  margin-top: 1.3rem;
+  margin-left: 3rem;
+  height: 5.1rem;
 `
