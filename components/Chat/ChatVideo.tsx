@@ -304,21 +304,22 @@ const ChatVideo: React.FC<Props> = ({
               </ScreenSharingStartedText>
             )}
           </AnimatePresence>
-          <FriendVideo
-            style={{
-              visibility: chatVideoScreensState.isIn(
-                "youtubeVideoScreen.visible"
-              )
-                ? "hidden"
-                : "visible",
-            }}
-            animate={{ scaleX: flipFriendVideo || flipWebcam ? 1 : -1 }}
-            theatreMode={displayTheatreMode}
-            ref={friendVideoRef}
-            playsInline
-            autoPlay
-          />
-          <canvas hidden ref={friendVideoCanvasRef} />
+          <FriendVideoWrapper theatreMode={displayTheatreMode} layout>
+            <FriendVideo
+              style={{
+                visibility: chatVideoScreensState.isIn(
+                  "youtubeVideoScreen.visible"
+                )
+                  ? "hidden"
+                  : "visible",
+              }}
+              animate={{ scaleX: flipFriendVideo || flipWebcam ? 1 : -1 }}
+              ref={friendVideoRef}
+              playsInline
+              autoPlay
+            />
+            <canvas hidden ref={friendVideoCanvasRef} />
+          </FriendVideoWrapper>
           {peerAudioMuted && (
             <FriendAudioMuted animate={{ y: [10, 0], opacity: [0, 1] }}>
               {otherUsername} muted mic{" "}
@@ -389,16 +390,19 @@ const Wrapper = styled(motion.div)`
     props.isYoutubeVideo ? "none" : "0 0.7rem 5rem rgba(131, 82, 253, 0.1)"};
 `
 
-const FriendVideo = styled(motion.video)`
+const FriendVideoWrapper = styled(motion.div)`
   height: 100%;
   max-height: ${(props: StyledProps) => (props.theatreMode ? "85vh" : "670px")};
   width: 100%;
   margin: 0;
   padding: 0;
+`
 
-  @media (max-width: 500px) {
-    height: 300px;
-  }
+const FriendVideo = styled(motion.video)`
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 `
 
 const FriendAudioMuted = styled(motion.span)`

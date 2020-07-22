@@ -275,6 +275,11 @@ const Container = styled(motion.div)`
   z-index: 2;
   height: 100%;
   width: 100%;
+  max-width: 1200px;
+
+  @media (max-width: 1440px) {
+    max-width: 1000px;
+  }
 `
 
 const VideoContainer = styled.div`
