@@ -109,16 +109,24 @@ const Tagline = styled.span`
   font-weight: 600;
   color: var(--textColor);
   margin-bottom: 8rem;
+
+  @media (min-width: 1800px) {
+    margin-bottom: 12rem;
+  }
 `
 
 const StepsList = styled.div`
   display: grid;
   grid-template-columns: repeat(3, minmax(300px, 1fr));
-  grid-gap: 4rem 6rem;
+  grid-gap: 6rem 8rem;
   justify-content: center;
 
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1800px) {
+    grid-gap: 12rem 6rem;
   }
 `
 
@@ -128,11 +136,16 @@ const StepsItemImgWrapper = styled.div`
   height: 35rem;
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
+  /* margin-bottom: 0.5rem; */
+
+  @media (min-width: 1800px) {
+    margin-bottom: 3rem;
+  }
 `
 
 const StepsItemImg = styled.img`
   max-width: 100%;
+  max-height: 400px;
 `
 
 const StepsItemHeading = styled.div`
@@ -149,7 +162,7 @@ const StepsItemOrder = styled.h5`
 
 const StepsItemTitle = styled.h4`
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.7rem;
   color: var(--primaryColorLight);
 `
 

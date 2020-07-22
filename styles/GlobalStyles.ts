@@ -55,7 +55,7 @@ body {
   min-height: 100%;
   font-family: var(--systemFont);
   color: #555;
-  background: rgb(12, 6, 19);
+  background: #0e0718;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-transform: translateZ(0);
