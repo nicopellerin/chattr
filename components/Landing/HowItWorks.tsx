@@ -11,7 +11,9 @@ const HowItWorks = () => {
         </Tagline>
         <StepsList>
           <StepsItem>
-            {/* <StepsItemImg src="/create.png" /> */}
+            <StepsItemImgWrapper>
+              <StepsItemImg src="/create.png" />
+            </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>1.</StepsItemOrder>
               <StepsItemTitle>Create room</StepsItemTitle>
@@ -19,7 +21,9 @@ const HowItWorks = () => {
             <StepsItemDesc>Just choose a username and an avatar</StepsItemDesc>
           </StepsItem>
           <StepsItem>
-            {/* <StepsItemImg src="/invite.png" /> */}
+            <StepsItemImgWrapper>
+              <StepsItemImg src="/invite.png" />
+            </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>2.</StepsItemOrder>
               <StepsItemTitle>Invite friend</StepsItemTitle>
@@ -29,7 +33,9 @@ const HowItWorks = () => {
             </StepsItemDesc>
           </StepsItem>
           <StepsItem>
-            {/* <StepsItemImg src="/call.png" /> */}
+            <StepsItemImgWrapper>
+              <StepsItemImg src="/call.png" />
+            </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>3.</StepsItemOrder>
               <StepsItemTitle>Start call</StepsItemTitle>
@@ -39,7 +45,9 @@ const HowItWorks = () => {
             </StepsItemDesc>
           </StepsItem>
           <StepsItem>
-            {/* <StepsItemImg src="/demo-yt.png" /> */}
+            <StepsItemImgWrapper>
+              <StepsItemImg src="/youtube.png" />
+            </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>4.</StepsItemOrder>
               <StepsItemTitle>Pick a Youtube video</StepsItemTitle>
@@ -47,12 +55,16 @@ const HowItWorks = () => {
             <StepsItemDesc>Copy and paste any Youtube video url</StepsItemDesc>
           </StepsItem>
           <StepsItem>
-            {/* <StepsItemImg src="/demo-yt.png" /> */}
+            <StepsItemImgWrapper>
+              <StepsItemImg src="/demo-yt.png" />
+            </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>5.</StepsItemOrder>
               <StepsItemTitle>Enjoy watching {":)"}</StepsItemTitle>
             </StepsItemHeading>
-            <StepsItemDesc>Press play and enjoy!</StepsItemDesc>
+            <StepsItemDesc>
+              Press play and enjoy! Oh and try moving the progress bar
+            </StepsItemDesc>
           </StepsItem>
         </StepsList>
       </Container>
@@ -74,6 +86,7 @@ const Container = styled.div`
   max-width: 85vw;
   margin: 0 auto;
   padding: 6rem;
+  padding-bottom: 14rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,15 +113,26 @@ const Tagline = styled.span`
 
 const StepsList = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 5rem;
+  grid-template-columns: repeat(3, minmax(300px, 1fr));
+  grid-gap: 4rem 6rem;
+  justify-content: center;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 `
 
 const StepsItem = styled.div``
 
+const StepsItemImgWrapper = styled.div`
+  height: 35rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+`
+
 const StepsItemImg = styled.img`
   max-width: 100%;
-  margin-bottom: 1rem;
 `
 
 const StepsItemHeading = styled.div`
@@ -134,4 +158,5 @@ const StepsItemDesc = styled.span`
   font-weight: 500;
   margin-bottom: 1rem;
   color: var(--textColor);
+  line-height: 1.4;
 `

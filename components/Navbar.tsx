@@ -2,10 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { useRouter } from "next/router"
-import { useRecoilState } from "recoil"
 
-import { joinRoomState } from "../store/app"
 import { FaRocket } from "react-icons/fa"
 
 const Navbar = () => {
@@ -14,7 +11,6 @@ const Navbar = () => {
       <Link href="/">
         <LogoStyled src="/logo-3d.svg" alt="logo" />
       </Link>
-      {/* <Text>One-on-one hangouts in a fun and secure way</Text> */}
       <ButtonsWrapper>
         <Link href="/join">
           <ButtonJoin whileTap={{ scale: 0.98 }} whileHover={{ scale: 1.02 }}>

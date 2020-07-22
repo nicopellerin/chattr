@@ -2,13 +2,12 @@ import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
-const Bar = ({ opacity }) => {
+const Bar = () => {
   return (
     <Wrapper
-      style={{ opacity }}
       initial={{ x: "-50%" }}
       animate={{ y: [0, 5] }}
-      transition={{ yoyo: "Infinity", duration: 2, delay: 1 }}
+      transition={{ yoyo: "Infinity", duration: 1 }}
     >
       <Text>How it works</Text>
       <Line />

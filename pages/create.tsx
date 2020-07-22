@@ -5,14 +5,13 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { detect } from "detect-browser"
 import dynamic from "next/dynamic"
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useRecoilState } from "recoil"
 import { FaDownload } from "react-icons/fa"
 
 import UsernameModal from "../components/UsernameModal"
 import Layout from "../components/Layout"
-import JoinRoomModal from "../components/JoinRoomModal"
 
-import { supportsPWAState, joinRoomState } from "../store/app"
+import { supportsPWAState } from "../store/app"
 
 const DetectWrongBrowser = dynamic(
   () => import("../components/DetectWrongBrowser"),
@@ -23,8 +22,6 @@ const DetectWrongBrowser = dynamic(
 
 const CreatePage = () => {
   const [supportsPWA, setSupportsPWA] = useRecoilState(supportsPWAState)
-
-  const joinRoom = useRecoilValue(joinRoomState)
 
   const [promptInstall, setPromptInstall] = useState<any>(null)
   const [installMsg, setInstallMsg] = useState("Install the app")

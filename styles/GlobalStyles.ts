@@ -55,10 +55,11 @@ body {
   min-height: 100%;
   font-family: var(--systemFont);
   color: #555;
+  background: rgb(12, 6, 19);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-transform: translateZ(0);
-  /* overflow: hidden; */
+  overflow-x: hidden;
 }
 
 

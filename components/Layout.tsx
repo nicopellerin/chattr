@@ -12,12 +12,6 @@ const Layout: React.FC<Props> = ({ children }) => {
     <Wrapper>
       <Navbar />
       <Container>{children}</Container>
-      <Footer>
-        Made by{" "}
-        <a href="https://nicopellerin.io" target="_blank" rel="noreferrer">
-          Nico Pellerin
-        </a>
-      </Footer>
     </Wrapper>
   )
 }
@@ -40,22 +34,5 @@ const Wrapper = styled.div`
 const Container = styled.main`
   display: grid;
   place-items: center;
-  height: calc(100% - 150px);
-`
-
-const Footer = styled.footer`
-  color: #2fb5fc;
-  font-size: 1.7rem;
-  font-weight: 700;
-  padding-bottom: 4rem;
-  text-align: center;
-
-  a {
-    color: var(--tertiaryColor);
-    text-decoration: none;
-  }
-
-  @media (max-width: 500px) {
-    padding-bottom: 3rem;
-  }
+  height: 100%;
 `

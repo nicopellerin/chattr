@@ -166,7 +166,7 @@ const Container = styled(motion.div)`
   border-radius: 10%;
   border-bottom: 7px solid var(--primaryColor);
   min-width: 41rem;
-  box-shadow: 0 0.4rem 5rem rgba(131, 82, 253, 0.2);
+  box-shadow: 0 0.4rem 5rem rgba(131, 82, 253, 0.05);
 
   @media (max-width: 500px) {
     width: 90vw;
