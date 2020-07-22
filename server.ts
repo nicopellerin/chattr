@@ -76,16 +76,14 @@ if (!sticky.listen(server, PORT)) {
 
     socket.join(room)
 
+    socket.broadcast.to(room).emit("userJoinedGlobal")
+
     io.to(room).emit("listUsers", rooms[room].users)
     io.to(room).emit("chatConnection", "Welcome to Chattr!")
 
     console.log("USERS", rooms[room].users)
 
     socket.emit("selfId", socket.id)
-
-    socket.on("username", (username: string) => {
-      socket.broadcast.to(room).emit("usernameJoined", username)
-    })
 
     socket.on("otherUserMediaNotSupported", (status: boolean) => {
       socket.broadcast.to(room).emit("otherUserMediaNotSupportedPeer", status)
@@ -219,8 +217,8 @@ if (!sticky.listen(server, PORT)) {
       io.to(room).emit("rewindYoutubeVideoGlobal")
     })
 
-    socket.on("youtubeVideoSeekTo", (time: number) => {
-      io.to(room).emit("youtubeVideoSeekToGlobal", time)
+    socket.on("youtubeVideoSeekTo", (time: number, width: number) => {
+      io.to(room).emit("youtubeVideoSeekToGlobal", time, width)
     })
 
     socket.on("sharedScreenRequest", (data) => {

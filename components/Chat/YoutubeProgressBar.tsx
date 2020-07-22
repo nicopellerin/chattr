@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { motion } from "framer-motion"
@@ -9,11 +9,12 @@ import momentDurationFormatSetup from "moment-duration-format"
 import {
   youtubeProgressBarWidthState,
   playYoutubeVideoState,
+  youtubeBarHoveredState,
 } from "../../store/youtube"
+import { useRecoilState } from "recoil"
 
 interface Props {
   youtubePlayerRef: React.MutableRefObject<any>
-  // handleSeekTo: (e: any) => string
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
@@ -22,6 +23,11 @@ const YoutubeProgressBar: React.FC<Props> = ({ youtubePlayerRef, socket }) => {
   momentDurationFormatSetup(moment)
 
   const playYoutubeVideo = useRecoilValue(playYoutubeVideoState)
+
+  const [youtubeBarHovered, setYoutubeBarHovered] = useRecoilState(
+    youtubeBarHoveredState
+  )
+
   const setYoutubeProgressBarWidth = useSetRecoilState(
     youtubeProgressBarWidthState
   )
@@ -32,8 +38,6 @@ const YoutubeProgressBar: React.FC<Props> = ({ youtubePlayerRef, socket }) => {
   }
 
   const width = useRecoilValue(youtubeProgressBarWidthState)
-
-  const [barHovered, setBarHovered] = useState(0)
 
   const barOverlayRef = useRef() as React.MutableRefObject<HTMLDivElement>
   const requestRef = useRef() as React.MutableRefObject<
@@ -54,12 +58,35 @@ const YoutubeProgressBar: React.FC<Props> = ({ youtubePlayerRef, socket }) => {
     const x = e.clientX - rect.left
     const time = youtubePlayerRef?.current?.getDuration() * (x / 800)
     youtubePlayerRef?.current?.seekTo(time)
-    socket?.current?.emit("youtubeVideoSeekTo", time)
+    const width = e.clientX - barOverlayRef.current.getBoundingClientRect().left
+    setYoutubeProgressBarWidth(width)
+    setYoutubeBarHovered(width)
     timeRef.current = moment
       .duration(time, "seconds")
       .format("h:mm:ss")
       .padStart(4, "0:0")
+    socket?.current?.emit("youtubeVideoSeekTo", time, width)
   }
+
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+    socket?.current?.on(
+      "youtubeVideoSeekToGlobal",
+      (time: number, width: number) => {
+        youtubePlayerRef?.current?.seekTo(time)
+        setYoutubeProgressBarWidth(width)
+        setYoutubeBarHovered(width)
+        timeRef.current = moment
+          .duration(time, "seconds")
+          .format("h:mm:ss")
+          .padStart(4, "0:0")
+
+        idx = setTimeout(() => setYoutubeBarHovered(0), 2000)
+      }
+    )
+
+    return () => clearTimeout(idx)
+  }, [socket?.current])
 
   useEffect(() => {
     if (playYoutubeVideo) {
@@ -74,23 +101,17 @@ const YoutubeProgressBar: React.FC<Props> = ({ youtubePlayerRef, socket }) => {
         ref={barOverlayRef}
         onClick={(e) => {
           handleSeekTo(e)
-          setBarHovered(
-            e.clientX - barOverlayRef.current.getBoundingClientRect().left
-          )
-          setYoutubeProgressBarWidth(
-            e.clientX - barOverlayRef.current.getBoundingClientRect().left
-          )
         }}
-        onMouseOut={() => setBarHovered(0)}
+        onMouseOut={() => setYoutubeBarHovered(0)}
       />
       <Bar style={{ width }} />
       <>
-        {barHovered ? (
+        {youtubeBarHovered ? (
           <Tooltip
             layout
             initial={{ position: "absolute", top: -55, opacity: 0 }}
             animate={{
-              left: barHovered - 20,
+              left: youtubeBarHovered - 20,
               opacity: 1,
             }}
             exit={{ scaleY: 0, opacity: 0 }}

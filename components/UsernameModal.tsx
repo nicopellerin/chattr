@@ -75,8 +75,8 @@ const UsernameModal: React.FC<Props> = ({
     typeof window !== "undefined" &&
       window.sessionStorage.setItem("chattr-avatar", JSON.stringify(avatar))
 
-    if (noUsernameModal && socket) {
-      socket?.current?.emit("username", user)
+    if (noUsernameModal && socket?.current) {
+      socket.current.emit("userJoined")
       return
     }
 

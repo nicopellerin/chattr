@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { createState } from "@state-designer/core"
@@ -12,7 +12,7 @@ import ChatTextWindowGallery from "./ChatTextWindowGallery"
 import ChatTextWindowMain from "./ChatTextWindowMain"
 import ChatTextWindowChatBtn from "./ChatTextWindowChatBtn"
 
-import { otherUsernameQuery, userSoundOnState } from "../../store/users"
+import { userSoundOnState, userJoinedChattrState } from "../../store/users"
 import YoutubeChatWindow from "./YoutubeChatWindow"
 import YoutubeChatWindowBtn from "./YoutubeChatWindowBtn"
 import { AnimatePresence, motion } from "framer-motion"
@@ -35,10 +35,8 @@ export const chatTextWindowScreens = createState({
 const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)
 
-  const otherUsername = useRecoilValue(otherUsernameQuery)
   const soundOn = useRecoilValue(userSoundOnState)
-
-  const [showJoinMsg, setShowJoinMsg] = useState(false)
+  const userJoinedChattr = useRecoilValue(userJoinedChattrState)
 
   const joined = new Audio("/sounds/joined.mp3")
   joined.volume = 0.3
@@ -46,18 +44,14 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   // Plays sound when other user connects
   useEffect(() => {
     let idx: ReturnType<typeof setTimeout>
-    if (otherUsername) {
-      setShowJoinMsg(true)
+    if (userJoinedChattr) {
       if (soundOn) {
         joined.play()
       }
-      idx = setTimeout(() => {
-        setShowJoinMsg(false)
-      }, 4000)
     }
 
     return () => clearTimeout(idx)
-  }, [otherUsername])
+  }, [userJoinedChattr])
 
   useEffect(() => {
     socket?.current?.on("userLeftChattr", () => {
@@ -74,7 +68,10 @@ const ChatTextWindow: React.FC<Props> = ({ socket }) => {
       <AnimatePresence>
         {chatTextWindowScreensState.whenIn({
           chatScreen: (
-            <ChatTextWindowMain showJoinMsg={showJoinMsg} socket={socket} />
+            <ChatTextWindowMain
+              showJoinMsg={userJoinedChattr}
+              socket={socket}
+            />
           ),
           gameScreen: <TicTacToe socket={socket} />,
           photoGalleryScreen: <ChatTextWindowGallery />,

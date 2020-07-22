@@ -38,3 +38,8 @@ export const youtubeProgressBarWidthState = atom<number>({
   key: "youtubeProgressBarWidthState",
   default: 0,
 })
+
+export const youtubeBarHoveredState = atom<number>({
+  key: "youtubeBarHoveredState",
+  default: 0,
+})

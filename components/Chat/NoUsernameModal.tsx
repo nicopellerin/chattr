@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 
 import UsernameModal from "../UsernameModal"
-import Portal from "./Portal"
+// import Portal from "./Portal"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -23,7 +23,7 @@ const NoUsername: React.FC<Props> = ({ socket }) => {
           socket={socket}
         />
       </Wrapper>
-      <Portal />
+      {/* <Portal /> */}
     </>
   )
 }

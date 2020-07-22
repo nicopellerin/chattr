@@ -247,10 +247,6 @@ const useSocket = ({
       }
     })
 
-    socket.current.on("usernameJoined", () => {
-      setUserLeftChattr(false)
-    })
-
     socket.current.on("listUsers", (users: User[]) => {
       setListUsers(users)
     })

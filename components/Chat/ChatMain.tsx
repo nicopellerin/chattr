@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react"
 import styled, { css } from "styled-components"
 import Peer from "simple-peer"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import shortid from "shortid"
 import { useStateDesigner } from "@state-designer/react"
 import { FaExchangeAlt } from "react-icons/fa"
@@ -26,9 +26,9 @@ import {
   userLeftChattrState,
   avatarState,
   userSoundOnState,
+  userJoinedChattrState,
 } from "../../store/users"
 import {
-  expandChatWindowState,
   messageDeletedState,
   showPlayBarState,
   togglePhotoExpanderState,
@@ -62,6 +62,9 @@ const ChatMain = () => {
     messageDeletedState
   )
   const [flipLayout, setFlipLayout] = useRecoilState(flipLayoutState)
+  const [userJoinedChattr, setUserJoinedChattr] = useRecoilState(
+    userJoinedChattrState
+  )
 
   const setStreamOtherPeer = useSetRecoilState(streamOtherPeerState)
   const setCallAccepted = useSetRecoilState(callAcceptedState)
@@ -73,7 +76,6 @@ const ChatMain = () => {
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
-  const expandChatWindow = useRecoilValue(expandChatWindowState)
   const showPlayBar = useRecoilValue(showPlayBarState)
   const selfId = useRecoilValue(selfIdState)
   const caller = useRecoilValue(callerState)
@@ -102,9 +104,6 @@ const ChatMain = () => {
     oldStreamRef,
     streamRef,
   } = useSocket({ setMsg, setPlayBarType, setErrorMsg, setFlipWebcam })
-
-  // console.log("SELF", selfPeerRef.current)
-  // console.log("OTHER", otherPeerRef.current)
 
   // Remove "Screen sharing started text" after 3000ms
   useEffect(() => {
@@ -350,75 +349,77 @@ const ChatMain = () => {
     return () => clearTimeout(idx)
   }, [messageDeleted])
 
+  useEffect(() => {
+    socket.current.emit("userJoined")
+    socket.current.on("userJoinedGlobal", () => {
+      setUserJoinedChattr(true)
+    })
+  }, [])
+
+  useEffect(() => {
+    let idx: ReturnType<typeof setTimeout>
+    if (userJoinedChattr) {
+      idx = setTimeout(() => setUserJoinedChattr(false), 3000)
+    }
+
+    return () => clearTimeout(idx)
+  }, [userJoinedChattr])
+
   return (
     <>
       {!username && <NoUsername socket={socket} />}
       <OutterWrapper flipLayout={flipLayout}>
         <Wrapper theatreMode={displayTheatreMode}>
-          <AnimateSharedLayout type="crossfade">
-            <LeftColumn
-              flipLayout={flipLayout}
-              layout="position"
-              layoutId="col"
-              theatreMode={displayTheatreMode}
-              onMouseDown={(e) => {
-                e.persist()
-              }}
-            >
-              <ChatVideo
-                streamRef={streamRef}
-                socket={socket}
-                selfVideoRef={selfVideoRef}
-                friendVideoRef={friendVideoRef}
-                acceptCall={acceptCall}
-                shareScreen={shareScreen}
-                flipWebcam={flipWebcam}
-              />
-
-              <ChatTextBar socket={socket} />
-            </LeftColumn>
-            <RightColumn
-              layout="position"
-              layoutId="col"
-              theatreMode={displayTheatreMode}
-            >
-              <>
-                <LogoContainer>
-                  <LogoStyled src="/logo-3d.svg" alt="logo" />
-                  <ExchangeIconButton
-                    layout
-                    initial={{ y: "-50%" }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => {
-                      setFlipLayout((prevState) => !prevState)
-                      if (soundOn) {
-                        expand.play()
-                      }
-                    }}
-                  >
-                    <ExchangeIcon />
-                  </ExchangeIconButton>
-                </LogoContainer>
-                {!expandChatWindow && (
-                  <>
-                    <motion.div layout>
-                      <ChatUsername />
-                    </motion.div>
-                    <motion.div layout>
-                      <ChatCommands
-                        callFriend={callFriend}
-                        sendFile={sendFile}
-                        socket={socket}
-                        streamRef={streamRef}
-                      />
-                    </motion.div>
-                  </>
-                )}
-                <ChatTextWindow socket={socket} />
-              </>
+          <LeftColumn
+            key="left"
+            flipLayout={flipLayout}
+            layout="position"
+            theatreMode={displayTheatreMode}
+          >
+            <ChatVideo
+              streamRef={streamRef}
+              socket={socket}
+              selfVideoRef={selfVideoRef}
+              friendVideoRef={friendVideoRef}
+              acceptCall={acceptCall}
+              shareScreen={shareScreen}
+              flipWebcam={flipWebcam}
+            />
+            {!displayTheatreMode && <ChatTextBar socket={socket} />}
+          </LeftColumn>
+          {!displayTheatreMode && (
+            <RightColumn key="right" layout="position">
+              <LogoContainer>
+                <LogoStyled src="/logo-3d.svg" alt="logo" />
+                <ExchangeIconButton
+                  layout
+                  initial={{ y: "-50%" }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setFlipLayout((prevState) => !prevState)
+                    if (soundOn) {
+                      expand.play()
+                    }
+                  }}
+                >
+                  <ExchangeIcon />
+                </ExchangeIconButton>
+              </LogoContainer>
+              <motion.div layout>
+                <ChatUsername />
+              </motion.div>
+              <motion.div layout>
+                <ChatCommands
+                  callFriend={callFriend}
+                  sendFile={sendFile}
+                  socket={socket}
+                  streamRef={streamRef}
+                />
+              </motion.div>
+              <ChatTextWindow socket={socket} />
             </RightColumn>
-          </AnimateSharedLayout>
+          )}
         </Wrapper>
       </OutterWrapper>
       <AnimatePresence>
@@ -504,8 +505,7 @@ const LeftColumn = styled(motion.div)`
 
 const RightColumn = styled(motion.div)`
   grid-gap: 2rem;
-  display: ${(props: { theatreMode: boolean }) =>
-    props.theatreMode ? "none" : "grid"};
+  display: grid;
 `
 
 const LogoContainer = styled(motion.div)`

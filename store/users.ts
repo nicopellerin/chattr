@@ -32,6 +32,11 @@ export const avatarState = atom<string>({
     "/avatars/cat.png",
 })
 
+export const userJoinedChattrState = atom<boolean>({
+  key: "userJoinedChattrState",
+  default: false,
+})
+
 export const userLeftChattrState = atom<boolean>({
   key: "userLeftChattrState",
   default: false,
