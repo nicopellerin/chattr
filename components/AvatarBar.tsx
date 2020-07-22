@@ -21,8 +21,6 @@ const avatarsContainerVariant = {
   visible: {
     opacity: 1,
     transition: {
-      // delay: 0.1,
-      // when: "beforeChildren",
       staggerChildren: 0.1,
     },
   },
@@ -42,6 +40,16 @@ const AvatarBar: React.FC<Props> = ({ setToggleAvatar }) => {
 
   const node = useClickOutside(setToggleAvatar)
 
+  const handleChangeAvatar = (avatarImg: string) => {
+    const selectSound = new Audio("/sounds/select-char4.mp3")
+    selectSound.volume = 0.3
+    setAvatar(avatarImg)
+    selectSound.play()
+    setToggleAvatar(false)
+    typeof window !== "undefined" &&
+      window.sessionStorage.setItem("chattr-avatar", JSON.stringify(avatarImg))
+  }
+
   return (
     <AvatarsContainer
       variants={avatarsContainerVariant}
@@ -57,13 +65,7 @@ const AvatarBar: React.FC<Props> = ({ setToggleAvatar }) => {
             variants={avatarVariant}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => {
-              const selectSound = new Audio("/sounds/select-char4.mp3")
-              selectSound.volume = 0.3
-              setAvatar(avatarImg)
-              selectSound.play()
-              setToggleAvatar(false)
-            }}
+            onClick={() => handleChangeAvatar(avatarImg)}
           >
             <Avatar
               animate={{ opacity: avatar === avatarImg ? 1 : 0.3 }}
