@@ -12,7 +12,7 @@ const HowItWorks = () => {
         <StepsList>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/create.webp" alt="Create" />
+              <StepsItemImg loading="lazy" src="/create.webp" alt="Create" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>1.</StepsItemOrder>
@@ -22,7 +22,7 @@ const HowItWorks = () => {
           </StepsItem>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/invite.webp" alt="Invite" />
+              <StepsItemImg loading="lazy" src="/invite.webp" alt="Invite" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>2.</StepsItemOrder>
@@ -34,7 +34,7 @@ const HowItWorks = () => {
           </StepsItem>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/call.webp" alt="Call" />
+              <StepsItemImg loading="lazy" src="/call.webp" alt="Call" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>3.</StepsItemOrder>
@@ -46,7 +46,7 @@ const HowItWorks = () => {
           </StepsItem>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/youtube.webp" alt="Youtube" />
+              <StepsItemImg loading="lazy" src="/youtube.webp" alt="Youtube" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>4.</StepsItemOrder>
@@ -56,7 +56,7 @@ const HowItWorks = () => {
           </StepsItem>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/demo-yt.webp" alt="Video" />
+              <StepsItemImg loading="lazy" src="/demo-yt.webp" alt="Video" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>5.</StepsItemOrder>
@@ -152,14 +152,14 @@ const StepsItemHeading = styled.div`
   align-items: baseline;
 `
 
-const StepsItemOrder = styled.h5`
+const StepsItemOrder = styled.h4`
   font-size: 4rem;
   margin: 0;
   margin-right: 1.5rem;
   color: var(--tertiaryColor);
 `
 
-const StepsItemTitle = styled.h4`
+const StepsItemTitle = styled.h5`
   font-size: 3rem;
   margin-bottom: 1.7rem;
   color: var(--primaryColorLight);

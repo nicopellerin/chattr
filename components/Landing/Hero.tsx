@@ -59,7 +59,7 @@ export default Hero
 
 // Styles
 const Wrapper = styled.div`
-  background: url("/bg-2.jpg");
+  background: url("/bg-2.webp");
   background-size: cover;
   height: 98vh;
   overflow: hidden;
