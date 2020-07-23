@@ -32,7 +32,7 @@ const Hero = () => {
         <motion.div
           animate={{ opacity: [0, 1] }}
           transition={{ delay: 1.2 }}
-          style={{ zIndex: 200, position: "fixed" }}
+          style={{ zIndex: 200, position: "fixed", opacity: 0 }}
         >
           <motion.div
             style={{
@@ -79,6 +79,7 @@ const LeftColumn = styled(motion.div)`
   flex-direction: column;
   justify-content: center;
   height: 100%;
+  opacity: 0;
 `
 
 const RightColumn = styled.div`
@@ -123,6 +124,7 @@ const DemoImage = styled(motion.img)`
   max-width: 100%;
   box-shadow: 0 0.7rem 10rem rgba(131, 82, 253, 0.1);
   border-radius: 5px;
+  opacity: 0;
 `
 
 const Wave = styled(motion.img)`
@@ -131,6 +133,7 @@ const Wave = styled(motion.img)`
   bottom: -50;
   right: 0;
   fill: #000;
+
   @media (max-width: 500px) {
     bottom: -75px;
   }
