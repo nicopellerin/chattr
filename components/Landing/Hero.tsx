@@ -24,7 +24,7 @@ const Hero = () => {
             <DemoImage
               animate={{ opacity: [0, 1], y: [20, 0] }}
               transition={{ delay: 0.2 }}
-              src="/demo-yt.png"
+              src="/demo-yt.webp"
               alt="demo"
             />
           </RightColumn>
