@@ -12,7 +12,7 @@ const HowItWorks = () => {
         <StepsList>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/create.png" />
+              <StepsItemImg src="/create.webp" alt="Create" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>1.</StepsItemOrder>
@@ -22,7 +22,7 @@ const HowItWorks = () => {
           </StepsItem>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/invite.png" />
+              <StepsItemImg src="/invite.webp" alt="Invite" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>2.</StepsItemOrder>
@@ -34,7 +34,7 @@ const HowItWorks = () => {
           </StepsItem>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/call.png" />
+              <StepsItemImg src="/call.webp" alt="Call" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>3.</StepsItemOrder>
@@ -46,7 +46,7 @@ const HowItWorks = () => {
           </StepsItem>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/youtube.png" />
+              <StepsItemImg src="/youtube.webp" alt="Youtube" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>4.</StepsItemOrder>
@@ -56,7 +56,7 @@ const HowItWorks = () => {
           </StepsItem>
           <StepsItem>
             <StepsItemImgWrapper>
-              <StepsItemImg src="/demo-yt.png" />
+              <StepsItemImg src="/demo-yt.webp" alt="Video" />
             </StepsItemImgWrapper>
             <StepsItemHeading>
               <StepsItemOrder>5.</StepsItemOrder>
