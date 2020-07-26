@@ -7,10 +7,10 @@ import { FaArrowLeft } from "react-icons/fa"
 import { detect } from "detect-browser"
 import dynamic from "next/dynamic"
 
-import Layout from "../components/Layout"
+import Layout from "../components/Chat/Shared/Layout"
 
 const DetectWrongBrowser = dynamic(
-  () => import("../components/DetectWrongBrowser"),
+  () => import("../components/Chat/Shared/DetectWrongBrowser"),
   {
     ssr: false,
   }

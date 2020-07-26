@@ -1,15 +1,16 @@
 import * as React from "react"
 import styled from "styled-components"
-import Portal from "../Chat/Portal"
 import { motion } from "framer-motion"
 import { FaGamepad, FaYoutube } from "react-icons/fa"
 import { useSetRecoilState } from "recoil"
 import { useStateDesigner } from "@state-designer/react"
 
+import Portal from "../Chat/Shared/Portal"
+
 import { showPlayBarState } from "../../store/chat"
 
 import { gameScreens } from "./TicTacToe/Game"
-import { chatTextWindowScreens } from "../Chat/ChatTextWindow"
+import { chatTextWindowScreens } from "../Chat/RightColumn/TextWindow"
 import { shareVideoScreenState } from "../../store/video"
 
 interface Props {

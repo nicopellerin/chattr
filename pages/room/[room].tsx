@@ -4,12 +4,12 @@ import styled from "styled-components"
 import { detect } from "detect-browser"
 import { useRouter } from "next/router"
 
-const ChatMainClient = dynamic(() => import("../../components/Chat/ChatMain"), {
+const ChatMainClient = dynamic(() => import("../../components/Chat/Main"), {
   ssr: false,
 })
 
 const DetectWrongBrowser = dynamic(
-  () => import("../../components/DetectWrongBrowser"),
+  () => import("../../components/Chat/Shared/DetectWrongBrowser"),
   {
     ssr: false,
   }

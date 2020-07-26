@@ -8,13 +8,13 @@ import dynamic from "next/dynamic"
 import { useRecoilState } from "recoil"
 import { FaDownload } from "react-icons/fa"
 
-import Layout from "../components/Layout"
-import JoinRoomModal from "../components/JoinRoomModal"
+import Layout from "../components/Chat/Shared/Layout"
+import JoinRoomModal from "../components/Chat/Shared/JoinRoomModal"
 
 import { supportsPWAState } from "../store/app"
 
 const DetectWrongBrowser = dynamic(
-  () => import("../components/DetectWrongBrowser"),
+  () => import("../components/Chat/Shared/DetectWrongBrowser"),
   {
     ssr: false,
   }

@@ -7,7 +7,7 @@ import dynamic from "next/dynamic"
 import Head from "next/head"
 
 const DetectWrongBrowser = dynamic(
-  () => import("../components/DetectWrongBrowser"),
+  () => import("../components/Chat/Shared/DetectWrongBrowser"),
   {
     ssr: false,
   }

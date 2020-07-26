@@ -8,13 +8,13 @@ import dynamic from "next/dynamic"
 import { useRecoilState } from "recoil"
 import { FaDownload } from "react-icons/fa"
 
-import UsernameModal from "../components/UsernameModal"
-import Layout from "../components/Layout"
+import UsernameModal from "../components/Chat/Shared/UsernameModal"
+import Layout from "../components/Chat/Shared/Layout"
 
 import { supportsPWAState } from "../store/app"
 
 const DetectWrongBrowser = dynamic(
-  () => import("../components/DetectWrongBrowser"),
+  () => import("../components/Chat/Shared/DetectWrongBrowser"),
   {
     ssr: false,
   }

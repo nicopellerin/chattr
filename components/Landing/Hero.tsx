@@ -2,7 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 import { useViewportScroll, useTransform, motion } from "framer-motion"
 
-import Navbar from "../Navbar"
+import Navbar from "../Navigation/Navbar"
 import Bar from "./Bar"
 
 const Hero = () => {

@@ -8,7 +8,7 @@ import io from "socket.io-client"
 import SimplePeer from "simple-peer"
 import getUserMedia from "get-user-media-promise"
 
-import { youtubeChatWindowScreens } from "../components/Chat/YoutubeChatWindow"
+import { youtubeChatWindowScreens } from "../components/Chat/RightColumn/YoutubeChatWindow"
 import { gameScreens } from "../components/Games/TicTacToe/Game"
 import {
   photoGalleryState,
@@ -55,7 +55,7 @@ import {
   selfIdState,
   avatarState,
 } from "../store/users"
-import { chatVideoScreens } from "../components/Chat/ChatVideo"
+import { chatVideoScreens } from "../components/Chat/LeftColumn/ChatVideo"
 import { Message, Call, User } from "../models"
 
 enum SquareValue {
