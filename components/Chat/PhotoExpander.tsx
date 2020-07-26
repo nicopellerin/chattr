@@ -18,13 +18,13 @@ const PhotoExpander = () => {
   return (
     <Wrapper
       layout
-      initial={{ opacity: 0 }}
+      initial={{ opacity: 0.5 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <Container>
         <ExpandedImage
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0.5 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 0 }}
           layout
@@ -35,6 +35,7 @@ const PhotoExpander = () => {
         />
         <Button
           layout
+          exit={{ opacity: 0, scale: 0 }}
           whileHover={{ rotate: 5 }}
           onClick={() => setTogglePhotoExpander(false)}
           isFullWidth={fullWidth}

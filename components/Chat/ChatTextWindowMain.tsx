@@ -67,7 +67,7 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
     if (msgs.length > 0 && soundOn && !messagedDeleted) {
       pop.play()
     }
-    if (scrollRef.current && scrollRef.current) {
+    if (scrollRef.current) {
       scrollRef.current.scrollTop = Number.MAX_SAFE_INTEGER
     }
   }, [msgs])
@@ -106,7 +106,6 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
         style={{ height: 400 }}
       >
         <Container
-          // layout="position"
           isExpanded={expandChatWindow}
           isIpad={
             typeof window !== "undefined" && window.innerWidth < 1025

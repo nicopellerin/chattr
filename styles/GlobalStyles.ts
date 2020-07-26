@@ -59,7 +59,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-transform: translateZ(0);
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 
@@ -98,7 +98,7 @@ aside.emoji-picker-react {
 
 .emoji-picker-react .emoji-group:before {
   content: "";
-} 
+}
 
 .ps__rail-y {
   display: none!important;
