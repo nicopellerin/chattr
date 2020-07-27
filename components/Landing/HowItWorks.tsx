@@ -153,7 +153,7 @@ const StepsItemHeading = styled.div`
 `
 
 const StepsItemOrder = styled.h4`
-  font-size: 4rem;
+  font-size: 3.5rem;
   margin: 0;
   margin-right: 1.5rem;
   color: var(--tertiaryColor);
