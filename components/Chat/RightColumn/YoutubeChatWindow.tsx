@@ -135,27 +135,36 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
             initialScreen: (
               <Container layout="position">
                 <Form onSubmit={handleSubmit}>
-                  <YoutubeIcon src="/yt.png" alt="Youtube logo" />
-                  <Title>Watch video with friend</Title>
-                  <Input
-                    name="youtubeURL"
-                    placeholder="Enter Youtube URL..."
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    required
-                  />
-                  <WaitingButton
-                    style={{
-                      cursor:
-                        noConnection && !streamOtherPeer ? "initial" : "cursor",
-                      pointerEvents:
-                        noConnection || !streamOtherPeer ? "none" : "all",
-                    }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {buttonText()}
-                  </WaitingButton>
+                  <InnerContainer>
+                    <Title>
+                      <span>
+                        Watch <YoutubeIcon src="/yt.png" alt="Youtube logo" />
+                      </span>
+                      with a friend
+                    </Title>
+                    <Input
+                      name="youtubeURL"
+                      placeholder="Enter Youtube URL..."
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      required
+                    />
+                    <WaitingButton
+                      style={{
+                        cursor:
+                          noConnection && !streamOtherPeer
+                            ? "not-allowed"
+                            : "cursor",
+                        pointerEvents:
+                          noConnection || !streamOtherPeer ? "none" : "all",
+                        opacity: noConnection || !streamOtherPeer ? 0.5 : 1,
+                      }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {buttonText()}
+                    </WaitingButton>
+                  </InnerContainer>
                 </Form>
               </Container>
             ),
@@ -288,41 +297,60 @@ const Form = styled.form`
   justify-content: center;
 `
 
+const InnerContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2.4rem;
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+  border-radius: 50px;
+  box-shadow: 0 -8px 4px -4px rgba(0, 0, 0, 0.25);
+
+  @media (min-width: 1800px) {
+    padding-top: 6rem;
+    margin-top: 3rem;
+  }
+`
+
 const YoutubeIcon = styled.img`
-  position: absolute;
-  top: 4rem;
-  width: 14rem;
-  /* background: rgba(131, 82, 253, 0.1);
-  padding: 1rem; */
+  width: 13.5rem;
+  margin-left: 1rem;
   border-radius: 5px;
   filter: drop-shadow(0 0.4rem 3rem rgba(131, 82, 253, 0.2));
 `
 
 const Title = styled.h3`
-  background: -webkit-linear-gradient(
-    145deg,
-    var(--primaryColor),
-    var(--tertiaryColor)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 2.6rem;
+  color: var(--textColor);
+  font-size: 3rem;
   text-align: center;
   max-width: 100%;
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  span {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.1rem;
+  }
 `
 
 const Input = styled.input`
   border: none;
-  background: #0c0613;
+  background: #0a0515;
   color: var(--textColor);
-  padding: 0.8em 1em;
+  padding: 0.8em 0.8em;
   font-size: 1.7rem;
-  font-weight: 500;
+  font-weight: 600;
   border-radius: 5px;
   margin-bottom: 3rem;
   width: 100%;
-  max-width: 90%;
   outline: transparent;
   height: 48px;
 
@@ -408,7 +436,11 @@ const MuteButton = styled(motion.button)`
 `
 
 const WaitingButton = styled(Button)`
-  background: linear-gradient(45deg, #d852fd, #9c74fe);
+  background: linear-gradient(
+    140deg,
+    var(--primaryColor),
+    var(--primaryColorDark)
+  );
   color: var(--textColor);
 `
 

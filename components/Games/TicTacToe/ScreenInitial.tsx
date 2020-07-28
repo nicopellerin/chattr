@@ -61,6 +61,7 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
           style={{
             cursor: noConnection ? "initial" : "pointer",
             pointerEvents: noConnection ? "none" : "all",
+            opacity: noConnection ? 0.5 : 1,
           }}
         >
           {noConnection ? `Waiting for friend to connect` : `Start game`}
