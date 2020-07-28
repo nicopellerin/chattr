@@ -6,7 +6,7 @@ import { useSetRecoilState, useRecoilValue } from "recoil"
 import CryptoJS from "crypto-js"
 import io from "socket.io-client"
 import SimplePeer from "simple-peer"
-import getUserMedia from "get-user-media-promise"
+import "webrtc-adapter"
 
 import { youtubeChatWindowScreens } from "../components/Chat/RightColumn/YoutubeChatWindow"
 import { gameScreens } from "../components/Games/TicTacToe/Game"
@@ -153,25 +153,14 @@ const useSocket = ({
     })
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      getUserMedia({
-        video: {
-          width: { ideal: 4096 },
-          height: { ideal: 2160 },
-        },
-        audio: {
-          optional: [
-            { echoCancellation: true },
-            { noiseSuppression: true },
-            { googEchoCancellation: true },
-            { googEchoCancellation2: true },
-            { googNoiseSuppression: true },
-            { googNoiseSuppression2: true },
-            { googHighpassFilter: true },
-            { googAudioMirroring: false },
-            { sourceId: "default" },
-          ],
-        },
-      })
+      navigator.mediaDevices
+        .getUserMedia({
+          video: {
+            width: { ideal: 4096 },
+            height: { ideal: 2160 },
+          },
+          audio: true,
+        })
         .then((stream: MediaStream) => {
           streamRef.current = stream
           if (selfVideoRef.current) {

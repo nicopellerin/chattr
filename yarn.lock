@@ -9519,7 +9519,7 @@ webrtc-adapter@^2.0.2:
   dependencies:
     sdp "^1.0.0"
 
-webrtc-adapter@^7.3.0:
+webrtc-adapter@^7.3.0, webrtc-adapter@^7.6.3:
   version "7.6.3"
   resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-7.6.3.tgz#4752338bbc411caa3f71da3a5de46149690ddcbe"
   integrity sha512-DCMiS6cy29PknSuBz779twM6/VsPdoQNAU/I/q4VCEVSlCQ88xiwqGD5/osVO6UMyXCnTBiOl8kd+1cJi6Pkig==

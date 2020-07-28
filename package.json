@@ -61,7 +61,8 @@
     "typeface-inter": "^3.12.0",
     "typeface-lora": "^0.0.72",
     "use-force-update": "^1.0.7",
-    "wasm-flate": "^1.0.2-browser"
+    "wasm-flate": "^1.0.2-browser",
+    "webrtc-adapter": "^7.6.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
