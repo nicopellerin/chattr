@@ -17,7 +17,6 @@ const avatars = [
   "/avatars/black-unicorn.png",
   "/avatars/white-robot.png",
   "/avatars/test.png",
-  // "/avatars/square-top.png",
 ]
 
 const avatarsContainerVariant = {
@@ -25,8 +24,6 @@ const avatarsContainerVariant = {
   visible: {
     opacity: 1,
     transition: {
-      // delay: 0.1,
-      // when: "beforeChildren",
       staggerChildren: 0.1,
     },
   },
@@ -86,6 +83,11 @@ const UsernameModal: React.FC<Props> = ({
 
   useEffect(() => {
     inputRef.current.focus()
+  }, [])
+
+  useEffect(() => {
+    const randomIdx = Math.floor(Math.random() * avatars.length)
+    setAvatar(avatars[randomIdx])
   }, [])
 
   return (

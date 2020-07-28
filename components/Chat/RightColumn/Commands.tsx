@@ -185,7 +185,7 @@ const ChatCommands: React.FC<Props> = ({
           </IconWrapper>
           <IconWrapper
             onClick={() => {
-              setMuteMic(!muteMic)
+              setMuteMic((prevState) => !prevState)
               if (soundOn) {
                 beepOn.play()
               }
@@ -201,7 +201,7 @@ const ChatCommands: React.FC<Props> = ({
           </IconWrapper>
           <IconWrapper
             onClick={() => {
-              setShowSelfWebcam(!showSelfWebcam)
+              setShowSelfWebcam((prevState) => !prevState)
               if (soundOn) {
                 beepOn.play()
               }
