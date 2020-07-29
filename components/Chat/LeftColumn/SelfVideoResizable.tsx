@@ -17,6 +17,11 @@ import {
 } from "../../../store/video"
 import { useRecoilState } from "recoil"
 
+interface Props {
+  contraintsRef: React.Ref<HTMLDivElement>
+  selfVideoRef: any
+}
+
 interface StyledProps {
   supported?: boolean
   isYoutubeVideo?: boolean
@@ -24,7 +29,7 @@ interface StyledProps {
   showWebcam?: boolean
 }
 
-const SelfVideoResizable = ({ selfVideoRef, contraintsRef }) => {
+const SelfVideoResizable: React.FC<Props> = ({ selfVideoRef, contraintsRef }) => {
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
 
   const showWebcam = useRecoilValue(showSelfWebcamState)

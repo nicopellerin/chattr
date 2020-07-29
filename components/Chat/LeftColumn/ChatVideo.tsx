@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
@@ -146,6 +146,7 @@ const ChatVideo: React.FC<Props> = ({
   const screenSharingStarted = useRecoilValue(screenSharingStartedState)
   const shareVideoScreen = useRecoilValue(shareVideoScreenState)
   const flipFriendVideo = useRecoilValue(flipFriendVideoState)
+  const flipSelfVideo = useRecoilValue(flipSelfVideoState)
 
   const [
     messageContainsHeartEmoji,
@@ -154,7 +155,6 @@ const ChatVideo: React.FC<Props> = ({
   const [displayTheatreMode, setDisplayTheatreMode] = useRecoilState(
     displayTheatreModeState
   )
-  const [flipSelfVideo, setFlipSelfVideo] = useRecoilState(flipSelfVideoState)
 
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
   const friendVideoCanvasRef = useRef() as React.MutableRefObject<
