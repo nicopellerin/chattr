@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { Resizable } from "react-resizable"
@@ -52,6 +52,21 @@ const SelfVideoResizable: React.FC<Props> = ({
 
   const node = useClickOutside(setIsSelected)
 
+  // Launches "resize" on right click
+  useEffect(() => {
+    node.current.addEventListener("contextmenu", (e: MouseEvent) => {
+      e.preventDefault()
+      setIsSelected((prevState) => !prevState)
+    })
+
+    return () => {
+      node.current.removeEventListener("contextmenu", (e: MouseEvent) => {
+        e.preventDefault()
+        setIsSelected((prevState) => !prevState)
+      })
+    }
+  }, [])
+
   return (
     <SelfVideoWrapper
       layout={isSelected ? false : true}
@@ -61,7 +76,6 @@ const SelfVideoResizable: React.FC<Props> = ({
       dragConstraints={contraintsRef}
       theatreMode={displayTheatreMode}
       showWebcam={showWebcam}
-      onDoubleClick={() => setIsSelected((prevState) => !prevState)}
       ref={node}
     >
       <Resizable
