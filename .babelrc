@@ -5,6 +5,5 @@
       "styled-components",
       { "ssr": true, "displayName": true, "preprocess": false, "pure": true }
     ],
-    resolve.alias: { "crypto": false }
   ]
 }
