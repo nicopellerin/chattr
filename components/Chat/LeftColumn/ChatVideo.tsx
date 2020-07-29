@@ -1,15 +1,9 @@
 import * as React from "react"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
-import {
-  FaExpand,
-  FaMicrophoneSlash,
-  FaLaptop,
-  FaCamera,
-  FaRedoAlt,
-} from "react-icons/fa"
+import { FaExpand, FaMicrophoneSlash, FaLaptop, FaCamera } from "react-icons/fa"
 import dynamic from "next/dynamic"
 import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
@@ -51,7 +45,6 @@ const ChatScreenHeart = dynamic(() => import("../Screens/HeartScreen"), {
 })
 
 import {
-  showSelfWebcamState,
   callAcceptedState,
   getUserMediaNotSupportedState,
   displayTheatreModeState,
@@ -61,7 +54,6 @@ import {
   shareVideoScreenState,
   flipSelfVideoState,
   flipFriendVideoState,
-  sharingScreenState,
 } from "../../../store/video"
 import {
   listUsersState,
@@ -69,6 +61,7 @@ import {
   otherUsernameQuery,
 } from "../../../store/users"
 import { messageContainsHeartEmojiState } from "../../../store/chat"
+import SelfVideoResizable from "./SelfVideoResizable"
 
 export const chatVideoScreens = createState({
   id: "chatTextWindowScreens",
@@ -143,7 +136,6 @@ const ChatVideo: React.FC<Props> = ({
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
   const catSliderScreenState = useStateDesigner(catSliderScreen)
 
-  const showWebcam = useRecoilValue(showSelfWebcamState)
   const callAccepted = useRecoilValue(callAcceptedState)
   const listUsers = useRecoilValue(listUsersState)
   const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
@@ -154,7 +146,6 @@ const ChatVideo: React.FC<Props> = ({
   const screenSharingStarted = useRecoilValue(screenSharingStartedState)
   const shareVideoScreen = useRecoilValue(shareVideoScreenState)
   const flipFriendVideo = useRecoilValue(flipFriendVideoState)
-  const sharingScreen = useRecoilValue(sharingScreenState)
 
   const [
     messageContainsHeartEmoji,
@@ -219,10 +210,6 @@ const ChatVideo: React.FC<Props> = ({
     socket?.current?.emit("flipSelfVideo", flipSelfVideo)
   }, [flipSelfVideo])
 
-  const flipSelfVideoAction = () => {
-    setFlipSelfVideo((prevState) => !prevState)
-  }
-
   // If streaming is not supported
   if (getUserMediaNotSupported) {
     socket.current.emit("otherUserMediaNotSupported", true)
@@ -266,31 +253,10 @@ const ChatVideo: React.FC<Props> = ({
       })}
       <>
         <>
-          <SelfVideoWrapper
-            layout
-            drag
-            dragMomentum={false}
-            // @ts-ignore
-            dragConstraints={contraintsRef}
-            theatreMode={displayTheatreMode}
-            showWebcam={showWebcam}
-          >
-            <SelfVideo
-              muted
-              style={{
-                visibility: chatVideoScreensState.isIn(
-                  "youtubeVideoScreen.visible"
-                )
-                  ? "hidden"
-                  : "visible",
-              }}
-              animate={{ scaleX: flipSelfVideo ? 1 : -1 }}
-              ref={selfVideoRef}
-              playsInline
-              autoPlay
-            />
-            {!sharingScreen && <RotateIcon onClick={flipSelfVideoAction} />}
-          </SelfVideoWrapper>
+          <SelfVideoResizable
+            selfVideoRef={selfVideoRef}
+            contraintsRef={contraintsRef}
+          />
           <AnimatePresence>
             {messageContainsHeartEmoji &&
               callAccepted &&
@@ -419,46 +385,6 @@ const FriendAudioMuted = styled(motion.span)`
   display: flex;
   align-items: center;
   margin: 0;
-`
-
-const SelfVideoWrapper = styled(motion.div)`
-  height: 130px;
-  width: 200px;
-  opacity: ${(props: StyledProps) => (props.showWebcam ? 1 : 0)};
-  display: ${(props: StyledProps) => (props.theatreMode ? "none" : "block")};
-  position: absolute;
-  bottom: 3vh;
-  left: 3vh;
-  z-index: 19;
-`
-
-const SelfVideo = styled(motion.video)`
-  height: 130px;
-  width: 200px;
-  object-fit: cover;
-  margin: 0;
-  padding: 0;
-  border-radius: 3px;
-  cursor: move;
-
-  @media (max-width: 500px) {
-    display: none;
-  }
-`
-
-const RotateIcon = styled(FaRedoAlt)`
-  position: absolute;
-  right: 1rem;
-  bottom: 0.8rem;
-  font-size: 1.7rem;
-  color: var(--secondaryColor);
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 150ms ease-in-out;
-
-  ${SelfVideoWrapper}:hover & {
-    opacity: 1;
-  }
 `
 
 const ExpandButton = styled(motion.button)`

@@ -1,10 +1,10 @@
 import * as React from "react"
-import styled from "styled-components"
+import styled, { keyframes, css } from "styled-components"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { motion } from "framer-motion"
 import { useStateDesigner } from "@state-designer/react"
 
-import { NoMarginContainer, WinnerText, RematchButton } from "./GameStyles"
+import { NoMarginContainer, WinnerText } from "./GameStyles"
 import { gameScreens } from "./Game"
 
 import {
@@ -54,10 +54,11 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
           <span style={{ color: "var(--successColor)" }}>Tac</span>
           <span style={{ color: "var(--primaryColor)" }}>Toe</span>
         </WinnerText>
-        <RematchButton
+        <Button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleStartGame}
+          noConnection={noConnection}
           style={{
             cursor: noConnection ? "initial" : "pointer",
             pointerEvents: noConnection ? "none" : "all",
@@ -65,7 +66,7 @@ const ScreenInitial: React.FC<Props> = ({ socket }) => {
           }}
         >
           {noConnection ? `Waiting for friend to connect` : `Start game`}
-        </RematchButton>
+        </Button>
       </NoMarginContainer>
     </Wrapper>
   )
@@ -85,4 +86,47 @@ const Wrapper = styled(motion.div)`
   justify-content: center;
   align-items: center;
   z-index: 1000;
+`
+
+const shimmer = keyframes`
+    100% {
+      transform: translateX(100%);
+    }
+`
+
+const Button = styled(motion.button)`
+  background: linear-gradient(45deg, #d852fd, #9c74fe);
+  border: none;
+  border-radius: 5px;
+  padding: 0.8em 1em;
+  font-weight: 600;
+  font-size: 1.7rem;
+  color: var(--textColor);
+  cursor: pointer;
+  outline: transparent;
+  overflow: hidden;
+  position: relative;
+  height: 48px;
+
+  ${(props: { noConnection: boolean }) =>
+    props.noConnection &&
+    css`
+      &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: translateX(-100%);
+        background-image: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0,
+          rgba(255, 255, 255, 0.05) 20%,
+          rgba(255, 255, 255, 0.2) 60%,
+          rgba(255, 255, 255, 0)
+        );
+        animation: ${shimmer} 1.5s infinite;
+        content: "";
+      }
+    `}
 `

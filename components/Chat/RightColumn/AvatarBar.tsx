@@ -102,7 +102,6 @@ const AvatarsContainer = styled(motion.ul)`
   left: -0.5rem;
   min-height: 64px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  /* filter: drop-shadow(0 0.4rem 5rem rgba(131, 82, 253, 0.15)); */
 
   &:after {
     content: "";
@@ -115,8 +114,6 @@ const AvatarsContainer = styled(motion.ul)`
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 10px solid #1a0d2b;
-    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); */
-    /* filter: drop-shadow(0 0.4rem 5rem rgba(131, 82, 253, 0.15)); */
   }
 `
 

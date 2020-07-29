@@ -1,5 +1,5 @@
 import * as React from "react"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import { motion } from "framer-motion"
 import { useSetRecoilState } from "recoil"
 import { useStateDesigner } from "@state-designer/react"
@@ -54,14 +54,39 @@ const WaitingText = styled.h5`
   margin-bottom: 3rem;
 `
 
+const shimmer = keyframes`
+    100% {
+      transform: translateX(100%);
+    }
+`
+
 const Button = styled(motion.button)`
   background: linear-gradient(45deg, #d852fd, #9c74fe);
   border: none;
   border-radius: 5px;
-  padding: 1rem 1.5rem;
+  padding: 0.8em 1em;
   font-weight: 600;
   font-size: 1.7rem;
   color: var(--textColor);
   cursor: pointer;
   outline: transparent;
+  height: 48px;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.05) 20%,
+      rgba(255, 255, 255, 0.2) 60%,
+      rgba(255, 255, 255, 0)
+    );
+    animation: ${shimmer} 1.5s infinite;
+    content: "";
+  }
 `
