@@ -1,8 +1,7 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { Waypoint } from "react-waypoint"
 
 const stepsData = [
   {
@@ -60,37 +59,47 @@ const itemVariant = {
 const HowItWorks = () => {
   const [isVisible, setIsVisible] = useState(false)
 
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      if (scrollY > 375) {
+        setIsVisible(true)
+      }
+    })
+
+    return () => {
+      window.removeEventListener("scroll", () => {
+        if (scrollY > 375) {
+          setIsVisible(true)
+        }
+      })
+    }
+  }, [])
+
   return (
-    <Waypoint onEnter={() => setIsVisible(true)}>
-      {isVisible && (
-        <Wrapper>
-          <Container>
-            <Title>How it works</Title>
-            <Tagline>
-              Chattr is a free p2p video chat app with your security in mind
-            </Tagline>
-            <StepsList
-              variants={listVariant}
-              initial="hidden"
-              animate="visible"
-            >
-              {stepsData.map(({ id, src, alt, title, desc }) => (
-                <StepsItem key={id} variants={itemVariant}>
-                  <StepsItemImgWrapper>
-                    <StepsItemImg loading="lazy" src={src} alt={alt} />
-                  </StepsItemImgWrapper>
-                  <StepsItemHeading>
-                    <StepsItemOrder>{id}.</StepsItemOrder>
-                    <StepsItemTitle>{title}</StepsItemTitle>
-                  </StepsItemHeading>
-                  <StepsItemDesc>{desc}</StepsItemDesc>
-                </StepsItem>
-              ))}
-            </StepsList>
-          </Container>
-        </Wrapper>
-      )}
-    </Waypoint>
+    <Wrapper>
+      <Container>
+        <Title>How it works</Title>
+        <Tagline>
+          Chattr is a free p2p video chat app with your security in mind
+        </Tagline>
+        {isVisible && (
+          <StepsList variants={listVariant} initial="hidden" animate="visible">
+            {stepsData.map(({ id, src, alt, title, desc }) => (
+              <StepsItem key={id} variants={itemVariant}>
+                <StepsItemImgWrapper>
+                  <StepsItemImg loading="lazy" src={src} alt={alt} />
+                </StepsItemImgWrapper>
+                <StepsItemHeading>
+                  <StepsItemOrder>{id}.</StepsItemOrder>
+                  <StepsItemTitle>{title}</StepsItemTitle>
+                </StepsItemHeading>
+                <StepsItemDesc>{desc}</StepsItemDesc>
+              </StepsItem>
+            ))}
+          </StepsList>
+        )}
+      </Container>
+    </Wrapper>
   )
 }
 
