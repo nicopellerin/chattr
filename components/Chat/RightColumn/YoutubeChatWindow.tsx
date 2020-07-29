@@ -307,10 +307,10 @@ const InnerContainer = styled.div`
   padding-top: 8rem;
   padding-bottom: 8rem;
   border-radius: 50px;
-  box-shadow: 0 -8px 4px -4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 -8px 4px -4px rgba(0, 0, 0, 0.2);
 
   @media (min-width: 1800px) {
-    padding-top: 6rem;
+    padding-top: 7rem;
     margin-top: 3rem;
   }
 `

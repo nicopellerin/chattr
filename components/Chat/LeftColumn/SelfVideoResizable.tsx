@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useState } from "react"
 import styled, { css } from "styled-components"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 import { Resizable } from "react-resizable"
 import { FaRedoAlt } from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
@@ -9,13 +9,14 @@ import { motion } from "framer-motion"
 
 import { chatVideoScreens } from "./ChatVideo"
 
+import { useClickOutside } from "../../../hooks/useClickOutside"
+
 import {
   showSelfWebcamState,
   sharingScreenState,
   displayTheatreModeState,
   flipSelfVideoState,
 } from "../../../store/video"
-import { useRecoilState } from "recoil"
 
 interface Props {
   contraintsRef: React.Ref<HTMLDivElement>
@@ -29,7 +30,10 @@ interface StyledProps {
   showWebcam?: boolean
 }
 
-const SelfVideoResizable: React.FC<Props> = ({ selfVideoRef, contraintsRef }) => {
+const SelfVideoResizable: React.FC<Props> = ({
+  selfVideoRef,
+  contraintsRef,
+}) => {
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
 
   const showWebcam = useRecoilValue(showSelfWebcamState)
@@ -44,8 +48,9 @@ const SelfVideoResizable: React.FC<Props> = ({ selfVideoRef, contraintsRef }) =>
       height: 130,
     },
   })
-
   const [isSelected, setIsSelected] = useState(false)
+
+  const node = useClickOutside(setIsSelected)
 
   return (
     <SelfVideoWrapper
@@ -57,6 +62,7 @@ const SelfVideoResizable: React.FC<Props> = ({ selfVideoRef, contraintsRef }) =>
       theatreMode={displayTheatreMode}
       showWebcam={showWebcam}
       onDoubleClick={() => setIsSelected((prevState) => !prevState)}
+      ref={node}
     >
       <Resizable
         width={element.style.width}
