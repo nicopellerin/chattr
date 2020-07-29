@@ -292,7 +292,7 @@ const IconWrapper = styled(motion.div)`
   color: var(--primaryColorLight);
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 0rem 0.5rem rgba(131, 82, 253, 0.4);
+  box-shadow: 0 0rem 0.5rem rgba(0, 0, 0, 0.1);
 
   ${(props: StyledProps) =>
     props.off &&
