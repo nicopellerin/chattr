@@ -451,7 +451,7 @@ const WaitingButton = styled(Button)`
   position: relative;
   overflow: hidden;
 
-  ${(props: { waiting: boolean }) =>
+  ${(props: { waiting?: boolean }) =>
     props.waiting &&
     css`
       &::after {
