@@ -10,9 +10,6 @@
     "stop": "pm2 stop dist/server.js",
     "type-check": "tsc"
   },
-  // "resolutions": {
-  //   "webpack": "^5.0.0-beta.22"
-  // },
   "dependencies": {
     "@babel/preset-env": "^7.10.3",
     "@babel/preset-typescript": "^7.10.1",
@@ -39,7 +36,7 @@
     "html2canvas": "^1.0.0-rc.5",
     "moment": "^2.27.0",
     "moment-duration-format": "^2.3.2",
-    "next": "^9.5.0",
+    "next": "9.5",
     "next-pwa": "^2.6.1",
     "peerjs": "^1.2.0",
     "pm2": "^4.4.0",
@@ -97,8 +94,5 @@
     "typescript": "^3.9.5",
     "worker-loader": "^2.0.0"
   },
-  // "browser": {
-  //   "crypto": "crypto-browserify"
-  // },
   "license": "ISC"
 }
