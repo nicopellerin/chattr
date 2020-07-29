@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
-import styled, { keyframes } from "styled-components"
+import styled, { keyframes, css } from "styled-components"
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
 import { useStateDesigner, createState } from "@state-designer/react"
@@ -150,6 +150,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
                       required
                     />
                     <WaitingButton
+                      waiting={!streamOtherPeer ? true : false}
                       style={{
                         cursor:
                           noConnection && !streamOtherPeer
@@ -170,7 +171,6 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
             ),
             waitingScreen: (
               <Container layout="position">
-                <YoutubeIcon src="/yt.png" alt="Youtube logo" />
                 <Title>Waiting for your friend to accept...</Title>
                 <WaitingButton
                   type="button"
@@ -451,23 +451,27 @@ const WaitingButton = styled(Button)`
   position: relative;
   overflow: hidden;
 
-  &::after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: translateX(-100%);
-    background-image: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0,
-      rgba(255, 255, 255, 0.05) 20%,
-      rgba(255, 255, 255, 0.2) 60%,
-      rgba(255, 255, 255, 0)
-    );
-    animation: ${shimmer} 1.5s infinite;
-    content: "";
-  }
+  ${(props: { waiting: boolean }) =>
+    props.waiting &&
+    css`
+      &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: translateX(-100%);
+        background-image: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0,
+          rgba(255, 255, 255, 0.05) 20%,
+          rgba(255, 255, 255, 0.2) 60%,
+          rgba(255, 255, 255, 0)
+        );
+        animation: ${shimmer} 1.5s infinite;
+        content: "";
+      }
+    `}
 `
 
 const RewindButton = styled(MuteButton)`
