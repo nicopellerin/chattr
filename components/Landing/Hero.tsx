@@ -125,6 +125,7 @@ const DemoImage = styled(motion.img)`
   box-shadow: 0 0.7rem 10rem rgba(131, 82, 253, 0.1);
   border-radius: 5px;
   opacity: 0;
+  border: 1px solid rgba(131, 82, 253, 0.2);
 `
 
 const Wave = styled(motion.img)`

@@ -46,7 +46,7 @@ const listVariant = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.3,
+      staggerChildren: 0.4,
     },
   },
 }
@@ -61,14 +61,14 @@ const HowItWorks = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
-      if (scrollY > 375) {
+      if (scrollY > 350) {
         setIsVisible(true)
       }
     })
 
     return () => {
       window.removeEventListener("scroll", () => {
-        if (scrollY > 375) {
+        if (scrollY > 350) {
           setIsVisible(true)
         }
       })
@@ -111,7 +111,6 @@ const Wrapper = styled.div`
   min-height: 60rem;
   position: relative;
   z-index: 2;
-  /* height: 100%; */
 `
 
 const Container = styled.div`
