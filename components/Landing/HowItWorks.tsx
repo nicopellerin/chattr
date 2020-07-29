@@ -1,74 +1,96 @@
 import * as React from "react"
+import { useState } from "react"
 import styled from "styled-components"
+import { motion } from "framer-motion"
+import { Waypoint } from "react-waypoint"
+
+const stepsData = [
+  {
+    id: 1,
+    src: "/create.webp",
+    alt: "Step 1 - Create",
+    title: "Create room",
+    desc: "Just choose a username and an avatar",
+  },
+  {
+    id: 2,
+    src: "/invite.webp",
+    alt: "Step 2 - Invite",
+    title: "Invite friend",
+    desc: "Invite via Messenger, email or by copying link",
+  },
+  {
+    id: 3,
+    src: "/call.webp",
+    alt: "Step 3 - Start call",
+    title: "Start call",
+    desc: "Press phone button on the right to start calling",
+  },
+  {
+    id: 4,
+    src: "/youtube.webp",
+    alt: "Step 4 - Pick a Youtube video",
+    title: "Pick a Youtube video",
+    desc: "Copy and paste any Youtube video url",
+  },
+  {
+    id: 5,
+    src: "/yt-watch.webp",
+    alt: "Step 4 - Enjoy watching :)",
+    title: "Enjoy watching :)",
+    desc: "Press play and enjoy! Oh and try moving the progress bar",
+  },
+]
+
+const listVariant = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+    },
+  },
+}
+
+const itemVariant = {
+  hidden: { y: 25, opacity: 0 },
+  visible: { y: 0, opacity: 1 },
+}
 
 const HowItWorks = () => {
+  const [isVisible, setIsVisible] = useState(false)
+
   return (
-    <Wrapper>
-      <Container>
-        <Title>How it works</Title>
-        <Tagline>
-          Chattr is a free p2p video chat app with your security in mind
-        </Tagline>
-        <StepsList>
-          <StepsItem>
-            <StepsItemImgWrapper>
-              <StepsItemImg loading="lazy" src="/create.webp" alt="Create" />
-            </StepsItemImgWrapper>
-            <StepsItemHeading>
-              <StepsItemOrder>1.</StepsItemOrder>
-              <StepsItemTitle>Create room</StepsItemTitle>
-            </StepsItemHeading>
-            <StepsItemDesc>Just choose a username and an avatar</StepsItemDesc>
-          </StepsItem>
-          <StepsItem>
-            <StepsItemImgWrapper>
-              <StepsItemImg loading="lazy" src="/invite.webp" alt="Invite" />
-            </StepsItemImgWrapper>
-            <StepsItemHeading>
-              <StepsItemOrder>2.</StepsItemOrder>
-              <StepsItemTitle>Invite friend</StepsItemTitle>
-            </StepsItemHeading>
-            <StepsItemDesc>
-              Invite via Messenger, email or by copying link
-            </StepsItemDesc>
-          </StepsItem>
-          <StepsItem>
-            <StepsItemImgWrapper>
-              <StepsItemImg loading="lazy" src="/call.webp" alt="Call" />
-            </StepsItemImgWrapper>
-            <StepsItemHeading>
-              <StepsItemOrder>3.</StepsItemOrder>
-              <StepsItemTitle>Start call</StepsItemTitle>
-            </StepsItemHeading>
-            <StepsItemDesc>
-              Press phone button on the right to initiate call
-            </StepsItemDesc>
-          </StepsItem>
-          <StepsItem>
-            <StepsItemImgWrapper>
-              <StepsItemImg loading="lazy" src="/youtube.webp" alt="Youtube" />
-            </StepsItemImgWrapper>
-            <StepsItemHeading>
-              <StepsItemOrder>4.</StepsItemOrder>
-              <StepsItemTitle>Pick a Youtube video</StepsItemTitle>
-            </StepsItemHeading>
-            <StepsItemDesc>Copy and paste any Youtube video url</StepsItemDesc>
-          </StepsItem>
-          <StepsItem>
-            <StepsItemImgWrapper>
-              <StepsItemImg loading="lazy" src="/demo-yt.webp" alt="Video" />
-            </StepsItemImgWrapper>
-            <StepsItemHeading>
-              <StepsItemOrder>5.</StepsItemOrder>
-              <StepsItemTitle>Enjoy watching {":)"}</StepsItemTitle>
-            </StepsItemHeading>
-            <StepsItemDesc>
-              Press play and enjoy! Oh and try moving the progress bar
-            </StepsItemDesc>
-          </StepsItem>
-        </StepsList>
-      </Container>
-    </Wrapper>
+    <Waypoint onEnter={() => setIsVisible(true)}>
+      {isVisible && (
+        <Wrapper>
+          <Container>
+            <Title>How it works</Title>
+            <Tagline>
+              Chattr is a free p2p video chat app with your security in mind
+            </Tagline>
+            <StepsList
+              variants={listVariant}
+              initial="hidden"
+              animate="visible"
+            >
+              {stepsData.map(({ id, src, alt, title, desc }) => (
+                <StepsItem key={id} variants={itemVariant}>
+                  <StepsItemImgWrapper>
+                    <StepsItemImg loading="lazy" src={src} alt={alt} />
+                  </StepsItemImgWrapper>
+                  <StepsItemHeading>
+                    <StepsItemOrder>{id}.</StepsItemOrder>
+                    <StepsItemTitle>{title}</StepsItemTitle>
+                  </StepsItemHeading>
+                  <StepsItemDesc>{desc}</StepsItemDesc>
+                </StepsItem>
+              ))}
+            </StepsList>
+          </Container>
+        </Wrapper>
+      )}
+    </Waypoint>
   )
 }
 
@@ -80,6 +102,7 @@ const Wrapper = styled.div`
   min-height: 60rem;
   position: relative;
   z-index: 2;
+  height: 100%;
 `
 
 const Container = styled.div`
@@ -115,10 +138,10 @@ const Tagline = styled.span`
   }
 `
 
-const StepsList = styled.div`
+const StepsList = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(3, minmax(300px, 1fr));
-  grid-gap: 6rem 8rem;
+  grid-gap: 6rem 7rem;
   justify-content: center;
 
   @media (max-width: 600px) {
@@ -126,11 +149,11 @@ const StepsList = styled.div`
   }
 
   @media (min-width: 1800px) {
-    grid-gap: 8rem 6rem;
+    grid-gap: 9rem 10rem;
   }
 `
 
-const StepsItem = styled.div``
+const StepsItem = styled(motion.div)``
 
 const StepsItemImgWrapper = styled.div`
   height: 35rem;
