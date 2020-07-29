@@ -102,7 +102,7 @@ const Wrapper = styled.div`
   min-height: 60rem;
   position: relative;
   z-index: 2;
-  height: 100%;
+  /* height: 100%; */
 `
 
 const Container = styled.div`
@@ -143,6 +143,10 @@ const StepsList = styled(motion.div)`
   grid-template-columns: repeat(3, minmax(300px, 1fr));
   grid-gap: 6rem 7rem;
   justify-content: center;
+
+  &:last-of-type {
+    grid-column: 1 / -1;
+  }
 
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
