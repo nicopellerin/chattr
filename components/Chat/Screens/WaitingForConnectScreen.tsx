@@ -18,9 +18,12 @@ const WaitingForConnectScreen = () => {
             style={{ marginBottom: 30 }}
             color="var(--secondaryColor)"
           />
-          <div>
-            <span style={{ margin: 20 }}>Waiting for friend to connect</span>
-          </div>
+          <Text
+            animate={{ scale: [1, 1.05] }}
+            transition={{ yoyo: "Infinity", duration: 2 }}
+          >
+            Waiting for friend to connect
+          </Text>
         </Title>
       </Container>
     </Wrapper>
@@ -56,12 +59,15 @@ const Container = styled(motion.div)`
   z-index: 2;
 `
 
-const Title = styled.h4`
+const Title = styled(motion.h4)`
   font-size: 4rem;
   /* color: #f9e4fe; */
   display: flex;
   flex-direction: column;
   align-items: center;
+`
+
+const Text = styled(motion.span)`
   text-align: center;
   background: -webkit-linear-gradient(
     145deg,
