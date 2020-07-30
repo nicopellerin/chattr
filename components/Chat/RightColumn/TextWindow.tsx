@@ -2,7 +2,6 @@ import * as React from "react"
 import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
-import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
 import { AnimatePresence, motion } from "framer-motion"
 
@@ -16,21 +15,11 @@ import YoutubeChatWindow from "./YoutubeChatWindow"
 import YoutubeChatWindowBtn from "./YoutubeChatWindowBtn"
 
 import { userSoundOnState, userJoinedChattrState } from "../../../store/users"
+import { chatTextWindowScreens } from "../../../store/chat"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
-
-export const chatTextWindowScreens = createState({
-  id: "chatTextWindowScreens",
-  initial: "chatScreen",
-  states: {
-    chatScreen: {},
-    gameScreen: {},
-    photoGalleryScreen: {},
-    youtubeVideoStartScreen: {},
-  },
-})
 
 const ChatTextWindow: React.FC<Props> = ({ socket }) => {
   const chatTextWindowScreensState = useStateDesigner(chatTextWindowScreens)

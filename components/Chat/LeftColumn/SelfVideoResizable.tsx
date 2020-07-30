@@ -7,8 +7,6 @@ import { FaRedoAlt } from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
 import { motion } from "framer-motion"
 
-import { chatVideoScreens } from "./ChatVideo"
-
 import { useClickOutside } from "../../../hooks/useClickOutside"
 
 import {
@@ -16,6 +14,7 @@ import {
   sharingScreenState,
   displayTheatreModeState,
   flipSelfVideoState,
+  chatVideoScreens,
 } from "../../../store/video"
 
 interface Props {

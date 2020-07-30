@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useStateDesigner } from "@state-designer/react"
 
-import { catSliderScreen } from "../LeftColumn/ChatVideo"
+import { catSliderScreen } from "../../../store/video"
 
 const PeerNoVideoScreen = () => {
   const catSliderScreenState = useStateDesigner(catSliderScreen)

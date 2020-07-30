@@ -62,6 +62,7 @@ io.on("connection", (socket) => {
   socket.broadcast.to(room).emit("userJoinedGlobal")
 
   io.to(room).emit("listUsers", rooms[room].users)
+
   io.to(room).emit("chatConnection", "Welcome to Chattr!")
 
   console.log("USERS", rooms[room].users)
@@ -96,12 +97,14 @@ io.on("connection", (socket) => {
     rooms[room].users = rooms[room].users.filter(
       (user: User) => user.id !== socket.id
     )
-    if (!rooms[room].users) {
-      rooms[room].users = []
-    }
+
     io.to(room).emit("userLeftChattr")
     io.to(room).emit("listUsers", rooms[room].users)
     socket.leave(room)
+
+    if (!rooms[room].users) {
+      delete rooms[room]
+    }
   })
 
   socket.on("callUser", (data: CallUser) => {

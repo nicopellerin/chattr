@@ -6,9 +6,7 @@ import { FaYoutubeSquare } from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
 
 import { userSoundOnState } from "../../../store/users"
-import { flipLayoutState } from "../../../store/chat"
-
-import { chatTextWindowScreens } from "./TextWindow"
+import { flipLayoutState, chatTextWindowScreens } from "../../../store/chat"
 
 const YoutubeChatWindowBtn = () => {
   const state = useStateDesigner(chatTextWindowScreens)

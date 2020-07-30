@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { FaExpand, FaMicrophoneSlash, FaLaptop, FaCamera } from "react-icons/fa"
 import dynamic from "next/dynamic"
-import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
 import { saveAs } from "file-saver"
 import { detect } from "detect-browser"
@@ -37,6 +36,8 @@ const ChatScreenPeerNoVideo = dynamic(
   }
 )
 
+import SelfVideoResizable from "./SelfVideoResizable"
+
 import YoutubeVideoScreen from "../Screens/YoutubeVideoScreen"
 
 const Slider = dynamic(() => import("../Shared/Slider"), { ssr: false })
@@ -54,58 +55,17 @@ import {
   shareVideoScreenState,
   flipSelfVideoState,
   flipFriendVideoState,
+  chatVideoScreens,
+  catSliderScreen,
 } from "../../../store/video"
 import {
   listUsersState,
   userSoundOnState,
   otherUsernameQuery,
+  toggleOtherUsernameState,
 } from "../../../store/users"
 import { messageContainsHeartEmojiState } from "../../../store/chat"
-import SelfVideoResizable from "./SelfVideoResizable"
-
-export const chatVideoScreens = createState({
-  id: "chatTextWindowScreens",
-  initial: "waitingForConnectionScreen",
-  states: {
-    waitingForConnectionScreen: {},
-    callingScreen: {
-      initial: "hidden",
-      states: {
-        hidden: {},
-        visible: {},
-      },
-    },
-    noVideoScreen: {},
-    peerNoVideoScreen: {},
-    incomingCallScreen: {
-      initial: "hidden",
-      states: {
-        hidden: {},
-        visible: {},
-      },
-    },
-    youtubeVideoScreen: {
-      initial: "hidden",
-      states: {
-        hidden: {},
-        visible: {},
-      },
-    },
-  },
-})
-
-export const catSliderScreen = createState({
-  id: "catSliderScreen",
-  initial: "hidden",
-  states: {
-    hidden: {
-      on: { SHOW: { secretlyTo: "visible" } },
-    },
-    visible: {
-      on: { SHOW: { secretlyTo: "hidden" } },
-    },
-  },
-})
+import UsersBar from "../RightColumn/UsersBar"
 
 interface Props {
   acceptCall: () => void
@@ -147,6 +107,7 @@ const ChatVideo: React.FC<Props> = ({
   const shareVideoScreen = useRecoilValue(shareVideoScreenState)
   const flipFriendVideo = useRecoilValue(flipFriendVideoState)
   const flipSelfVideo = useRecoilValue(flipSelfVideoState)
+  const toggleOtherUsername = useRecoilValue(toggleOtherUsernameState)
 
   const [
     messageContainsHeartEmoji,
@@ -337,6 +298,7 @@ const ChatVideo: React.FC<Props> = ({
         >
           <FaExpand />
         </ExpandButton>
+        <AnimatePresence>{toggleOtherUsername && <UsersBar />}</AnimatePresence>
       </>
     </Wrapper>
   )

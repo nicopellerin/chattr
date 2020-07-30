@@ -7,11 +7,9 @@ import { useStateDesigner } from "@state-designer/react"
 
 import Portal from "../Chat/Shared/Portal"
 
-import { showPlayBarState } from "../../store/chat"
-
-import { gameScreens } from "./TicTacToe/Game"
-import { chatTextWindowScreens } from "../Chat/RightColumn/TextWindow"
+import { showPlayBarState, chatTextWindowScreens } from "../../store/chat"
 import { shareVideoScreenState } from "../../store/video"
+import { gameScreens } from "../../store/game"
 
 interface Props {
   msg: string

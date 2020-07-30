@@ -1,4 +1,5 @@
 import { atom } from "recoil"
+import { createState } from "@state-designer/react"
 
 interface YoutubeVideo {
   title: string
@@ -42,4 +43,14 @@ export const youtubeProgressBarWidthState = atom<number>({
 export const youtubeBarHoveredState = atom<number>({
   key: "youtubeBarHoveredState",
   default: 0,
+})
+
+export const youtubeChatWindowScreens = createState({
+  id: "youtubeChatWindow",
+  initial: "initialScreen",
+  states: {
+    initialScreen: {},
+    waitingScreen: {},
+    commandScreen: {},
+  },
 })

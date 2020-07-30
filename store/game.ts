@@ -1,6 +1,7 @@
 import { atom, selector } from "recoil"
 
 import { otherUsernameQuery } from "./users"
+import { createState } from "@state-designer/react"
 
 interface Player {
   username: string
@@ -100,5 +101,17 @@ export const resetGameState = selector({
     set(xIsNextState, true)
     set(wonGameState, false)
     set(playGameState, true)
+  },
+})
+
+export const gameScreens = createState({
+  id: "gameScreens",
+  initial: "initialScreen",
+  states: {
+    initialScreen: {},
+    waitingConnectionScreen: {},
+    turnScreen: {},
+    yourTurnScreen: {},
+    winOrTieScreen: {},
   },
 })

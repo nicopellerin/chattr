@@ -1,9 +1,9 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
-import { FaCog } from "react-icons/fa"
+import { FaCog, FaUserFriends } from "react-icons/fa"
 
 import AvatarBar from "./AvatarBar"
 
@@ -11,14 +11,20 @@ import {
   usernameState,
   userSoundOnState,
   avatarState,
+  toggleOtherUsernameState,
+  listUsersState,
 } from "../../../store/users"
 // import { micVolumeState } from "../../store/video"
 
 const ChatUsername = () => {
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
+  const listUsers = useRecoilValue(listUsersState)
 
   const [soundOn, setSoundOn] = useRecoilState(userSoundOnState)
+
+  const setToggleOtherUsername = useSetRecoilState(toggleOtherUsernameState)
+
   // const [micVolume, setMicVolume] = useRecoilState(micVolumeState)
 
   const [toggleDrawer, setToggleDrawer] = useState(false)
@@ -99,14 +105,21 @@ const ChatUsername = () => {
           </UsernameWrapper>
         )}
       </AnimatePresence>
-      <IconCog
-        onClick={() => {
-          setToggleDrawer((prevState) => !prevState)
-          if (soundOn) {
-            beepOn.play()
-          }
-        }}
-      />
+      <div>
+        {listUsers.length > 1 && (
+          <IconUsers
+            onClick={() => setToggleOtherUsername((prevState) => !prevState)}
+          />
+        )}
+        <IconCog
+          onClick={() => {
+            setToggleDrawer((prevState) => !prevState)
+            if (soundOn) {
+              beepOn.play()
+            }
+          }}
+        />
+      </div>
     </Wrapper>
   )
 }
@@ -163,6 +176,14 @@ const IconCog = styled(FaCog)`
     color: #eef;
     transform: rotate(90deg);
   }
+`
+
+const IconUsers = styled(FaUserFriends)`
+  font-size: 2rem;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 300ms ease-in-out;
+  margin-right: 2rem;
 `
 
 const UsernameWrapper = styled(motion.div)`

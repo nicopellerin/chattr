@@ -19,6 +19,7 @@ import {
   shareVideoScreenState,
   screenSharingStartedState,
   sharingScreenState,
+  chatVideoScreens,
 } from "../../store/video"
 import {
   selfIdState,
@@ -35,7 +36,7 @@ import {
   flipLayoutState,
 } from "../../store/chat"
 
-import ChatVideo, { chatVideoScreens } from "./LeftColumn/ChatVideo"
+import ChatVideo from "./LeftColumn/ChatVideo"
 import ChatTextBar from "./LeftColumn/TextBar"
 import ChatCommands from "./RightColumn/Commands"
 import ChatTextWindow from "./RightColumn/TextWindow"

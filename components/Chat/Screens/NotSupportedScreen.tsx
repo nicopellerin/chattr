@@ -5,7 +5,7 @@ import { useStateDesigner } from "@state-designer/react"
 
 import Slider from "../Shared/Slider"
 
-import { catSliderScreen } from "../LeftColumn/ChatVideo"
+import { catSliderScreen } from "../../../store/video"
 
 const NotSupportedScreen: React.FC = () => {
   const catSliderScreenState = useStateDesigner(catSliderScreen)

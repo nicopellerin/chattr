@@ -6,7 +6,7 @@ import { useStateDesigner } from "@state-designer/react"
 
 import { ScreenWrapper, NoMarginContainer } from "./GameStyles"
 import { showPlayBarState } from "../../../store/chat"
-import { gameScreens } from "./Game"
+import { gameScreens } from "../../../store/game"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>

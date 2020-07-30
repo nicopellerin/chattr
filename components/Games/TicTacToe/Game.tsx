@@ -3,7 +3,6 @@ import { useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue } from "recoil"
 import { useSetRecoilState } from "recoil"
-import { createState } from "@state-designer/core"
 import { useStateDesigner } from "@state-designer/react"
 
 import Board from "./Board"
@@ -15,6 +14,7 @@ import {
   tieGameState,
   xIsNextState,
   boardState,
+  gameScreens,
 } from "../../../store/game"
 
 import { calculateWinner, calculateTie } from "./utils"
@@ -23,18 +23,6 @@ import ScreenInitial from "./ScreenInitial"
 import ScreenWaitingForConnection from "./ScreenWaitingForConnection"
 import ScreenWinOrTie from "./ScreenWinOrTie"
 import ScreenYourTurn from "./ScreenYourTurn"
-
-export const gameScreens = createState({
-  id: "gameScreens",
-  initial: "initialScreen",
-  states: {
-    initialScreen: {},
-    waitingConnectionScreen: {},
-    turnScreen: {},
-    yourTurnScreen: {},
-    winOrTieScreen: {},
-  },
-})
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>

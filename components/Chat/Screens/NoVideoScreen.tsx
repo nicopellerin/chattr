@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { useStateDesigner } from "@state-designer/react"
 import { FaPhone } from "react-icons/fa"
 
-import { catSliderScreen } from "../LeftColumn/ChatVideo"
+import { catSliderScreen } from "../../../store/video"
 
 const NoVideoScreen = () => {
   const catSliderScreenState = useStateDesigner(catSliderScreen)

@@ -1,6 +1,7 @@
 import { atom, selector } from "recoil"
 
 import { listUsersState } from "./users"
+import { createState } from "@state-designer/react"
 
 export const streamOtherPeerState = atom<MediaStream | any>({
   key: "streamOtherPeerState",
@@ -137,4 +138,48 @@ export const flipFriendVideoState = atom<boolean>({
 export const micVolumeState = atom<number>({
   key: "micVolumeState",
   default: 1,
+})
+
+export const chatVideoScreens = createState({
+  id: "chatTextWindowScreens",
+  initial: "waitingForConnectionScreen",
+  states: {
+    waitingForConnectionScreen: {},
+    callingScreen: {
+      initial: "hidden",
+      states: {
+        hidden: {},
+        visible: {},
+      },
+    },
+    noVideoScreen: {},
+    peerNoVideoScreen: {},
+    incomingCallScreen: {
+      initial: "hidden",
+      states: {
+        hidden: {},
+        visible: {},
+      },
+    },
+    youtubeVideoScreen: {
+      initial: "hidden",
+      states: {
+        hidden: {},
+        visible: {},
+      },
+    },
+  },
+})
+
+export const catSliderScreen = createState({
+  id: "catSliderScreen",
+  initial: "hidden",
+  states: {
+    hidden: {
+      on: { SHOW: { secretlyTo: "visible" } },
+    },
+    visible: {
+      on: { SHOW: { secretlyTo: "hidden" } },
+    },
+  },
 })

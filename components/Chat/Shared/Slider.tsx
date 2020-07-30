@@ -6,7 +6,7 @@ import styled from "styled-components"
 import { FaTimesCircle } from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
 
-import { catSliderScreen } from "../LeftColumn/ChatVideo"
+import { catSliderScreen } from "../../../store/video"
 
 const images = [
   "/cats/cat1.webp",

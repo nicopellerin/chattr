@@ -8,6 +8,7 @@ import {
   receivingCallState,
   streamOtherPeerState,
 } from "./video"
+import { createState } from "@state-designer/react"
 
 interface OgData {
   title: string
@@ -118,4 +119,15 @@ export const userLeftChattrAction = selector({
 export const flipLayoutState = atom<boolean>({
   key: "flipLayoutState",
   default: false,
+})
+
+export const chatTextWindowScreens = createState({
+  id: "chatTextWindowScreens",
+  initial: "chatScreen",
+  states: {
+    chatScreen: {},
+    gameScreen: {},
+    photoGalleryScreen: {},
+    youtubeVideoStartScreen: {},
+  },
 })

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import styled, { keyframes, css } from "styled-components"
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
-import { useStateDesigner, createState } from "@state-designer/react"
+import { useStateDesigner } from "@state-designer/react"
 import {
   FaPauseCircle,
   FaPlayCircle,
@@ -12,7 +12,6 @@ import {
   FaFastBackward,
 } from "react-icons/fa"
 
-import { chatVideoScreens } from "../LeftColumn/ChatVideo"
 import MessageBar from "../Shared/MessageBar"
 
 import {
@@ -21,21 +20,12 @@ import {
   youtubeVideoMuteSoundState,
   youtubeVideoMetaDataState,
   youtubeVideoRewindState,
+  youtubeChatWindowScreens,
 } from "../../../store/youtube"
 import { listUsersState, usernameState } from "../../../store/users"
-import { streamOtherPeerState } from "../../../store/video"
+import { streamOtherPeerState, chatVideoScreens } from "../../../store/video"
 
 import { maxLength } from "../../../utils/maxLength"
-
-export const youtubeChatWindowScreens = createState({
-  id: "youtubeChatWindow",
-  initial: "initialScreen",
-  states: {
-    initialScreen: {},
-    waitingScreen: {},
-    commandScreen: {},
-  },
-})
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>

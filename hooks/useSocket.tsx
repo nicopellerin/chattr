@@ -8,8 +8,6 @@ import io from "socket.io-client"
 import SimplePeer from "simple-peer"
 import "webrtc-adapter"
 
-import { youtubeChatWindowScreens } from "../components/Chat/RightColumn/YoutubeChatWindow"
-import { gameScreens } from "../components/Games/TicTacToe/Game"
 import {
   photoGalleryState,
   fileTransferProgressState,
@@ -33,6 +31,7 @@ import {
   callerSignalState,
   screenSharingStartedState,
   cancelCallAction,
+  chatVideoScreens,
   // micVolumeState,
 } from "../store/video"
 import {
@@ -41,12 +40,14 @@ import {
   boardState,
   xIsNextState,
   resetGameState,
+  gameScreens,
 } from "../store/game"
 import {
   youtubeUrlState,
   playYoutubeVideoState,
   youtubeVideoRewindState,
   youtubeVideoMetaDataState,
+  youtubeChatWindowScreens,
 } from "../store/youtube"
 import {
   usernameState,
@@ -55,7 +56,7 @@ import {
   selfIdState,
   avatarState,
 } from "../store/users"
-import { chatVideoScreens } from "../components/Chat/LeftColumn/ChatVideo"
+
 import { Message, Call, User } from "../models"
 
 enum SquareValue {

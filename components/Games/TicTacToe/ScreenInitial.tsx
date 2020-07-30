@@ -5,14 +5,17 @@ import { motion } from "framer-motion"
 import { useStateDesigner } from "@state-designer/react"
 
 import { NoMarginContainer, WinnerText } from "./GameStyles"
-import { gameScreens } from "./Game"
 
 import {
   usernameState,
   otherUsernameQuery,
   listUsersState,
 } from "../../../store/users"
-import { startGameState, resetGameState } from "../../../store/game"
+import {
+  startGameState,
+  resetGameState,
+  gameScreens,
+} from "../../../store/game"
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>

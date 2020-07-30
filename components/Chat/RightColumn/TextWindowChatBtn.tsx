@@ -6,9 +6,12 @@ import { useRecoilValue } from "recoil"
 import { FaComment } from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
 
-import { chatTextWindowScreens } from "./TextWindow"
 import { usernameState } from "../../../store/users"
-import { chatWindowState, flipLayoutState } from "../../../store/chat"
+import {
+  chatWindowState,
+  flipLayoutState,
+  chatTextWindowScreens,
+} from "../../../store/chat"
 
 const ChatTextWindowChatBtn = () => {
   const state = useStateDesigner(chatTextWindowScreens)

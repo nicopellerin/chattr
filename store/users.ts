@@ -84,3 +84,8 @@ export const otherUserAvatarQuery = selector({
     return newList[0]?.avatar
   },
 })
+
+export const toggleOtherUsernameState = atom<boolean>({
+  key: "toggleOtherUsernameState",
+  default: false,
+})

@@ -19,10 +19,10 @@ import {
   wonGameState,
   xIsNextState,
   resetGameState,
+  gameScreens,
 } from "../../../store/game"
 
 import wonAnim from "./confetti.json"
-import { gameScreens } from "./Game"
 
 const animOptions = {
   loop: true,
