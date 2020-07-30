@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useEffect } from "react"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import { motion } from "framer-motion"
 import { FaPhoneAlt, FaTimesCircle } from "react-icons/fa"
 import { useSetRecoilState, useRecoilValue } from "recoil"
@@ -43,7 +43,14 @@ const NoVideoScreen: React.FC<Props> = ({ acceptCall, socket }) => {
       transition={{ type: "spring", damping: 80 }}
     >
       <Container layout>
-        <Title>Incoming call...</Title>
+        <Title
+          animate={{ scale: [1, 1.08] }}
+          transition={{ yoyo: "Infinity", duration: 2 }}
+        >
+          Incoming call<span>.</span>
+          <span>.</span>
+          <span>.</span>
+        </Title>
         <ButtonWrapper>
           <AcceptButton
             onClick={() => {
@@ -97,12 +104,24 @@ const Container = styled(motion.div)`
   z-index: 2;
 `
 
-const Title = styled.h4`
+const Blink = keyframes`
+    0% {
+      opacity: .2;
+    }
+
+    20% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: .2;
+    }
+`
+
+const Title = styled(motion.h4)`
   font-size: 4rem;
-  /* color: var(--textColor); */
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   margin-bottom: 4rem;
   background: -webkit-linear-gradient(
     145deg,
@@ -111,6 +130,28 @@ const Title = styled.h4`
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+
+  span {
+    background: -webkit-linear-gradient(
+      145deg,
+      var(--primaryColor),
+      var(--tertiaryColor)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: ${Blink};
+    animation-duration: 1.4s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
 `
 
 const ButtonWrapper = styled.div`
