@@ -145,6 +145,7 @@ const SelfVideo = styled(motion.video)`
   padding: 0;
   border-radius: 3px;
   cursor: move;
+  height: 100%;
 
   ${(props: { isVisible: boolean }) =>
     props.isVisible &&
@@ -152,7 +153,6 @@ const SelfVideo = styled(motion.video)`
       border: 2px dotted var(--tertiaryColor);
       cursor: initial;
     `}
-
   @media (max-width: 500px) {
     display: none;
   }

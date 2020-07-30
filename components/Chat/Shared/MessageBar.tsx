@@ -64,6 +64,7 @@ const Wrapper = styled(motion.div)`
   left: 50%;
   z-index: 9999;
   /* width: 100%; */
+  overflow: hidden;
 `
 
 const Container = styled(motion.div)`
