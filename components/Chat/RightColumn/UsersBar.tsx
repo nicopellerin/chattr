@@ -14,7 +14,7 @@ const UsersBar = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ type: "spring", damping: 10 }}
+      transition={{ type: "spring", damping: 13 }}
       layout="position"
     >
       <Container>

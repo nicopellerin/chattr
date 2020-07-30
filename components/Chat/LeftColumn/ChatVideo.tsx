@@ -298,7 +298,9 @@ const ChatVideo: React.FC<Props> = ({
         >
           <FaExpand />
         </ExpandButton>
-        <AnimatePresence>{toggleOtherUsername && <UsersBar />}</AnimatePresence>
+        <AnimatePresence>
+          {toggleOtherUsername && listUsers.length > 1 && <UsersBar />}
+        </AnimatePresence>
       </>
     </Wrapper>
   )

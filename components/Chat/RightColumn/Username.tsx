@@ -73,16 +73,6 @@ const ChatUsername = () => {
                 </ToggleSwitchLabel>
               </ToggleSwitch>
             </ToggleWrapper>
-            {/* <Text style={{ marginRight: 20 }}>Mic volume</Text>
-            <input
-              type="range"
-              value={micVolume}
-              onChange={(e) => setMicVolume(Number(e.target.value))}
-              name="points"
-              min="0"
-              max="1"
-              step="0.01"
-            /> */}
           </>
         ) : (
           <UsernameWrapper
@@ -91,9 +81,6 @@ const ChatUsername = () => {
             exit={{ y: 30 }}
             transition={{ type: "spring", damping: 17 }}
           >
-            <AnimatePresence>
-              {toggleAvatar && <AvatarBar setToggleAvatar={setToggleAvatar} />}
-            </AnimatePresence>
             <Avatar
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -120,6 +107,9 @@ const ChatUsername = () => {
           }}
         />
       </div>
+      <AnimatePresence>
+        {toggleAvatar && <AvatarBar setToggleAvatar={setToggleAvatar} />}
+      </AnimatePresence>
     </Wrapper>
   )
 }
@@ -184,6 +174,10 @@ const IconUsers = styled(FaUserFriends)`
   cursor: pointer;
   transition: all 300ms ease-in-out;
   margin-right: 2rem;
+
+  &:hover {
+    color: #eef;
+  }
 `
 
 const UsernameWrapper = styled(motion.div)`
