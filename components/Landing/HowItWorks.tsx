@@ -114,7 +114,7 @@ const Wrapper = styled.div`
 `
 
 const Container = styled.div`
-  max-width: 85vw;
+  max-width: 90vw;
   margin: 0 auto;
   padding: 6rem;
   padding-bottom: 14rem;
@@ -148,12 +148,28 @@ const Tagline = styled.span`
 
 const StepsList = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(3, minmax(300px, 1fr));
-  grid-gap: 6rem 7rem;
-  justify-content: center;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 6rem 8rem;
+  /* width: 100%; */
 
-  &:last-of-type {
-    grid-column: 1 / -1;
+  & > :first-child {
+    grid-area: 1 / 1 / 2 / 3;
+  }
+
+  & > :nth-child(2) {
+    grid-area: 1 / 3 / 2 / 5;
+  }
+
+  & > :nth-child(3) {
+    grid-area: 1 / 5 / 2 / 7;
+  }
+
+  & > :nth-child(4) {
+    grid-area: 2 / 2 / 3 / 4;
+  }
+
+  & > :last-child {
+    grid-area: 2 / 4 / 3 / 6;
   }
 
   @media (max-width: 600px) {
@@ -168,7 +184,7 @@ const StepsList = styled(motion.div)`
 const StepsItem = styled(motion.div)``
 
 const StepsItemImgWrapper = styled.div`
-  height: 35rem;
+  height: 40rem;
   display: flex;
   align-items: center;
 
@@ -179,7 +195,7 @@ const StepsItemImgWrapper = styled.div`
 
 const StepsItemImg = styled.img`
   max-width: 100%;
-  max-height: 400px;
+  max-height: 40rem;
 `
 
 const StepsItemHeading = styled.div`
