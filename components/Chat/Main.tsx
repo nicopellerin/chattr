@@ -307,12 +307,14 @@ const ChatMain = () => {
       return new Promise((resolve) => {
         socket.current.emit("fileTransferProgress", "Sending")
         reader.onloadend = () => {
+          socket.current.emit("fileTransferProgress", "Done!")
           resolve(reader.result)
         }
       })
     }
 
     const b64 = (await blobToBase64(file)) as string
+
     const id = shortid.generate()
 
     socket.current.emit("chatMessage", {
@@ -332,8 +334,6 @@ const ChatMain = () => {
       avatar,
       type: "image",
     })
-
-    socket.current.emit("fileTransferProgress", "Done!")
   }
 
   // End call
