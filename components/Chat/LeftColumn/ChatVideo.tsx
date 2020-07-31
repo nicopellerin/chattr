@@ -298,7 +298,11 @@ const ChatVideo: React.FC<Props> = ({
           <FaExpand />
         </ExpandButton>
         <AnimatePresence>
-          {toggleOtherUsername && listUsers.length > 1 && <UsersBar />}
+          {toggleOtherUsername &&
+            listUsers.length > 1 &&
+            !chatVideoScreensState.isIn("youtubeVideoScreen.visible") && (
+              <UsersBar />
+            )}
         </AnimatePresence>
       </>
     </Wrapper>
