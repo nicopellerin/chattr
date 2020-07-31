@@ -37,7 +37,6 @@ const Wrapper = styled(motion.div)`
   top: 1rem;
   left: 1rem;
   width: auto;
-  z-index: 210000;
   border-radius: 5px;
 `
 

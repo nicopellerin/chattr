@@ -80,7 +80,7 @@ const SelfVideoResizable: React.FC<Props> = ({
       <Resizable
         width={element.style.width}
         height={element.style.height}
-        lockAspectRatio={true}
+        // lockAspectRatio={true}
         onResize={(_, { size }) => {
           setElement((element) => ({
             ...element,
@@ -150,7 +150,7 @@ const SelfVideo = styled(motion.video)`
   ${(props: { isVisible: boolean }) =>
     props.isVisible &&
     css`
-      border: 2px dotted var(--tertiaryColor);
+      border: 2px dashed rgba(0, 229, 255, 0.6);
       cursor: initial;
     `}
   @media (max-width: 500px) {

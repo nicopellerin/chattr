@@ -20,14 +20,16 @@ const NoVideoScreen = () => {
         <Title>{"No video connection"}</Title>
         <Tagline>
           Press{" "}
-          <span
+          <motion.span
+            animate={{ scale: [1, 1.1] }}
+            transition={{ yoyo: "Infinity", duration: 2 }}
             style={{
               color: "var(--primaryColorLight)",
               margin: "0.5rem 1rem 0 1rem",
             }}
           >
             <FaPhone size={22} />
-          </span>{" "}
+          </motion.span>{" "}
           to start video/audio call
         </Tagline>
         <SlideshowButton
@@ -35,7 +37,8 @@ const NoVideoScreen = () => {
           whileTap={{ y: 1 }}
           whileHover={{ y: -1 }}
         >
-          Show me cats instead :3
+          Show me cats instead{" "}
+          <span style={{ fontSize: "2.2rem", marginLeft: 7 }}>😺</span>
         </SlideshowButton>
       </Container>
     </Wrapper>
@@ -94,7 +97,7 @@ const Tagline = styled.span`
 `
 
 const Button = styled(motion.button)`
-  padding: 1em 1.5em;
+  padding: 0.8em 1.5em;
   border: none;
   background: #28d728;
   color: #ffe9ff;

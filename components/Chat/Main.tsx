@@ -305,6 +305,7 @@ const ChatMain = () => {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
       return new Promise((resolve) => {
+        socket.current.emit("fileTransferProgress", "Sending")
         reader.onloadend = () => {
           resolve(reader.result)
         }

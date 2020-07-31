@@ -143,6 +143,7 @@ const Container = styled(motion.div)`
   align-items: center;
   overflow: hidden;
   border-radius: 5px;
+  z-index: 21000;
 `
 
 const ImageStyled = styled(motion.img)`

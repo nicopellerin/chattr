@@ -37,9 +37,9 @@ const ChatScreenPeerNoVideo = dynamic(
 )
 
 import SelfVideoResizable from "./SelfVideoResizable"
+import UsersBar from "../Shared/UsersBar"
 
 import YoutubeVideoScreen from "../Screens/YoutubeVideoScreen"
-
 const Slider = dynamic(() => import("../Shared/Slider"), { ssr: false })
 const ChatScreenHeart = dynamic(() => import("../Screens/HeartScreen"), {
   ssr: false,
@@ -65,7 +65,6 @@ import {
   toggleOtherUsernameState,
 } from "../../../store/users"
 import { messageContainsHeartEmojiState } from "../../../store/chat"
-import UsersBar from "../RightColumn/UsersBar"
 
 interface Props {
   acceptCall: () => void

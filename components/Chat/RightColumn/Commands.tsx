@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { Circle } from "better-react-spinkit"
 
 import MessageBar from "../Shared/MessageBar"
 
@@ -162,9 +163,9 @@ const ChatCommands: React.FC<Props> = ({
               onChange={(e) => handleSendFile(e)}
             />
             {!sendingFile && fileTransferProgress === "0" ? (
-              <>
-                <FaCloudUploadAlt size={22} title="Send image" />
-              </>
+              <FaCloudUploadAlt size={22} title="Send image" />
+            ) : fileTransferProgress !== "Done!" ? (
+              <Circle size={22} color="var(--secondaryColor)" />
             ) : (
               <motion.div
                 style={{
