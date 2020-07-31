@@ -273,6 +273,9 @@ const useSocket = ({
       }
     })
 
+    // Tictactoe game events
+    // ------------------------------------------------------
+    //
     socket.current.on("sendStartGameRequest", (username: string) => {
       setMsg(`${username} wants to play tictactoe`)
       setPlayBarType("game")
@@ -286,10 +289,6 @@ const useSocket = ({
         setPlayerOGlobal(playerO)
       }
     )
-
-    socket.current.on("addImageToPhotoGalleryGlobal", (data: any) => {
-      setPhotoGallery((prevState) => [data, ...prevState])
-    })
 
     socket.current.on(
       "playGameOtherPlayerAcceptedGlobal",
@@ -312,7 +311,21 @@ const useSocket = ({
     socket.current.on("gameNextPlayerGlobal", () => {
       setXisNext((prevState) => !prevState)
     })
+    // ------------------------------------------------------
+    //
 
+    // Photo gallery events
+    // ------------------------------------------------------
+    //
+    socket.current.on("addImageToPhotoGalleryGlobal", (data: any) => {
+      setPhotoGallery((prevState) => [data, ...prevState])
+    })
+    // ------------------------------------------------------
+    //
+
+    // Youtube events
+    // ------------------------------------------------------
+    //
     socket.current.on("sendingYoutubeUrl", (data: any) => {
       setYoutubeUrl(data.url)
       setYoutubeMetaData(data.meta)
@@ -331,6 +344,7 @@ const useSocket = ({
           youtubeChatWindowScreensState.reset()
           chatVideoScreensState.forceTransition("youtubeVideoScreen.hidden")
           setYoutubeUrl("")
+          setShowPlayBar(false)
         }
       }
     )
@@ -348,7 +362,13 @@ const useSocket = ({
     socket.current.on("rewindYoutubeVideoGlobal", () => {
       setYoutubeVideoRewind(true)
     })
+    //
+    // ------------------------------------------------------
+    //
 
+    // Sharing screen events
+    // ------------------------------------------------------
+    //
     socket.current.on(
       "sharedScreenRequestGlobal",
       (data: { status: boolean; username: string }) => {
@@ -388,6 +408,8 @@ const useSocket = ({
         }
       }
     )
+    // ------------------------------------------------------
+    //
 
     socket.current.on("flipFriendVideo", (status: boolean) => {
       setFlipFriendVideo(status)

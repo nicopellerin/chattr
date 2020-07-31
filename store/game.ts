@@ -2,6 +2,7 @@ import { atom, selector } from "recoil"
 
 import { otherUsernameQuery } from "./users"
 import { createState } from "@state-designer/react"
+import { showPlayBarState } from "./chat"
 
 interface Player {
   username: string
@@ -101,6 +102,7 @@ export const resetGameState = selector({
     set(xIsNextState, true)
     set(wonGameState, false)
     set(playGameState, true)
+    set(showPlayBarState, false)
   },
 })
 

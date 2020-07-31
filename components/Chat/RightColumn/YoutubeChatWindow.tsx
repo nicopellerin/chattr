@@ -169,6 +169,10 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
                   onClick={() => {
                     youtubeChatWindowScreensState.reset()
                     setUrl("")
+                    socket.current.emit(
+                      "sendingYoutubeVideoAcceptedGlobal",
+                      false
+                    )
                   }}
                 >
                   Cancel

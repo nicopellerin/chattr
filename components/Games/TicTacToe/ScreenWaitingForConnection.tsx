@@ -1,11 +1,10 @@
 import * as React from "react"
 import styled, { keyframes } from "styled-components"
 import { motion } from "framer-motion"
-import { useSetRecoilState } from "recoil"
 import { useStateDesigner } from "@state-designer/react"
 
 import { ScreenWrapper, NoMarginContainer } from "./GameStyles"
-import { showPlayBarState } from "../../../store/chat"
+
 import { gameScreens } from "../../../store/game"
 
 interface Props {
@@ -14,8 +13,6 @@ interface Props {
 
 const ScreenWaitingForConnection: React.FC<Props> = ({ socket }) => {
   const state = useStateDesigner(gameScreens)
-
-  const setShowPlayBar = useSetRecoilState(showPlayBarState)
 
   return (
     <ScreenWrapper>
@@ -30,7 +27,6 @@ const ScreenWaitingForConnection: React.FC<Props> = ({ socket }) => {
           whileTap={{ scale: 0.98 }}
           onClick={() => {
             state.forceTransition("initialScreen")
-            setShowPlayBar(false)
             socket.current.emit("playGameOtherPlayerAccepted", false)
           }}
         >
@@ -71,6 +67,8 @@ const Button = styled(motion.button)`
   cursor: pointer;
   outline: transparent;
   height: 48px;
+  position: relative;
+  overflow: hidden;
 
   &::after {
     position: absolute;
