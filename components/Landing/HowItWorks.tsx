@@ -150,7 +150,7 @@ const StepsList = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 6rem 8rem;
-  /* width: 100%; */
+  justify-items: center;
 
   & > :first-child {
     grid-area: 1 / 1 / 2 / 3;
