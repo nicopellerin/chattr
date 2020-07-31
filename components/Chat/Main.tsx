@@ -304,16 +304,16 @@ const ChatMain = () => {
     const blobToBase64 = (blob: Blob) => {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
+      socket.current.emit("fileTransferProgress", "Sending")
       return new Promise((resolve) => {
-        socket.current.emit("fileTransferProgress", "Sending")
         reader.onloadend = () => {
-          socket.current.emit("fileTransferProgress", "Done!")
           resolve(reader.result)
         }
       })
     }
 
     const b64 = (await blobToBase64(file)) as string
+    socket.current.emit("fileTransferProgress", "Done!")
 
     const id = shortid.generate()
 

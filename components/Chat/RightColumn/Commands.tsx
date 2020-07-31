@@ -167,21 +167,30 @@ const ChatCommands: React.FC<Props> = ({
             ) : fileTransferProgress !== "Done!" ? (
               <Circle size={22} color="var(--secondaryColor)" />
             ) : (
-              <motion.div
-                style={{
-                  color:
-                    fileTransferProgress === "Done!"
-                      ? "var(--successColor)"
-                      : "var(--textColor)",
-                  scale: fileTransferProgress === "Done!" ? 1.1 : 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  transition: "all 300ms ease-in-out",
-                }}
-              >
-                <FaCloudUploadAlt size={22} />
-              </motion.div>
+              <IconContainer>
+                <DoneWrapper
+                  initial={{ x: "-50%", scale: 0.7, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                >
+                  Done!
+                </DoneWrapper>
+                <motion.div
+                  style={{
+                    color:
+                      fileTransferProgress === "Done!"
+                        ? "var(--successColor)"
+                        : "var(--textColor)",
+                    scale: fileTransferProgress === "Done!" ? 1.1 : 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    transition: "all 300ms ease-in-out",
+                  }}
+                >
+                  <FaCloudUploadAlt size={22} />
+                </motion.div>
+              </IconContainer>
             )}
           </IconWrapper>
           <IconWrapper
@@ -305,4 +314,33 @@ const IconWrapper = styled(motion.div)`
     css`color: #aaa;!important; pointer-events: none;
     cursor: initial;
     `}
+`
+
+const IconContainer = styled.div`
+  position: relative;
+`
+
+const DoneWrapper = styled(motion.div)`
+  position: absolute;
+  left: 50%;
+  top: -50px;
+  background: #1a0d2b;
+  padding: 0.5rem;
+  border-radius: 5px;
+  filter: drop-shadow(0 2px 3px rgba(89, 86, 213, 0.2));
+  color: var(--successColor);
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -1rem;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #1a0d2b;
+    filter: drop-shadow(0 2px 2px rgba(89, 86, 213, 0.2));
+  }
 `
