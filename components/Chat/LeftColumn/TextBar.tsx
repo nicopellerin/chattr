@@ -179,7 +179,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
           id="message"
           ref={inputTextRef}
           disabled={noConnection}
-          placeholder="Type message..."
+          placeholder="Send a message"
           value={msg}
           onChange={(e) => (noConnection ? null : setMsg(e.target.value))}
         />
