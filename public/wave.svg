@@ -1,3 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="224" viewBox="0 0 1980 224">
-  <path fill="#0e0718" id="wave_3_" width="100%" data-name="wave (3)" d="M0,192l60-21.3c60-21.7,180-63.7,300-64,120,.3,240,42.3,360,48C840,160,960,128,1900,112s240-16,300-16h60V320H0Z" transform="translate(0 -96)"/>
+<svg xmlns="http://www.w3.org/2000/svg" height="224" width="100%" viewBox="0 0 1920 224" preserveAspectRatio = "xMinYMin slice">
+  <path fill="#0e0718" id="wave_3_" width="100%" data-name="wave (3)" d="M0,192l60-21.3c60-21.7,180-63.7,300-64,120,.3,240,42.3,360,48C840,160,960,128,1920,112s240-16,300-16h60V320H0Z" transform="translate(0 -96)"/>
 </svg>

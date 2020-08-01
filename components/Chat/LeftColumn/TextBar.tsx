@@ -16,7 +16,10 @@ import {
   listUsersState,
   avatarState,
 } from "../../../store/users"
-import { displayTheatreModeState } from "../../../store/video"
+import {
+  displayTheatreModeState,
+  streamOtherPeerState,
+} from "../../../store/video"
 
 const lolSounds = [
   "/sounds/lol/laugh.mp3",
@@ -54,6 +57,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const avatar = useRecoilValue(avatarState)
   const listUsers = useRecoilValue(listUsersState)
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
+  const streamOtherPeer = useRecoilValue(streamOtherPeerState)
 
   const [msg, setMsg] = useState("")
   const [togglePicker, setTogglePicker] = useState(false)
@@ -197,6 +201,18 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
         >
           Lol <FaVolumeUp style={{ marginLeft: 5 }} />
         </LolButton>
+        <Heart
+          src="/heart.png"
+          alt="heart"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          style={
+            !streamOtherPeer
+              ? { opacity: 0.2, pointerEvents: "none" }
+              : { opacity: 1, pointerEvents: "all" }
+          }
+          onClick={() => socket.current.emit("messageContainsHeartEmoiji")}
+        />
         <SmileyFace
           src="/smiley.png"
           alt="smiley"
@@ -256,7 +272,7 @@ const TextInput = styled.input`
   color: var(--secondaryColor);
   font-size: 1.7rem;
   font-weight: 500;
-  padding: 0 15.8rem 0 1.5rem;
+  padding: 0 22rem 0 1.5rem;
   outline: transparent;
 
   &::placeholder {
@@ -303,10 +319,18 @@ const SmileyFace = styled(motion.img)`
   cursor: pointer;
 `
 
+const Heart = styled(SmileyFace)`
+  position: absolute;
+  right: 19.2rem;
+  top: 2rem;
+  width: 32px;
+  cursor: pointer;
+`
+
 const LolButton = styled(motion.button)`
   position: absolute;
-  right: 20rem;
-  top: 2.45rem;
+  right: 24.5rem;
+  top: 2.32rem;
   cursor: pointer;
   border: none;
   border-radius: 5px;

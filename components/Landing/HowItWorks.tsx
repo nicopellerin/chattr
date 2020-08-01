@@ -36,7 +36,7 @@ const stepsData = [
     id: 5,
     src: "/yt-watch.webp",
     alt: "Step 4 - Enjoy watching :)",
-    title: "Enjoy watching :)",
+    title: "Enjoy watching 👀",
     desc: "Press play and enjoy! Oh and try moving the progress bar",
   },
 ]

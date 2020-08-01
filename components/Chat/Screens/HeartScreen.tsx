@@ -3,12 +3,13 @@ import styled from "styled-components"
 import Lottie from "react-lottie"
 import { motion } from "framer-motion"
 
-import heartAnim from "./heart.json"
+import heart1 from "./heart1.json"
+import heart2 from "./heart2.json"
 
 const animOptions = {
   loop: true,
   autoplay: true,
-  animationData: heartAnim,
+  animationData: Math.random() * 1 > 0.5 ? heart1 : heart2,
   rendererSettings: {
     preserveAspectRatio: "xMidYMid slice",
   },
@@ -43,9 +44,10 @@ const Wrapper = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-    45deg,
-    rgba(235, 87, 87, 0.1),
-    rgba(235, 87, 87, 0.3)
+  background: radial-gradient(
+    circle at center,
+    rgba(235, 87, 87, 0.7) 0,
+    rgba(235, 87, 87, 0.5) 50%,
+    rgba(235, 87, 87, 0.05) 100%
   );
 `
