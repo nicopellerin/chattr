@@ -4,12 +4,11 @@ import Lottie from "react-lottie"
 import { motion } from "framer-motion"
 
 import heart1 from "./heart1.json"
-import heart2 from "./heart2.json"
 
 const animOptions = {
   loop: true,
   autoplay: true,
-  animationData: Math.random() * 1 > 0.5 ? heart1 : heart2,
+  animationData: heart1,
   rendererSettings: {
     preserveAspectRatio: "xMidYMid slice",
   },
