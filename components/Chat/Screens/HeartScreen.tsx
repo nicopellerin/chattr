@@ -1,20 +1,25 @@
 import * as React from "react"
+import { useRef, useEffect } from "react"
 import styled from "styled-components"
-import Lottie from "react-lottie"
 import { motion } from "framer-motion"
-
-import heart1 from "./heart1.json"
-
-const animOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: heart1,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-}
+import lottie from "lottie-web"
 
 const HeartScreen = () => {
+  const lottieRef = useRef() as React.MutableRefObject<HTMLDivElement>
+
+  let anim: any
+  useEffect(() => {
+    anim = lottie.loadAnimation({
+      container: lottieRef.current,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      path: "/heart1.json",
+    })
+
+    return () => anim.destroy()
+  }, [])
+
   return (
     <Wrapper
       initial={{ opacity: 0 }}
@@ -26,7 +31,7 @@ const HeartScreen = () => {
         animate={{ scale: 1 }}
         exit={{ scale: 0 }}
       >
-        <Lottie options={animOptions} height={550} width={550} />
+        <div style={{ width: 550 }} ref={lottieRef} />
       </motion.div>
     </Wrapper>
   )

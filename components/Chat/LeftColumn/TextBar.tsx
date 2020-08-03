@@ -59,6 +59,7 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
   const streamOtherPeer = useRecoilValue(streamOtherPeerState)
 
+
   const [msg, setMsg] = useState("")
   const [togglePicker, setTogglePicker] = useState(false)
 
@@ -211,7 +212,11 @@ const ChatTextBar: React.FC<Props> = ({ socket }) => {
               ? { opacity: 0.2, pointerEvents: "none" }
               : { opacity: 1, pointerEvents: "all" }
           }
-          onClick={() => socket.current.emit("messageContainsHeartEmoiji")}
+          onClick={() => {
+      
+              socket.current.emit("messageContainsHeartEmoiji")
+            
+          }}
         />
         <SmileyFace
           src="/smiley.png"

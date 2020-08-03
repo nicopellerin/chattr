@@ -134,8 +134,8 @@ const SelfVideoWrapper = styled(motion.div)`
   opacity: ${(props: StyledProps) => (props.showWebcam ? 1 : 0)};
   display: ${(props: StyledProps) => (props.theatreMode ? "none" : "block")};
   position: absolute;
-  bottom: 3vh;
-  left: 3vh;
+  bottom: 0;
+  left: 0;
   z-index: 19;
 `
 
