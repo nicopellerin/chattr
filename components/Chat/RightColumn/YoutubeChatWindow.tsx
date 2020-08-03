@@ -161,7 +161,7 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
             ),
             waitingScreen: (
               <Container layout="position">
-                <Title>Waiting for your friend to accept...</Title>
+                <Title>Waiting for friend to accept...</Title>
                 <WaitingButton
                   type="button"
                   whileHover={{ scale: 1.02 }}
@@ -224,7 +224,6 @@ const YoutubeChatWindow: React.FC<Props> = ({ socket }) => {
                     </RewindButton>
                   </ButtonGroup>
                 </CommandsWrapper>
-
                 <Button
                   whileHover={{
                     scale: 1.02,

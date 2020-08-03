@@ -1,7 +1,8 @@
 import * as React from "react"
-import Lottie from "react-lottie"
+import {useEffect, useRef} from 'react'
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { useStateDesigner } from "@state-designer/react"
+import lottie from "lottie-web"
 
 import {
   QuitButton,
@@ -22,16 +23,7 @@ import {
   gameScreens,
 } from "../../../store/game"
 
-import wonAnim from "./confetti.json"
 
-const animOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: wonAnim,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-}
 
 interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
@@ -53,6 +45,22 @@ const ScreenWinOrTie: React.FC<Props> = ({ socket }) => {
     socket.current.emit("playGameOtherPlayerAccepted", false)
   }
 
+  const lottieRef = useRef() as React.MutableRefObject<HTMLDivElement>
+
+  let anim: any
+  useEffect(() => {
+    anim = lottie.loadAnimation({
+      container: lottieRef.current,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      path: "/confetti.json",
+    })
+
+    return () => anim.destroy()
+  }, [])
+
+
   return (
     <ScreenWrapper>
       <Container
@@ -62,12 +70,7 @@ const ScreenWinOrTie: React.FC<Props> = ({ socket }) => {
       >
         {wonGame ? (
           <>
-            <Lottie
-              options={animOptions}
-              height={125}
-              width={150}
-              isStopped={!wonGame}
-            />
+            <div style={{ width: 150, height: 125 }} ref={lottieRef} />
             <WinnerText>
               {xIsNext ? (
                 <OWonText>{playerOGlobal?.username}</OWonText>

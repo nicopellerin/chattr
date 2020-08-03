@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil"
 import { FaPlayCircle } from "react-icons/fa"
 
-import YoutubeProgressBar from "./YoutubeProgressBar"
+import YoutubeProgressBar from "../LeftColumn/YoutubeProgressBar"
 
 import { showSelfWebcamState, streamOtherPeerState } from "../../../store/video"
 import {
