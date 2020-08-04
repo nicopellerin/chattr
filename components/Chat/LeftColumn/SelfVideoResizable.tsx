@@ -106,6 +106,7 @@ const SelfVideoResizable: React.FC<Props> = ({
         handle={(h) => (
           <Handle className={`handle-${h}`} isVisible={isSelected} />
         )}
+        // @ts-ignore
         style={{ position: "relative" }}
       >
         <>
