@@ -33,7 +33,6 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
           <meta
             name="description"
@@ -58,7 +57,9 @@ export default class MyDocument extends Document {
             content="/icons/browserconfig.xml"
           />
           <link rel="manifest" href="/manifest.json" />
-          <script dangerouslySetInnerHTML={{__html: `
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
           (function(a,b,c){var d=a.history,e=document,f=navigator||{},g=localStorage,
             h=encodeURIComponent,i=d.pushState,k=function(){return Math.random().toString(36)},
             l=function(){return g.cid||(g.cid=k()),g.cid},m=function(r){var s=[];for(var t in r)
@@ -77,7 +78,9 @@ export default class MyDocument extends Document {
             a.ma={trackEvent:function o(r,s,t,u){return n("event",r,s,t,u)},
             trackException:function q(r,s){return n("exception",null,null,null,null,r,s)}}})
             (window,"UA-170612872-1",{anonymizeIp:true,colorDepth:true,characterSet:true,screenSize:true,language:true})
-          `}} />
+          `,
+            }}
+          />
         </Head>
         <body>
           <Main />

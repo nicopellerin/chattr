@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { Resizable } from "react-resizable"
-import { FaRedoAlt } from "react-icons/fa"
+import { FaRedoAlt, FaChevronLeft, FaChevronCircleUp } from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
 import { motion } from "framer-motion"
 
@@ -43,11 +43,12 @@ const SelfVideoResizable: React.FC<Props> = ({
 
   const [element, setElement] = useState({
     style: {
-      width: 200,
+      width: 250,
       height: 130,
     },
   })
   const [isSelected, setIsSelected] = useState(false)
+  const [minimizeWindow, setMinimizeWindow] = useState(false)
 
   const node = useClickOutside(setIsSelected)
 
@@ -77,10 +78,18 @@ const SelfVideoResizable: React.FC<Props> = ({
       showWebcam={showWebcam}
       ref={node}
     >
+      {minimizeWindow && (
+        <MaximizeButton
+          whileHover={{ color: "var(--tertiaryColor)" }}
+          layout
+          onClick={() => setMinimizeWindow(false)}
+        >
+          <FaChevronCircleUp />
+        </MaximizeButton>
+      )}
       <Resizable
         width={element.style.width}
         height={element.style.height}
-        // lockAspectRatio={true}
         onResize={(_, { size }) => {
           setElement((element) => ({
             ...element,
@@ -97,6 +106,7 @@ const SelfVideoResizable: React.FC<Props> = ({
         handle={(h) => (
           <Handle className={`handle-${h}`} isVisible={isSelected} />
         )}
+        style={{ position: "relative" }}
       >
         <>
           <SelfVideo
@@ -107,6 +117,7 @@ const SelfVideoResizable: React.FC<Props> = ({
               )
                 ? "hidden"
                 : "visible",
+              width: minimizeWindow ? 0 : element.style.width,
             }}
             animate={{ scaleX: flipSelfVideo ? 1 : -1 }}
             ref={selfVideoRef}
@@ -116,10 +127,13 @@ const SelfVideoResizable: React.FC<Props> = ({
             height={element.style.height}
             isVisible={isSelected}
           />
-          {!sharingScreen && !isSelected && (
+          {!sharingScreen && !isSelected && !minimizeWindow && (
             <RotateIcon
               onClick={() => setFlipSelfVideo((prevState) => !prevState)}
             />
+          )}
+          {!isSelected && !minimizeWindow && (
+            <LeftIcon onClick={() => setMinimizeWindow(true)} />
           )}
         </>
       </Resizable>
@@ -153,9 +167,6 @@ const SelfVideo = styled(motion.video)`
       border: 2px dashed rgba(0, 229, 255, 0.6);
       cursor: initial;
     `}
-  @media (max-width: 500px) {
-    display: none;
-  }
 `
 
 const RotateIcon = styled(FaRedoAlt)`
@@ -167,6 +178,25 @@ const RotateIcon = styled(FaRedoAlt)`
   cursor: pointer;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
+
+  ${SelfVideoWrapper}:hover & {
+    opacity: 1;
+  }
+`
+
+const LeftIcon = styled(FaChevronLeft)`
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2.4rem;
+  color: var(--textColor);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+  background: rgba(72, 35, 201, 0.8);
+  border-radius: 50%;
+  padding: 3px;
 
   ${SelfVideoWrapper}:hover & {
     opacity: 1;
@@ -198,4 +228,19 @@ const Handle = styled.span`
   &.handle-ne {
     cursor: ne-resize;
   }
+`
+
+const MaximizeButton = styled(motion.button)`
+  background: rgba(72, 35, 201, 0.6);
+  border: none;
+  border-top-right-radius: 50%;
+  padding: 1rem;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  bottom: 0;
 `

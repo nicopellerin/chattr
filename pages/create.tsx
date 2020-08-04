@@ -74,6 +74,7 @@ const CreatePage = () => {
           content="Watch Youtube videos in-sync while you chat 👀"
         />
         <meta property="og:image" content="https://chattr.lol/og-image4.jpg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       {notSupported ? (
         <DetectWrongBrowser />
