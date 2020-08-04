@@ -63,15 +63,15 @@ const CreatePage = () => {
   return (
     <>
       <Head>
-        <title>Chattr · Free P2P audio/video + chat platform</title>
+        <title>Chattr · Enjoy watching videos with friends</title>
         <meta
           property="og:title"
-          content="Chattr · Free P2P audio/video + chat platform"
+          content="Chattr · Enjoy watching videos with friends"
         />
         <meta property="og:url" content="https://chattr.lol" />
         <meta
           property="og:description"
-          content="One-on-one hangouts in a fun and secure way"
+          content="Watch Youtube videos in-sync while you chat 👀"
         />
         <meta property="og:image" content="https://chattr.lol/og-image4.jpg" />
       </Head>

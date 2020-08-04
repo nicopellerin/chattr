@@ -1,10 +1,11 @@
 import * as React from "react"
-import Hero from "../components/Landing/Hero"
-import HowItWorks from "../components/Landing/HowItWorks"
-import Footer from "../components/Landing/Footer"
 import { detect } from "detect-browser"
 import dynamic from "next/dynamic"
 import Head from "next/head"
+
+import Hero from "../components/Landing/Hero"
+import HowItWorks from "../components/Landing/HowItWorks"
+import Footer from "../components/Landing/Footer"
 
 const DetectWrongBrowser = dynamic(
   () => import("../components/Chat/Shared/DetectWrongBrowser"),

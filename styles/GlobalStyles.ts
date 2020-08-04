@@ -69,9 +69,6 @@ h1, h2, h3, h4, h5 {
   font-family: 'Lora', sans-serif;
 }
 
-h1, h2 {
-
-}
 
 input {
   font-family: inherit;
@@ -79,6 +76,10 @@ input {
 
 p {
   font-size: 1.8rem;
+}
+
+a {
+  text-decoration: none;
 }
 
 

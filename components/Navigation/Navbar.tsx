@@ -8,18 +8,25 @@ const Navbar = () => {
   return (
     <Wrapper>
       <Link href="/">
-        <LogoStyled src="/logo-3d.svg" alt="logo" />
+        <LogoStyled src="/logo-3d.svg" data-testid="logo" alt="logo" />
       </Link>
       <ButtonsWrapper>
         <Link href="/join">
-          <ButtonJoin whileTap={{ scale: 0.98 }} whileHover={{ scale: 1.02 }}>
-            Join room
-          </ButtonJoin>
+          <a data-testid="link-join">
+            <ButtonJoin whileTap={{ scale: 0.98 }} whileHover={{ scale: 1.02 }}>
+              Join room
+            </ButtonJoin>
+          </a>
         </Link>
-        <Link href="/create">
-          <ButtonCreate whileTap={{ scale: 0.98 }} whileHover={{ scale: 1.02 }}>
-            <FaRocket style={{ marginRight: 5 }} /> Create room
-          </ButtonCreate>
+        <Link href="/create" data-testid="link-create">
+          <a>
+            <ButtonCreate
+              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <FaRocket style={{ marginRight: 5 }} /> Create room
+            </ButtonCreate>
+          </a>
         </Link>
       </ButtonsWrapper>
     </Wrapper>

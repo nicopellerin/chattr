@@ -6,7 +6,11 @@ import Portal from "./Portal"
 const DetectWrongBrowser = () => {
   return (
     <WrapperDetectBrowser>
-      <LogoDetectBrowser src="/logo-3d.svg" alt="logo" />
+      <LogoDetectBrowser
+        src="/logo-3d.svg"
+        alt="logo"
+        data-testid="logo-detect-browser"
+      />
       <TextDetectBrowser>
         Chattr doesn't currently support your browser. Please use a desktop
         Chromium-based browser (Chrome, Edge, Brave) or Firefox.
