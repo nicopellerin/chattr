@@ -3,6 +3,8 @@ import { atom, selector } from "recoil"
 import { listUsersState } from "./users"
 import { createState } from "@state-designer/react"
 
+import { FilterClasses } from "../models"
+
 export const streamOtherPeerState = atom<MediaStream | any>({
   key: "streamOtherPeerState",
   default: null,
@@ -158,6 +160,11 @@ export const flipFriendVideoState = atom<boolean>({
 export const micVolumeState = atom<number>({
   key: "micVolumeState",
   default: 1,
+})
+
+export const videoFilterClassState = atom<FilterClasses | null>({
+  key: "videoFilterClassState",
+  default: null,
 })
 
 export const chatVideoScreens = createState({

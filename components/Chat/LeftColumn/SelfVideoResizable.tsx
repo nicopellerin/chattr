@@ -7,6 +7,7 @@ import {
   FaRedoAlt,
   FaChevronCircleLeft,
   FaChevronCircleUp,
+  FaSlidersH,
 } from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
 import { motion } from "framer-motion"
@@ -19,11 +20,15 @@ import {
   displayTheatreModeState,
   flipSelfVideoState,
   chatVideoScreens,
+  videoFilterClassState,
 } from "../../../store/video"
+
+import { FilterClasses } from "../../../models"
 
 interface Props {
   contraintsRef: React.Ref<HTMLDivElement>
-  selfVideoRef: any
+  selfVideoRef: React.MutableRefObject<HTMLVideoElement>
+  socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
 interface StyledProps {
@@ -36,6 +41,7 @@ interface StyledProps {
 const SelfVideoResizable: React.FC<Props> = ({
   selfVideoRef,
   contraintsRef,
+  socket,
 }) => {
   const chatVideoScreensState = useStateDesigner(chatVideoScreens)
 
@@ -44,6 +50,9 @@ const SelfVideoResizable: React.FC<Props> = ({
   const displayTheatreMode = useRecoilValue(displayTheatreModeState)
 
   const [flipSelfVideo, setFlipSelfVideo] = useRecoilState(flipSelfVideoState)
+  const [videoFilterClass, setVideoFilterClass] = useRecoilState(
+    videoFilterClassState
+  )
 
   const [element, setElement] = useState({
     style: {
@@ -70,6 +79,17 @@ const SelfVideoResizable: React.FC<Props> = ({
       })
     }
   }, [])
+
+  // Handles Instagram-like filter classes for self video
+  const handleVideoFilterClasses = () => {
+    if (!videoFilterClass) {
+      setVideoFilterClass(FilterClasses.INKWELL)
+      socket.current.emit("videoFilterClass", FilterClasses.INKWELL)
+    } else {
+      setVideoFilterClass(null)
+      socket.current.emit("videoFilterClass", null)
+    }
+  }
 
   return (
     <SelfVideoWrapper
@@ -104,7 +124,7 @@ const SelfVideoResizable: React.FC<Props> = ({
             },
           }))
         }}
-        minConstraints={[150, 90]}
+        minConstraints={[190, 90]}
         maxConstraints={[500, 300]}
         resizeHandles={["ne"]}
         handle={(h) => (
@@ -131,6 +151,7 @@ const SelfVideoResizable: React.FC<Props> = ({
             width={element.style.width}
             height={element.style.height}
             isVisible={isSelected}
+            className={videoFilterClass as string | undefined}
           />
           {!sharingScreen && !isSelected && !minimizeWindow && (
             <RotateIcon
@@ -139,6 +160,9 @@ const SelfVideoResizable: React.FC<Props> = ({
           )}
           {!isSelected && !minimizeWindow && (
             <LeftIcon onClick={() => setMinimizeWindow(true)} />
+          )}
+          {!isSelected && !minimizeWindow && (
+            <FiltersIcon onClick={handleVideoFilterClasses} />
           )}
         </>
       </Resizable>
@@ -169,7 +193,7 @@ const SelfVideo = styled(motion.video)`
   ${(props: { isVisible: boolean }) =>
     props.isVisible &&
     css`
-      border: 2px dashed rgba(0, 229, 255, 0.6);
+      border: 2px dashed rgba(255, 255, 255, 0.6);
       cursor: initial;
     `}
 `
@@ -177,12 +201,13 @@ const SelfVideo = styled(motion.video)`
 const RotateIcon = styled(FaRedoAlt)`
   position: absolute;
   right: 1rem;
-  bottom: 0.8rem;
-  font-size: 1.7rem;
+  bottom: 1rem;
+  font-size: 2rem;
   color: var(--secondaryColor);
   cursor: pointer;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
+  filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.5));
 
   ${SelfVideoWrapper}:hover & {
     opacity: 1;
@@ -192,16 +217,29 @@ const RotateIcon = styled(FaRedoAlt)`
 const LeftIcon = styled(FaChevronCircleLeft)`
   position: absolute;
   right: 0.9rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 2rem;
+  bottom: 7.5rem;
+  font-size: 2.2rem;
   color: var(--tertiaryColor);
   cursor: pointer;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
-  /* background: rgba(72, 35, 201, 0.8); */
-  /* border-radius: 50%; */
-  /* padding: 3px; */
+  filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.5));
+
+  ${SelfVideoWrapper}:hover & {
+    opacity: 1;
+  }
+`
+
+const FiltersIcon = styled(FaSlidersH)`
+  position: absolute;
+  right: 0.9rem;
+  bottom: 4.2rem;
+  font-size: 2rem;
+  color: var(--primaryColorLight);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+  filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.5));
 
   ${SelfVideoWrapper}:hover & {
     opacity: 1;

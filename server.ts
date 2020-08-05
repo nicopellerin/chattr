@@ -12,6 +12,7 @@ import {
   CallUser,
   AcceptCall,
   Message,
+  FilterClasses,
 } from "./models"
 
 const app = express()
@@ -181,6 +182,14 @@ io.on("connection", (socket) => {
 
   socket.on("peerClosedVideo", (status: boolean) => {
     socket.broadcast.to(room).emit("peerClosedVideo", status)
+  })
+
+  socket.on("videoFilterClass", (type: FilterClasses) => {
+    if (type) {
+      socket.broadcast.to(room).emit("videoFilterClassPeer", type)
+    } else {
+      socket.broadcast.to(room).emit("videoFilterClassPeer", null)
+    }
   })
 
   socket.on("addImageToPhotoGallery", (data: any) => {

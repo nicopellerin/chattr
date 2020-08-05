@@ -2,6 +2,7 @@ import React from "react"
 import { RecoilRoot } from "recoil"
 
 import "react-perfect-scrollbar/dist/css/styles.css"
+import "../styles/cssgram.css"
 import "typeface-lora"
 import "typeface-inter"
 

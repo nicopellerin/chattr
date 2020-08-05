@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
@@ -66,6 +66,7 @@ import {
   toggleOtherUsernameState,
 } from "../../../store/users"
 import { messageContainsHeartEmojiState } from "../../../store/chat"
+import { FilterClasses } from "../../../models"
 
 interface Props {
   acceptCall: () => void
@@ -117,6 +118,11 @@ const ChatVideo: React.FC<Props> = ({
   const [displayTheatreMode, setDisplayTheatreMode] = useRecoilState(
     displayTheatreModeState
   )
+
+  const [
+    videoFilterClassesPeer,
+    setVideoFilterClassesPeer,
+  ] = useState<FilterClasses | null>()
 
   const contraintsRef = useRef() as React.Ref<HTMLDivElement>
   const friendVideoCanvasRef = useRef() as React.MutableRefObject<
@@ -172,6 +178,12 @@ const ChatVideo: React.FC<Props> = ({
     socket?.current?.emit("flipSelfVideo", flipSelfVideo)
   }, [flipSelfVideo])
 
+  useEffect(() => {
+    socket?.current?.on("videoFilterClassPeer", (type: FilterClasses) => {
+      setVideoFilterClassesPeer(type)
+    })
+  }, [socket?.current])
+
   // If streaming is not supported
   if (getUserMediaNotSupported) {
     socket.current.emit("otherUserMediaNotSupported", true)
@@ -218,6 +230,7 @@ const ChatVideo: React.FC<Props> = ({
           <SelfVideoResizable
             selfVideoRef={selfVideoRef}
             contraintsRef={contraintsRef}
+            socket={socket}
           />
           <AnimatePresence>
             {messageContainsHeartEmoji &&
@@ -235,7 +248,11 @@ const ChatVideo: React.FC<Props> = ({
               </ScreenSharingStartedText>
             )}
           </AnimatePresence>
-          <FriendVideoWrapper theatreMode={displayTheatreMode} layout>
+          <FriendVideoWrapper
+            theatreMode={displayTheatreMode}
+            layout
+            className={videoFilterClassesPeer as string | undefined}
+          >
             <FriendVideo
               style={{
                 visibility: chatVideoScreensState.isIn(

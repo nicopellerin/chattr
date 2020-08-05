@@ -68,3 +68,11 @@ export interface PlayLolSound {
   to: string
   sound: string
 }
+
+export enum FilterClasses {
+  EARLY_BIRD = "earlybird",
+  INKWELL = "inkwell",
+  LOFI = "lofi",
+  MOON = "moon",
+  NASHVILLE = "nashville",
+}
