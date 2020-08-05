@@ -3,7 +3,11 @@ import { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { Resizable } from "react-resizable"
-import { FaRedoAlt, FaChevronLeft, FaChevronCircleUp } from "react-icons/fa"
+import {
+  FaRedoAlt,
+  FaChevronCircleLeft,
+  FaChevronCircleUp,
+} from "react-icons/fa"
 import { useStateDesigner } from "@state-designer/react"
 import { motion } from "framer-motion"
 
@@ -43,7 +47,7 @@ const SelfVideoResizable: React.FC<Props> = ({
 
   const [element, setElement] = useState({
     style: {
-      width: 250,
+      width: 225,
       height: 130,
     },
   })
@@ -185,19 +189,19 @@ const RotateIcon = styled(FaRedoAlt)`
   }
 `
 
-const LeftIcon = styled(FaChevronLeft)`
+const LeftIcon = styled(FaChevronCircleLeft)`
   position: absolute;
-  right: 0.5rem;
+  right: 0.9rem;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 2.4rem;
-  color: var(--textColor);
+  font-size: 2rem;
+  color: var(--tertiaryColor);
   cursor: pointer;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
-  background: rgba(72, 35, 201, 0.8);
-  border-radius: 50%;
-  padding: 3px;
+  /* background: rgba(72, 35, 201, 0.8); */
+  /* border-radius: 50%; */
+  /* padding: 3px; */
 
   ${SelfVideoWrapper}:hover & {
     opacity: 1;

@@ -57,6 +57,7 @@ import {
   flipFriendVideoState,
   chatVideoScreens,
   catSliderScreen,
+  peerClosedVideoQuery,
 } from "../../../store/video"
 import {
   listUsersState,
@@ -107,6 +108,7 @@ const ChatVideo: React.FC<Props> = ({
   const flipFriendVideo = useRecoilValue(flipFriendVideoState)
   const flipSelfVideo = useRecoilValue(flipSelfVideoState)
   const toggleOtherUsername = useRecoilValue(toggleOtherUsernameState)
+  const peerClosedVideo = useRecoilValue(peerClosedVideoQuery)
 
   const [
     messageContainsHeartEmoji,
@@ -255,6 +257,14 @@ const ChatVideo: React.FC<Props> = ({
               <FaMicrophoneSlash style={{ marginLeft: 5 }} />
             </FriendAudioMuted>
           )}
+          {peerClosedVideo && (
+            <FriendVideoClosed
+              initial={{ x: "-50%", y: "-40%", opacity: 0 }}
+              animate={{ y: "-50%", opacity: 1 }}
+            >
+              {otherUsername} turned off webcam
+            </FriendVideoClosed>
+          )}
         </>
         {streamOtherPeer &&
           !chatVideoScreensState.isIn("youtubeVideoScreen.visible") && (
@@ -352,6 +362,20 @@ const FriendAudioMuted = styled(motion.span)`
   display: flex;
   align-items: center;
   margin: 0;
+`
+
+const FriendVideoClosed = styled(motion.h2)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 3rem;
+  background: -webkit-linear-gradient(
+    140deg,
+    rgb(235, 36, 218) -300%,
+    var(--textColor)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `
 
 const ExpandButton = styled(motion.button)`

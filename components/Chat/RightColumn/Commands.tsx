@@ -26,6 +26,7 @@ import {
   disableCallIconState,
   getUserMediaNotSupportedState,
   getUserMediaPeerNotSupportedState,
+  streamOtherPeerState,
 } from "../../../store/video"
 import {
   listUsersState,
@@ -75,6 +76,7 @@ const ChatCommands: React.FC<Props> = ({
   const getUserMediaPeerNotSupported = useRecoilValue(
     getUserMediaPeerNotSupportedState
   )
+  const streamOtherPeer = useRecoilValue(streamOtherPeerState)
 
   const [errorMsg, setErrorMsg] = useState("")
 
@@ -232,6 +234,11 @@ const ChatCommands: React.FC<Props> = ({
               getUserMediaPeerNotSupported
             }
             whileTap={{ scale: 0.98 }}
+            style={{
+              boxShadow: streamOtherPeer
+                ? `0 0rem 0.5rem rgba(105, 240, 174, 0.5)`
+                : `0 0rem 0.5rem rgba(0, 0, 0, 0.1)`,
+            }}
           >
             {callAccepted || pressedCall ? (
               <FaTimesCircle
@@ -280,7 +287,7 @@ const Container = styled.div`
   height: 100%;
   background: rgba(255, 255, 255, 0.01);
   padding: 0.8rem;
-  box-shadow: "4px 0 15px rgba(0, 0, 0, 0.1)";
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
   grid-gap: 0.5rem;
 `
 
@@ -290,10 +297,11 @@ const IconWrapper = styled(motion.div)`
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
+  padding: 7px;
   font-weight: 600;
   border-radius: 50%;
-  width: 4rem;
-  height: 4rem;
+  width: 4.5rem;
+  height: 4.5rem;
   background: linear-gradient(
     45deg,
     rgba(255, 255, 255, 0.05),
@@ -303,6 +311,10 @@ const IconWrapper = styled(motion.div)`
   cursor: pointer;
   user-select: none;
   box-shadow: 0 0rem 0.5rem rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
+  }
 
   ${(props: StyledProps) =>
     props.off &&

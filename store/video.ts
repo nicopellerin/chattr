@@ -110,6 +110,26 @@ export const peerAudioMutedQuery = selector({
   },
 })
 
+export const peerClosedVideoState = atom<boolean>({
+  key: "peerClosedVideoState",
+  default: false,
+})
+
+export const peerClosedVideoQuery = selector({
+  key: "peerClosedVideo",
+  get: ({ get }) => {
+    const callAccepted = get(callAcceptedState)
+    const peerAudioMuted = get(peerClosedVideoState)
+    const listUsers = get(listUsersState)
+
+    if (callAccepted && peerAudioMuted && listUsers?.length > 1) {
+      return true
+    }
+
+    return false
+  },
+})
+
 export const shareVideoScreenState = atom<boolean>({
   key: "shareVideoScreenState",
   default: false,

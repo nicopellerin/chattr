@@ -32,6 +32,7 @@ import {
   screenSharingStartedState,
   cancelCallAction,
   chatVideoScreens,
+  peerClosedVideoState,
   // micVolumeState,
 } from "../store/video"
 import {
@@ -96,6 +97,7 @@ const useSocket = ({
     getUserMediaPeerNotSupportedState
   )
   const setPeerAudioMuted = useSetRecoilState(peerAudioMutedState)
+  const setPeerClosedVideo = useSetRecoilState(peerClosedVideoState)
   const setPlayerXGlobal = useSetRecoilState(playerXGlobalState)
   const setPlayerOGlobal = useSetRecoilState(playerOGlobalState)
   const setMessageContainsHeartEmoji = useSetRecoilState(
@@ -270,6 +272,14 @@ const useSocket = ({
         setPeerAudioMuted(true)
       } else {
         setPeerAudioMuted(false)
+      }
+    })
+
+    socket.current.on("peerClosedVideo", (status: boolean) => {
+      if (status) {
+        setPeerClosedVideo(true)
+      } else {
+        setPeerClosedVideo(false)
       }
     })
 
