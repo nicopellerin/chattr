@@ -9,7 +9,7 @@ interface Props {
 
 const Layout: React.FC<Props> = ({ children }) => {
   return (
-    <Wrapper>
+    <Wrapper data-testid="layout-wrapper">
       <Navbar />
       <Container>{children}</Container>
     </Wrapper>
