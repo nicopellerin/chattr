@@ -9,7 +9,7 @@ import { useRecoilState } from "recoil"
 import { FaDownload } from "react-icons/fa"
 
 import UsernameModal from "../components/Chat/Shared/UsernameModal"
-import Layout from "../components/Chat/Shared/Layout"
+import Layout from "../components/Landing/Layout"
 
 import { supportsPWAState } from "../store/app"
 

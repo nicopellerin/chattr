@@ -8,7 +8,7 @@ import dynamic from "next/dynamic"
 import { useRecoilState } from "recoil"
 import { FaDownload } from "react-icons/fa"
 
-import Layout from "../components/Chat/Shared/Layout"
+import Layout from "../components/Landing/Layout"
 import JoinRoomModal from "../components/Chat/Shared/JoinRoomModal"
 
 import { supportsPWAState } from "../store/app"

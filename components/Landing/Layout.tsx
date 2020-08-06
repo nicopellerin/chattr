@@ -1,7 +1,7 @@
 import * as React from "react"
 import styled from "styled-components"
 
-import Navbar from "../../Navigation/Navbar"
+import Navbar from "../Navigation/Navbar"
 
 interface Props {
   children: React.ReactNode
