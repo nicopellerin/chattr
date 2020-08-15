@@ -15,7 +15,7 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
 
     const filter = context.createBiquadFilter()
     filter.type = "highpass"
-    filter.frequency.value = 1500
+    filter.frequency.value = 1000
 
     const src = context.createMediaStreamSource(streamRef.current)
 
@@ -51,8 +51,8 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.globalAlpha = 0.7
 
-        for (var i = 0; i < bufferLength / 1.05; i++) {
-          barHeight = dataArray[i] * 0.16
+        for (var i = 0; i < bufferLength; i++) {
+          barHeight = dataArray[i] * 0.12
 
           const r = barHeight + 125 * (i / bufferLength)
           const g = 50 * (i / bufferLength)
