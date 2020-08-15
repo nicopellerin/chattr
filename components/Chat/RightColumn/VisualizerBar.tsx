@@ -13,17 +13,21 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
   const audioVisualiser = () => {
     const context = new AudioContext()
 
+    const filter = context.createBiquadFilter()
+    filter.type = "highpass"
+    filter.frequency.value = 1500
+
     const src = context.createMediaStreamSource(streamRef.current)
 
     const analyser = context.createAnalyser()
     analyser.smoothingTimeConstant = 0.92
-    analyser.minDecibels = -65
+    analyser.minDecibels = -75
 
     const canvas = canvasRef.current
     const ctx = canvas.getContext("2d")
 
-    src.connect(analyser)
-    // analyser.connect(context.destination)
+    filter.connect(analyser)
+    src.connect(filter)
 
     analyser.fftSize = 256
 
@@ -45,10 +49,10 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
 
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.globalAlpha = 0.65
+        ctx.globalAlpha = 0.7
 
         for (var i = 0; i < bufferLength / 1.05; i++) {
-          barHeight = dataArray[i] * 0.13
+          barHeight = dataArray[i] * 0.16
 
           const r = barHeight + 125 * (i / bufferLength)
           const g = 50 * (i / bufferLength)
