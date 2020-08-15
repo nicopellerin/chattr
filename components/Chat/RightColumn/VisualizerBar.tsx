@@ -92,7 +92,7 @@ export default VisualizerBar
 const Wrapper = styled(motion.div)`
   position: absolute;
   left: 0;
-  top: -113px;
+  top: -111px;
   width: 100%;
   height: 100%;
   display: flex;
