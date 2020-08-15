@@ -539,6 +539,7 @@ const ExchangeIconButton = styled(motion.button)`
   border: none;
   outline: none;
   transition: opacity 150ms ease-in-out;
+  z-index: 3;
 
   ${LogoContainer}:hover & {
     opacity: 1;
