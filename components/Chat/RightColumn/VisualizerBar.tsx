@@ -63,7 +63,7 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
       }
     }
 
-    renderFrame()
+    requestAnimationFrame(renderFrame)
   }
 
   useEffect(() => {
