@@ -25,7 +25,7 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
     src.connect(analyser)
     // analyser.connect(context.destination)
 
-    analyser.fftSize = 128
+    analyser.fftSize = 256
 
     const bufferLength = analyser.frequencyBinCount
 
@@ -34,22 +34,21 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
     const WIDTH = canvas.width
     const HEIGHT = canvas.height
 
-    const barWidth = (WIDTH / bufferLength) * 1.8
+    const barWidth = (WIDTH / bufferLength) * 1.9
     let barHeight
     let x = 0
 
     function renderFrame() {
       requestAnimationFrame(renderFrame)
-
       x = 0
-
       analyser.getByteFrequencyData(dataArray)
 
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.globalAlpha = 0.65
 
         for (var i = 0; i < bufferLength / 1.05; i++) {
-          barHeight = dataArray[i] * 0.165
+          barHeight = dataArray[i] * 0.13
 
           const r = barHeight + 125 * (i / bufferLength)
           const g = 50 * (i / bufferLength)
@@ -92,7 +91,7 @@ export default VisualizerBar
 const Wrapper = styled(motion.div)`
   position: absolute;
   left: 0;
-  top: -111px;
+  top: -141px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -101,7 +100,7 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
 
   @media (max-width: 1600px) {
-    top: -98px;
+    top: -119px;
   }
 `
 
@@ -116,10 +115,5 @@ const Container = styled(motion.div)`
 `
 
 const CanvasStyled = styled.canvas`
-  height: 150px;
   width: 100%;
-
-  @media (max-width: 1600px) {
-    height: 125px;
-  }
 `
