@@ -38,9 +38,9 @@ const ChatScreenPeerNoVideo = dynamic(
 
 import SelfVideoResizable from "./SelfVideoResizable"
 import UsersBar from "../Shared/UsersBar"
+const Slider = dynamic(() => import("../Shared/Slider"), { ssr: false })
 
 import YoutubeVideoScreen from "../Screens/YoutubeVideoScreen"
-const Slider = dynamic(() => import("../Shared/Slider"), { ssr: false })
 const ChatScreenHeart = dynamic(() => import("../Screens/HeartScreen"), {
   ssr: false,
 })
@@ -132,6 +132,7 @@ const ChatVideo: React.FC<Props> = ({
   let sound = new Audio("/sounds/expand.mp3")
   sound.volume = 0.4
 
+  // If 2 users connected, go to `noVideoScreen`, else `waitingForConnectionScreen`
   useEffect(() => {
     if (listUsers?.length > 1) {
       chatVideoScreensState.forceTransition("noVideoScreen")
@@ -293,9 +294,7 @@ const ChatVideo: React.FC<Props> = ({
                 !streamOtherPeer ||
                 chatVideoScreensState.isIn("youtubeVideoScreen.visible")
               }
-              onClick={() => {
-                shareScreen()
-              }}
+              onClick={shareScreen}
             >
               <FaLaptop />
             </ShareScreenButton>

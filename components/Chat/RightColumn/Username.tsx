@@ -14,9 +14,10 @@ import {
   toggleOtherUsernameState,
   listUsersState,
 } from "../../../store/users"
+import VisualizerBar from "./VisualizerBar"
 // import { micVolumeState } from "../../store/video"
 
-const ChatUsername = () => {
+const ChatUsername = ({ streamRef }) => {
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
   const listUsers = useRecoilValue(listUsersState)
@@ -40,87 +41,89 @@ const ChatUsername = () => {
   }, [soundOn])
 
   return (
-    <Wrapper>
-      <AnimatePresence initial={false}>
-        {toggleDrawer ? (
-          <>
-            <ToggleWrapper
+    <>
+      <VisualizerBar streamRef={streamRef} />
+      <Container>
+        <AnimatePresence initial={false}>
+          {toggleDrawer ? (
+            <>
+              <ToggleWrapper
+                initial={{ y: -30 }}
+                animate={{ y: 0 }}
+                exit={{ y: 30 }}
+                transition={{ type: "spring", damping: 15 }}
+              >
+                <Text style={{ marginRight: 20 }}>Sound FX</Text>
+                <ToggleSwitch
+                  onClick={() => {
+                    setSoundOn((prevState) => !prevState)
+                    if (!soundOn) {
+                      swoosh.play()
+                    }
+                  }}
+                >
+                  <ToggleSwitchCheckbox
+                    type="checkbox"
+                    name="status"
+                    id="status"
+                  />
+                  <ToggleSwitchLabel>
+                    <ToggleSwitchInner layout isOn={soundOn ? true : false} />
+                    <ToggleSwitchSwitch
+                      layout
+                      isOn={soundOn ? true : false}
+                    ></ToggleSwitchSwitch>
+                  </ToggleSwitchLabel>
+                </ToggleSwitch>
+              </ToggleWrapper>
+            </>
+          ) : (
+            <UsernameWrapper
               initial={{ y: -30 }}
               animate={{ y: 0 }}
               exit={{ y: 30 }}
-              transition={{ type: "spring", damping: 15 }}
+              transition={{ type: "spring", damping: 17 }}
             >
-              <Text style={{ marginRight: 20 }}>Sound FX</Text>
-              <ToggleSwitch
-                onClick={() => {
-                  setSoundOn((prevState) => !prevState)
-                  if (!soundOn) {
-                    swoosh.play()
-                  }
-                }}
-              >
-                <ToggleSwitchCheckbox
-                  type="checkbox"
-                  name="status"
-                  id="status"
-                />
-                <ToggleSwitchLabel>
-                  <ToggleSwitchInner layout isOn={soundOn ? true : false} />
-                  <ToggleSwitchSwitch
-                    layout
-                    isOn={soundOn ? true : false}
-                  ></ToggleSwitchSwitch>
-                </ToggleSwitchLabel>
-              </ToggleSwitch>
-            </ToggleWrapper>
-          </>
-        ) : (
-          <UsernameWrapper
-            initial={{ y: -30 }}
-            animate={{ y: 0 }}
-            exit={{ y: 30 }}
-            transition={{ type: "spring", damping: 17 }}
-          >
-            <Avatar
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              src={avatar}
-              alt="avatar"
-              onClick={() => setToggleAvatar((prevState) => !prevState)}
+              <Avatar
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                src={avatar}
+                alt="avatar"
+                onClick={() => setToggleAvatar((prevState) => !prevState)}
+              />
+              <Username>{username}</Username>
+            </UsernameWrapper>
+          )}
+        </AnimatePresence>
+        <div>
+          {listUsers.length > 1 && (
+            <IconUsers
+              onClick={() => setToggleOtherUsername((prevState) => !prevState)}
             />
-            <Username>{username}</Username>
-          </UsernameWrapper>
-        )}
-      </AnimatePresence>
-      <div>
-        {listUsers.length > 1 && (
-          <IconUsers
-            onClick={() => setToggleOtherUsername((prevState) => !prevState)}
+          )}
+          <IconCog
+            onClick={() => {
+              setToggleDrawer((prevState) => !prevState)
+              if (soundOn) {
+                beepOn.play()
+              }
+            }}
           />
-        )}
-        <IconCog
-          onClick={() => {
-            setToggleDrawer((prevState) => !prevState)
-            if (soundOn) {
-              beepOn.play()
-            }
-          }}
-        />
-      </div>
-      <AnimatePresence>
-        {toggleAvatar && <AvatarBar setToggleAvatar={setToggleAvatar} />}
-      </AnimatePresence>
-    </Wrapper>
+        </div>
+        <AnimatePresence>
+          {toggleAvatar && <AvatarBar setToggleAvatar={setToggleAvatar} />}
+        </AnimatePresence>
+      </Container>
+    </>
   )
 }
 
 export default ChatUsername
 
 // Styles
-const Wrapper = styled.form`
+const Container = styled.form`
   background: #1a0d2b;
   height: 100%;
-  min-height: 54px;
   padding: 1.2rem 1.7rem;
   border-radius: 5px;
   display: grid;

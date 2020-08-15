@@ -409,7 +409,7 @@ const ChatMain = () => {
                 </ExchangeIconButton>
               </LogoContainer>
               <motion.div layout>
-                <ChatUsername />
+                <ChatUsername streamRef={streamRef} />
               </motion.div>
               <motion.div layout>
                 <ChatCommands
@@ -521,6 +521,8 @@ const LogoStyled = styled.img`
   width: 200px;
   justify-self: center;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
 
   @media (max-width: 500px) {
     display: none;
