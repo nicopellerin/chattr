@@ -49,7 +49,7 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         for (var i = 0; i < bufferLength / 1.05; i++) {
-          barHeight = dataArray[i] * 0.175
+          barHeight = dataArray[i] * 0.165
 
           const r = barHeight + 125 * (i / bufferLength)
           const g = 50 * (i / bufferLength)
