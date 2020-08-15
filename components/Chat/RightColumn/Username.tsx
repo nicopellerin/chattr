@@ -103,11 +103,9 @@ const ChatUsername: React.FC<Props> = ({ streamRef }) => {
           )}
         </AnimatePresence>
         <div>
-          {listUsers.length > 1 && (
-            <IconWave
-              onClick={() => setToggleVisualizer((prevState) => !prevState)}
-            />
-          )}
+          <IconWave
+            onClick={() => setToggleVisualizer((prevState) => !prevState)}
+          />
           <IconCog
             onClick={() => {
               setToggleDrawer((prevState) => !prevState)
