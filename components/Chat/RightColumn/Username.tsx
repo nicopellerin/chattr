@@ -17,7 +17,11 @@ import {
 import VisualizerBar from "./VisualizerBar"
 // import { micVolumeState } from "../../store/video"
 
-const ChatUsername = ({ streamRef }) => {
+interface Props {
+  streamRef: React.MutableRefObject<MediaStream>
+}
+
+const ChatUsername: React.FC<Props> = ({ streamRef }) => {
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
   const listUsers = useRecoilValue(listUsersState)

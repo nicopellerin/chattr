@@ -3,7 +3,11 @@ import { useRef, useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
-const VisualizerBar = ({ streamRef }) => {
+interface Props {
+  streamRef: React.MutableRefObject<MediaStream>
+}
+
+const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
   const canvasRef = useRef() as React.MutableRefObject<HTMLCanvasElement>
 
   const audioVisualiser = () => {
