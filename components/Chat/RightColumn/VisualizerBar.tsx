@@ -17,8 +17,8 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
 
     // Initiate analsyer
     const analyser = context.createAnalyser()
-    analyser.smoothingTimeConstant = 0.92
-    analyser.minDecibels = -105
+    analyser.smoothingTimeConstant = 0.88
+    analyser.minDecibels = -88
 
     // Highpass filter
     const hipassFilter = context.createBiquadFilter()
@@ -28,7 +28,7 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
     // Lowpass filter
     const lowpassFilter = context.createBiquadFilter()
     lowpassFilter.type = "lowpass"
-    lowpassFilter.frequency.value = 16000
+    lowpassFilter.frequency.value = 10000
 
     hipassFilter.connect(analyser)
     lowpassFilter.connect(hipassFilter)
@@ -82,9 +82,9 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
 
   return (
     <Wrapper
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.8 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
       transition={{ type: "spring", damping: 80 }}
     >
       <Container>
@@ -100,13 +100,14 @@ export default VisualizerBar
 const Wrapper = styled(motion.div)`
   position: absolute;
   left: 0;
-  top: -141px;
+  top: -143px;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  z-index: -1;
 
   @media (max-width: 1600px) {
     top: -117px;

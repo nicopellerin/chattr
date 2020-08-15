@@ -152,14 +152,16 @@ const ChatTextWindowMain: React.FC<Props> = ({ socket, showJoinMsg }) => {
           {msgs.length === 0 && hasConnection && (
             <NoMessages layout="position" hasConnection={hasConnection}>
               <NoMessagesText>
-                <IconAvatar
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ type: "spring", damping: 80 }}
-                  src={otherAvatar}
-                  alt="Icon"
-                />
+                <IconAvatarWrapper>
+                  <IconAvatar
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ type: "spring", damping: 80 }}
+                    src={otherAvatar}
+                    alt="Icon"
+                  />
+                </IconAvatarWrapper>
                 {showJoinMsg ? (
                   <UserJoinedText>
                     {otherUsername}
@@ -293,16 +295,18 @@ const UserDisconnectedText = styled.span`
   font-weight: 700;
   color: var(--secondaryColor);
   text-align: center;
+  padding-top: 2rem;
 `
 
 const UserJoinedText = styled.span`
   font-size: 2.4rem;
   font-weight: 700;
   color: var(--secondaryColor);
+  padding-top: 2rem;
 `
 
 const IconLogo = styled(motion.img)`
-  margin-bottom: 2.4rem;
+  margin-bottom: 0;
   width: 12rem;
 
   @media (max-width: 500px) {
@@ -310,16 +314,25 @@ const IconLogo = styled(motion.img)`
   }
 `
 
+const IconAvatarWrapper = styled(motion.div)`
+  width: 100%;
+  box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+`
+
 const IconAvatar = styled(IconLogo)`
-  margin-bottom: 2.4rem;
   width: 10rem;
+  display: block;
 
   @media (max-width: 500px) {
     margin-bottom: 1.7rem;
   }
 `
 
-const WelcomeText = styled.h3`
+const WelcomeText = styled(motion.h3)`
   background: -webkit-linear-gradient(
     145deg,
     var(--primaryColor),
@@ -327,4 +340,5 @@ const WelcomeText = styled.h3`
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  padding-top: 2rem;
 `

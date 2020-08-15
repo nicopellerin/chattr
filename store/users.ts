@@ -89,3 +89,8 @@ export const toggleOtherUsernameState = atom<boolean>({
   key: "toggleOtherUsernameState",
   default: true,
 })
+
+export const toggleVisualizerState = atom<boolean>({
+  key: "toggleVisualizerState",
+  default: true,
+})

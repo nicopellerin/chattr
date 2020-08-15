@@ -12,11 +12,11 @@ import MessageBar from "./MessageBar"
 import { usernameState, avatarState } from "../../../store/users"
 
 const avatars = [
-  "/avatars/cat.png",
-  "/avatars/dead.png",
-  "/avatars/black-unicorn.png",
-  "/avatars/white-robot.png",
-  "/avatars/test.png",
+  "/avatars/white-dude.png",
+  "/avatars/white-girl.png",
+  "/avatars/black-girl.png",
+  "/avatars/brown-dude.png",
+  "/avatars/black-dude.png",
 ]
 
 const avatarsContainerVariant = {
@@ -132,7 +132,7 @@ const UsernameModal: React.FC<Props> = ({
                 }}
               >
                 <Avatar
-                  animate={{ opacity: avatar === avatarImg ? 1 : 0.3 }}
+                  animate={{ opacity: avatar === avatarImg ? 1 : 0.5 }}
                   whileHover={{ opacity: 1 }}
                   src={avatarImg}
                   alt="avatar"

@@ -8,12 +8,11 @@ import { avatarState } from "../../../store/users"
 import { useClickOutside } from "../../../hooks/useClickOutside"
 
 const avatars = [
-  "/avatars/cat.png",
-  "/avatars/dead.png",
-  "/avatars/black-unicorn.png",
-  "/avatars/white-robot.png",
-  "/avatars/test.png",
-  // "/avatars/square-top.png",
+  "/avatars/white-dude.png",
+  "/avatars/white-girl.png",
+  "/avatars/black-girl.png",
+  "/avatars/brown-dude.png",
+  "/avatars/black-dude.png",
 ]
 
 const avatarsContainerVariant = {
@@ -68,7 +67,7 @@ const AvatarBar: React.FC<Props> = ({ setToggleAvatar }) => {
             onClick={() => handleChangeAvatar(avatarImg)}
           >
             <Avatar
-              animate={{ opacity: avatar === avatarImg ? 1 : 0.3 }}
+              animate={{ opacity: avatar === avatarImg ? 1 : 0.5 }}
               whileHover={{ opacity: 1 }}
               src={avatarImg}
               alt="avatar"
