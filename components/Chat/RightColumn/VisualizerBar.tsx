@@ -16,7 +16,7 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
     const src = context.createMediaStreamSource(streamRef.current)
 
     const analyser = context.createAnalyser()
-    analyser.smoothingTimeConstant = 0.9
+    analyser.smoothingTimeConstant = 0.92
     analyser.minDecibels = -65
 
     const canvas = canvasRef.current

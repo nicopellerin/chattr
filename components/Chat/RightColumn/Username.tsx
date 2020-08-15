@@ -45,7 +45,7 @@ const ChatUsername: React.FC<Props> = ({ streamRef }) => {
   }, [soundOn])
 
   return (
-    <>
+    <Wrapper>
       <VisualizerBar streamRef={streamRef} />
       <Container>
         <AnimatePresence initial={false}>
@@ -118,13 +118,17 @@ const ChatUsername: React.FC<Props> = ({ streamRef }) => {
           {toggleAvatar && <AvatarBar setToggleAvatar={setToggleAvatar} />}
         </AnimatePresence>
       </Container>
-    </>
+    </Wrapper>
   )
 }
 
 export default ChatUsername
 
 // Styles
+const Wrapper = styled.div`
+  position: relative;
+`
+
 const Container = styled.form`
   background: #1a0d2b;
   height: 100%;
