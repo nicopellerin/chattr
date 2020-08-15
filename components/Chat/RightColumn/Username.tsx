@@ -11,11 +11,9 @@ import {
   usernameState,
   userSoundOnState,
   avatarState,
-  listUsersState,
   toggleVisualizerState,
 } from "../../../store/users"
 import VisualizerBar from "./VisualizerBar"
-// import { micVolumeState } from "../../store/video"
 
 interface Props {
   streamRef: React.MutableRefObject<MediaStream>
@@ -24,14 +22,11 @@ interface Props {
 const ChatUsername: React.FC<Props> = ({ streamRef }) => {
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
-  const listUsers = useRecoilValue(listUsersState)
 
   const [soundOn, setSoundOn] = useRecoilState(userSoundOnState)
   const [toggleVisualizer, setToggleVisualizer] = useRecoilState(
     toggleVisualizerState
   )
-
-  // const [micVolume, setMicVolume] = useRecoilState(micVolumeState)
 
   const [toggleDrawer, setToggleDrawer] = useState(false)
   const [toggleAvatar, setToggleAvatar] = useState(false)
