@@ -140,7 +140,7 @@ const Container = styled.form`
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  min-height: 68px;
+  min-height: 65px;
   box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);
 
   @media (max-width: 500px) {

@@ -13,53 +13,58 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
   const audioVisualiser = () => {
     const context = new AudioContext()
 
-    const filter = context.createBiquadFilter()
-    filter.type = "highpass"
-    filter.frequency.value = 1000
-
     const src = context.createMediaStreamSource(streamRef.current)
 
+    // Initiate analsyer
     const analyser = context.createAnalyser()
     analyser.smoothingTimeConstant = 0.92
-    analyser.minDecibels = -75
+    analyser.minDecibels = -105
+
+    // Highpass filter
+    const hipassFilter = context.createBiquadFilter()
+    hipassFilter.type = "highpass"
+    hipassFilter.frequency.value = 2300
+
+    // Lowpass filter
+    const lowpassFilter = context.createBiquadFilter()
+    lowpassFilter.type = "lowpass"
+    lowpassFilter.frequency.value = 16000
+
+    hipassFilter.connect(analyser)
+    lowpassFilter.connect(hipassFilter)
+    src.connect(lowpassFilter)
+
+    analyser.fftSize = 128
+
+    const bufferLength = analyser.frequencyBinCount
+    const dataArray = new Uint8Array(bufferLength)
 
     const canvas = canvasRef.current
     const ctx = canvas.getContext("2d")
-
-    filter.connect(analyser)
-    src.connect(filter)
-
-    analyser.fftSize = 256
-
-    const bufferLength = analyser.frequencyBinCount
-
-    const dataArray = new Uint8Array(bufferLength)
-
     const WIDTH = canvas.width
     const HEIGHT = canvas.height
 
-    const barWidth = (WIDTH / bufferLength) * 1.9
+    const barWidth = (WIDTH / bufferLength) * 1.25
     let barHeight
     let x = 0
 
     function renderFrame() {
       requestAnimationFrame(renderFrame)
-      x = 0
       analyser.getByteFrequencyData(dataArray)
+      x = 0
 
       if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.globalAlpha = 0.7
+        ctx.clearRect(0, 0, WIDTH, HEIGHT)
 
         for (var i = 0; i < bufferLength; i++) {
-          barHeight = dataArray[i] * 0.12
+          barHeight = dataArray[i] * 0.13
 
           const r = barHeight + 125 * (i / bufferLength)
           const g = 50 * (i / bufferLength)
-          const b = 150
+          const b = 90
 
-          ctx!.fillStyle = "rgb(" + r + "," + g + "," + b + ")"
-          ctx!.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
+          ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")"
+          ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
 
           x += barWidth + 1
         }
@@ -104,7 +109,7 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
 
   @media (max-width: 1600px) {
-    top: -119px;
+    top: -117px;
   }
 `
 
@@ -118,6 +123,6 @@ const Container = styled(motion.div)`
   z-index: 0;
 `
 
-const CanvasStyled = styled.canvas`
+const CanvasStyled = styled(motion.canvas)`
   width: 100%;
 `

@@ -408,17 +408,13 @@ const ChatMain = () => {
                   <ExchangeIcon />
                 </ExchangeIconButton>
               </LogoContainer>
-              <motion.div layout>
-                <ChatUsername streamRef={streamRef} />
-              </motion.div>
-              <motion.div layout>
-                <ChatCommands
-                  callFriend={callFriend}
-                  sendFile={sendFile}
-                  socket={socket}
-                  streamRef={streamRef}
-                />
-              </motion.div>
+              <ChatUsername streamRef={streamRef} />
+              <ChatCommands
+                callFriend={callFriend}
+                sendFile={sendFile}
+                socket={socket}
+                streamRef={streamRef}
+              />
               <ChatTextWindow socket={socket} />
             </RightColumn>
           )}
