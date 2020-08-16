@@ -20,14 +20,16 @@ const NotSupportedScreen: React.FC = () => {
       <Container layout>
         <Title>{"Streaming is not supported :("}</Title>
         <Tagline>
-          Make sure you allowed video/audio or try using a different browser
+          Make sure you've allowed Camera & Microphone permissions or try using
+          a different browser
         </Tagline>
         <SlideshowButton
           onClick={() => catSliderScreenState.send("SHOW")}
           whileTap={{ y: 1 }}
           whileHover={{ y: -1 }}
         >
-          Show me cats instead :3
+          Show me cats instead{" "}
+          <span style={{ fontSize: "2.2rem", marginLeft: 7 }}>😺</span>
         </SlideshowButton>
       </Container>
 
@@ -87,13 +89,15 @@ const Title = styled.h4`
 const Tagline = styled.span`
   display: block;
   font-size: 2rem;
+  font-weight: 500;
   max-width: 80ch;
   margin: 0 auto;
   margin-bottom: 5rem;
+  color: var(--textColor);
 `
 
 const Button = styled(motion.button)`
-  padding: 1em 1.5em;
+  padding: 0.8em 1.5em;
   border: none;
   background: #28d728;
   color: #ffe9ff;
@@ -108,6 +112,10 @@ const Button = styled(motion.button)`
 `
 
 const SlideshowButton = styled(Button)`
-  background: var(--primaryColor);
+  background: linear-gradient(
+    140deg,
+    var(--primaryColor),
+    var(--primaryColorDark)
+  );
   color: var(--textColor);
 `

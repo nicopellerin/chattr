@@ -30,7 +30,7 @@ const ChatScreenNotSupported = dynamic(
   }
 )
 const ChatScreenPeerNoVideo = dynamic(
-  () => import("../Screens/NoVideoScreen"),
+  () => import("../Screens/PeerNoVideoScreen"),
   {
     ssr: false,
   }
@@ -63,7 +63,6 @@ import {
   listUsersState,
   userSoundOnState,
   otherUsernameQuery,
-  toggleOtherUsernameState,
 } from "../../../store/users"
 import { messageContainsHeartEmojiState } from "../../../store/chat"
 import { FilterClasses } from "../../../models"
@@ -108,7 +107,6 @@ const ChatVideo: React.FC<Props> = ({
   const shareVideoScreen = useRecoilValue(shareVideoScreenState)
   const flipFriendVideo = useRecoilValue(flipFriendVideoState)
   const flipSelfVideo = useRecoilValue(flipSelfVideoState)
-  const toggleOtherUsername = useRecoilValue(toggleOtherUsernameState)
   const peerClosedVideo = useRecoilValue(peerClosedVideoQuery)
 
   const [
@@ -187,7 +185,6 @@ const ChatVideo: React.FC<Props> = ({
 
   // If streaming is not supported
   if (getUserMediaNotSupported) {
-    socket.current.emit("otherUserMediaNotSupported", true)
     return (
       <Wrapper
         isYoutubeVideo={chatVideoScreensState.isIn(
@@ -196,6 +193,12 @@ const ChatVideo: React.FC<Props> = ({
         ref={contraintsRef}
       >
         <ChatScreenNotSupported />
+        <AnimatePresence>
+          {listUsers.length > 1 &&
+            !chatVideoScreensState.isIn("youtubeVideoScreen.visible") && (
+              <UsersBar />
+            )}
+        </AnimatePresence>
       </Wrapper>
     )
   }
@@ -324,8 +327,7 @@ const ChatVideo: React.FC<Props> = ({
           <FaExpand />
         </ExpandButton>
         <AnimatePresence>
-          {toggleOtherUsername &&
-            listUsers.length > 1 &&
+          {listUsers.length > 1 &&
             !chatVideoScreensState.isIn("youtubeVideoScreen.visible") && (
               <UsersBar />
             )}

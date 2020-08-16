@@ -171,6 +171,7 @@ const useSocket = ({
           }
         })
         .catch(() => {
+          socket.current.emit("otherUserMediaNotSupported", true)
           setGetUserMediaNotSupported(true)
         })
     }
@@ -199,6 +200,7 @@ const useSocket = ({
     })
 
     socket.current.on("otherUserMediaNotSupportedPeer", (status: boolean) => {
+      console.log("PEER NOPT SUPORT")
       setGetUserMediaPeerNotSupported(status)
       chatVideoScreensState.forceTransition("peerNoVideoScreen")
     })

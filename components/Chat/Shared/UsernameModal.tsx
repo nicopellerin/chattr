@@ -86,7 +86,7 @@ const UsernameModal: React.FC<Props> = ({
     inputRef.current.focus()
   }, [])
 
-  // Returns other users avatat
+  // Returns other user's avatat
   useEffect(() => {
     socket?.current?.on("otherUserAvatarStart", (avatar: string) => {
       setOtherUserAvatar(avatar)

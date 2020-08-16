@@ -5,6 +5,7 @@ import { useRecoilValue, useRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
 import { FaCog, FaWaveSquare } from "react-icons/fa"
 
+import VisualizerBar from "./VisualizerBar"
 import AvatarBar from "./AvatarBar"
 
 import {
@@ -13,7 +14,7 @@ import {
   avatarState,
   toggleVisualizerState,
 } from "../../../store/users"
-import VisualizerBar from "./VisualizerBar"
+import { getUserMediaNotSupportedState } from "../../../store/video"
 
 interface Props {
   streamRef: React.MutableRefObject<MediaStream>
@@ -22,6 +23,7 @@ interface Props {
 const ChatUsername: React.FC<Props> = ({ streamRef }) => {
   const username = useRecoilValue(usernameState)
   const avatar = useRecoilValue(avatarState)
+  const getUserMediaNotSupported = useRecoilValue(getUserMediaNotSupportedState)
 
   const [soundOn, setSoundOn] = useRecoilState(userSoundOnState)
   const [toggleVisualizer, setToggleVisualizer] = useRecoilState(
@@ -98,9 +100,11 @@ const ChatUsername: React.FC<Props> = ({ streamRef }) => {
           )}
         </AnimatePresence>
         <div>
-          <IconWave
-            onClick={() => setToggleVisualizer((prevState) => !prevState)}
-          />
+          {!getUserMediaNotSupported && (
+            <IconWave
+              onClick={() => setToggleVisualizer((prevState) => !prevState)}
+            />
+          )}
           <IconCog
             onClick={() => {
               setToggleDrawer((prevState) => !prevState)
@@ -139,8 +143,8 @@ const Container = styled.form`
   min-height: 65px;
   box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);
 
-  @media (max-width: 500px) {
-    display: none;
+  @media (min-width: 1600px) {
+    height: 75px;
   }
 `
 

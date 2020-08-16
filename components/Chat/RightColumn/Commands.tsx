@@ -196,6 +196,7 @@ const ChatCommands: React.FC<Props> = ({
             )}
           </IconWrapper>
           <IconWrapper
+            disabled={getUserMediaNotSupported}
             onClick={() => {
               setMuteMic((prevState) => !prevState)
               if (soundOn) {
@@ -212,6 +213,7 @@ const ChatCommands: React.FC<Props> = ({
             )}
           </IconWrapper>
           <IconWrapper
+            disabled={getUserMediaNotSupported}
             onClick={() => {
               setShowSelfWebcam((prevState) => !prevState)
               if (soundOn) {

@@ -17,7 +17,7 @@ interface Props {
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
 
-const NoVideoScreen: React.FC<Props> = ({ acceptCall, socket }) => {
+const IncomingCallScreen: React.FC<Props> = ({ acceptCall, socket }) => {
   const setCancelCallRequest = useSetRecoilState(cancelCallRequestState)
 
   const receivingCall = useRecoilValue(receivingCallState)
@@ -79,7 +79,7 @@ const NoVideoScreen: React.FC<Props> = ({ acceptCall, socket }) => {
   )
 }
 
-export default NoVideoScreen
+export default IncomingCallScreen
 
 // Styles
 const Wrapper = styled(motion.div)`

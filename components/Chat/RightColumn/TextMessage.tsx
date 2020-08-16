@@ -183,8 +183,7 @@ const Username = styled.span`
 `
 
 const Avatar = styled.img`
-  width: 2rem;
-  /* height: 2.4rem; */
+  width: 1.6rem;
   margin-right: 1.2rem;
 `
 

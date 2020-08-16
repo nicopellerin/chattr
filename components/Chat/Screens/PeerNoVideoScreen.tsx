@@ -17,9 +17,12 @@ const PeerNoVideoScreen = () => {
     >
       <Container layout>
         <Title>
-          Your friend doesn't support
-          <br /> video connection
+          Your friend doesn't have support for
+          <br /> audio/video connection
         </Title>
+        <Tagline>
+          You can still send messages or images through the chat {":)"}
+        </Tagline>
         <SlideshowButton
           onClick={() => catSliderScreenState.send("SHOW")}
           whileTap={{ y: 1 }}
@@ -72,6 +75,16 @@ const Title = styled.h2`
   flex-direction: column;
   align-items: center;
   text-align: center;
+`
+
+const Tagline = styled.span`
+  display: block;
+  font-size: 2rem;
+  font-weight: 500;
+  max-width: 80ch;
+  margin: 0 auto;
+  margin-bottom: 5rem;
+  color: var(--textColor);
 `
 
 const Button = styled(motion.button)`
