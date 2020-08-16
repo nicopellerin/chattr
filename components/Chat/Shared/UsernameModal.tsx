@@ -50,6 +50,7 @@ const UsernameModal: React.FC<Props> = ({
 
   const [user, setUser] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
+  const [otherUserAvatar, setOtherUserAvatar] = useState("")
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>
 
@@ -85,8 +86,20 @@ const UsernameModal: React.FC<Props> = ({
     inputRef.current.focus()
   }, [])
 
+  // Returns other users avatat
   useEffect(() => {
-    const randomIdx = Math.floor(Math.random() * avatars.length)
+    socket?.current?.on("otherUserAvatarStart", (avatar: string) => {
+      setOtherUserAvatar(avatar)
+    })
+  }, [socket?.current])
+
+  useEffect(() => {
+    let randomIdx
+    if (noUsernameModal) {
+      randomIdx = Math.floor(Math.random() * avatars.length - 1)
+    } else {
+      randomIdx = Math.floor(Math.random() * avatars.length)
+    }
     setAvatar(avatars[randomIdx])
   }, [])
 
@@ -117,30 +130,32 @@ const UsernameModal: React.FC<Props> = ({
           initial="hidden"
           animate="visible"
         >
-          {avatars.map((avatarImg) => {
-            return (
-              <AvatarItem
-                key={avatarImg}
-                variants={avatarVariant}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  const selectSound = new Audio("/sounds/select-char4.mp3")
-                  selectSound.volume = 0.3
-                  setAvatar(avatarImg)
-                  selectSound.play()
-                }}
-              >
-                <Avatar
-                  animate={{ opacity: avatar === avatarImg ? 1 : 0.5 }}
-                  whileHover={{ opacity: 1 }}
-                  src={avatarImg}
-                  alt="avatar"
-                  width="32"
-                />
-              </AvatarItem>
-            )
-          })}
+          {avatars
+            .filter((avatar) => avatar !== otherUserAvatar)
+            .map((avatarImg) => {
+              return (
+                <AvatarItem
+                  key={avatarImg}
+                  variants={avatarVariant}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    const selectSound = new Audio("/sounds/select-char4.mp3")
+                    selectSound.volume = 0.3
+                    setAvatar(avatarImg)
+                    selectSound.play()
+                  }}
+                >
+                  <Avatar
+                    animate={{ opacity: avatar === avatarImg ? 1 : 0.5 }}
+                    whileHover={{ opacity: 1 }}
+                    src={avatarImg}
+                    alt="avatar"
+                    width="32"
+                  />
+                </AvatarItem>
+              )
+            })}
         </AvatarsContainer>
         <Button whileTap={{ y: 1 }} whileHover={{ y: -1 }}>
           {buttonText} <FaRocket style={{ marginLeft: 7 }} />

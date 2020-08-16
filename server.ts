@@ -40,7 +40,17 @@ io.on("connection", (socket) => {
     return
   }
 
-  if (username === "Anonymous") return
+  const otherAvatar =
+    rooms[room] &&
+    rooms[room].users &&
+    rooms[room].users[0] &&
+    rooms[room].users[0].avatar
+
+  if (username === "Anonymous") {
+    console.log("OTHER", otherAvatar)
+    socket.emit("otherUserAvatarStart", otherAvatar)
+    return
+  }
 
   const otherUsername =
     rooms[room] &&
