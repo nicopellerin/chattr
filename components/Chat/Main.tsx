@@ -8,6 +8,18 @@ import shortid from "shortid"
 import { useStateDesigner } from "@state-designer/react"
 import { FaExchangeAlt } from "react-icons/fa"
 
+import ChatVideo from "./LeftColumn/ChatVideo"
+import TextBar from "./LeftColumn/TextBar"
+import Commands from "./RightColumn/Commands"
+import TextWindow from "./RightColumn/TextWindow"
+import UsernameBar from "./RightColumn/UsernameBar"
+import NoUsernameModal from "./Shared/NoUsernameModal"
+import PlayBar from "../Games/PlayBar"
+import MessageBar from "./Shared/MessageBar"
+import PhotoExpander from "./Shared/PhotoExpander"
+
+import useSocket from "../../hooks/useSocket"
+
 import {
   receivingCallState,
   callerState,
@@ -35,18 +47,6 @@ import {
   togglePhotoExpanderState,
   flipLayoutState,
 } from "../../store/chat"
-
-import ChatVideo from "./LeftColumn/ChatVideo"
-import ChatTextBar from "./LeftColumn/TextBar"
-import ChatCommands from "./RightColumn/Commands"
-import ChatTextWindow from "./RightColumn/TextWindow"
-import ChatUsername from "./RightColumn/Username"
-import NoUsername from "./Shared/NoUsernameModal"
-import PlayBar from "../Games/PlayBar"
-import MessageBar from "./Shared/MessageBar"
-import PhotoExpander from "./Shared/PhotoExpander"
-
-import useSocket from "../../hooks/useSocket"
 
 interface StyledProps {
   theatreMode?: boolean
@@ -369,7 +369,7 @@ const ChatMain = () => {
 
   return (
     <>
-      {!username && <NoUsername socket={socket} />}
+      {!username && <NoUsernameModal socket={socket} />}
       <OutterWrapper flipLayout={flipLayout}>
         <Wrapper theatreMode={displayTheatreMode}>
           <LeftColumn
@@ -387,7 +387,7 @@ const ChatMain = () => {
               shareScreen={shareScreen}
               flipWebcam={flipWebcam}
             />
-            {!displayTheatreMode && <ChatTextBar socket={socket} />}
+            {!displayTheatreMode && <TextBar socket={socket} />}
           </LeftColumn>
           {!displayTheatreMode && (
             <RightColumn key="right" layout="position">
@@ -408,14 +408,14 @@ const ChatMain = () => {
                   <ExchangeIcon />
                 </ExchangeIconButton>
               </LogoContainer>
-              <ChatUsername streamRef={streamRef} />
-              <ChatCommands
+              <UsernameBar streamRef={streamRef} />
+              <Commands
                 callFriend={callFriend}
                 sendFile={sendFile}
                 socket={socket}
                 streamRef={streamRef}
               />
-              <ChatTextWindow socket={socket} />
+              <TextWindow socket={socket} />
             </RightColumn>
           )}
         </Wrapper>
