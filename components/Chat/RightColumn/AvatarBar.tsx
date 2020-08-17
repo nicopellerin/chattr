@@ -13,6 +13,8 @@ const avatars = [
   "/avatars/black-girl.png",
   "/avatars/brown-dude.png",
   "/avatars/black-dude.png",
+  "/avatars/white-dude2.png",
+  "/avatars/white-girl2.png",
 ]
 
 const avatarsContainerVariant = {
@@ -85,7 +87,7 @@ export default AvatarBar
 // Styles
 const AvatarsContainer = styled(motion.ul)`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-around;
   width: 100%;
   margin: 0;
@@ -94,11 +96,11 @@ const AvatarsContainer = styled(motion.ul)`
   position: absolute;
   z-index: 200;
   background: #1a0d2b;
-  width: 30rem;
+  width: 34rem;
   padding: 0 1rem;
   border-radius: 5px;
   top: -65px;
-  left: -0.5rem;
+  left: -0.7rem;
   min-height: 64px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 
@@ -119,6 +121,7 @@ const AvatarsContainer = styled(motion.ul)`
 const AvatarItem = styled(motion.li)`
   list-style: none;
   margin: 0;
+  margin-top: 0.7rem;
   padding: 0;
 `
 
