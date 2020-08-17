@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { FaRocket } from "react-icons/fa"
 import { useSetRecoilState, useRecoilState } from "recoil"
 import { useRouter } from "next/router"
@@ -9,17 +9,13 @@ import shortid from "shortid"
 
 import MessageBar from "./MessageBar"
 
-import { usernameState, avatarState } from "../../../store/users"
+import {
+  usernameState,
+  avatarState,
+  otherUserAvatarState,
+} from "../../../store/users"
 
-const avatars = [
-  "/avatars/white-dude.png",
-  "/avatars/white-girl.png",
-  "/avatars/black-girl.png",
-  "/avatars/brown-dude.png",
-  "/avatars/black-dude.png",
-  "/avatars/white-dude2.png",
-  "/avatars/white-girl2.png",
-]
+import { avatars } from "../RightColumn/AvatarBar"
 
 const avatarsContainerVariant = {
   hidden: { opacity: 0 },
@@ -49,10 +45,12 @@ const UsernameModal: React.FC<Props> = ({
 }) => {
   const setUsername = useSetRecoilState(usernameState)
   const [avatar, setAvatar] = useRecoilState(avatarState)
+  const [otherUserAvatar, setOtherUserAvatar] = useRecoilState(
+    otherUserAvatarState
+  )
 
   const [user, setUser] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
-  const [otherUserAvatar, setOtherUserAvatar] = useState("")
   const [prevAvatar, setPrevAvatar] = useState(0)
   const [nextAvatar, setNextAvatar] = useState(5)
 
@@ -94,7 +92,7 @@ const UsernameModal: React.FC<Props> = ({
   }
 
   const handleNextAvatar = () => {
-    if (nextAvatar < avatars.length) {
+    if (nextAvatar < (noUsernameModal ? avatars.length - 1 : avatars.length)) {
       setPrevAvatar((prevState) => prevState + 1)
       setNextAvatar((prevState) => prevState + 1)
     }
@@ -120,6 +118,16 @@ const UsernameModal: React.FC<Props> = ({
   //   }
   //   setAvatar(avatars[randomIdx])
   // }, [])
+
+  useEffect(() => {
+    let randomIdx
+    if (noUsernameModal) {
+      randomIdx = Math.floor(Math.random() * 5 - 1)
+    } else {
+      randomIdx = Math.floor(Math.random() * 5)
+    }
+    setAvatar(avatars[randomIdx])
+  }, [])
 
   return (
     <Container
@@ -178,20 +186,15 @@ const UsernameModal: React.FC<Props> = ({
                     selectSound.play()
                   }}
                 >
-                  <AnimateSharedLayout>
-                    <Avatar
-                      whileHover={{ opacity: 1 }}
-                      src={avatarImg}
-                      alt="avatar"
-                      width="32"
-                    />
-                    {avatar === avatarImg && (
-                      <SelectedAvatarDot
-                        layoutId="selected"
-                        initial={{ x: "-50%" }}
-                      />
-                    )}
-                  </AnimateSharedLayout>
+                  <Avatar
+                    whileHover={{ opacity: 1 }}
+                    src={avatarImg}
+                    alt="avatar"
+                    width="32"
+                  />
+                  {avatar === avatarImg && (
+                    <SelectedAvatarDot initial={{ x: "-50%" }} />
+                  )}
                 </AvatarItem>
               )
             })}
@@ -288,7 +291,7 @@ const Avatar = styled(motion.img)`
 
 const SelectedAvatarDot = styled(motion.div)`
   position: absolute;
-  left: 40%;
+  left: 50%;
   bottom: -14px;
   width: 8px;
   height: 8px;

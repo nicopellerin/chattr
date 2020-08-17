@@ -1,13 +1,13 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 
-import { avatarState } from "../../../store/users"
+import { avatarState, otherUserAvatarQuery } from "../../../store/users"
 
 import { useClickOutside } from "../../../hooks/useClickOutside"
 
-const avatars = [
+export const avatars = [
   "/avatars/white-dude.png",
   "/avatars/white-girl.png",
   "/avatars/black-girl.png",
@@ -37,6 +37,8 @@ interface Props {
 }
 
 const AvatarBar: React.FC<Props> = ({ setToggleAvatar }) => {
+  const otherUserAvatar = useRecoilValue(otherUserAvatarQuery)
+
   const [avatar, setAvatar] = useRecoilState(avatarState)
 
   const node = useClickOutside(setToggleAvatar)
@@ -59,25 +61,27 @@ const AvatarBar: React.FC<Props> = ({ setToggleAvatar }) => {
       exit="hidden"
       ref={node}
     >
-      {avatars.map((avatarImg) => {
-        return (
-          <AvatarItem
-            key={avatarImg}
-            variants={avatarVariant}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => handleChangeAvatar(avatarImg)}
-          >
-            <Avatar
-              animate={{ opacity: avatar === avatarImg ? 1 : 0.5 }}
-              whileHover={{ opacity: 1 }}
-              src={avatarImg}
-              alt="avatar"
-              width="24"
-            />
-          </AvatarItem>
-        )
-      })}
+      {avatars
+        .filter((avatar) => avatar !== otherUserAvatar)
+        .map((avatarImg) => {
+          return (
+            <AvatarItem
+              key={avatarImg}
+              variants={avatarVariant}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleChangeAvatar(avatarImg)}
+            >
+              <Avatar
+                animate={{ opacity: avatar === avatarImg ? 1 : 0.5 }}
+                whileHover={{ opacity: 1 }}
+                src={avatarImg}
+                alt="avatar"
+                width="24"
+              />
+            </AvatarItem>
+          )
+        })}
     </AvatarsContainer>
   )
 }

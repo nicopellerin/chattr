@@ -74,6 +74,11 @@ export const otherUserIdQuery = selector({
   },
 })
 
+export const otherUserAvatarState = atom<string>({
+  key: "otherUserAvatarState",
+  default: "",
+})
+
 export const otherUserAvatarQuery = selector({
   key: "otherUserAvatarQuery",
   get: ({ get }) => {
