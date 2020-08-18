@@ -102,6 +102,7 @@ const ChatUsername: React.FC<Props> = ({ streamRef }) => {
         <div>
           {!getUserMediaNotSupported && (
             <IconWave
+              title="Toggle audio visualizer on/off"
               onClick={() => setToggleVisualizer((prevState) => !prevState)}
             />
           )}
