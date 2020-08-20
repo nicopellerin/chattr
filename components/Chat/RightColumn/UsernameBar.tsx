@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
@@ -17,10 +17,10 @@ import {
 import { getUserMediaNotSupportedState } from "../../../store/video"
 
 function useForceUpdate() {
-  const [, forceUpdate] = React.useState()
+  const [, forceUpdate] = useState()
 
-  return React.useCallback(() => {
-    forceUpdate((s) => !s)
+  return useCallback(() => {
+    forceUpdate((s: any) => !s)
   }, [])
 }
 
