@@ -13,6 +13,8 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
   const audioVisualiser = () => {
     const context = new AudioContext()
 
+    if (!streamRef.current) return
+
     const src = context.createMediaStreamSource(streamRef.current)
 
     // Initiate analsyer
@@ -48,7 +50,7 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
     let barHeight
     let x = 0
 
-    function renderFrame() {
+    const renderFrame = () => {
       requestAnimationFrame(renderFrame)
       analyser.getByteFrequencyData(dataArray)
       x = 0
@@ -75,9 +77,7 @@ const VisualizerBar: React.FC<Props> = ({ streamRef }) => {
   }
 
   useEffect(() => {
-    if (streamRef.current) {
-      audioVisualiser()
-    }
+    audioVisualiser()
   }, [streamRef.current])
 
   return (

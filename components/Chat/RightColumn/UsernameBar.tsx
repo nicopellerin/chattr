@@ -16,6 +16,14 @@ import {
 } from "../../../store/users"
 import { getUserMediaNotSupportedState } from "../../../store/video"
 
+function useForceUpdate() {
+  const [, forceUpdate] = React.useState()
+
+  return React.useCallback(() => {
+    forceUpdate((s) => !s)
+  }, [])
+}
+
 interface Props {
   streamRef: React.MutableRefObject<MediaStream>
 }
@@ -29,6 +37,7 @@ const ChatUsername: React.FC<Props> = ({ streamRef }) => {
   const [toggleVisualizer, setToggleVisualizer] = useRecoilState(
     toggleVisualizerState
   )
+  const forceUpdate = useForceUpdate()
 
   const [toggleDrawer, setToggleDrawer] = useState(false)
   const [toggleAvatar, setToggleAvatar] = useState(false)
@@ -41,6 +50,14 @@ const ChatUsername: React.FC<Props> = ({ streamRef }) => {
   useEffect(() => {
     window.localStorage.setItem("chattr-sounds-on", JSON.stringify(soundOn))
   }, [soundOn])
+
+  // Hack to re-render and trigger VisualizerBar
+  useEffect(() => {
+    const idx = setTimeout(() => forceUpdate(), 1000)
+    return () => {
+      clearTimeout(idx)
+    }
+  }, [streamRef.current])
 
   return (
     <Wrapper>
