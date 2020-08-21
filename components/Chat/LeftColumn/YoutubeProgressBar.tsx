@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useEffect, useRef } from "react"
 import styled from "styled-components"
-import { useRecoilValue, useSetRecoilState } from "recoil"
+import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil"
 import { motion } from "framer-motion"
 import moment from "moment"
 import momentDurationFormatSetup from "moment-duration-format"
@@ -11,7 +11,6 @@ import {
   playYoutubeVideoState,
   youtubeBarHoveredState,
 } from "../../../store/youtube"
-import { useRecoilState } from "recoil"
 
 interface Props {
   youtubePlayerRef: React.MutableRefObject<any>
