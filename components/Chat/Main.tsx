@@ -363,7 +363,6 @@ const ChatMain = () => {
     if (userJoinedChattr) {
       idx = setTimeout(() => setUserJoinedChattr(false), 3000)
     }
-
     return () => clearTimeout(idx)
   }, [userJoinedChattr])
 

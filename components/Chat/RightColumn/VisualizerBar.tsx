@@ -107,7 +107,6 @@ const Wrapper = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  z-index: -1;
 
   @media (max-width: 1600px) {
     top: -117px;
@@ -121,7 +120,6 @@ const Container = styled(motion.div)`
   flex-direction: column;
   width: 100%;
   border-radius: 5px;
-  z-index: 0;
 `
 
 const CanvasStyled = styled(motion.canvas)`

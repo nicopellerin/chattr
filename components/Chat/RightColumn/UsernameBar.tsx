@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { motion, AnimatePresence } from "framer-motion"
@@ -16,13 +16,7 @@ import {
 } from "../../../store/users"
 import { getUserMediaNotSupportedState } from "../../../store/video"
 
-function useForceUpdate() {
-  const [, forceUpdate] = useState()
-
-  return useCallback(() => {
-    forceUpdate((s: any) => !s)
-  }, [])
-}
+import useForceUpdate from "../../../hooks/useForceUpdate"
 
 interface Props {
   streamRef: React.MutableRefObject<MediaStream>
@@ -57,11 +51,11 @@ const ChatUsername: React.FC<Props> = ({ streamRef }) => {
     return () => {
       clearTimeout(idx)
     }
-  }, [streamRef.current])
+  }, [])
 
   return (
     <Wrapper>
-      <AnimatePresence initial={false}>
+      <AnimatePresence>
         {toggleVisualizer && <VisualizerBar streamRef={streamRef} />}
       </AnimatePresence>
       <Container>
@@ -148,6 +142,7 @@ const Wrapper = styled.div`
 `
 
 const Container = styled.form`
+  position: relative;
   background: #1a0d2b;
   height: 100%;
   padding: 1.2rem 1.7rem;
@@ -160,6 +155,7 @@ const Container = styled.form`
   overflow: hidden;
   min-height: 65px;
   box-shadow: 0 0.7rem 5rem rgba(131, 82, 253, 0.1);
+  z-index: 2;
 
   @media (min-width: 1600px) {
     height: 75px;
