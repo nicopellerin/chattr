@@ -17,7 +17,6 @@ import { useClickOutside } from "../../../hooks/useClickOutside"
 import {
   showSelfWebcamState,
   sharingScreenState,
-  displayTheatreModeState,
   flipSelfVideoState,
   chatVideoScreens,
   videoFilterClassState,
@@ -26,7 +25,7 @@ import {
 import { FilterClasses } from "../../../models"
 
 interface Props {
-  contraintsRef: React.Ref<HTMLDivElement>
+  contraintsRef: React.MutableRefObject<HTMLDivElement>
   selfVideoRef: React.MutableRefObject<HTMLVideoElement>
   socket: React.MutableRefObject<SocketIOClient.Socket>
 }
@@ -34,7 +33,6 @@ interface Props {
 interface StyledProps {
   supported?: boolean
   isYoutubeVideo?: boolean
-  theatreMode?: boolean
   showWebcam?: boolean
 }
 
@@ -47,7 +45,6 @@ const SelfVideoResizable: React.FC<Props> = ({
 
   const showWebcam = useRecoilValue(showSelfWebcamState)
   const sharingScreen = useRecoilValue(sharingScreenState)
-  const displayTheatreMode = useRecoilValue(displayTheatreModeState)
 
   const [flipSelfVideo, setFlipSelfVideo] = useRecoilState(flipSelfVideoState)
   const [videoFilterClass, setVideoFilterClass] = useRecoilState(
@@ -62,6 +59,7 @@ const SelfVideoResizable: React.FC<Props> = ({
   })
   const [isSelected, setIsSelected] = useState(false)
   const [minimizeWindow, setMinimizeWindow] = useState(false)
+  const [points, setPoints] = useState({ x: 0, y: 0 })
 
   const node = useClickOutside(setIsSelected)
 
@@ -96,11 +94,23 @@ const SelfVideoResizable: React.FC<Props> = ({
       layout={isSelected ? false : true}
       drag={isSelected ? false : true}
       dragMomentum={false}
-      // @ts-ignore
+      dragElastic={0}
+      onDragEnd={() => {
+        if (contraintsRef.current !== null) {
+          setPoints({
+            x:
+              node.current.getBoundingClientRect().left -
+              contraintsRef.current.getBoundingClientRect().left,
+            y:
+              contraintsRef.current.getBoundingClientRect().bottom -
+              node.current.getBoundingClientRect().bottom,
+          })
+        }
+      }}
       dragConstraints={contraintsRef}
-      theatreMode={displayTheatreMode}
       showWebcam={showWebcam}
       ref={node}
+      style={{ left: points.x, bottom: points.y }}
     >
       {minimizeWindow && (
         <MaximizeButton
@@ -175,7 +185,6 @@ export default SelfVideoResizable
 // Styles
 const SelfVideoWrapper = styled(motion.div)`
   opacity: ${(props: StyledProps) => (props.showWebcam ? 1 : 0)};
-  display: ${(props: StyledProps) => (props.theatreMode ? "none" : "block")};
   position: absolute;
   bottom: 0;
   left: 0;
@@ -283,7 +292,7 @@ const MaximizeButton = styled(motion.button)`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   left: 0;
   bottom: 0;
 `

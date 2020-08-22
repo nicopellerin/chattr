@@ -122,7 +122,7 @@ const ChatVideo: React.FC<Props> = ({
     setVideoFilterClassesPeer,
   ] = useState<FilterClasses | null>()
 
-  const contraintsRef = useRef() as React.Ref<HTMLDivElement>
+  const contraintsRef = useRef() as React.MutableRefObject<HTMLDivElement>
   const friendVideoCanvasRef = useRef() as React.MutableRefObject<
     HTMLCanvasElement
   >
