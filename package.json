@@ -1,5 +1,5 @@
 {
-  "name": "with-typescript",
+  "name": "chattr",
   "version": "1.0.0",
   "scripts": {
     "dev": "NODE_ENV=development ts-node --project tsconfig.server.json server.ts",
