@@ -48,6 +48,7 @@ const JoinRoomModal = () => {
           value={roomId}
           onChange={(e) => setRoomId(e.target.value)}
           placeholder="Room ID or full URL"
+          required
         />
         <Button whileTap={{ scale: 0.98 }}>
           <span>Join room</span> <FaRocket style={{ marginLeft: 7 }} />
