@@ -3,6 +3,7 @@ declare module "socket.io-encrypt"
 declare module "get-user-media-promise"
 
 declare module "*.webp"
+declare module "*.svg"
 
 // type ShareData = {
 //   title?: string

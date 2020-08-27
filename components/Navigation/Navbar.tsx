@@ -3,12 +3,15 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { FaRocket } from "react-icons/fa"
+import Img from "react-optimized-image"
+
+import logo3d from "../../public/logo-3d.svg"
 
 const Navbar = () => {
   return (
     <Wrapper>
       <Link href="/">
-        <LogoStyled src="/logo-3d.svg" data-testid="logo" alt="logo" />
+        <LogoStyled src={logo3d} inline data-testid="logo" alt="logo" />
       </Link>
       <ButtonsWrapper>
         <Link href="/join">
@@ -55,7 +58,7 @@ const Wrapper = styled.nav`
   }
 `
 
-const LogoStyled = styled.img`
+const LogoStyled = styled(Img)`
   width: 23rem;
   cursor: pointer;
   padding: 1rem 0;

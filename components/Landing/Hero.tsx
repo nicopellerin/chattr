@@ -39,8 +39,7 @@ const Hero = () => {
                   src={demo}
                   alt="demo"
                   style={{ maxWidth: "100%" }}
-                  sizes={[800]}
-                  inline
+                  sizes={[1000]}
                 />
               </DemoImageWrapper>
             </RightColumn>

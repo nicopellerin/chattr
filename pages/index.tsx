@@ -3,16 +3,14 @@ import { detect } from "detect-browser"
 import dynamic from "next/dynamic"
 import Head from "next/head"
 
-import Hero from "../components/Landing/Hero"
-import HowItWorks from "../components/Landing/HowItWorks"
-import Footer from "../components/Landing/Footer"
-
 const DetectWrongBrowser = dynamic(
   () => import("../components/Chat/Shared/DetectWrongBrowser"),
   {
     ssr: false,
   }
 )
+
+const Home = dynamic(() => import("../components/Landing/Home"))
 
 const IndexPage = () => {
   const browser = detect()
@@ -39,15 +37,7 @@ const IndexPage = () => {
         <meta property="og:image" content="https://chattr.lol/og-image4.jpg" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      {notSupported ? (
-        <DetectWrongBrowser />
-      ) : (
-        <>
-          <Hero />
-          <HowItWorks />
-          <Footer />
-        </>
-      )}
+      {notSupported ? <DetectWrongBrowser /> : <Home />}
     </>
   )
 }
