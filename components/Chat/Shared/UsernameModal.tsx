@@ -1,7 +1,12 @@
 import * as React from "react"
 import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
-import { motion, AnimatePresence } from "framer-motion"
+import {
+  m as motion,
+  MotionConfig,
+  AnimationFeature,
+  AnimatePresence,
+} from "framer-motion"
 import { FaRocket } from "react-icons/fa"
 import { useSetRecoilState, useRecoilState } from "recoil"
 import { useRouter } from "next/router"
@@ -130,103 +135,107 @@ const UsernameModal: React.FC<Props> = ({
   }, [])
 
   return (
-    <Container
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 30 }}
-      transition={{ type: "spring", damping: 80 }}
-    >
-      <Form
-        onSubmit={(e) => {
-          handleSubmit(e)
-        }}
+    <MotionConfig features={[AnimationFeature]}>
+      <Container
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 30 }}
+        transition={{ type: "spring", damping: 80 }}
       >
-        <Tagline htmlFor="username">Hello, stranger!</Tagline>
-        <Input
-          ref={inputRef}
-          id="username"
-          required
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
-          placeholder="Pick a username..."
-          maxLength={18}
-        />
-        <AvatarsContainer
-          variants={avatarsContainerVariant}
-          initial="hidden"
-          animate="visible"
+        <Form
+          onSubmit={(e) => {
+            handleSubmit(e)
+          }}
         >
-          <PrevIcon
-            onClick={handlePrevAvatar}
-            initial={{ scale: 0.5, rotate: -180, y: "-50%", opacity: 0 }}
-            animate={{ opacity: 0.8, x: [-50, 0] }}
-            transition={{ delay: 1 }}
+          <Tagline htmlFor="username">Hello, stranger!</Tagline>
+          <Input
+            ref={inputRef}
+            id="username"
+            required
+            value={user}
+            onChange={(e) => setUser(e.target.value)}
+            placeholder="Pick a username..."
+            maxLength={18}
+          />
+          <AvatarsContainer
+            variants={avatarsContainerVariant}
+            initial="hidden"
+            animate="visible"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="42">
-              <path
-                d="M 1.067 0.94 C 2.069 -0.058 3.69 -0.058 4.693 0.94 L 22.821 18.992 C 23.821 19.988 23.821 21.607 22.821 22.603 L 22.821 22.603 C 21.818 23.601 20.198 23.601 19.195 22.603 L 1.067 4.551 C 0.067 3.555 0.067 1.936 1.067 0.94 Z M 22.547 19.399 C 23.547 20.395 23.547 22.014 22.547 23.01 L 4.419 41.062 C 3.417 42.06 1.796 42.06 0.793 41.062 L 0.793 41.062 C -0.207 40.066 -0.207 38.447 0.793 37.451 L 18.922 19.399 C 19.924 18.401 21.545 18.401 22.547 19.399 Z"
-                fill={prevAvatar - 1 >= 0 ? "var(--primaryColorDark)" : "#ccc"}
-              ></path>
-            </svg>
-          </PrevIcon>
-          {avatars
-            .filter((avatar) => avatar !== otherUserAvatar)
-            .slice(prevAvatar, nextAvatar)
-            .map((avatarImg) => {
-              return (
-                <AvatarItem
-                  key={avatarImg}
-                  variants={avatarVariant}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    const selectSound = new Audio("/sounds/select-char4.mp3")
-                    selectSound.volume = 0.3
-                    setAvatar(avatarImg)
-                    selectSound.play()
-                  }}
-                >
-                  <Avatar
-                    whileHover={{ opacity: 1 }}
-                    src={avatarImg}
-                    alt="avatar"
-                    width="32"
-                  />
-                  {avatar === avatarImg && (
-                    <SelectedAvatarDot initial={{ x: "-50%" }} />
-                  )}
-                </AvatarItem>
-              )
-            })}
-          <NextIcon
-            onClick={handleNextAvatar}
-            initial={{ scale: 0.5, y: "-50%", opacity: 0 }}
-            animate={{ opacity: 0.8, x: [50, 0] }}
-            whileHover={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="42">
-              <path
-                d="M 1.067 0.94 C 2.069 -0.058 3.69 -0.058 4.693 0.94 L 22.821 18.992 C 23.821 19.988 23.821 21.607 22.821 22.603 L 22.821 22.603 C 21.818 23.601 20.198 23.601 19.195 22.603 L 1.067 4.551 C 0.067 3.555 0.067 1.936 1.067 0.94 Z M 22.547 19.399 C 23.547 20.395 23.547 22.014 22.547 23.01 L 4.419 41.062 C 3.417 42.06 1.796 42.06 0.793 41.062 L 0.793 41.062 C -0.207 40.066 -0.207 38.447 0.793 37.451 L 18.922 19.399 C 19.924 18.401 21.545 18.401 22.547 19.399 Z"
-                fill={
-                  nextAvatar < avatars.length
-                    ? "var(--primaryColorDark)"
-                    : "#ccc"
-                }
-              ></path>
-            </svg>
-          </NextIcon>
-        </AvatarsContainer>
-        <Button whileTap={{ y: 1 }} whileHover={{ y: -1 }}>
-          {buttonText} <FaRocket style={{ marginLeft: 7 }} />
-        </Button>
-      </Form>
-      <AnimatePresence>
-        {errorMsg && (
-          <MessageBar errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
-        )}
-      </AnimatePresence>
-    </Container>
+            <PrevIcon
+              onClick={handlePrevAvatar}
+              initial={{ scale: 0.5, rotate: -180, y: "-50%", opacity: 0 }}
+              animate={{ opacity: 0.8, x: [-50, 0] }}
+              transition={{ delay: 1 }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="42">
+                <path
+                  d="M 1.067 0.94 C 2.069 -0.058 3.69 -0.058 4.693 0.94 L 22.821 18.992 C 23.821 19.988 23.821 21.607 22.821 22.603 L 22.821 22.603 C 21.818 23.601 20.198 23.601 19.195 22.603 L 1.067 4.551 C 0.067 3.555 0.067 1.936 1.067 0.94 Z M 22.547 19.399 C 23.547 20.395 23.547 22.014 22.547 23.01 L 4.419 41.062 C 3.417 42.06 1.796 42.06 0.793 41.062 L 0.793 41.062 C -0.207 40.066 -0.207 38.447 0.793 37.451 L 18.922 19.399 C 19.924 18.401 21.545 18.401 22.547 19.399 Z"
+                  fill={
+                    prevAvatar - 1 >= 0 ? "var(--primaryColorDark)" : "#ccc"
+                  }
+                ></path>
+              </svg>
+            </PrevIcon>
+            {avatars
+              .filter((avatar) => avatar !== otherUserAvatar)
+              .slice(prevAvatar, nextAvatar)
+              .map((avatarImg) => {
+                return (
+                  <AvatarItem
+                    key={avatarImg}
+                    variants={avatarVariant}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      const selectSound = new Audio("/sounds/select-char4.mp3")
+                      selectSound.volume = 0.3
+                      setAvatar(avatarImg)
+                      selectSound.play()
+                    }}
+                  >
+                    <Avatar
+                      whileHover={{ opacity: 1 }}
+                      src={avatarImg}
+                      alt="avatar"
+                      width="32"
+                    />
+                    {avatar === avatarImg && (
+                      <SelectedAvatarDot initial={{ x: "-50%" }} />
+                    )}
+                  </AvatarItem>
+                )
+              })}
+            <NextIcon
+              onClick={handleNextAvatar}
+              initial={{ scale: 0.5, y: "-50%", opacity: 0 }}
+              animate={{ opacity: 0.8, x: [50, 0] }}
+              whileHover={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="42">
+                <path
+                  d="M 1.067 0.94 C 2.069 -0.058 3.69 -0.058 4.693 0.94 L 22.821 18.992 C 23.821 19.988 23.821 21.607 22.821 22.603 L 22.821 22.603 C 21.818 23.601 20.198 23.601 19.195 22.603 L 1.067 4.551 C 0.067 3.555 0.067 1.936 1.067 0.94 Z M 22.547 19.399 C 23.547 20.395 23.547 22.014 22.547 23.01 L 4.419 41.062 C 3.417 42.06 1.796 42.06 0.793 41.062 L 0.793 41.062 C -0.207 40.066 -0.207 38.447 0.793 37.451 L 18.922 19.399 C 19.924 18.401 21.545 18.401 22.547 19.399 Z"
+                  fill={
+                    nextAvatar < avatars.length
+                      ? "var(--primaryColorDark)"
+                      : "#ccc"
+                  }
+                ></path>
+              </svg>
+            </NextIcon>
+          </AvatarsContainer>
+          <Button whileTap={{ y: 1 }} whileHover={{ y: -1 }}>
+            {buttonText} <FaRocket style={{ marginLeft: 7 }} />
+          </Button>
+        </Form>
+        <AnimatePresence>
+          {errorMsg && (
+            <MessageBar errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
+          )}
+        </AnimatePresence>
+      </Container>
+    </MotionConfig>
   )
 }
 

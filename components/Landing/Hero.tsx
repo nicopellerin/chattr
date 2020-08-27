@@ -1,57 +1,74 @@
 import * as React from "react"
 import styled from "styled-components"
-import { useViewportScroll, useTransform, motion } from "framer-motion"
+import {
+  useViewportScroll,
+  useTransform,
+  m as motion,
+  MotionConfig,
+  AnimationFeature,
+} from "framer-motion"
+import Img from "react-optimized-image"
 
 import Navbar from "../Navigation/Navbar"
 import Bar from "./Bar"
+
+import demo from "../../public/demo-yt.webp"
 
 const Hero = () => {
   const { scrollY } = useViewportScroll()
   const opacity = useTransform(scrollY, [0, 30], [1, 0])
 
   return (
-    <div style={{ overflow: "hidden" }}>
-      <Wrapper>
-        <Navbar />
-        <Container>
-          <LeftColumn animate={{ opacity: [0, 1], y: [20, 0] }}>
-            <Title>Enjoy watching videos with friends</Title>
-            <Tagline>
-              <span>Watch Youtube videos in-sync while you chat</span> 👀
-            </Tagline>
-          </LeftColumn>
-          <RightColumn>
-            <DemoImage
-              animate={{ opacity: [0, 1], y: [20, 0] }}
-              transition={{ delay: 0.2 }}
-              src="/demo-yt.webp"
-              alt="demo"
-            />
-          </RightColumn>
-        </Container>
-        <motion.div
-          animate={{ opacity: [0, 1] }}
-          transition={{ delay: 1.2 }}
-          style={{ zIndex: 200, position: "fixed", opacity: 0 }}
-        >
+    <MotionConfig features={[AnimationFeature]}>
+      <div style={{ overflow: "hidden" }}>
+        <Wrapper>
+          <Navbar />
+          <Container>
+            <LeftColumn animate={{ opacity: [0, 1], y: [20, 0] }}>
+              <Title>Enjoy watching videos with friends</Title>
+              <Tagline>
+                <span>Watch Youtube videos in-sync while you chat</span> 👀
+              </Tagline>
+            </LeftColumn>
+            <RightColumn>
+              <DemoImageWrapper
+                animate={{ opacity: [0, 1], y: [20, 0] }}
+                transition={{ delay: 0.2 }}
+              >
+                <Img
+                  src={demo}
+                  alt="demo"
+                  style={{ maxWidth: "100%" }}
+                  sizes={[800]}
+                  inline
+                />
+              </DemoImageWrapper>
+            </RightColumn>
+          </Container>
           <motion.div
-            style={{
-              opacity,
-            }}
+            animate={{ opacity: [0, 1] }}
+            transition={{ delay: 1.2 }}
+            style={{ zIndex: 200, position: "fixed", opacity: 0 }}
           >
-            <Bar />
+            <motion.div
+              style={{
+                opacity,
+              }}
+            >
+              <Bar />
+            </motion.div>
           </motion.div>
-        </motion.div>
-        <Wave
-          src="/wave.svg"
-          alt=""
-          initial={{ y: -50 }}
-          animate={{
-            y: [-50, -110],
-          }}
-        />
-      </Wrapper>
-    </div>
+          <Wave
+            src="/wave.svg"
+            alt=""
+            initial={{ y: -50 }}
+            animate={{
+              y: [-50, -110],
+            }}
+          />
+        </Wrapper>
+      </div>
+    </MotionConfig>
   )
 }
 
@@ -120,7 +137,7 @@ const Tagline = styled.h2`
   }
 `
 
-const DemoImage = styled(motion.img)`
+const DemoImageWrapper = styled(motion.div)`
   max-width: 100%;
   box-shadow: 0 0.7rem 10rem rgba(131, 82, 253, 0.1);
   border-radius: 5px;

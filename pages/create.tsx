@@ -2,7 +2,7 @@ import * as React from "react"
 import { useEffect, useState } from "react"
 import Head from "next/head"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { m as motion, MotionConfig, AnimationFeature } from "framer-motion"
 import { detect } from "detect-browser"
 import dynamic from "next/dynamic"
 import { useRecoilState } from "recoil"
@@ -61,7 +61,7 @@ const CreatePage = () => {
     window.matchMedia("(display-mode: standalone)").matches
 
   return (
-    <>
+    <MotionConfig features={[AnimationFeature]}>
       <Head>
         <title>Chattr · Enjoy watching videos with friends</title>
         <meta
@@ -112,7 +112,7 @@ const CreatePage = () => {
           </Container>
         </Layout>
       )}
-    </>
+    </MotionConfig>
   )
 }
 

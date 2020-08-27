@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { m as motion, MotionConfig } from "framer-motion"
 import Link from "next/link"
 import { FaRocket } from "react-icons/fa"
 
@@ -60,6 +60,13 @@ const itemVariant = {
 
 const HowItWorks = () => {
   const [isVisible, setIsVisible] = useState(false)
+  const [features, setFeatures] = useState<Array<any>>([])
+
+  useEffect(() => {
+    import("./MotionFeatures").then((res) => {
+      setFeatures(res.default)
+    })
+  }, [])
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -85,7 +92,7 @@ const HowItWorks = () => {
           Chattr is a free p2p video chat app with your security in mind
         </Tagline>
         {isVisible && (
-          <>
+          <MotionConfig features={features}>
             <StepsList
               variants={listVariant}
               initial="hidden"
@@ -120,7 +127,7 @@ const HowItWorks = () => {
                 </a>
               </Link>
             </StartNow>
-          </>
+          </MotionConfig>
         )}
       </Container>
     </Wrapper>
