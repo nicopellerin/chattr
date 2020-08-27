@@ -4,6 +4,8 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import lottie from "lottie-web"
 
+import heart from "./heart2.json"
+
 const HeartScreen = () => {
   const lottieRef = useRef() as React.MutableRefObject<HTMLDivElement>
 
@@ -14,7 +16,7 @@ const HeartScreen = () => {
       renderer: "svg",
       loop: true,
       autoplay: true,
-      path: "/heart1.json",
+      animationData: heart,
     })
 
     return () => anim.destroy()
