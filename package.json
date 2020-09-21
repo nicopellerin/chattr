@@ -43,7 +43,7 @@
     "react-perfect-scrollbar": "^1.5.8",
     "react-resizable": "^1.10.1",
     "react-scrollbar": "^0.5.6",
-    "recoil": "^0.0.10",
+    "recoil": "^0.0.13",
     "shortid": "^2.2.15",
     "simple-peer": "^9.7.2",
     "socket.io": "^2.3.0",
