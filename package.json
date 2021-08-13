@@ -31,7 +31,7 @@
     "lottie-web": "^5.7.1",
     "moment": "^2.27.0",
     "moment-duration-format": "^2.3.2",
-    "next": "^9.5.2",
+    "next": "^11.1.0",
     "next-optimized-images": "^3.0.0-canary.10",
     "next-pwa": "^2.6.1",
     "peerjs": "^1.2.0",
