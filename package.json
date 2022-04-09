@@ -29,7 +29,7 @@
     "get-user-media-promise": "^1.1.4",
     "getusermedia": "^2.0.1",
     "lottie-web": "^5.7.1",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "moment-duration-format": "^2.3.2",
     "next": "^9.5.2",
     "next-optimized-images": "^3.0.0-canary.10",
