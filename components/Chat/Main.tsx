@@ -59,9 +59,8 @@ const ChatMain = () => {
   const [screenSharingStarted, setScreenSharingStarted] = useRecoilState(
     screenSharingStartedState
   )
-  const [messageDeleted, setMessageDeleted] = useRecoilState(
-    messageDeletedState
-  )
+  const [messageDeleted, setMessageDeleted] =
+    useRecoilState(messageDeletedState)
   const [flipLayout, setFlipLayout] = useRecoilState(flipLayoutState)
   const [userJoinedChattr, setUserJoinedChattr] = useRecoilState(
     userJoinedChattrState
@@ -124,14 +123,19 @@ const ChatMain = () => {
       config: {
         iceServers: [
           {
-            urls: "stun:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
+            urls: "turn:openrelay.metered.ca:80",
+            username: "openrelayproject",
+            credential: "openrelayproject",
           },
           {
-            urls: "stun:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
+            urls: "turn:openrelay.metered.ca:443",
+            username: "openrelayproject",
+            credential: "openrelayproject",
+          },
+          {
+            urls: "turn:openrelay.metered.ca:443?transport=tcp",
+            username: "openrelayproject",
+            credential: "openrelayproject",
           },
         ],
       },
@@ -179,6 +183,7 @@ const ChatMain = () => {
     })
 
     socket.current.on("callAccepted", (signal: any) => {
+      console.log("CALL ACCEPTED", signal)
       setReceivingCall(false)
       setCallAccepted(true)
       chatVideoScreensState.forceTransition("callingScreen.hidden")
@@ -225,7 +230,7 @@ const ChatMain = () => {
     navigator.mediaDevices
       // @ts-ignore
       .getDisplayMedia({
-        cursor: true,
+        // cursor: true,
         video: {
           width: { ideal: 4096 },
           height: { ideal: 2160 },
