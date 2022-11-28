@@ -14,7 +14,7 @@
     "@popmotion/popcorn": "^0.4.4",
     "@state-designer/core": "^1.2.23",
     "@state-designer/react": "^1.2.23",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "better-react-spinkit": "^2.0.4",
     "cors": "^2.8.5",
     "cors-anywhere": "^0.4.3",
