@@ -23,7 +23,7 @@
     "detect-browser": "^5.1.1",
     "dompurify": "^2.0.12",
     "emoji-picker-react": "^3.2.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "file-saver": "^2.0.2",
     "framer-motion": "2.4",
     "get-user-media-promise": "^1.1.4",
